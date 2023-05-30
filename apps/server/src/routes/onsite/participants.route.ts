@@ -8,7 +8,6 @@ const router: Router = express.Router();
 
 // Get all participants
 router.get("/", async (req: Request, res: Response) => {
-  console.log("get all participants");
   const participants: any = await getAllParticipants();
   res.json(participants);
 });

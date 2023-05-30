@@ -1,5 +1,5 @@
 import UUID from "domain/src/UUID"
-import {Participant} from "domain/src/"
+import {Participant} from "../../domain/src/"
 import {ParticipantRepository} from "domain/src/"
 import {pg} from "./pg"
 

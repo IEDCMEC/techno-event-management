@@ -1,9 +1,7 @@
-//import "dotenv/config";
+import "dotenv/config";
 import {Pool} from "pg";
 
 function getPostgresCredentials() {
-
-    // console.log("from pg" + JSON.stringify(process.env))
 
     const user = process.env.POSTGRES_USER;
     const password = process.env.POSTGRES_PASSWORD;
