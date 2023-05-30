@@ -1,0 +1,7 @@
+{
+  "name": "database",
+  "main": "src/index.ts",
+  "devDependencies": {
+    "typescript": "latest"
+  }
+}

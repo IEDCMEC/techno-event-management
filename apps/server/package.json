@@ -1,0 +1,47 @@
+{
+  "name": "techno-event-server",
+  "version": "2.0.0",
+  "description": "",
+  "main": "build/apps/server/src/index.js",
+  "scripts": {
+    "build": "npm run clean & npx tsc",
+    "clean": "rimraf build",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/index.js\"",
+    "start": "node build/index.js",
+    "test": "mocha -r ts-node/register 'tests/**/*.ts' --timeout 10000 --exit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "pg": "^8.11.0",
+    "domain": "workspace:*",
+    "pgdatabase": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/express": "^4.17.17",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.2.5",
+    "@types/pg": "^8.10.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "concurrently": "^8.0.1",
+    "eslint": "^8.41.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.22",
+    "prettier": "2.8.8",
+    "rimraf": "^5.0.1",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.0.4"
+  }
+}
