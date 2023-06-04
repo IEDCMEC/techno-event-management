@@ -3,7 +3,7 @@ DROP EXTENSION IF EXISTS "uuid-ossp" CASCADE;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 DROP TABLE IF EXISTS "user" CASCADE;
-DROP TABLE IF EXISTS role CASCADE;
+DROP TABLE IF EXISTS available_role CASCADE;
 DROP TABLE IF EXISTS organization CASCADE;
 DROP TABLE IF EXISTS organization_user CASCADE;
 DROP TABLE IF EXISTS available_subscription CASCADE;
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS "user"
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS role
+CREATE TABLE IF NOT EXISTS available_role
 (
     id   uuid DEFAULT uuid_generate_v4(),
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS organization_user
     PRIMARY KEY (id, user_id, organization_id),
     FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (role) REFERENCES role (id)
+    FOREIGN KEY (role) REFERENCES available_role (id)
 );
 
 CREATE TABLE IF NOT EXISTS available_subscription
