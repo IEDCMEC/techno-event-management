@@ -8,7 +8,8 @@
     "clean": "rimraf build",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/index.js\"",
     "start": "node build/index.js",
-    "test": "mocha -r ts-node/register 'tests/**/*.ts' --timeout 10000 --exit"
+    "test": "mocha -r ts-node/register 'tests/**/*.ts' --timeout 10000 --exit",
+    "lint": "eslint --ext .ts src"
   },
   "keywords": [],
   "author": "",
