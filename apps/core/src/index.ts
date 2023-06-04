@@ -7,8 +7,8 @@ const cors = require('cors');
 dotenv.config();
 
 const getPORT = () => {
-  // const port = process.env.PORT 
-  const port = "3001";
+  // const port = process.env.PORT
+  const port = '3001';
   if (port) {
     return parseInt(port);
   } else {
