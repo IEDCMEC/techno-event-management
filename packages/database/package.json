@@ -3,5 +3,8 @@
   "main": "src/index.ts",
   "devDependencies": {
     "typescript": "latest"
+  },
+  "scripts": {
+    "lint": "eslint"
   }
 }

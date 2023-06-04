@@ -12,7 +12,8 @@
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "domain": "workspace:*"
+    "domain": "workspace:*",
+    "eslint-config-custom": "*"
   },
   "devDependencies": {
     "@types/node": "20.2.5",
