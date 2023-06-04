@@ -9,11 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/next-js": "^2.1.4",
+    "@chakra-ui/react": "^2.7.0",
+    "@emotion/react": "^11.11.0",
+    "domain": "workspace:*",
+    "eslint-config-custom": "*",
+    "framer-motion": "^10.12.16",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "domain": "workspace:*",
-    "eslint-config-custom": "*"
+    "react-icons": "^4.9.0"
   },
   "devDependencies": {
     "@types/node": "20.2.5",
@@ -21,7 +26,7 @@
     "@types/react-dom": "18.2.4",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
-    "typescript": "5.0.4",
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "typescript": "5.0.4"
   }
 }
