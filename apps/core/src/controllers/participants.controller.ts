@@ -1,5 +1,3 @@
-import { pg } from '../../../../packages/pgdatabase/src/pg';
-
 import Participant from 'domain/src/Participant';
 import { ParticipantRepository } from '../../../../packages/pgdatabase/src/';
 
@@ -11,7 +9,6 @@ const getAllParticipants = async () => {
     return participants;
   } catch (err) {
     console.log(err);
-  } finally {
   }
 };
 
@@ -21,7 +18,6 @@ const getParticipantById = async (id: String) => {
     return participant;
   } catch (err) {
     console.log(err);
-  } finally {
   }
 };
 
