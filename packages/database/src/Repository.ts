@@ -1,13 +1,13 @@
 interface Repository<Domain> {
-    create(domain: Domain): void
+  create(domain: Domain): void;
 
-    find(id: any): Promise<Domain>
+  find(id: any): Promise<Domain>;
 
-    findAll(): Promise<Domain[]>
+  findAll(): Promise<Domain[]>;
 
-    update(domain: Domain): void
+  update(domain: Domain): void;
 
-    delete(id: any): void
+  delete(id: any): void;
 }
 
-export default Repository
+export default Repository;

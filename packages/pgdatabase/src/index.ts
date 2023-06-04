@@ -1,5 +1,3 @@
-import ParticipantRepository from "./ParticipantRepository";
+import ParticipantRepository from './ParticipantRepository';
 
-export {
-    ParticipantRepository
-}
+export { ParticipantRepository };
