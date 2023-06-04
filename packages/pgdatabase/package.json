@@ -10,5 +10,8 @@
     "@types/node": "^20.2.5",
     "@types/pg": "^8.10.1",
     "typescript": "latest"
+  },
+  "scripts": {
+    "lint": "eslint"
   }
 }
