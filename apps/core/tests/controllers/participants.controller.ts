@@ -1,19 +1,19 @@
-import { describe } from "mocha"
-import { expect } from "chai"
+import { describe } from 'mocha';
+import { expect } from 'chai';
 
 import {
   getAllParticipants,
   getParticipantById,
-} from "../../src/controllers/participants.controller"
+} from '../../src/controllers/participants.controller';
 
-describe("Participants", () => {
-  describe("Get all participant", () => {
-    it("should return a list of participants", async () => {
-      const participants = await getAllParticipants()
-      expect(participants).to.be.an("array")
-      expect(participants).to.have.length.greaterThan(0)
-    })
-  })
+describe('Participants', () => {
+  describe('Get all participant', () => {
+    it('should return a list of participants', async () => {
+      const participants = await getAllParticipants();
+      expect(participants).to.be.an('array');
+      expect(participants).to.have.length.greaterThan(0);
+    });
+  });
 
   // describe("Get participant by id", () => {
   //   it("should return a participant", async () => {
@@ -23,4 +23,4 @@ describe("Participants", () => {
   //     expect(participant).to.be.an("object")
   //   })
   // })
-})
+});

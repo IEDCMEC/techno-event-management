@@ -6,13 +6,15 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.9",
     "eslint": "^7.32.0",
     "prettier": "^2.8.8",
-    "turbo": "^1.9.9"
+    "turbo": "^1.9.9",
+    "husky": "^8.0.0"
   },
   "packageManager": "pnpm@7.15.0",
   "name": "techno-event-management"
