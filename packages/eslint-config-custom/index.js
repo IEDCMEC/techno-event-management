@@ -1,5 +1,34 @@
 module.exports = {
-  extends: ["next", "turbo", "prettier","eslint:recommended"],
+  env: {
+    browser: true,
+    commonjs: true,
+    es6: true,
+    node: true
+},
+parser: "@typescript-eslint/parser",
+  settings: {
+    react: {
+        version: "detect"
+    }
+},
+  plugins: ["react", "@typescript-eslint", "prettier"],
+  extends: ['plugin:react/recommended', 'prettier'],
   rules: {
+    'react/jsx-props-no-spreading': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'import/prefer-default-export': 'off',
+    'prettier/prettier': ['error'],
+    'class-methods-use-this': 'off',
+    'react/function-component-definition': [
+      2,
+      {
+        namedComponents: 'arrow-function',
+      },
+    ],
+    'import/no-extraneous-dependencies': 'off',
+    'react/require-default-props': 'off',
+    'comma-dangle': 'error',
+    'no-return-await': 'off',
+    '@typescript-eslint/return-await': 'off',
   },
 };
