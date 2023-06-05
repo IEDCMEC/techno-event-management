@@ -23,8 +23,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 import { participantsRouter } from './routes/onsite/participants.route';
+import { checkInRouter } from './routes/onsite/checkin.route';
 
 app.use('/onsite/participant', participantsRouter);
+app.use('/onsite/checkin', checkInRouter);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Techno Event Server');

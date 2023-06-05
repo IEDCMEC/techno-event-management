@@ -25,7 +25,6 @@ class NodePGParticipantRepository implements ParticipantRepository<Participant> 
   }
 
   public async find(organizationId: UUID, eventId: UUID, id: UUID): Promise<Participant> {
-    console.log('find', organizationId, eventId, id);
     try {
       const result = (
         await pg.query(
