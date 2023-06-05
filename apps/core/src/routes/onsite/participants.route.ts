@@ -3,6 +3,7 @@ import { authorize } from '../../middlewares/auth.middleware';
 import {
   getAllEventParticipants,
   getEventParticipantById,
+  getEventParticipantByInviteId,
 } from '../../controllers/participants.controller';
 import { Participant } from 'domain';
 
@@ -17,6 +18,12 @@ router.get('/', authorize, async (req: Request, res: Response) => {
 // Checkin a participant
 router.post('/checkin', authorize, async (req: Request, res: Response) => {
   res.json({ message: 'checked in' });
+});
+
+// Get participant by invite id
+router.get('/invite/:inviteId', authorize, async (req: Request, res: Response) => {
+  const participant: Participant = await getEventParticipantByInviteId(req, res);
+  res.json(participant);
 });
 
 // Get participant by id

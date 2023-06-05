@@ -47,6 +47,29 @@ class NodePGParticipantRepository implements ParticipantRepository<Participant> 
     } catch (err: any) {}
   }
 
+  public async findByInviteId(
+    organizationId: UUID,
+    eventId: UUID,
+    inviteId: string,
+  ): Promise<Participant> {
+    try {
+      const result = (
+        await pg.query(
+          'SELECT * FROM participant WHERE organization_id = $1 AND event_id = $2 AND invite_id = $3',
+          [organizationId, eventId, inviteId],
+        )
+      ).rows[0];
+      return new Participant(
+        result.id,
+        result.organization_id,
+        result.event_id,
+        result.first_name,
+        result.last_name,
+        result.invite_id,
+      );
+    } catch (err: any) {}
+  }
+
   public async findAll(organizationId: UUID, eventId: UUID): Promise<Participant[]> {
     try {
       const result = (

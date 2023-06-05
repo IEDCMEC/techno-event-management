@@ -5,6 +5,8 @@ interface ParticipantRepository<Participant> {
 
   find(organizationId: UUID, eventId: UUID, id: UUID): Promise<Participant>;
 
+  findByInviteId(organizationId: UUID, eventId: UUID, inviteId: string): Promise<Participant>;
+
   findAll(organizationId: UUID, eventId: UUID): Promise<Participant[]>;
 
   update(domain: Participant): void;

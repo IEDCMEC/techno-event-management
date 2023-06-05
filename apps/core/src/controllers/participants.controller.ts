@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import Participant from 'domain/src/models/Participant';
 
-import { getParticipantById, getAllParticipants } from '../services/participant.service';
+import {
+  getParticipantById,
+  getAllParticipants,
+  getParticipantByInviteId,
+} from '../services/participant.service';
 
 const getAllEventParticipants = async (req: Request, res: Response) => {
   try {
@@ -41,4 +45,28 @@ const getEventParticipantById = async (req: Request, res: Response) => {
   }
 };
 
-export { getAllEventParticipants, getEventParticipantById };
+const getEventParticipantByInviteId = async (req: Request, res: Response) => {
+  try {
+    const inviteId = req.params.inviteId;
+    const { organizationId, eventId } = req.body;
+
+    if (!organizationId || !eventId) res.status(400).json({ error: 'Authentication Error' });
+
+    if (!inviteId) {
+      res.status(400).json({ error: 'Invite id is required' });
+      return;
+    }
+
+    const participant: Participant = await getParticipantByInviteId(
+      organizationId,
+      eventId,
+      inviteId,
+    );
+
+    res.json(participant);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export { getAllEventParticipants, getEventParticipantById, getEventParticipantByInviteId };

@@ -25,6 +25,15 @@ const getParticipantById = async (organizationId: UUID, eventId: UUID, participa
   );
   return participant;
 };
+
+const getParticipantByInviteId = async (organizationId: UUID, eventId: UUID, inviteId: string) => {
+  const participant: Participant = await participantRepository.findByInviteId(
+    organizationId,
+    eventId,
+    inviteId,
+  );
+  return participant;
+};
 // const getParticipantByTag = async (organizationId: UUID, eventId: UUID, tag: UUID) => {};
 // const getParticipantAttributes = async (
 //   organizationId: UUID,
@@ -40,4 +49,4 @@ const getParticipantById = async (organizationId: UUID, eventId: UUID, participa
 
 // const checkInParticipant = async (organizationId: UUID, eventId: UUID, participantId: UUID) => {};
 
-export { getParticipantById, getAllParticipants };
+export { getParticipantById, getParticipantByInviteId, getAllParticipants };
