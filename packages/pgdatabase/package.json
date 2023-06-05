@@ -2,6 +2,7 @@
   "name": "pgdatabase",
   "main": "src/index.ts",
   "types": "src/index.ts",
+  "type": "module",
   "dependencies": {
     "pg": "^8.11.0",
     "domain": "workspace:*"

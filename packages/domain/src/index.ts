@@ -1,10 +1,10 @@
 import UUID from './UUID';
 
-import Organization from './Organization';
-import Event from './Event';
-import Participant from './Participant';
-import User from './User';
+import Organization from './models/Organization';
+import Event from './models/Event';
+import Participant from './models/Participant';
+import User from './models/User';
 
-import ParticipantRepository from './ParticipantRepository';
+import ParticipantRepository from './repositories/ParticipantRepository';
 
 export { UUID, Organization, Event, Participant, User, ParticipantRepository };

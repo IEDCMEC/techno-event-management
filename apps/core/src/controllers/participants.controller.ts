@@ -1,24 +1,24 @@
-import Participant from 'domain/src/Participant';
-import { ParticipantRepository } from '../../../../packages/pgdatabase/src/';
+import Participant from 'domain/src/models/Participant';
 
-const participantRepository: ParticipantRepository = new ParticipantRepository();
+import {getParticipant, getAllEventParticipants} from '../services/participant.service';
 
-const getAllParticipants = async () => {
-  try {
-    const participants: Participant[] = await participantRepository.findAll();
-    return participants;
-  } catch (err) {
-    console.log(err);
-  }
+
+const getAllParticipants = async (organizationId: string, eventId: string) => {
+    try {
+        const participants: Participant[] = await getAllEventParticipants(organizationId, eventId);
+        return participants;
+    } catch (err) {
+        console.log(err);
+    }
 };
 
-const getParticipantById = async (id: String) => {
-  try {
-    const participant: Participant = await participantRepository.find(id);
-    return participant;
-  } catch (err) {
-    console.log(err);
-  }
+const getParticipantById = async (organizationId: string, eventId: string, id: string) => {
+    try {
+        const participant: Participant = await getParticipant(organizationId, eventId, id);
+        return participant;
+    } catch (err) {
+        console.log(err);
+    }
 };
 
-export { getAllParticipants, getParticipantById };
+export {getAllParticipants, getParticipantById};
