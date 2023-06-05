@@ -72,35 +72,15 @@ VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM available_role WHERE name = 'onsite'));
 
 INSERT INTO "user"(name, email, password)
-VALUES ('Harry', 'harry@email.com', 'boy who lived');
-INSERT INTO "user"(name, email, password)
-VALUES ('Voldemort', 'vold@email.com', 'noseless bro');
-INSERT INTO "user"(name, email, password)
-VALUES ('Albus', 'albus@email.com', 'sherbert lemon');
+VALUES ('checkinbot', 'checkinbot@email.com', 'bro is a bot');
 
 INSERT INTO organization_user(organization_id, user_id, role)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
-        (SELECT id FROM "user" WHERE name = 'Harry'),
-        (SELECT id FROM available_role WHERE name = 'onsite'));
-INSERT INTO organization_user(organization_id, user_id, role)
-VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
-        (SELECT id FROM "user" WHERE name = 'Voldemort'),
-        (SELECT id FROM available_role WHERE name = 'onsite'));
-INSERT INTO organization_user(organization_id, user_id, role)
-VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
-        (SELECT id FROM "user" WHERE name = 'Albus'),
+        (SELECT id FROM "user" WHERE name = 'checkinbot'),
         (SELECT id FROM available_role WHERE name = 'onsite'));
 INSERT INTO organization_user(organization_id, user_id, role)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
-        (SELECT id FROM "user" WHERE name = 'Harry'),
-        (SELECT id FROM available_role WHERE name = 'onsite'));
-INSERT INTO organization_user(organization_id, user_id, role)
-VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
-        (SELECT id FROM "user" WHERE name = 'Voldemort'),
-        (SELECT id FROM available_role WHERE name = 'onsite'));
-INSERT INTO organization_user(organization_id, user_id, role)
-VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
-        (SELECT id FROM "user" WHERE name = 'Albus'),
+        (SELECT id FROM "user" WHERE name = 'checkinbot'),
         (SELECT id FROM available_role WHERE name = 'onsite'));
 
 INSERT INTO event(organization_id, name)
@@ -111,7 +91,7 @@ INSERT INTO event(organization_id, name)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'), 'Technoprenuer Day 2');
 
 INSERT INTO event(organization_id, name)
-VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'), 'DebConf');
+VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'), 'DebUtsav');
 
 INSERT INTO available_extras(organization_id, event_id, name)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
@@ -172,7 +152,8 @@ VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
 
 INSERT INTO available_attributes(organization_id, event_id, name)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
-        (SELECT id FROM event WHERE name = 'DebConf'), 'T-Shirt Size');
+        (SELECT id FROM event WHERE name = 'DebUtsav'), 'T-Shirt Size');
 
 INSERT INTO participant(organization_id, event_id, first_name, last_name, tag)
-VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'), (SELECT id FROM event WHERE name ='Technohack'), 'James', 'Bond', '007');
+VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'), (SELECT id FROM event WHERE name = 'Technohack'),
+        'James', 'Bond', '007');
