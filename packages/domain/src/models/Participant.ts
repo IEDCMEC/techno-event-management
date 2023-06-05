@@ -1,5 +1,7 @@
+import UUID from '../UUID';
+
 class Participant {
-  public id: string;
+  public id: UIDD;
   public organization_id: string;
   public event_id: string;
   public first_name: string;
@@ -7,13 +9,14 @@ class Participant {
   public invite_id: string;
 
   constructor(
-    id: string,
+    id: UUID,
     organization_id: string,
     event_id: string,
     first_name: string,
     last_name: string,
     invite_id: string,
   ) {
+    this.id = id;
     this.organization_id = organization_id;
     this.event_id = event_id;
     this.first_name = first_name;

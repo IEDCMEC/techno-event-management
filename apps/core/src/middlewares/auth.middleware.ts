@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { pg } from '../../../../packages/pgdatabase/src/pg';
-import { Organization, Event, User } from 'domain';
+import { Organization, Event, User } from 'domain/src';
 
 // Temporary authorization for testing
 const authorize = async (req: Request, res: Response, next: NextFunction) => {

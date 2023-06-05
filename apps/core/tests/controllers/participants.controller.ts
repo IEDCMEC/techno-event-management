@@ -2,14 +2,14 @@ import { describe } from 'mocha';
 import { expect } from 'chai';
 
 import {
-  getAllParticipants,
-  getParticipantById,
+  getAllEventParticipants,
+  getEventParticipantById,
 } from '../../src/controllers/participants.controller';
 
 describe('Participants', () => {
   describe('Get all participant', () => {
     it('should return a list of participants', async () => {
-      const participants = await getAllParticipants();
+      const participants = await getAllEventParticipants();
       expect(participants).to.be.an('array');
       expect(participants).to.have.length.greaterThan(0);
     });
