@@ -154,6 +154,6 @@ INSERT INTO available_attributes(organization_id, event_id, name)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM event WHERE name = 'DebUtsav'), 'T-Shirt Size');
 
-INSERT INTO participant(organization_id, event_id, first_name, last_name, tag)
-VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'), (SELECT id FROM event WHERE name = 'Technohack'),
+INSERT INTO participant(organization_id, event_id, first_name, last_name, invite_id)
+VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'), (SELECT id FROM event WHERE name = 'DebUtsav'),
         'James', 'Bond', '007');

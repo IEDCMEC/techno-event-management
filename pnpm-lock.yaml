@@ -170,10 +170,6 @@ importers:
         version: 5.1.3
 
   packages/domain:
-    dependencies:
-      database:
-        specifier: workspace:*
-        version: link:../database
     devDependencies:
       typescript:
         specifier: latest

@@ -11,6 +11,8 @@ DROP TABLE IF EXISTS organization_subscription CASCADE;
 
 DROP TABLE IF EXISTS event CASCADE;
 DROP TABLE IF EXISTS participant CASCADE;
+DROP TABLE IF EXISTS available_tags CASCADE;
+DROP TABLE IF EXISTS participant_tag CASCADE;
 DROP TABLE IF EXISTS participant_check_in CASCADE;
 DROP TABLE IF EXISTS available_attributes CASCADE;
 DROP TABLE IF EXISTS participant_attribute CASCADE;
@@ -103,11 +105,40 @@ CREATE TABLE IF NOT EXISTS participant
 
     first_name      VARCHAR(255) NOT NULL,
     last_name       VARCHAR(255) NOT NULL,
+    invite_id       VARCHAR(255) NOT NULL,
+
+    PRIMARY KEY (id, organization_id, event_id),
+    FOREIGN KEY (organization_id) REFERENCES organization (id),
+    FOREIGN KEY (event_id, organization_id) REFERENCES event (id, organization_id)
+);
+
+CREATE TABLE IF NOT EXISTS available_tags
+(
+    id              uuid DEFAULT uuid_generate_v4(),
+    organization_id uuid         NOT NULL,
+    event_id        uuid         NOT NULL,
+
     tag             VARCHAR(255) NOT NULL,
 
     PRIMARY KEY (id, organization_id, event_id),
     FOREIGN KEY (organization_id) REFERENCES organization (id),
     FOREIGN KEY (event_id, organization_id) REFERENCES event (id, organization_id)
+);
+
+CREATE TABLE IF NOT EXISTS participant_tag
+(
+    id              uuid DEFAULT uuid_generate_v4(),
+    organization_id uuid NOT NULL,
+    event_id        uuid NOT NULL,
+
+    tag_id          uuid NOT NULL,
+    participant_id  uuid NOT NULL,
+
+    PRIMARY KEY (id, organization_id, event_id),
+    FOREIGN KEY (organization_id) REFERENCES organization (id),
+    FOREIGN KEY (organization_id, event_id) REFERENCES event (organization_id, id),
+    FOREIGN KEY (tag_id, organization_id, event_id) REFERENCES available_tags (id, organization_id, event_id),
+    FOREIGN KEY (participant_id, organization_id, event_id) REFERENCES participant (id, organization_id, event_id)
 );
 
 CREATE TABLE IF NOT EXISTS participant_check_in
