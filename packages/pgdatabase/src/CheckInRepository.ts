@@ -1,11 +1,11 @@
-import UUID from 'domain/src/UUID';
-import { Participant } from '../../domain/src/';
 import { pg } from './pg';
-import CheckInRepository from '../../domain/src/repositories/CheckInRepository';
-import ParticipantCheckIn from '../../domain/src/models/ParticipantCheckIn';
 
-class NodePGCheckInRepository implements CheckInRepository<ParticipantCheckIn> {
-  public async create(participant: ParticipantCheckIn): Promise<boolean> {
+const UUID = require('common').UUID;
+const CheckInRepository = require('common').CheckInRepository;
+const ParticipantCheckIn = require('common').ParticipantCheckIn;
+
+class NodePGCheckInRepository implements InstanceType<typeof CheckInRepository> {
+  public async create(participant: typeof ParticipantCheckIn): Promise<boolean> {
     try {
       const result = await pg.query(
         'INSERT INTO participant_check_in( organization_id, event_id, participant_id, checked_in, check_in_time, checked_in_by) VALUES ($1, $2, $3, true, now(), $4)',
@@ -20,10 +20,16 @@ class NodePGCheckInRepository implements CheckInRepository<ParticipantCheckIn> {
       if (!result) throw new Error('Error in checking in participant');
 
       return true;
-    } catch (err: any) {}
+    } catch (err: any) {
+      return false;
+    }
   }
 
-  public async find(organizationId: UUID, eventId: UUID, id: UUID): Promise<ParticipantCheckIn> {
+  public async find(
+    organizationId: typeof UUID,
+    eventId: typeof UUID,
+    id: typeof UUID,
+  ): Promise<typeof ParticipantCheckIn> {
     try {
       const result = (
         await pg.query(
@@ -43,14 +49,16 @@ class NodePGCheckInRepository implements CheckInRepository<ParticipantCheckIn> {
         result.check_in_time,
         result.checked_in_by,
       );
-    } catch (err: any) {}
+    } catch (err: any) {
+      return null as any;
+    }
   }
 
   public async findByParticipantId(
-    organizationId: UUID,
-    eventId: UUID,
-    participantId: UUID,
-  ): Promise<ParticipantCheckIn> {
+    organizationId: typeof UUID,
+    eventId: typeof UUID,
+    participantId: typeof UUID,
+  ): Promise<typeof ParticipantCheckIn> {
     try {
       const result = (
         await pg.query(
@@ -70,10 +78,15 @@ class NodePGCheckInRepository implements CheckInRepository<ParticipantCheckIn> {
         result.check_in_time,
         result.checked_in_by,
       );
-    } catch (err: any) {}
+    } catch (err: any) {
+      return null as any;
+    }
   }
 
-  public async findAll(organizationId: UUID, eventId: UUID): Promise<ParticipantCheckIn[]> {
+  public async findAll(
+    organizationId: typeof UUID,
+    eventId: typeof UUID,
+  ): Promise<(typeof ParticipantCheckIn)[]> {
     try {
       const result = (
         await pg.query(
@@ -96,14 +109,16 @@ class NodePGCheckInRepository implements CheckInRepository<ParticipantCheckIn> {
             row.checked_in_by,
           ),
       );
-    } catch (err: any) {}
+    } catch (err: any) {
+      return [];
+    }
   }
 
-  public async update(participantCheckIn: ParticipantCheckIn): Promise<void> {
+  public async update(participantCheckIn: typeof ParticipantCheckIn): Promise<void> {
     throw new Error('Method not implemented');
   }
 
-  public async delete(item: ParticipantCheckIn): Promise<boolean> {
+  public async delete(item: typeof ParticipantCheckIn): Promise<boolean> {
     throw new Error('Method not implemented');
   }
 }

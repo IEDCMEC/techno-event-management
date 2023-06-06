@@ -1,12 +1,9 @@
 {
   "extends": "tsconfig/tsconfig.json",
   "compilerOptions": {
-    "outDir": "./build/"
+    "outDir": "./build/",
+    "rootDir": "./src/",
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

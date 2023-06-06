@@ -1,15 +1,13 @@
 {
-  "name": "pgdatabase",
+  "name": "common",
   "main": "build/index.js",
   "types": "build/index.js",
   "dependencies": {
-    "common": "workspace:*",
-    "pg": "^8.11.0"
+    "rimraf": "^5.0.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.2.5",
-    "@types/pg": "^8.10.1",
-    "rimraf": "^5.0.1",
+    "@types/uuid": "^9.0.1",
     "tsconfig": "workspace:*",
     "typescript": "latest"
   },

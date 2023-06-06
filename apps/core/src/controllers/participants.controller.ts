@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Participant from 'domain/src/models/Participant';
+const Participant = require('common').Participant;
 
 import {
   getParticipantById,
@@ -14,7 +14,7 @@ const getAllEventParticipants = async (req: Request, res: Response) => {
       res.status(400).json({ error: 'Authentication Error' });
       return;
     }
-    const participants: Participant[] = await getAllParticipants(organizationId, eventId);
+    const participants: (typeof Participant)[] = await getAllParticipants(organizationId, eventId);
     res.json(participants);
   } catch (err) {
     console.log(err);
@@ -33,7 +33,7 @@ const getEventParticipantById = async (req: Request, res: Response) => {
       return;
     }
 
-    const participant: Participant = await getParticipantById(
+    const participant: typeof Participant = await getParticipantById(
       organizationId,
       eventId,
       participantId,
@@ -57,7 +57,7 @@ const getEventParticipantByInviteId = async (req: Request, res: Response) => {
       return;
     }
 
-    const participant: Participant = await getParticipantByInviteId(
+    const participant: typeof Participant = await getParticipantByInviteId(
       organizationId,
       eventId,
       inviteId,
