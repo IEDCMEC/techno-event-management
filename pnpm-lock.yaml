@@ -218,6 +218,9 @@ importers:
       common:
         specifier: workspace:*
         version: link:../common
+      dotenv:
+        specifier: ^16.0.3
+        version: 16.0.3
       pg:
         specifier: ^8.11.0
         version: 8.11.0

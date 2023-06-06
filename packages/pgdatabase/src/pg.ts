@@ -1,5 +1,6 @@
-import 'dotenv/config';
 import { Pool } from 'pg';
+
+require('dotenv').config();
 
 function getPostgresCredentials() {
   const user = process.env.POSTGRES_USER;

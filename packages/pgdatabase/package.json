@@ -4,6 +4,7 @@
   "types": "build/index.js",
   "dependencies": {
     "common": "workspace:*",
+    "dotenv": "^16.0.3",
     "pg": "^8.11.0"
   },
   "devDependencies": {
