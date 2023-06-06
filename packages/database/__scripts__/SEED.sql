@@ -16,15 +16,15 @@ VALUES ('Jithin', 'jithin@email.com', 'no idea');
 INSERT INTO "user"(name, email, password)
 VALUES ('Jozef', 'jozef@email.com', 'tailwind fenboy');
 
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE name = 'Allen'),
         (SELECT id FROM available_roles WHERE name = 'admin'));
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE name = 'Allen'),
         (SELECT id FROM available_roles WHERE name = 'onsite'));
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE name = 'Aldrin'),
         (SELECT id FROM available_roles WHERE name = 'owner'));
@@ -34,39 +34,39 @@ VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE name = 'Aldrin'),
         (SELECT id FROM available_roles WHERE name = 'onsite'));
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE name = 'Jaison'),
         (SELECT id FROM available_roles WHERE name = 'admin'));
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE name = 'Jaison'),
         (SELECT id FROM available_roles WHERE name = 'onsite'));
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE name = 'Subramani'),
         (SELECT id FROM available_roles WHERE name = 'admin'));
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE name = 'Subramani'),
         (SELECT id FROM available_roles WHERE name = 'onsite'));
 
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE name = 'Jithin'),
         (SELECT id FROM available_roles WHERE name = 'owner'));
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE name = 'Jithin'),
         (SELECT id FROM available_roles WHERE name = 'admin'));
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE name = 'Jithin'),
         (SELECT id FROM available_roles WHERE name = 'onsite'));
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE name = 'Jozef'),
         (SELECT id FROM available_roles WHERE name = 'admin'));
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE name = 'Jozef'),
         (SELECT id FROM available_roles WHERE name = 'onsite'));
@@ -74,11 +74,11 @@ VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
 INSERT INTO "user"(name, email, password)
 VALUES ('checkinbot', 'checkinbot@email.com', 'bro is a bot');
 
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE name = 'checkinbot'),
         (SELECT id FROM available_roles WHERE name = 'onsite'));
-INSERT INTO organization_user(organization_id, user_id, role)
+INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE name = 'checkinbot'),
         (SELECT id FROM available_roles WHERE name = 'onsite'));
