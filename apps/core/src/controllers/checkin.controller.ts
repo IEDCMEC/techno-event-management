@@ -16,7 +16,7 @@ const checkInEventParticipant = async (req: Request, res: Response) => {
 
     const checkInSucces = await checkInParticipant(organizationId, eventId, participantId, userId);
     if (!checkInSucces) {
-      res.status(400).json({  error: 'Checkin failed' });
+      res.status(400).json({ error: 'Checkin failed' });
       return;
     }
     if (checkInSucces) {

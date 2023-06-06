@@ -1,4 +1,5 @@
-import { UUID } from '../../../../packages/domain';
+import { UUID } from '../../../../packages/domain/src';
+import { ParticipantCheckIn } from '../../../../packages/domain/src';
 
 import CheckInRepository from '../../../../packages/pgdatabase/src/CheckInRepository';
 
@@ -21,12 +22,17 @@ const checkInParticipant = async (
 
   console.log(previousCheckin);
 
-  const checkInSucces = await checkInRepository.checkInParticipant(
+  const participantCheckIn: ParticipantCheckIn = new ParticipantCheckIn(
+    new UUID(),
     organizationId,
     eventId,
     participantId,
+    true,
+    new Date(),
     checkedInBy,
   );
+
+  const checkInSucces = await checkInRepository.create(participantCheckIn);
   return checkInSucces;
 };
 

@@ -6,8 +6,7 @@ const router: Router = express.Router();
 
 // Get all participants
 router.post('/', authorize, async (req: Request, res: Response) => {
-    await checkInEventParticipant(req, res);
+  await checkInEventParticipant(req, res);
 });
-
 
 export { router as checkInRouter };

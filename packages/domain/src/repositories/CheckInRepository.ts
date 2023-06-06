@@ -1,17 +1,17 @@
 import UUID from '../UUID';
 
-interface CheckInRepository<any> {
-  create(domain: any): void;
+interface CheckInRepository<T> {
+  create(item: T): Promise<boolean>;
 
-  find(organizationId: UUID, eventId: UUID, id: UUID): Promise<any>;
+  find(organizationId: UUID, eventId: UUID, id: UUID): Promise<T>;
 
-  findAll(organizationId: UUID, eventId: UUID): Promise<any[]>;
+  findByParticipantId(organizationId: UUID, eventId: UUID, participantId: UUID): Promise<T>;
 
-  update(domain: any): void;
+  findAll(organizationId: UUID, eventId: UUID): Promise<T[]>;
 
-  delete(organizationId: UUID, eventId: UUID, id: UUID): Promise<boolean>;
+  update(domain: T): void;
 
-  checkInParticipant(organizationId: UUID, eventId: UUID, participantId: UUID, checkedInBy: UUID): Promise<boolean>;
+  delete(item: T): Promise<boolean>;
 }
 
 export default CheckInRepository;
