@@ -5,23 +5,19 @@ const checkInEventParticipant = async (req: Request, res: Response) => {
   try {
     const { organizationId, eventId, userId, participantId } = req.body;
     if (!organizationId || !eventId || !userId) {
-      res.status(400).json({ error: 'Authentication Error' });
-      return;
+      return res.status(400).json({ error: 'Authentication Error' });
     }
 
     if (!participantId) {
-      res.status(400).json({ error: 'Participant id is required' });
-      return;
+      return res.status(400).json({ error: 'Participant id is required' });
     }
 
     const checkInSucces = await checkInParticipant(organizationId, eventId, participantId, userId);
     if (!checkInSucces) {
-      res.status(400).json({ error: 'Checkin failed' });
-      return;
+      return res.status(400).json({ error: 'Checkin failed' });
     }
     if (checkInSucces) {
-      res.status(200).json({ message: 'Checkin success' });
-      return;
+      return res.status(200).json({ message: 'Checkin success' });
     }
   } catch (err) {
     console.log(err);
