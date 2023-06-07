@@ -5,7 +5,6 @@ const Organization = require('common').Organization;
 const Event = require('common').Event;
 const User = require('common').User;
 
-
 // Temporary authorization for testing
 const authorize = async (req: Request, res: Response, next: NextFunction) => {
   const organization: typeof Organization = (
