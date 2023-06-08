@@ -23,7 +23,7 @@ type props = {
   route: string;
   content: string;
 };
-function NavLink(props: props) {
+const NavLink = (props: props) => {
   return (
     <Link href={props.route}>
       <Box
@@ -38,9 +38,9 @@ function NavLink(props: props) {
       </Box>
     </Link>
   );
-}
+};
 
-export default function Navbar() {
+const Navbar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { setOpen } = useContext(themeContext);
 
@@ -102,4 +102,6 @@ export default function Navbar() {
       </Box>
     </>
   );
-}
+};
+
+export default Navbar;
