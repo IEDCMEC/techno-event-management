@@ -11,14 +11,7 @@ import {
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { themeContext } from '@/Contexts/ContextVariables';
 import { useContext } from 'react';
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Input,
-  Box,
-} from '@chakra-ui/react';
+import { FormControl, FormLabel, Input, Box } from '@chakra-ui/react';
 enum GenderEnum {
   female = 'female',
   male = 'male',
@@ -29,7 +22,7 @@ interface IFormInput {
   email: String;
   password: String;
 }
-export default function SigninModal() {
+const SigninModal = () => {
   const { register, handleSubmit, reset } = useForm<IFormInput>();
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log(data);
@@ -88,4 +81,6 @@ export default function SigninModal() {
       </Modal>
     </>
   );
-}
+};
+
+export default SigninModal;
