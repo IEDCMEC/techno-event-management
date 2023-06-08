@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Participant from 'domain/src/models/Participant';
+const Participant = require('common').Participant;
 
 import {
   getParticipantById,
@@ -11,11 +11,10 @@ const getAllEventParticipants = async (req: Request, res: Response) => {
   try {
     const { organizationId, eventId } = req.body;
     if (!organizationId || !eventId) {
-      res.status(400).json({ error: 'Authentication Error' });
-      return;
+      return res.status(400).json({ error: 'Authentication Error' });
     }
-    const participants: Participant[] = await getAllParticipants(organizationId, eventId);
-    res.json(participants);
+    const participants: (typeof Participant)[] = await getAllParticipants(organizationId, eventId);
+    return res.json(participants);
   } catch (err) {
     console.log(err);
   }
@@ -29,17 +28,16 @@ const getEventParticipantById = async (req: Request, res: Response) => {
     if (!organizationId || !eventId) res.status(400).json({ error: 'Authentication Error' });
 
     if (!participantId) {
-      res.status(400).json({ error: 'Participant id is required' });
-      return;
+      return res.status(400).json({ error: 'Participant id is required' });
     }
 
-    const participant: Participant = await getParticipantById(
+    const participant: typeof Participant = await getParticipantById(
       organizationId,
       eventId,
       participantId,
     );
 
-    res.json(participant);
+    return res.json(participant);
   } catch (err) {
     console.log(err);
   }
@@ -53,17 +51,16 @@ const getEventParticipantByInviteId = async (req: Request, res: Response) => {
     if (!organizationId || !eventId) res.status(400).json({ error: 'Authentication Error' });
 
     if (!inviteId) {
-      res.status(400).json({ error: 'Invite id is required' });
-      return;
+      return res.status(400).json({ error: 'Invite id is required' });
     }
 
-    const participant: Participant = await getParticipantByInviteId(
+    const participant: typeof Participant = await getParticipantByInviteId(
       organizationId,
       eventId,
       inviteId,
     );
 
-    res.json(participant);
+    return res.json(participant);
   } catch (err) {
     console.log(err);
   }

@@ -1,10 +1,11 @@
-import UUID from 'domain/src/UUID';
-import { Participant } from '../../domain/src/';
-import { ParticipantRepository } from 'domain/src/';
 import { pg } from './pg';
 
-class NodePGParticipantRepository implements ParticipantRepository<Participant> {
-  public async create(participant: Participant): Promise<void> {
+const UUID = require('common').UUID;
+const Participant = require('common').Participant;
+const ParticipantRepository = require('common').ParticipantRepository;
+
+class NodePGParticipantRepository implements InstanceType<typeof ParticipantRepository> {
+  public async create(participant: typeof Participant): Promise<boolean> {
     try {
       const result = (
         await pg.query(
@@ -21,10 +22,18 @@ class NodePGParticipantRepository implements ParticipantRepository<Participant> 
       ).rows[0];
 
       if (!result) throw new Error('Participant not created');
-    } catch (err: any) {}
+
+      return true;
+    } catch (err: any) {
+      return false;
+    }
   }
 
-  public async find(organizationId: UUID, eventId: UUID, id: UUID): Promise<Participant> {
+  public async find(
+    organizationId: typeof UUID,
+    eventId: typeof UUID,
+    id: typeof UUID,
+  ): Promise<typeof Participant> {
     try {
       const result = (
         await pg.query(
@@ -43,14 +52,16 @@ class NodePGParticipantRepository implements ParticipantRepository<Participant> 
         result.last_name,
         result.invite_id,
       );
-    } catch (err: any) {}
+    } catch (err: any) {
+      return null as any;
+    }
   }
 
   public async findByInviteId(
-    organizationId: UUID,
-    eventId: UUID,
+    organizationId: typeof UUID,
+    eventId: typeof UUID,
     inviteId: string,
-  ): Promise<Participant> {
+  ): Promise<typeof Participant> {
     try {
       const result = (
         await pg.query(
@@ -66,10 +77,15 @@ class NodePGParticipantRepository implements ParticipantRepository<Participant> 
         result.last_name,
         result.invite_id,
       );
-    } catch (err: any) {}
+    } catch (err: any) {
+      return null as any;
+    }
   }
 
-  public async findAll(organizationId: UUID, eventId: UUID): Promise<Participant[]> {
+  public async findAll(
+    organizationId: typeof UUID,
+    eventId: typeof UUID,
+  ): Promise<(typeof Participant)[]> {
     try {
       const result = (
         await pg.query('SELECT * FROM participant WHERE organization_id = $1 AND event_id = $2', [
@@ -91,10 +107,12 @@ class NodePGParticipantRepository implements ParticipantRepository<Participant> 
             row.invite_id,
           ),
       );
-    } catch (err: any) {}
+    } catch (err: any) {
+      return [];
+    }
   }
 
-  public async update(participant: Participant): Promise<void> {
+  public async update(participant: typeof Participant): Promise<boolean> {
     try {
       const result = (
         await pg.query(
@@ -111,15 +129,19 @@ class NodePGParticipantRepository implements ParticipantRepository<Participant> 
       ).rows[0];
 
       if (!result) throw new Error('Participant not updated');
-    } catch (err: any) {}
+
+      return true;
+    } catch (err: any) {
+      return false;
+    }
   }
 
-  public async delete(organizationId: UUID, eventId: UUID, id: UUID): Promise<boolean> {
+  public async delete(participant: typeof Participant): Promise<boolean> {
     try {
       const result = (
         await pg.query(
           'DELETE FROM participant WHERE organization_id = $1 AND event_id = $2 AND id = $3 RETURNING *',
-          [organizationId, eventId, id],
+          [participant.organization_id, participant.event_id, participant.id],
         )
       ).rows[0];
 

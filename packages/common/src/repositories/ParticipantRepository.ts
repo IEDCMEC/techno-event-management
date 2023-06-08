@@ -1,7 +1,8 @@
 import UUID from '../UUID';
+import Participant from '../models/Participant';
 
-interface ParticipantRepository<Participant> {
-  create(domain: Participant): void;
+interface ParticipantRepository {
+  create(item: Participant): Promise<boolean>;
 
   find(organizationId: UUID, eventId: UUID, id: UUID): Promise<Participant>;
 
@@ -9,9 +10,9 @@ interface ParticipantRepository<Participant> {
 
   findAll(organizationId: UUID, eventId: UUID): Promise<Participant[]>;
 
-  update(domain: Participant): void;
+  update(item: Participant): Promise<boolean>;
 
-  delete(organizationId: UUID, eventId: UUID, id: UUID): Promise<boolean>;
+  delete(item: Participant): Promise<boolean>;
 }
 
 export default ParticipantRepository;

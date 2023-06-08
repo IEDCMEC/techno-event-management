@@ -2,13 +2,14 @@
   "extends": "tsconfig/tsconfig.json",
   "compilerOptions": {
     "outDir": "./build/",
+    "rootDir": "./src/",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "moduleResolution": "node",
     "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "noEmit": true,
+    "noEmit": false,
     "strict": true
   },
   "include": [

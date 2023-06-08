@@ -10,6 +10,9 @@
     "eslint-config-turbo": "^1.9.9",
     "eslint-plugin-react": "7.28.0"
   },
+  "devDependencies": {
+    "tsconfig": "workspace:*"
+  },
   "publishConfig": {
     "access": "public"
   },

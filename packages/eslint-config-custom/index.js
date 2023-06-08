@@ -22,7 +22,7 @@ parser: "@typescript-eslint/parser",
     'react/function-component-definition': [
       2,
       {
-        namedComponents: 'arrow-function',
+        namedComponents: 'function-declaration',
       },
     ],
     'import/no-extraneous-dependencies': 'off',

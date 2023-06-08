@@ -55,12 +55,12 @@ CREATE TABLE IF NOT EXISTS organization_user
     user_id         uuid NOT NULL,
     organization_id uuid NOT NULL,
 
-    role            uuid NOT NULL,
+    role_id            uuid NOT NULL,
 
     PRIMARY KEY (id, user_id, organization_id),
     FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (role) REFERENCES available_roles (id)
+    FOREIGN KEY (role_id) REFERENCES available_roles (id)
 );
 
 CREATE TABLE IF NOT EXISTS available_subscriptions

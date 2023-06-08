@@ -1,4 +1,4 @@
-// import { UUID } from '../../../../packages/domain/';
+// import { UUID } from '../../../../packages/common/';
 
 // const getEventById = async (organizationId: UUID, eventId: UUID) => {};
 

@@ -17,29 +17,30 @@ import {
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { themeContext } from '@/Contexts/ContextVariables';
-import { useDisclosure } from '@chakra-ui/react';
 import { useContext } from 'react';
 import Link from 'next/link';
 type props = {
   route: string;
   content: string;
 };
-const NavLink = (props: props) => (
-  <Link href={props.route}>
-    <Box
-      px={2}
-      py={1}
-      rounded={'md'}
-      _hover={{
-        textDecoration: 'none',
-      }}
-    >
-      {props.content}
-    </Box>
-  </Link>
-);
+function NavLink(props: props) {
+  return (
+    <Link href={props.route}>
+      <Box
+        px={2}
+        py={1}
+        rounded={'md'}
+        _hover={{
+          textDecoration: 'none',
+        }}
+      >
+        {props.content}
+      </Box>
+    </Link>
+  );
+}
 
-const Navbar = () => {
+export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { setOpen } = useContext(themeContext);
 
@@ -101,5 +102,4 @@ const Navbar = () => {
       </Box>
     </>
   );
-};
-export default Navbar;
+}

@@ -29,7 +29,7 @@ interface IFormInput {
   email: String;
   password: String;
 }
-const SigninModal = () => {
+export default function SigninModal() {
   const { register, handleSubmit, reset } = useForm<IFormInput>();
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log(data);
@@ -88,5 +88,4 @@ const SigninModal = () => {
       </Modal>
     </>
   );
-};
-export default SigninModal;
+}

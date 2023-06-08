@@ -1,24 +1,33 @@
-import { Participant, UUID } from '../../../../packages/domain';
-import ParticipantRepository from '../../../../packages/pgdatabase/src/ParticipantRepository';
+const Participant = require('common').Participant;
+const UUID = require('common').UUID;
+const NodePGParticipantRepository = require('pgdatabase').NodePGParticipantRepository;
 
-const participantRepository: ParticipantRepository = new ParticipantRepository();
+const participantRepository: typeof NodePGParticipantRepository = new NodePGParticipantRepository();
 
 // const addParticiant = async (organizationId: UUID, eventId: UUID, name: UUID) => {};
 
-const getAllParticipants = async (organizationId: UUID, eventId: UUID) => {
+const getAllParticipants = async (
+  organizationId: typeof UUID,
+  eventId: typeof UUID,
+): Promise<(typeof Participant)[]> => {
   try {
-    const participants: Participant[] = await participantRepository.findAll(
+    const participants: (typeof Participant)[] = await participantRepository.findAll(
       organizationId,
       eventId,
     );
     return participants;
   } catch (err) {
     console.log(err);
+    return [];
   }
 };
 
-const getParticipantById = async (organizationId: UUID, eventId: UUID, participantId: UUID) => {
-  const participant: Participant = await participantRepository.find(
+const getParticipantById = async (
+  organizationId: typeof UUID,
+  eventId: typeof UUID,
+  participantId: typeof UUID,
+) => {
+  const participant: typeof Participant = await participantRepository.find(
     organizationId,
     eventId,
     participantId,
@@ -26,8 +35,12 @@ const getParticipantById = async (organizationId: UUID, eventId: UUID, participa
   return participant;
 };
 
-const getParticipantByInviteId = async (organizationId: UUID, eventId: UUID, inviteId: string) => {
-  const participant: Participant = await participantRepository.findByInviteId(
+const getParticipantByInviteId = async (
+  organizationId: typeof UUID,
+  eventId: typeof UUID,
+  inviteId: string,
+) => {
+  const participant: typeof Participant = await participantRepository.findByInviteId(
     organizationId,
     eventId,
     inviteId,

@@ -1,18 +1,35 @@
-import UUID from 'domain/src/UUID';
-import { Participant } from '../../domain/src/';
 import { pg } from './pg';
-import CheckInRepository from '../../pgdatabase/src/ParticipantRepository';
-import ParticipantCheckIn from '../../domain/src/models/ParticipantCheckIn';
-import organization from 'domain/src/models/Organization';
-import event from 'domain/src/models/Event';
-import participant from 'domain/src/models/Participant';
 
-class NodePGCheckInRepository implements CheckInRepository<ParticipantCheckIn> {
-  public async create(participant: Participant): Promise<void> {
-    throw new Error('Method not implemented');
+const UUID = require('common').UUID;
+const CheckInRepository = require('common').CheckInRepository;
+const ParticipantCheckIn = require('common').ParticipantCheckIn;
+
+class NodePGCheckInRepository implements InstanceType<typeof CheckInRepository> {
+  public async create(participant: typeof ParticipantCheckIn): Promise<boolean> {
+    try {
+      const result = await pg.query(
+        'INSERT INTO participant_check_in( organization_id, event_id, participant_id, checked_in, check_in_time, checked_in_by) VALUES ($1, $2, $3, true, now(), $4)',
+        [
+          participant.organization_id,
+          participant.event_id,
+          participant.participant_id,
+          participant.checked_in_by,
+        ],
+      );
+
+      if (!result) throw new Error('Error in checking in participant');
+
+      return true;
+    } catch (err: any) {
+      return false;
+    }
   }
 
-  public async find(organizationId: UUID, eventId: UUID, id: UUID): Promise<ParticipantCheckIn> {
+  public async find(
+    organizationId: typeof UUID,
+    eventId: typeof UUID,
+    id: typeof UUID,
+  ): Promise<typeof ParticipantCheckIn> {
     try {
       const result = (
         await pg.query(
@@ -32,14 +49,16 @@ class NodePGCheckInRepository implements CheckInRepository<ParticipantCheckIn> {
         result.check_in_time,
         result.checked_in_by,
       );
-    } catch (err: any) {}
+    } catch (err: any) {
+      return null as any;
+    }
   }
 
   public async findByParticipantId(
-    organizationId: UUID,
-    eventId: UUID,
-    participantId: UUID,
-  ): Promise<ParticipantCheckIn> {
+    organizationId: typeof UUID,
+    eventId: typeof UUID,
+    participantId: typeof UUID,
+  ): Promise<typeof ParticipantCheckIn> {
     try {
       const result = (
         await pg.query(
@@ -59,10 +78,15 @@ class NodePGCheckInRepository implements CheckInRepository<ParticipantCheckIn> {
         result.check_in_time,
         result.checked_in_by,
       );
-    } catch (err: any) {}
+    } catch (err: any) {
+      return null as any;
+    }
   }
 
-  public async findAll(organizationId: UUID, eventId: UUID): Promise<ParticipantCheckIn[]> {
+  public async findAll(
+    organizationId: typeof UUID,
+    eventId: typeof UUID,
+  ): Promise<(typeof ParticipantCheckIn)[]> {
     try {
       const result = (
         await pg.query(
@@ -85,33 +109,17 @@ class NodePGCheckInRepository implements CheckInRepository<ParticipantCheckIn> {
             row.checked_in_by,
           ),
       );
-    } catch (err: any) {}
+    } catch (err: any) {
+      return [];
+    }
   }
 
-  public async update(participantCheckIn: ParticipantCheckIn): Promise<void> {
+  public async update(participantCheckIn: typeof ParticipantCheckIn): Promise<void> {
     throw new Error('Method not implemented');
   }
 
-  public async delete(organizationId: UUID, eventId: UUID, id: UUID): Promise<boolean> {
+  public async delete(item: typeof ParticipantCheckIn): Promise<boolean> {
     throw new Error('Method not implemented');
-  }
-
-  public async checkInParticipant(
-    organizationId: UUID,
-    eventId: UUID,
-    participantId: UUID,
-    checkedInBy: UUID,
-  ): Promise<boolean> {
-    try {
-      const result = await pg.query(
-        'INSERT INTO participant_check_in( organization_id, event_id, participant_id, checked_in, check_in_time, checked_in_by) VALUES ($1, $2, $3, true, now(), $4)',
-        [organizationId, eventId, participantId, checkedInBy],
-      );
-
-      if (!result) throw new Error('Error in checking in participant');
-
-      return true;
-    } catch (err: any) {}
   }
 }
 

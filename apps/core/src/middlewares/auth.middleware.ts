@@ -1,18 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { pg } from '../../../../packages/pgdatabase/src/pg';
-import { Organization, Event, User } from 'domain/src';
+const pg = require('pgdatabase').pg;
+const Organization = require('common').Organization;
+const Event = require('common').Event;
+const User = require('common').User;
 
 // Temporary authorization for testing
 const authorize = async (req: Request, res: Response, next: NextFunction) => {
-  const organization: Organization = (
+  const organization: typeof Organization = (
     await pg.query('SELECT * FROM organization WHERE name = $1', ['FOSS MEC'])
   ).rows[0];
 
-  const event: Event = (await pg.query('SELECT * FROM event WHERE name = $1', ['DebUtsav']))
+  const event: typeof Event = (await pg.query('SELECT * FROM event WHERE name = $1', ['DebUtsav']))
     .rows[0];
 
-  const user: User = (await pg.query('SELECT * FROM "user" WHERE name = $1', ['checkinbot']))
+  const user: typeof User = (await pg.query('SELECT * FROM "user" WHERE name = $1', ['checkinbot']))
     .rows[0];
 
   if (!organization || !event || !user) {

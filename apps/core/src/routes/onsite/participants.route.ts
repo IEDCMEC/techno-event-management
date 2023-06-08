@@ -5,31 +5,22 @@ import {
   getEventParticipantById,
   getEventParticipantByInviteId,
 } from '../../controllers/participants.controller';
-import { Participant } from 'domain';
 
 const router: Router = express.Router();
 
 // Get all participants
 router.get('/', authorize, async (req: Request, res: Response) => {
-  const participants: Participant[] = await getAllEventParticipants(req, res);
-  res.json(participants);
-});
-
-// Checkin a participant
-router.post('/checkin', authorize, async (req: Request, res: Response) => {
-  res.json({ message: 'checked in' });
+  await getAllEventParticipants(req, res);
 });
 
 // Get participant by invite id
 router.get('/invite/:inviteId', authorize, async (req: Request, res: Response) => {
-  const participant: Participant = await getEventParticipantByInviteId(req, res);
-  res.json(participant);
+  await getEventParticipantByInviteId(req, res);
 });
 
 // Get participant by id
 router.get('/:id', authorize, async (req: Request, res: Response) => {
-  const participant: Participant = await getEventParticipantById(req, res);
-  res.json(participant);
+  await getEventParticipantById(req, res);
 });
 
 export { router as participantsRouter };

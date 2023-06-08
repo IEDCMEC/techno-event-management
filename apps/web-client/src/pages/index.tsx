@@ -6,7 +6,7 @@ import Navbar from '@/Components/Navbar';
 import SigninModal from '@/Components/SigninModal';
 const inter = Inter({ subsets: ['latin'] });
 
-const Home = () => {
+export default function Home() {
   return (
     <>
       <Head>
@@ -21,5 +21,4 @@ const Home = () => {
       </main>
     </>
   );
-};
-export default Home;
+}

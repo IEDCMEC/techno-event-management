@@ -1,14 +1,15 @@
-import { UUID } from '../../../../packages/domain';
+const UUID = require('common').UUID;
+const ParticipantCheckIn = require('common').ParticipantCheckIn;
 
-import CheckInRepository from '../../../../packages/pgdatabase/src/CheckInRepository';
+const CheckInRepository = require('pgdatabase').CheckInRepository;
 
-const checkInRepository: CheckInRepository = new CheckInRepository();
+const checkInRepository: typeof CheckInRepository = new CheckInRepository();
 
 const checkInParticipant = async (
-  organizationId: UUID,
-  eventId: UUID,
-  participantId: UUID,
-  checkedInBy: UUID,
+  organizationId: typeof UUID,
+  eventId: typeof UUID,
+  participantId: typeof UUID,
+  checkedInBy: typeof UUID,
 ) => {
   const previousCheckin = await checkInRepository.findByParticipantId(
     organizationId,
@@ -21,12 +22,17 @@ const checkInParticipant = async (
 
   console.log(previousCheckin);
 
-  const checkInSucces = await checkInRepository.checkInParticipant(
+  const participantCheckIn: typeof ParticipantCheckIn = new ParticipantCheckIn(
+    new UUID(),
     organizationId,
     eventId,
     participantId,
+    true,
+    new Date(),
     checkedInBy,
   );
+
+  const checkInSucces = await checkInRepository.create(participantCheckIn);
   return checkInSucces;
 };
 

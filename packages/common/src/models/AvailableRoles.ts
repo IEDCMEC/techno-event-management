@@ -1,6 +1,6 @@
 import UUID from '../UUID';
 
-class Role {
+class AvailableRoles {
   public id: UUID;
   public name: string;
 
@@ -9,4 +9,4 @@ class Role {
     this.name = name;
   }
 }
-export default Role;
+export default AvailableRoles;

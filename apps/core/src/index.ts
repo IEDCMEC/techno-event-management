@@ -6,18 +6,9 @@ const cors = require('cors');
 
 dotenv.config();
 
-const getPORT = () => {
-  // const port = process.env.PORT
-  const port = '3001';
-  if (port) {
-    return parseInt(port);
-  } else {
-    return 3000;
-  }
-};
+const port: any = process.env.PORT;
 
 const app: Express = express();
-const port: any = getPORT();
 
 app.use(cors());
 app.use(bodyParser.json());
