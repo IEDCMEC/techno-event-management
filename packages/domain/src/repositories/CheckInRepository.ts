@@ -11,7 +11,12 @@ interface CheckInRepository<any> {
 
   delete(organizationId: UUID, eventId: UUID, id: UUID): Promise<boolean>;
 
-  checkInParticipant(organizationId: UUID, eventId: UUID, participantId: UUID, checkedInBy: UUID): Promise<boolean>;
+  checkInParticipant(
+    organizationId: UUID,
+    eventId: UUID,
+    participantId: UUID,
+    checkedInBy: UUID,
+  ): Promise<boolean>;
 }
 
 export default CheckInRepository;
