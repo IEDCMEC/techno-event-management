@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
-
 import Navbar from '@/Components/Navbar';
 import SigninModal from '@/Components/SigninModal';
+import SignupModal from '@/Components/SignupModal';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
@@ -18,6 +18,7 @@ export default function Home() {
       <main className={`${styles.main} ${inter.className}`}>
         <Navbar />
         <SigninModal />
+        <SignupModal />
       </main>
     </>
   );

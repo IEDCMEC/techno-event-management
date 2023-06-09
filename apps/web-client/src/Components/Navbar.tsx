@@ -42,7 +42,7 @@ function NavLink(props: props) {
 
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
-  const { setOpen } = useContext(themeContext);
+  const { setOpen, setOpen2 } = useContext(themeContext);
 
   return (
     <>
@@ -62,7 +62,7 @@ export default function Navbar() {
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
               <Button onClick={() => setOpen(true)}>Sign In</Button>
-              <Button>Sign Up</Button>
+              <Button onClick={() => setOpen2(true)}>Sign Up</Button>
               <Button onClick={toggleColorMode}>
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>

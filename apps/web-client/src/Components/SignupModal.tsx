@@ -14,8 +14,8 @@ import { useContext } from 'react';
 import {
   FormControl,
   FormLabel,
-  // FormErrorMessage,
-  // FormHelperText,
+  //   FormErrorMessage,
+  //   FormHelperText,
   Input,
   Box,
 } from '@chakra-ui/react';
@@ -28,19 +28,50 @@ import {
 interface IFormInput {
   email: String;
   password: String;
+  name: String;
 }
-export default function SigninModal() {
+export default function SignupModal() {
+  const { setOpen2, open2, form, setForm, formError, setformError, constructor } =
+    useContext(themeContext);
   const { register, handleSubmit, reset } = useForm<IFormInput>();
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    setForm(data);
     console.log(data);
+
+    let obj1Props = Object.keys(data);
+    let obj2Props = Object.keys({ name: '', email: '', password: '' });
+    console.log(obj1Props, obj2Props);
+    if (obj1Props.length != obj2Props.length) {
+      setformError(true);
+    } else {
+      // Compare the values of each property
+      var allPropsAreEqual = true;
+      for (let i = 0; i < obj1Props.length; i++) {
+        let propName = obj1Props[i];
+        if (
+          data[propName as keyof IFormInput] !== form[propName as keyof {}] &&
+          data[propName as keyof IFormInput] !== ''
+        ) {
+          allPropsAreEqual = false;
+          break;
+        }
+      }
+      if (allPropsAreEqual) {
+        setformError(false);
+      } else {
+        setformError(true);
+        // console.log(formError);
+        setOpen2(false);
+      }
+    }
   };
-  const { setOpen, open } = useContext(themeContext);
+
   return (
     <>
-      <Modal isOpen={open} onClose={() => setOpen(false)}>
+      <Modal isOpen={open2} onClose={() => setOpen2(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Sign In</ModalHeader>
+          <ModalHeader>Sign Up</ModalHeader>
           <ModalCloseButton />
           <ModalBody display={'flex'} justifyContent={'center'} alignItems={'center'}>
             <FormControl
@@ -49,21 +80,20 @@ export default function SigninModal() {
               justifyContent={'center'}
               alignItems={'center'}
               flexDirection={'column'}
+              isRequired
             >
               <Box width={'80%'} padding={'15px 0'}>
+                <FormLabel>Name</FormLabel>
+                <Input {...register('name')} placeholder="Enter your Name" />
+              </Box>
+              <Box width={'80%'} padding={'15px 0'}>
                 <FormLabel>Email</FormLabel>
-                <Input
-                  {...register('email')}
-                  isRequired
-                  type="email"
-                  placeholder="Enter Your Email"
-                />
+                <Input {...register('email')} type="email" placeholder="Enter Your Email" />
               </Box>
               <Box width={'80%'} padding={'15px 0'}>
                 <FormLabel>Password</FormLabel>
                 <Input
                   {...register('password')}
-                  isRequired
                   type="password"
                   placeholder="Enter Your password"
                 />
