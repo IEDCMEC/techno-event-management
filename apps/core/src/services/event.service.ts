@@ -1,5 +1,3 @@
-// import { UUID } from '../../../../packages/common/';
+const getEvents = async (organizationId: string) => {};
 
-// const getEventById = async (organizationId: UUID, eventId: UUID) => {};
-
-// const getAllParticipants = async (organizationId: UUID, eventId: UUID) => {};
+const getEvent = async (organizationId: string, eventId: string) => {};
