@@ -15,9 +15,11 @@ app.use(bodyParser.json());
 
 import { participantsRouter } from './routes/onsite/participants.route';
 import { checkInRouter } from './routes/onsite/checkin.route';
+import { router } from './routes/routes';
 
 app.use('/onsite/participant', participantsRouter);
 app.use('/onsite/checkin', checkInRouter);
+app.use('/core', router);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Techno Event Server');
