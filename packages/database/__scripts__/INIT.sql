@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS organization_user
     user_id         uuid NOT NULL,
     organization_id uuid NOT NULL,
 
-    role_id            uuid NOT NULL,
+    role_id         uuid NOT NULL,
 
     PRIMARY KEY (id, user_id, organization_id),
     FOREIGN KEY (user_id) REFERENCES "user" (id),
@@ -233,4 +233,20 @@ CREATE TABLE IF NOT EXISTS participant_extras_check_in
     FOREIGN KEY (organization_id) REFERENCES organization (id),
     FOREIGN KEY (participant_extra_id, organization_id, event_id) REFERENCES participant_extras (id, organization_id, event_id),
     FOREIGN KEY (checked_in_by) REFERENCES "user" (id)
+);
+
+CREATE TABLE IF NOT EXISTS event_volunteer
+(
+    id                   uuid DEFAULT uuid_generate_v4(),
+    organization_id      uuid NOT NULL,
+    event_id             uuid NOT NULL,
+    user_id              uuid NOT NULL,
+
+    organization_user_id uuid NOT NULL,
+
+    PRIMARY KEY (id, organization_id, event_id, user_id),
+    FOREIGN KEY (organization_id) REFERENCES organization (id),
+    FOREIGN KEY (organization_id, event_id) REFERENCES event (id, organization_id),
+    FOREIGN KEY (organization_user_id, user_id, organization_id) REFERENCES organization_user (id, user_id, organization_id),
+    FOREIGN KEY (user_id) REFERENCES "user" (id)
 );
