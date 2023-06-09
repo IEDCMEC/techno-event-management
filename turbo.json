@@ -6,19 +6,16 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
-    "clean": {
-      "cache": false,
-      "persistent": true
-    },
+    "clean": {},
+    "start": {},
     "lint": {},
     "dev": {
       "cache": false,
       "persistent": true
     },
     "test": {
-      "dependsOn": ["^test"],
-      "cache": false,
-      "persistent": true
+      "dependsOn": ["^build"],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "test/**/*.tsx"]
     }
   }
 }
