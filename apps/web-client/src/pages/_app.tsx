@@ -3,7 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
 import ContextVariables from '@/Contexts/ContextVariables';
 
-export const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <ChakraProvider>
       <ContextVariables>
@@ -12,3 +12,5 @@ export const App = ({ Component, pageProps }: AppProps) => {
     </ChakraProvider>
   );
 };
+
+export default App;
