@@ -29,7 +29,7 @@ export const themeContext = createContext<context>({
   open2: false,
   setOpen2: () => {},
 });
-export default function ContextVariables({ children }: any) {
+const ContextVariables = ({ children }: any) => {
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [form, setForm] = React.useState({ Name: '', Email: '', Password: '' });
@@ -51,4 +51,4 @@ export default function ContextVariables({ children }: any) {
       {children}
     </themeContext.Provider>
   );
-}
+};
