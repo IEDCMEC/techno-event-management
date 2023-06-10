@@ -1,6 +1,6 @@
-import Navbar from '@/Components/Navbar';
-import ParticipantCard from '@/Components/ParticipantCard';
-import Scanner from '@/Components/Scanner';
+import Navbar from '@/components/Navbar';
+import ParticipantCard from '@/components/ParticipantCard';
+import Scanner from '@/components/Scanner';
 import { Button, Flex, color } from '@chakra-ui/react';
 import React, { useState } from 'react';
 

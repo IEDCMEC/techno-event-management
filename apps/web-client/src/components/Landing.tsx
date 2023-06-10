@@ -15,7 +15,7 @@ import {
   //   Image,
 } from '@chakra-ui/react';
 import Image from 'next/image';
-import qr from '../Assets/qr.jpg';
+import qr from '@/assets/qr.jpg';
 const PlayIcon = createIcon({
   displayName: 'PlayIcon',
   viewBox: '0 0 58 58',

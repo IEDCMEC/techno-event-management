@@ -16,7 +16,7 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
-import { themeContext } from '@/Contexts/ContextVariables';
+import { themeContext } from '@/contexts/ContextVariables';
 import { useContext } from 'react';
 import Link from 'next/link';
 type props = {

@@ -3,8 +3,8 @@ import React from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-import Navbar from '@/Components/Navbar';
-import Layout from '@/Components/Layout';
+import Navbar from '@/components/Navbar';
+import Layout from '@/components/Layout';
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };

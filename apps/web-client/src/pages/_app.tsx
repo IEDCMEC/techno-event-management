@@ -2,10 +2,10 @@ import '@/styles/globals.css';
 import { ChakraProvider } from '@chakra-ui/react';
 // import type { AppProps } from 'next/app';
 import { AppPropsWithLayout } from './events';
-import ContextVariables from '@/Contexts/ContextVariables';
-import Navbar from '@/Components/Navbar';
-import SigninModal from '@/Components/SigninModal';
-import SignupModal from '@/Components/SignupModal';
+import ContextVariables from '@/contexts/ContextVariables';
+import Navbar from '@/components/Navbar';
+import SigninModal from '@/components/SigninModal';
+import SignupModal from '@/components/SignupModal';
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   if (Component.getLayout) {
     return Component.getLayout(<Component {...pageProps} />);
