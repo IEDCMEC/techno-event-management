@@ -6,6 +6,7 @@ import AvailableRoles from './models/AvailableRoles';
 import AvailableSubscriptions from './models/AvailableSubscriptions';
 import AvailableTags from './models/AvailableTags';
 import Event from './models/Event';
+import EventVolunteer from './models/EventVolunteer';
 import Organization from './models/Organization';
 import OrganizationSubscription from './models/OrganizationSubscription';
 import OrganizationUser from './models/OrganizationUser';
@@ -18,8 +19,23 @@ import ParticipantTag from './models/ParticipantTag';
 import Tag from './models/Tag';
 import User from './models/User';
 
+import AvailableAttributesRepository from './repositories/AvailableAttributesRepository';
+import AvailableExtrasRepository from './repositories/AvailableExtrasRepository';
+import AvailableRolesRepository from './repositories/AvailableRolesRepository';
+import AvailableSubscriptionsRepository from './repositories/AvailableSubscriptionsRepository';
+import AvailableTagsRepository from './repositories/AvailableTagsRepository';
+import EventRepository from './repositories/EventRepository';
+import EventVolunteerRepository from './repositories/EventVolunteerRepository';
+import OrganizationRepository from './repositories/OrganizationRepository';
+import OrganizationSubscriptionRepository from './repositories/OrganizationSubscriptionRepository';
+import OrganizationUserRepository from './repositories/OrganizationUserRepository';
+import ParticipantAttributeRepository from './repositories/ParticipantAttributeRepository';
+import ParticipantCheckInRepository from './repositories/ParticipantCheckInRepository';
+import ParticipantExtrasCheckInRepository from './repositories/ParticipantExtrasCheckInRepository';
+import ParticipantExtrasRepository from './repositories/ParticipantExtrasRepository';
 import ParticipantRepository from './repositories/ParticipantRepository';
-import CheckInRepository from './repositories/CheckInRepository';
+import ParticipantTagRepository from './repositories/ParticipantTagRepository';
+import UserRepository from './repositories/UserRepository';
 
 export {
   UUID,
@@ -29,6 +45,7 @@ export {
   AvailableSubscriptions,
   AvailableTags,
   Event,
+  EventVolunteer,
   Organization,
   OrganizationSubscription,
   OrganizationUser,
@@ -40,6 +57,21 @@ export {
   ParticipantTag,
   Tag,
   User,
+  AvailableAttributesRepository,
+  AvailableExtrasRepository,
+  AvailableRolesRepository,
+  AvailableSubscriptionsRepository,
+  AvailableTagsRepository,
+  EventRepository,
+  EventVolunteerRepository,
+  OrganizationRepository,
+  OrganizationSubscriptionRepository,
+  OrganizationUserRepository,
+  ParticipantAttributeRepository,
+  ParticipantCheckInRepository,
+  ParticipantExtrasCheckInRepository,
+  ParticipantExtrasRepository,
   ParticipantRepository,
-  CheckInRepository,
+  ParticipantTagRepository,
+  UserRepository,
 };

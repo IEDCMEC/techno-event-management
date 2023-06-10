@@ -1,7 +1,7 @@
 import UUID from '../UUID';
 import ParticipantCheckIn from '../models/ParticipantCheckIn';
 
-interface CheckInRepository {
+interface ParticipantCheckInRepository {
   create(item: ParticipantCheckIn): Promise<boolean>;
 
   find(organizationId: UUID, eventId: UUID, id: UUID): Promise<ParticipantCheckIn>;
@@ -19,4 +19,4 @@ interface CheckInRepository {
   delete(item: ParticipantCheckIn): Promise<boolean>;
 }
 
-export default CheckInRepository;
+export default ParticipantCheckInRepository;

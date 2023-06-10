@@ -1,10 +1,12 @@
-import { pg } from './pg';
+import { pg } from '../pg';
 
 const UUID = require('common').UUID;
-const CheckInRepository = require('common').CheckInRepository;
+const ParticipantCheckInRepository = require('common').CheckInRepository;
 const ParticipantCheckIn = require('common').ParticipantCheckIn;
 
-class NodePGCheckInRepository implements InstanceType<typeof CheckInRepository> {
+class NodePGParticipantCheckInRepository
+  implements InstanceType<typeof ParticipantCheckInRepository>
+{
   public async create(participant: typeof ParticipantCheckIn): Promise<boolean> {
     try {
       const result = await pg.query(
@@ -26,9 +28,9 @@ class NodePGCheckInRepository implements InstanceType<typeof CheckInRepository> 
   }
 
   public async find(
+    id: typeof UUID,
     organizationId: typeof UUID,
     eventId: typeof UUID,
-    id: typeof UUID,
   ): Promise<typeof ParticipantCheckIn> {
     try {
       const result = (
@@ -115,12 +117,45 @@ class NodePGCheckInRepository implements InstanceType<typeof CheckInRepository> 
   }
 
   public async update(participantCheckIn: typeof ParticipantCheckIn): Promise<void> {
-    throw new Error('Method not implemented');
+    try {
+      const result = await pg.query(
+        'UPDATE participant_check_in SET checked_in = $1, check_in_time = $2, checked_in_by = $3 WHERE organization_id = $4 AND event_id = $5 AND id = $6',
+        [
+          participantCheckIn.checked_in,
+          participantCheckIn.check_in_time,
+          participantCheckIn.checked_in_by,
+          participantCheckIn.organization_id,
+          participantCheckIn.event_id,
+          participantCheckIn.id,
+        ],
+      );
+
+      if (!result) throw new Error('Error in updating participant check in');
+
+      return;
+    } catch (err: any) {
+      return;
+    }
   }
 
-  public async delete(item: typeof ParticipantCheckIn): Promise<boolean> {
-    throw new Error('Method not implemented');
+  public async delete(
+    id: typeof UUID,
+    organizationId: typeof UUID,
+    eventId: typeof UUID,
+  ): Promise<boolean> {
+    try {
+      const result = await pg.query(
+        'DELETE FROM participant_check_in WHERE organization_id = $1 AND event_id = $2 AND id = $3',
+        [organizationId, eventId, id],
+      );
+
+      if (!result) throw new Error('Error in deleting participant check in');
+
+      return true;
+    } catch (err: any) {
+      return false;
+    }
   }
 }
 
-export default NodePGCheckInRepository;
+export default NodePGParticipantCheckInRepository;

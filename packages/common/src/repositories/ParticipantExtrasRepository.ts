@@ -4,12 +4,7 @@ import UUID from '../UUID';
 export interface ParticipantExtrasRepository {
   create(participantExtras: ParticipantExtras): Promise<boolean>;
 
-  find(
-    organizationId: UUID,
-    eventId: UUID,
-    participantId: UUID,
-    participantExtraId: UUID,
-  ): Promise<ParticipantExtras[] | null>;
+  find(id: UUID, organizationId: UUID, eventId: UUID): Promise<ParticipantExtras[] | null>;
 
   findAll(organizationId: UUID, eventId: UUID): Promise<ParticipantExtras | null>;
 

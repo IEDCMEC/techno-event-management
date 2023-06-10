@@ -10,9 +10,9 @@ export interface UserRepository {
 
   findByEmail(email: string): Promise<User | null>;
 
-  update(user: User): Promise<User>;
+  update(user: User): Promise<User | null>;
 
-  delete(id: UUID): Promise<void>;
+  delete(id: UUID): Promise<boolean>;
 }
 
 export default UserRepository;

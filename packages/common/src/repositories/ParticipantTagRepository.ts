@@ -4,18 +4,17 @@ import UUID from '../UUID';
 interface ParticipantTagRepository {
   create(item: ParticipantTag): Promise<boolean>;
 
-  find(
+  find(id: UUID, organizationId: UUID, eventId: UUID): Promise<ParticipantTag | null>;
+
+  findAll(
     organizationId: UUID,
     eventId: UUID,
-    tagId: UUID,
     participantId: UUID,
-  ): Promise<ParticipantTag>;
+  ): Promise<ParticipantTag[] | null>;
 
-  findAll(organizationId: UUID, eventId: UUID, participantId: UUID): Promise<ParticipantTag[]>;
+  update(item: ParticipantTag): Promise<ParticipantTag | boolean>;
 
-  update(item: ParticipantTag): Promise<boolean>;
-
-  delete(organizationId: UUID, eventId: UUID, tagId: UUID, participantId: UUID): Promise<boolean>;
+  delete(id: UUID, organizationId: UUID, eventId: UUID): Promise<boolean>;
 }
 
 export default ParticipantTagRepository;

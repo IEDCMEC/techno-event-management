@@ -4,11 +4,11 @@ import Event from '../models/Event';
 interface EventRepository {
   create(item: Event): Promise<boolean>;
 
-  find(organizationId: UUID): Promise<Event>;
+  find(id: UUID, organizationId: UUID): Promise<Event | null>;
 
-  findAll(organizationId: UUID): Promise<Event[]>;
+  findAll(organizationId: UUID): Promise<Event[] | null>;
 
-  update(item: Event): Promise<boolean>;
+  update(item: Event): Promise<Event | boolean>;
 
   delete(item: Event): Promise<boolean>;
 }

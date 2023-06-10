@@ -1,4 +1,4 @@
-import { pg } from './pg';
+import { pg } from '../pg';
 
 const UUID = require('common').UUID;
 const Participant = require('common').Participant;

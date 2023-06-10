@@ -4,11 +4,11 @@ import AvailableSubscriptions from '../models/AvailableSubscriptions';
 interface AvailableSubscriptionsRepository {
   create(item: AvailableSubscriptions): Promise<boolean>;
 
-  find(): Promise<AvailableSubscriptions>;
+  find(id: UUID): Promise<AvailableSubscriptions | null>;
 
-  findAll(): Promise<AvailableSubscriptions[]>;
+  findAll(): Promise<AvailableSubscriptions[] | null>;
 
-  update(item: AvailableSubscriptions): Promise<boolean>;
+  update(item: AvailableSubscriptions): Promise<AvailableSubscriptions | boolean>;
 
   delete(item: AvailableSubscriptions): Promise<boolean>;
 }

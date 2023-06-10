@@ -4,11 +4,11 @@ import AvailableExtras from '../models/AvailableExtras';
 interface AvailableExtrasRepository {
   create(item: AvailableExtras): Promise<boolean>;
 
-  find(organizationId: UUID, eventId: UUID): Promise<AvailableExtras>;
+  find(id: UUID, organizationId: UUID, eventId: UUID): Promise<AvailableExtras | null>;
 
-  findAll(AvailableExtras: UUID, eventId: UUID): Promise<AvailableExtras[]>;
+  findAll(AvailableExtras: UUID, eventId: UUID): Promise<AvailableExtras[] | null>;
 
-  update(item: AvailableExtras): Promise<boolean>;
+  update(item: AvailableExtras): Promise<AvailableExtras | boolean>;
 
   delete(item: AvailableExtras): Promise<boolean>;
 }
