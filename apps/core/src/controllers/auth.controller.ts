@@ -10,4 +10,4 @@ const signup = async (req: Request, res: Response) => {
   } catch (err) {
     console.log(err);
   }
-}
+};
