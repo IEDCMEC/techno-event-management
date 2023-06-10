@@ -5,10 +5,7 @@ const Organization = require('common').Organization;
 const Event = require('common').Event;
 const User = require('common').User;
 
-
 const accessTokenSecret = process.env.SECRET_KEY;
-
-
 
 // Temporary authorization for testing
 const authorize = async (req: Request & typeof User, res: Response, next: NextFunction) => {
@@ -37,15 +34,14 @@ const authorize = async (req: Request & typeof User, res: Response, next: NextFu
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(' ')[1];
-    jwt.verify(token, accessTokenSecret, (err:Error, user: typeof User) => {
-       if (err) {
-         return res.sendStatus(403);
-       }
-        
-       req.user = user;
-        next();
-     });
+    jwt.verify(token, accessTokenSecret, (err: Error, user: typeof User) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
 
+      req.user = user;
+      next();
+    });
   } else {
     res.sendStatus(401);
   }

@@ -18,7 +18,7 @@ module.exports = (passport: any) => {
           // }
 
           //const user = await createUser(email, password);
-          return done(null, {email,password});
+          return done(null, { email, password });
         } catch (error) {
           done(error);
         }
@@ -26,13 +26,13 @@ module.exports = (passport: any) => {
     ),
   );
   passport.use(
-    "local-login",
+    'local-login',
     new LocalStrategy(
       {
-        usernameField: "email",
-        passwordField: "password",
+        usernameField: 'email',
+        passwordField: 'password',
       },
-      async (email:String, password:String, done:Function) => {
+      async (email: String, password: String, done: Function) => {
         try {
           const user = await emailExists(email);
           if (!user) return done(null, false);
@@ -42,7 +42,7 @@ module.exports = (passport: any) => {
         } catch (error) {
           return done(error, false);
         }
-      }
-    )
+      },
+    ),
   );
 };
