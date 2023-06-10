@@ -65,7 +65,7 @@ const Landing = () => {
                 position: 'absolute',
                 bottom: 1,
                 left: 0,
-                bg: 'blue',
+                bg: useColorModeValue('blue.200', 'blue.900'),
                 zIndex: -1,
               }}
             >
