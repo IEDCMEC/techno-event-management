@@ -52,3 +52,4 @@ const ContextVariables = ({ children }: any) => {
     </themeContext.Provider>
   );
 };
+export default ContextVariables;
