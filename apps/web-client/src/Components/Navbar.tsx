@@ -51,7 +51,7 @@ const Navbar = () => {
           h={16}
           alignItems={'center'}
           justifyContent={'space-between'}
-          width={'85vw'}
+          width={'90vw'}
           padding={'0px'}
           flexDirection={'row'}
         >
@@ -61,12 +61,14 @@ const Navbar = () => {
 
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
+              <NavLink route="events" content="Events" />
               <Button onClick={() => setOpen(true)}>Sign In</Button>
               <Button onClick={() => setOpen2(true)}>Sign Up</Button>
               <Button onClick={toggleColorMode}>
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
-
+              {/* add conditional rendering of icon for settings/dashboard after authentication */}
+              {/* 
               <Menu>
                 <MenuButton
                   as={Button}
@@ -95,7 +97,7 @@ const Navbar = () => {
                   <MenuItem>Account Settings</MenuItem>
                   <MenuItem>Logout</MenuItem>
                 </MenuList>
-              </Menu>
+              </Menu> */}
             </Stack>
           </Flex>
         </Flex>
