@@ -244,7 +244,7 @@ CREATE TABLE IF NOT EXISTS event_volunteer
 
     organization_user_id uuid NOT NULL,
 
-    PRIMARY KEY (id, organization_id, event_id, user_id),
+    PRIMARY KEY (id, organization_id, event_id),
     FOREIGN KEY (organization_id) REFERENCES organization (id),
     FOREIGN KEY (organization_id, event_id) REFERENCES event (id, organization_id),
     FOREIGN KEY (organization_user_id, user_id, organization_id) REFERENCES organization_user (id, user_id, organization_id),
