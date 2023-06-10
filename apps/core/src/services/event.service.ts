@@ -1,10 +1,10 @@
-import { UUID } from 'common';
+const UUID = require('common').UUID;
 const EventRepository = require('common').EventRepository;
-import { NodePGEventRepository } from 'pgdatabase';
+const NodePGEventRepository = require('pgdatabase').NodePGEventRepository;
 
-const eventRepository: EventRepository = new NodePGEventRepository();
+const eventRepository: typeof EventRepository = new NodePGEventRepository();
 
-const getAllEventsByOrganization = async (organizationId: UUID) => {
+const getAllEventsByOrganization = async (organizationId: typeof UUID) => {
   // const events = await EventRepository.findAll(organizationId);
   // return events;
 };

@@ -6,7 +6,7 @@ import {
   getAllParticipants,
   getParticipantByInviteId,
 } from '../services/participant.service';
-import { checkInParticipant } from '../services/checkin.service';
+import { checkInParticipant } from '../services/participant.service';
 
 const getAllEventParticipants = async (req: Request, res: Response) => {
   try {
