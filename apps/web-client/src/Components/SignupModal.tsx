@@ -30,7 +30,7 @@ interface IFormInput {
   password: String;
   name: String;
 }
-export default function SignupModal() {
+const SignupModal = () => {
   const { setOpen2, open2, form, setForm, formError, setformError, constructor } =
     useContext(themeContext);
   const { register, handleSubmit, reset } = useForm<IFormInput>();
@@ -111,4 +111,5 @@ export default function SignupModal() {
       </Modal>
     </>
   );
-}
+};
+export default SignupModal;
