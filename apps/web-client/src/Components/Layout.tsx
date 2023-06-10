@@ -34,7 +34,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Events', icon: FiTrendingUp, list: ['Event1', 'Event2', 'Event3'] },
   { name: 'Participants', icon: FiCompass, list: ['participant1', 'participant2', 'participant3'] },
   { name: 'Attributes', icon: FiStar, list: ['Attributes1', 'Attributes2', 'Attributes3'] },
-  //   { name: 'Extras', icon: FiSettings, list: [] },
+  { name: 'Settings', icon: FiSettings, list: ['Dashboard', 'Logout'] },
 ];
 const Layout = ({ children }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -92,9 +92,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <Accordion allowMultiple key={link.name}>
-          <AccordionItem>
+      <Accordion allowMultiple>
+        {LinkItems.map((link) => (
+          <AccordionItem key={link.name}>
             <AccordionButton>
               <Box as="span" flex="1" textAlign="left">
                 <NavItem key={link.name} icon={link.icon}>
@@ -123,11 +123,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
               )}
             </AccordionPanel>
           </AccordionItem>
-        </Accordion>
-      ))}
-      <Box as="span" flex="1" textAlign="left">
-        <NavItem icon={FiSettings}>Settings</NavItem>
-      </Box>
+        ))}
+      </Accordion>
     </Box>
   );
 };
@@ -156,9 +153,9 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
           <Icon
             mr="4"
             fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
+            // _groupHover={{
+            //   color: 'white',
+            // }}
             as={icon}
           />
         )}
