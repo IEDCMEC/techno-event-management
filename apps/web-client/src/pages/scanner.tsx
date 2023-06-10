@@ -8,18 +8,12 @@ type Props = {};
 
 const ScannerComponent: React.FC<Props> = () => {
   const [participant, setParticipant] = useState<string>('');
+  const obj = { user: 'Alice', checkin: false, food: 'Veg', foodCheckin: false };
 
   return (
     <>
       <Navbar />
-      <Flex
-        align={'center'}
-        direction={'column'}
-        gap={4}
-        justify={'center'}
-        h={'100vh'}
-        w={'100vw'}
-      >
+      <Flex align={'center'} direction={'column'} gap={4} justify={'center'} w={'100vw'}>
         <Scanner setResult={(result: string) => setParticipant(result)} />
         <p style={{ color: 'black' }}>{participant}</p>
         <Button
@@ -29,7 +23,7 @@ const ScannerComponent: React.FC<Props> = () => {
         >
           Checkin
         </Button>
-        <ParticipantCard />
+        {!participant && <ParticipantCard {...obj} />}
       </Flex>
     </>
   );

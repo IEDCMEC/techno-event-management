@@ -14,7 +14,12 @@ import {
   Flex,
 } from '@chakra-ui/react';
 
-type Props = {};
+type Props = {
+  user: string;
+  checkin: boolean;
+  food: string;
+  foodCheckin: boolean;
+};
 
 const ParticipantCard = (props: Props) => {
   return (
@@ -29,7 +34,7 @@ const ParticipantCard = (props: Props) => {
             borderRadius="50%"
           />
           <Stack mt="6" spacing="3">
-            <Heading size="md">Allen Shibu</Heading>
+            <Heading size="md">{props.user}</Heading>
           </Stack>
         </Flex>
       </CardBody>
