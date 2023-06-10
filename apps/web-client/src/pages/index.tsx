@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
-
 import Navbar from '@/Components/Navbar';
-import SigninModal from '@/Components/SigninModal';
+import Landing from '@/Components/Landing';
+
 const inter = Inter({ subsets: ['latin'] });
 
 const Home = () => {
@@ -17,7 +17,7 @@ const Home = () => {
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <Navbar />
-        <SigninModal />
+        <Landing />
       </main>
     </>
   );
