@@ -23,7 +23,7 @@ type props = {
   route: string;
   content: string;
 };
-const NavLink = (props: props) => {
+export const NavLink = (props: props) => {
   return (
     <Link href={props.route}>
       <Box
@@ -32,6 +32,7 @@ const NavLink = (props: props) => {
         rounded={'md'}
         _hover={{
           textDecoration: 'none',
+          bg: useColorModeValue('gray.200', 'gray.700'),
         }}
       >
         {props.content}
@@ -46,24 +47,41 @@ const Navbar = () => {
 
   return (
     <>
-      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={'100vw'} position="fixed" top="0px">
+      <Box
+        bg={useColorModeValue('gray.100', 'gray.900')}
+        px={'100vw'}
+        position="fixed"
+        top="0px"
+        padding={'0'}
+        width={'100vw'}
+        display={'flex'}
+        alignItems={'center'}
+        justifyContent={'center'}
+      >
         <Flex
           h={16}
           alignItems={'center'}
-          justifyContent={'space-between'}
+          justifyContent={['flex-end', 'flex-end', 'space-between']}
           width={'90vw'}
           padding={'0px'}
           flexDirection={'row'}
         >
-          <Box fontSize={'1.7rem'}>
-            <NavLink route="/" content="QR System" />
+          <Box fontSize={'1.7rem'} display={'flex'}>
+            <Link href="/">QR System</Link>
           </Box>
 
           <Flex alignItems={'center'}>
-            <Stack direction={'row'} spacing={7}>
-              <NavLink route="events" content="Events" />
-              <Button onClick={() => setOpen(true)}>Sign In</Button>
-              <Button onClick={() => setOpen2(true)}>Sign Up</Button>
+            <Stack direction={'row'} spacing={7} display={'flex'} alignItems={'center'}>
+              <Box display={'flex'} flexDirection={'row'}>
+                <NavLink route="events" content="Events" />
+                {/* <NavLink route="scanner" content="Check In" /> */}
+              </Box>
+              <Button display={'flex'} onClick={() => setOpen(true)}>
+                Sign In
+              </Button>
+              <Button display={'flex'} onClick={() => setOpen2(true)}>
+                Sign Up
+              </Button>
               <Button onClick={toggleColorMode}>
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
