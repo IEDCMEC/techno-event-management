@@ -73,11 +73,9 @@ const checkInEventParticipant = async (req: Request, res: Response) => {
   //   if (!organizationId || !eventId || !userId) {
   //     return res.status(400).json({ error: 'Authentication Error' });
   //   }
-
   //   if (!participantId) {
   //     return res.status(400).json({ error: 'Participant id is required' });
   //   }
-
   //   const checkInSucces = await checkInParticipant(organizationId, eventId, participantId, userId);
   //   if (!checkInSucces) {
   //     return res.status(400).json({ error: 'Checkin failed' });

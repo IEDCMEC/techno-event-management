@@ -26,6 +26,22 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Techno Event Server');
 });
 
+app.get('/health', (req: Request, res: Response) => {
+  const healthcheck: any = {
+    resource: 'Techno Event Server',
+    uptime: process.uptime(),
+    responseTime: process.hrtime(),
+    message: 'OK',
+    timestamp: Date.now(),
+  };
+  try {
+    res.send(healthcheck);
+  } catch (error) {
+    healthcheck.message = error;
+    res.status(503).send();
+  }
+});
+
 app.use('/auth', authrouter);
 
 app.listen(port, () => {
