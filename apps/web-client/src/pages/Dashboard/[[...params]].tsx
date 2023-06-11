@@ -16,7 +16,7 @@ export type AppPropsWithLayout = AppProps & {
 export default function events<NextPageWithLayout>() {
   const router = useRouter();
   const { params = [] } = router.query;
-  console.log(params);
+  // console.log(params);
   return (
     <Box
       margin={'0'}
