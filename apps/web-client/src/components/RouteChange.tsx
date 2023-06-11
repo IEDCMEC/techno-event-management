@@ -35,17 +35,21 @@ const RouteChange = () => {
     // from the event with the `off` method:
   }
   const router = useRouter();
-  useEffect(() => {
-    setRoute(window.location.href);
-    router.events.on('routeChangeStart', HandleRouteChange);
-    router.events.on('routeChangeComplete', HandleRouteChange);
-    router.events.on('routeChangeError', HandleRouteChange);
-    return () => {
-      router.events.off('routeChangeStart', HandleRouteChange);
-      router.events.off('routeChangeComplete', HandleRouteChange);
-      router.events.off('routeChangeError', HandleRouteChange);
-    };
-  }, [typeof window !== 'undefined' ? window.location.href : null]);
+  HandleRouteChange();
+  useEffect(
+    () => {
+      setRoute(window.location.href);
+      router.events.on('routeChangeStart', HandleRouteChange);
+      router.events.on('routeChangeComplete', HandleRouteChange);
+      router.events.on('routeChangeError', HandleRouteChange);
+      return () => {
+        router.events.off('routeChangeStart', HandleRouteChange);
+        router.events.off('routeChangeComplete', HandleRouteChange);
+        router.events.off('routeChangeError', HandleRouteChange);
+      };
+    },
+    typeof window !== 'undefined' ? [window.location.href] : [],
+  );
   if (routeChange) {
     return <Layout />;
   } else {
