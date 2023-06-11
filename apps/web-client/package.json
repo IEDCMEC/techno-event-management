@@ -14,22 +14,22 @@
     "@chakra-ui/react": "^2.7.0",
     "@emotion/react": "^11.11.1",
     "common": "workspace:*",
-    "eslint-config-custom": "*",
     "framer-motion": "^10.12.16",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.44.3",
     "react-icons": "^4.9.0",
-    "react-zxing": "^1.1.4",
-    "sharp": "^0.32.1"
+    "react-zxing": "^1.1.4"
   },
   "devDependencies": {
     "@types/node": "20.2.5",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "eslint": "8.41.0",
+    "eslint-config-custom": "*",
     "eslint-config-next": "13.4.4",
+    "sharp": "^0.32.1",
     "tsconfig": "workspace:*",
     "typescript": "5.0.4"
   }

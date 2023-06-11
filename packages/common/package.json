@@ -3,11 +3,11 @@
   "main": "build/index.js",
   "types": "build/index.js",
   "dependencies": {
-    "rimraf": "^5.0.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/uuid": "^9.0.1",
+    "rimraf": "^5.0.1",
     "tsconfig": "workspace:*",
     "typescript": "latest"
   },
