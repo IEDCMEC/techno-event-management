@@ -1,6 +1,5 @@
 import '@/styles/globals.css';
 import { ChakraProvider } from '@chakra-ui/react';
-// import type { AppProps } from 'next/app';
 import { AppPropsWithLayout } from './Dashboard/[[...params]]';
 import ContextVariables from '@/contexts/ContextVariables';
 import SigninModal from '@/components/SigninModal';
