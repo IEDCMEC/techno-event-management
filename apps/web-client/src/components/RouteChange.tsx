@@ -8,23 +8,25 @@ const RouteChange = () => {
   function HandleRouteChange() {
     if (typeof window !== 'undefined') {
       if (
-        route === 'http://localhost:3000/Dashboard' ||
-        route === 'http://localhost:3000/Dashboard/organizations' ||
-        route === 'http://localhost:3000/Dashboard/Events' ||
-        route === 'http://localhost:3000/Dashboard/Participants' ||
-        route === 'http://localhost:3000/Dashboard/Attributes' ||
-        route === 'http://localhost:3000/Dashboard/settings' ||
-        route === 'https://techno-event.vercel.app/Dashboard' ||
-        route === 'https://techno-event.vercel.app/Dashboard/organizations' ||
-        route === 'https://techno-event.vercel.app/Dashboard/Events' ||
-        route === 'https://techno-event.vercel.app/Dashboard/Participants' ||
-        route === 'https://techno-event.vercel.app/Dashboard/Attributes' ||
-        route === 'https://techno-event.vercel.app/Dashboard/settings'
+        window.location.href === 'http://localhost:3000/Dashboard' ||
+        window.location.href === 'http://localhost:3000/Dashboard/organizations' ||
+        window.location.href === 'http://localhost:3000/Dashboard/Events' ||
+        window.location.href === 'http://localhost:3000/Dashboard/Participants' ||
+        window.location.href === 'http://localhost:3000/Dashboard/Attributes' ||
+        window.location.href === 'http://localhost:3000/Dashboard/settings' ||
+        window.location.href === 'https://techno-event.vercel.app/Dashboard' ||
+        window.location.href === 'https://techno-event.vercel.app/Dashboard/organizations' ||
+        window.location.href === 'https://techno-event.vercel.app/Dashboard/Events' ||
+        window.location.href === 'https://techno-event.vercel.app/Dashboard/Participants' ||
+        window.location.href === 'https://techno-event.vercel.app/Dashboard/Attributes' ||
+        window.location.href === 'https://techno-event.vercel.app/Dashboard/settings'
       ) {
         setrouteChange(true);
+        console.log(route);
         return true;
       } else {
         setrouteChange(false);
+        console.log(route);
         return false;
       }
     }
@@ -43,7 +45,7 @@ const RouteChange = () => {
       router.events.off('routeChangeComplete', HandleRouteChange);
       router.events.off('routeChangeError', HandleRouteChange);
     };
-  }, [route]);
+  }, [typeof window !== 'undefined' ? window.location.href : null]);
   if (routeChange) {
     return <Layout />;
   } else {

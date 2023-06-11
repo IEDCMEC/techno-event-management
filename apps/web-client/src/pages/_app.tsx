@@ -19,7 +19,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   if (Component.getLayout) {
     return Component.getLayout(<Component {...pageProps} />);
   }
-
   return (
     <ChakraProvider>
       <EventVariables>

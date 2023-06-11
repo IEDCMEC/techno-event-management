@@ -25,7 +25,7 @@ export default function events<NextPageWithLayout>() {
       flexDirection={'row'}
       justifyContent={'center'}
     >
-      <Layout />
+      {/* <Layout /> */}
       {params[0] === 'organizations' ? (
         <>
           <Index />
