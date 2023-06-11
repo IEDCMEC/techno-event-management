@@ -39,7 +39,15 @@ const LinkItems: Array<LinkItemProps> = [
 const Layout = ({ children }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box
+      minH="100vh"
+      bg={useColorModeValue('gray.100', 'gray.900')}
+      margin={'0'}
+      position={'absolute'}
+      top={'0'}
+      left={'0'}
+      width={['0%', '0%', '200px']}
+    >
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         autoFocus={false}
@@ -92,39 +100,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      <Accordion allowMultiple>
-        {LinkItems.map((link) => (
-          <AccordionItem key={link.name}>
-            <AccordionButton>
-              <Box as="span" flex="1" textAlign="left">
-                <NavItem key={link.name} icon={link.icon}>
-                  {link.name}
-                </NavItem>
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-            <AccordionPanel pb={4}>
-              {link.list.map(
-                (
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-                    | React.ReactFragment
-                    | React.ReactPortal
-                    | React.PromiseLikeOfReactNode
-                    | null
-                    | undefined,
-                  index: any,
-                ) => (
-                  <Text key={index}>{value}</Text>
-                ),
-              )}
-            </AccordionPanel>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      {LinkItems.map((link) => (
+        <Box as="span" flex="1" textAlign="left" key={link.name}>
+          <NavItem key={link.name} icon={link.icon}>
+            {link.name}
+          </NavItem>
+        </Box>
+      ))}
     </Box>
   );
 };
@@ -143,10 +125,10 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
         borderRadius="lg"
         role="group"
         cursor="pointer"
-        // _hover={{
-        //   bg: 'cyan.400',
-        //   color: 'white',
-        // }}
+        _hover={{
+          bg: useColorModeValue('cyan.400', 'white'),
+          color: 'black',
+        }}
         {...rest}
       >
         {icon && (
@@ -180,6 +162,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent="flex-start"
       {...rest}
+      width={'100vw !important'}
+      //   maxHeight={'100px'}
     >
       <IconButton variant="outline" onClick={onOpen} aria-label="open menu" icon={<FiMenu />} />
 

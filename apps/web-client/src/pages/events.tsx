@@ -13,9 +13,15 @@ export type AppPropsWithLayout = AppProps & {
 };
 export default function events<NextPageWithLayout>() {
   return (
-    <Box margin={'0'}>
+    <Box
+      margin={'0'}
+      display={'flex'}
+      alignItems={'center'}
+      flexDirection={'row'}
+      justifyContent={'center'}
+    >
       <Layout />
-      Hello World
+      {/* <Box></Box> */}
     </Box>
   );
 }
