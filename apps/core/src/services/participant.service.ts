@@ -5,9 +5,10 @@ const NodePGParticipantRepository = require('pgdatabase').NodePGParticipantRepos
 const participantRepository: typeof NodePGParticipantRepository = new NodePGParticipantRepository();
 const ParticipantCheckIn = require('common').ParticipantCheckIn;
 
-const CheckInRepository = require('pgdatabase').CheckInRepository;
+const NodePGParticipantCheckInRepository = require('pgdatabase').NodePGParticipantCheckInRepository;
 
-const checkInRepository: typeof CheckInRepository = new CheckInRepository();
+const participantCheckInRepository: typeof NodePGParticipantCheckInRepository =
+  new NodePGParticipantCheckInRepository();
 
 // const addParticiant = async (organizationId: UUID, eventId: UUID, name: UUID) => {};
 
@@ -71,29 +72,29 @@ const checkInParticipant = async (
   participantId: typeof UUID,
   checkedInBy: typeof UUID,
 ) => {
-  const previousCheckin = await checkInRepository.findByParticipantId(
-    organizationId,
-    eventId,
-    participantId,
-  );
-  if (previousCheckin) {
-    return false;
-  }
+  // const previousCheckin = await checkInRepository.findByParticipantId(
+  //   organizationId,
+  //   eventId,
+  //   participantId,
+  // );
+  // if (previousCheckin) {
+  //   return false;
+  // }
 
-  console.log(previousCheckin);
+  // console.log(previousCheckin);
 
-  const participantCheckIn: typeof ParticipantCheckIn = new ParticipantCheckIn(
-    new UUID(),
-    organizationId,
-    eventId,
-    participantId,
-    true,
-    new Date(),
-    checkedInBy,
-  );
+  // const participantCheckIn: typeof ParticipantCheckIn = new ParticipantCheckIn(
+  //   new UUID(),
+  //   organizationId,
+  //   eventId,
+  //   participantId,
+  //   true,
+  //   new Date(),
+  //   checkedInBy,
+  // );
 
-  const checkInSucces = await checkInRepository.create(participantCheckIn);
-  return checkInSucces;
+  // const checkInSucces = await checkInRepository.create(participantCheckIn);
+  // return checkInSucces;
 };
 
 export { getParticipantById, getParticipantByInviteId, getAllParticipants, checkInParticipant };

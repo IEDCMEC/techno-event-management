@@ -27,6 +27,6 @@ router.post(
   passport.authenticate('local-login', { session: false }),
   (req: any, res, next) => {
     res.json({ user: req.user });
-  },
+  }, 
 );
 export { router as authrouter };
