@@ -73,7 +73,7 @@ const Navbar = () => {
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7} display={'flex'} alignItems={'center'}>
               <Box display={'flex'} flexDirection={'row'}>
-                <NavLink route="events" content="Events" />
+                <NavLink route="Dashboard" content="Dashboard" />
                 {/* <NavLink route="scanner" content="Check In" /> */}
               </Box>
               <Button display={'flex'} onClick={() => setOpen(true)}>
