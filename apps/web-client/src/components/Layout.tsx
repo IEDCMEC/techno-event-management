@@ -6,7 +6,7 @@ import {
   Flex,
   Icon,
   useColorModeValue,
-  Link,
+  // Link,
   Drawer,
   DrawerContent,
   Text,
@@ -14,6 +14,7 @@ import {
   BoxProps,
   FlexProps,
 } from '@chakra-ui/react';
+import { default as RouteLink } from 'next/link';
 import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiMenu } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
@@ -28,18 +29,52 @@ interface LinkItemProps {
   name: string;
   icon: IconType;
   list: any;
+  route: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Organizations', icon: FiHome, list: ['org1', 'org2', 'org3'] },
-  { name: 'Events', icon: FiTrendingUp, list: ['Event1', 'Event2', 'Event3'] },
-  { name: 'Participants', icon: FiCompass, list: ['participant1', 'participant2', 'participant3'] },
-  { name: 'Attributes', icon: FiStar, list: ['Attributes1', 'Attributes2', 'Attributes3'] },
-  { name: 'Settings', icon: FiSettings, list: ['Dashboard', 'Logout'] },
+  {
+    name: 'Organizations',
+    icon: FiHome,
+    list: ['org1', 'org2', 'org3'],
+    route: '/Dashboard/organizations',
+  },
+  {
+    name: 'Events',
+    icon: FiTrendingUp,
+    list: ['Event1', 'Event2', 'Event3'],
+    route: '/Dashboard/Events',
+  },
+  {
+    name: 'Participants',
+    icon: FiCompass,
+    list: ['participant1', 'participant2', 'participant3'],
+    route: '/Dashboard/Participants',
+  },
+  {
+    name: 'Attributes',
+    icon: FiStar,
+    list: ['Attributes1', 'Attributes2', 'Attributes3'],
+    route: '/Dashboard/Attributes',
+  },
+  {
+    name: 'Settings',
+    icon: FiSettings,
+    list: ['Dashboard', 'Logout'],
+    route: '/Dashboard/settings',
+  },
 ];
 const Layout = ({ children }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box
+      minH="100vh"
+      bg={useColorModeValue('gray.100', 'gray.900')}
+      margin={'0'}
+      position={'absolute'}
+      top={'0'}
+      left={'0'}
+      width={['0%', '0%', '200px']}
+    >
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         autoFocus={false}
@@ -79,89 +114,65 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          <Link
-            href="/"
-            _hover={{
-              textDecoration: 'none',
-              bg: useColorModeValue('gray.200', 'gray.700'),
-            }}
-          >
-            QR System
-          </Link>
-        </Text>
+        <Box
+          _hover={{
+            textDecoration: 'none',
+            bg: useColorModeValue('gray.200', 'gray.700'),
+          }}
+        >
+          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+            <RouteLink href="/">QR System</RouteLink>
+          </Text>
+        </Box>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      <Accordion allowMultiple>
-        {LinkItems.map((link) => (
-          <AccordionItem key={link.name}>
-            <AccordionButton>
-              <Box as="span" flex="1" textAlign="left">
-                <NavItem key={link.name} icon={link.icon}>
-                  {link.name}
-                </NavItem>
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-            <AccordionPanel pb={4}>
-              {link.list.map(
-                (
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-                    | React.ReactFragment
-                    | React.ReactPortal
-                    | React.PromiseLikeOfReactNode
-                    | null
-                    | undefined,
-                  index: any,
-                ) => (
-                  <Text key={index}>{value}</Text>
-                ),
-              )}
-            </AccordionPanel>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      {LinkItems.map((link) => (
+        <Box as="span" flex="1" textAlign="left" key={link.name}>
+          <NavItem key={link.name} route={link.route} icon={link.icon}>
+            {link.name}
+          </NavItem>
+        </Box>
+      ))}
     </Box>
   );
 };
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
-  children: ReactText;
+  children: any;
+  route: string;
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ route, icon, children, ...rest }: NavItemProps) => {
   return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        // _hover={{
-        //   bg: 'cyan.400',
-        //   color: 'white',
-        // }}
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            // _groupHover={{
-            //   color: 'white',
-            // }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Link>
+    <Box style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+      <RouteLink href={route}>
+        <Flex
+          align="center"
+          p="4"
+          mx="4"
+          borderRadius="lg"
+          role="group"
+          cursor="pointer"
+          _hover={{
+            bg: useColorModeValue('cyan.400', 'white'),
+            color: 'black',
+          }}
+          {...rest}
+        >
+          {icon && (
+            <Icon
+              mr="4"
+              fontSize="16"
+              // _groupHover={{
+              //   color: 'white',
+              // }}
+              as={icon}
+            />
+          )}
+          {children}
+        </Flex>
+      </RouteLink>
+    </Box>
   );
 };
 
@@ -180,6 +191,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent="flex-start"
       {...rest}
+      width={'100vw !important'}
+      //   maxHeight={'100px'}
     >
       <IconButton variant="outline" onClick={onOpen} aria-label="open menu" icon={<FiMenu />} />
 

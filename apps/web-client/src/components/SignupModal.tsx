@@ -81,6 +81,7 @@ const SignupModal = () => {
               alignItems={'center'}
               flexDirection={'column'}
               isRequired
+              // method={'POST'}
             >
               <Box width={'80%'} padding={'15px 0'}>
                 <FormLabel>Name</FormLabel>

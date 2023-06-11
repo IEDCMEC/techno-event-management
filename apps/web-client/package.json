@@ -12,7 +12,7 @@
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/next-js": "^2.1.4",
     "@chakra-ui/react": "^2.7.0",
-    "@emotion/react": "^11.11.0",
+    "@emotion/react": "^11.11.1",
     "common": "workspace:*",
     "eslint-config-custom": "*",
     "framer-motion": "^10.12.16",
