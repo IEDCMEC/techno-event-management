@@ -13,20 +13,19 @@ const ScannerComponent: React.FC<Props> = () => {
 
   return (
     <>
-    <Layout>
-      
-      <Flex align={'center'} direction={'column'} gap={4} justify={'center'} w={'100vw'}>
-        <Scanner setResult={(result: string) => setParticipant(result)} />
-        <p style={{ color: 'black' }}>{participant}</p>
-        <Button
-          onClick={() => {
-            console.log(participant);
-          }}
-        >
-          Checkin
-        </Button>
-        {!participant && <ParticipantCard {...obj} />}
-      </Flex>
+      <Layout>
+        <Flex align={'center'} direction={'column'} gap={4} justify={'center'} w={'100vw'}>
+          <Scanner setResult={(result: string) => setParticipant(result)} />
+          <p style={{ color: 'black' }}>{participant}</p>
+          <Button
+            onClick={() => {
+              console.log(participant);
+            }}
+          >
+            Checkin
+          </Button>
+          {!participant && <ParticipantCard {...obj} />}
+        </Flex>
       </Layout>
     </>
   );
