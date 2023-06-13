@@ -1,3 +1,4 @@
+import Layout from '@/Layout/Layout';
 import Navbar from '@/components/Navbar';
 import ParticipantCard from '@/components/ParticipantCard';
 import Scanner from '@/components/Scanner';
@@ -12,7 +13,8 @@ const ScannerComponent: React.FC<Props> = () => {
 
   return (
     <>
-      <Navbar />
+    <Layout>
+      
       <Flex align={'center'} direction={'column'} gap={4} justify={'center'} w={'100vw'}>
         <Scanner setResult={(result: string) => setParticipant(result)} />
         <p style={{ color: 'black' }}>{participant}</p>
@@ -25,6 +27,7 @@ const ScannerComponent: React.FC<Props> = () => {
         </Button>
         {!participant && <ParticipantCard {...obj} />}
       </Flex>
+      </Layout>
     </>
   );
 };
