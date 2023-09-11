@@ -20,13 +20,13 @@ DROP TABLE IF EXISTS participant_attribute CASCADE;
 DROP TABLE IF EXISTS available_extras CASCADE;
 DROP TABLE IF EXISTS participant_extras CASCADE;
 DROP TABLE IF EXISTS participant_extras_check_in CASCADE;
-DROP TABLE IF EXISTS team CASCADE;
-DROP TABLE IF EXISTS team_member CASCADE;
-DROP TABLE IF EXISTS team_check_in CASCADE;
-DROP TABLE IF EXISTS team_tag CASCADE;
-DROP TABLE IF EXISTS team_attribute CASCADE;
-DROP TABLE IF EXISTS team_extras CASCADE;
-DROP TABLE IF EXISTS team_extras_check_in CASCADE;
+-- DROP TABLE IF EXISTS team CASCADE;
+-- DROP TABLE IF EXISTS team_member CASCADE;
+-- DROP TABLE IF EXISTS team_check_in CASCADE;
+-- DROP TABLE IF EXISTS team_tag CASCADE;
+-- DROP TABLE IF EXISTS team_attribute CASCADE;
+-- DROP TABLE IF EXISTS team_extras CASCADE;
+-- DROP TABLE IF EXISTS team_extras_check_in CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS "user"
@@ -259,119 +259,119 @@ CREATE TABLE IF NOT EXISTS event_volunteer
     FOREIGN KEY (organization_user_id) REFERENCES organization_user (id),
     FOREIGN KEY (user_id) REFERENCES "user" (id)
 );
-
-CREATE TABLE IF NOT EXISTS team
-
-(
-    id              UUID DEFAULT uuid_generate_v4(),
-    organization_id UUID         NOT NULL,
-    event_id        UUID         NOT NULL,
-
-    name            VARCHAR(255) NOT NULL,
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (event_id) REFERENCES event (id)
-);
-
-CREATE TABLE IF NOT EXISTS team_member
-(
-    id              UUID DEFAULT uuid_generate_v4(),
-    organization_id UUID NOT NULL,
-    event_id        UUID NOT NULL,
-
-    team_id         UUID NOT NULL,
-    participant_id  UUID NOT NULL,
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (event_id) REFERENCES event (id),
-    FOREIGN KEY (team_id) REFERENCES team (id),
-    FOREIGN KEY (participant_id) REFERENCES participant (id)
-);
-
-CREATE TABLE IF NOT EXISTS team_tag
-(
-    id              UUID DEFAULT uuid_generate_v4(),
-    organization_id UUID NOT NULL,
-    event_id        UUID NOT NULL,
-
-    tag_id          UUID NOT NULL,
-    team_id         UUID NOT NULL,
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (event_id) REFERENCES event (id),
-    FOREIGN KEY (tag_id) REFERENCES available_tags (id),
-    FOREIGN KEY (team_id) REFERENCES team (id)
-);
-
-CREATE TABLE IF NOT EXISTS team_check_in
-(
-    id              UUID               DEFAULT uuid_generate_v4(),
-    organization_id UUID      NOT NULL,
-    event_id        UUID      NOT NULL,
-
-    team_id         UUID      NOT NULL,
-
-    checked_in      BOOLEAN   NOT NULL DEFAULT FALSE,
-    check_in_time   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    checked_in_by   UUID      NOT NULL,
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (team_id) REFERENCES team (id),
-    FOREIGN KEY (checked_in_by) REFERENCES "user" (id)
-);
-
-CREATE TABLE IF NOT EXISTS team_attribute
-(
-    id              UUID DEFAULT uuid_generate_v4(),
-    organization_id UUID         NOT NULL,
-    event_id        UUID         NOT NULL,
-
-    attribute_id    UUID         NOT NULL,
-    team_id         UUID         NOT NULL,
-
-    value           VARCHAR(255) NOT NULL,
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (attribute_id) REFERENCES available_attributes (id),
-    FOREIGN KEY (team_id) REFERENCES team (id)
-);
-
-CREATE TABLE IF NOT EXISTS team_extras
-(
-    id              UUID DEFAULT uuid_generate_v4(),
-    organization_id UUID         NOT NULL,
-    event_id        UUID         NOT NULL,
-
-    extra_id        UUID         NOT NULL,
-    team_id         UUID         NOT NULL,
-
-    value           VARCHAR(255) NOT NULL,
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (extra_id) REFERENCES available_extras (id),
-    FOREIGN KEY (team_id) REFERENCES team (id)
-);
-
-CREATE TABLE IF NOT EXISTS team_extras_check_in
-(
-    id              UUID               DEFAULT uuid_generate_v4(),
-    organization_id UUID      NOT NULL,
-    event_id        UUID      NOT NULL,
-
-    team_extra_id   UUID      NOT NULL,
-
-    checked_in      BOOLEAN   NOT NULL DEFAULT FALSE,
-    check_in_time   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    checked_in_by   UUID      NOT NULL,
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (team_extra_id) REFERENCES team_extras (id),
-    FOREIGN KEY (checked_in_by) REFERENCES "user" (id)
-);
+--
+-- CREATE TABLE IF NOT EXISTS team
+--
+-- (
+--     id              UUID DEFAULT uuid_generate_v4(),
+--     organization_id UUID         NOT NULL,
+--     event_id        UUID         NOT NULL,
+--
+--     name            VARCHAR(255) NOT NULL,
+--
+--     PRIMARY KEY (id),
+--     FOREIGN KEY (organization_id) REFERENCES organization (id),
+--     FOREIGN KEY (event_id) REFERENCES event (id)
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS team_member
+-- (
+--     id              UUID DEFAULT uuid_generate_v4(),
+--     organization_id UUID NOT NULL,
+--     event_id        UUID NOT NULL,
+--
+--     team_id         UUID NOT NULL,
+--     participant_id  UUID NOT NULL,
+--
+--     PRIMARY KEY (id),
+--     FOREIGN KEY (organization_id) REFERENCES organization (id),
+--     FOREIGN KEY (event_id) REFERENCES event (id),
+--     FOREIGN KEY (team_id) REFERENCES team (id),
+--     FOREIGN KEY (participant_id) REFERENCES participant (id)
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS team_tag
+-- (
+--     id              UUID DEFAULT uuid_generate_v4(),
+--     organization_id UUID NOT NULL,
+--     event_id        UUID NOT NULL,
+--
+--     tag_id          UUID NOT NULL,
+--     team_id         UUID NOT NULL,
+--
+--     PRIMARY KEY (id),
+--     FOREIGN KEY (organization_id) REFERENCES organization (id),
+--     FOREIGN KEY (event_id) REFERENCES event (id),
+--     FOREIGN KEY (tag_id) REFERENCES available_tags (id),
+--     FOREIGN KEY (team_id) REFERENCES team (id)
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS team_check_in
+-- (
+--     id              UUID               DEFAULT uuid_generate_v4(),
+--     organization_id UUID      NOT NULL,
+--     event_id        UUID      NOT NULL,
+--
+--     team_id         UUID      NOT NULL,
+--
+--     checked_in      BOOLEAN   NOT NULL DEFAULT FALSE,
+--     check_in_time   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--     checked_in_by   UUID      NOT NULL,
+--
+--     PRIMARY KEY (id),
+--     FOREIGN KEY (organization_id) REFERENCES organization (id),
+--     FOREIGN KEY (team_id) REFERENCES team (id),
+--     FOREIGN KEY (checked_in_by) REFERENCES "user" (id)
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS team_attribute
+-- (
+--     id              UUID DEFAULT uuid_generate_v4(),
+--     organization_id UUID         NOT NULL,
+--     event_id        UUID         NOT NULL,
+--
+--     attribute_id    UUID         NOT NULL,
+--     team_id         UUID         NOT NULL,
+--
+--     value           VARCHAR(255) NOT NULL,
+--
+--     PRIMARY KEY (id),
+--     FOREIGN KEY (organization_id) REFERENCES organization (id),
+--     FOREIGN KEY (attribute_id) REFERENCES available_attributes (id),
+--     FOREIGN KEY (team_id) REFERENCES team (id)
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS team_extras
+-- (
+--     id              UUID DEFAULT uuid_generate_v4(),
+--     organization_id UUID         NOT NULL,
+--     event_id        UUID         NOT NULL,
+--
+--     extra_id        UUID         NOT NULL,
+--     team_id         UUID         NOT NULL,
+--
+--     value           VARCHAR(255) NOT NULL,
+--
+--     PRIMARY KEY (id),
+--     FOREIGN KEY (organization_id) REFERENCES organization (id),
+--     FOREIGN KEY (extra_id) REFERENCES available_extras (id),
+--     FOREIGN KEY (team_id) REFERENCES team (id)
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS team_extras_check_in
+-- (
+--     id              UUID               DEFAULT uuid_generate_v4(),
+--     organization_id UUID      NOT NULL,
+--     event_id        UUID      NOT NULL,
+--
+--     team_extra_id   UUID      NOT NULL,
+--
+--     checked_in      BOOLEAN   NOT NULL DEFAULT FALSE,
+--     check_in_time   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--     checked_in_by   UUID      NOT NULL,
+--
+--     PRIMARY KEY (id),
+--     FOREIGN KEY (organization_id) REFERENCES organization (id),
+--     FOREIGN KEY (team_extra_id) REFERENCES team_extras (id),
+--     FOREIGN KEY (checked_in_by) REFERENCES "user" (id)
+-- );

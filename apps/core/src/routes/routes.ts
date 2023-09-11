@@ -6,7 +6,7 @@ import {
   getEventParticipantById,
   getEventParticipantCheckInStatus,
 } from '../controllers/participant.controller';
-import { getAllEvents, getEventById } from '../controllers/event.controller';
+import { addNewEvent, getAllEvents, getEventById } from '../controllers/events.controller';
 import {
   getAllEventExtras,
   getEventExtraById,
@@ -20,6 +20,8 @@ import {
 } from '../controllers/member.controller';
 
 const router: Router = express.Router();
+
+router.post('/:organizationId/events', addNewEvent);
 
 router.get('/:organizationId/events', authorize, getAllEvents);
 
