@@ -12,8 +12,6 @@ const EventCard = () => {
 
       <div className="flex items-start flex-row w-full h-full py-0.5">
         <p className="text-white font-semibold text-lg">Venue:</p>
-
-        
       </div>
       <div className="flex items-start w-full h-fit pb-4">
         <p className="text-white font-light">
