@@ -1,15 +1,16 @@
 import React from 'react';
 
-const ParticipantCard = ({ name, email, avatar, isCheckedIn }) => {
+interface ParticipantCardProps {
+  name: string;
+  email: string;
+  isCheckedIn: boolean;
+}
+
+const ParticipantCard: React.FC<ParticipantCardProps> = ({ name, email, isCheckedIn }) => {
   const cardBgColor = isCheckedIn ? 'bg-green-200' : 'bg-red-200';
 
   return (
     <div className={`shadow-lg rounded-lg overflow-hidden ${cardBgColor}`}>
-      <img
-        src={avatar}
-        alt={`${name}'s avatar`}
-        className="w-full h-40 object-cover object-center"
-      />
       <div className="p-4">
         <h2 className="text-xl font-semibold">{name}</h2>
         <p className="text-gray-600">{email}</p>
@@ -19,6 +20,12 @@ const ParticipantCard = ({ name, email, avatar, isCheckedIn }) => {
       </div>
     </div>
   );
+};
+
+ParticipantCard.defaultProps = {
+  name: 'John Doe',
+  email: 'johndoe@email.com',
+  isCheckedIn: false,
 };
 
 export default ParticipantCard;
