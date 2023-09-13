@@ -9,7 +9,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       <Navbar />
       <div className="h-full w-full flex flex-row justify-between items-center">
         <Sidebar />
-        <div className="h-full w-full">{children}</div>
+        <div className="flex h-full w-full">{children}</div>
       </div>
     </main>
   );
