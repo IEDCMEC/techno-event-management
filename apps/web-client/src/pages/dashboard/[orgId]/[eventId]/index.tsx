@@ -11,11 +11,7 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <div className="h-full w-full bg-neutral-100 flex flex-row justify-start items-start gap-4 flex-wrap">
-        <ParticipantCard />
-        <ParticipantCard />
-        <ParticipantCard />
-        <ParticipantCard />
-        <ParticipantCard />
+        <ParticipantCard name="John Doe" email="johndoe@email.com" isCheckedIn={false} />
       </div>
     </DashboardLayout>
   );
