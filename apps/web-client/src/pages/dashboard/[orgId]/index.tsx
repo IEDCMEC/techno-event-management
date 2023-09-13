@@ -10,7 +10,8 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <div className="h-full w-full bg-neutral-100 flex flex-row justify-start items-start gap-4 flex-wrap">
+      <div className="h-full w-full bg-black-russian flex flex-row justify-evenly items-center overflow-y-auto gap-8 flex-wrap p-6">
+        <EventCard />
         <EventCard />
         <EventCard />
         <EventCard />
