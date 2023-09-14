@@ -1,31 +1,27 @@
-
-import { useState } from "react";
-import googleicon from  '../../assets/googleicon.png';
-import idea from  '../../assets/idea.png';
-import Image from "next/image";
+import { useState } from 'react';
+import googleicon from '../../assets/googleicon.png';
+import idea from '../../assets/idea.png';
+import Image from 'next/image';
 
 const colors = {
-  primary: "#2596be",
-  background: "#041c2c",
+  primary: '#2596be',
+  background: '#041c2c',
 };
 
 const Login = () => {
   return (
     <div className="w-full h-screen flex items-start  ">
       <div className="w-11/12 h-full flex flex-col bg-[#2596be]">
-        <div className="absolute top-[20%] left-[10%] flex flex-col">
-
-        </div>
-        <Image src = {idea} alt="background" className="h-full object-contain" />
+        <div className="absolute top-[20%] left-[10%] flex flex-col"></div>
+        <Image src={idea} alt="background" className="h-full object-contain" />
       </div>
       <div className="w-full h-full bg-[#041c2c] flex flex-col p-20 justify-between ">
-        <h1 className="text-5xl text-[#2596be] font-semibold font-poppins ">
-          IEDC MEC
-        </h1>
+        <h1 className="text-5xl text-[#2596be] font-semibold font-poppins ">IEDC MEC</h1>
 
-        <div className="w-full flex flex-col max-w-[500px] 
-        ">
-          
+        <div
+          className="w-full flex flex-col max-w-[500px] 
+        "
+        >
           <div className="w-full flex flex-col mb-2">
             <h3 className="text-3xl font-semibold mb-3 font-poppins text-[#2596be] ">Login</h3>
             <p className="text-base mb-2 font-poppins text-white">
@@ -69,13 +65,13 @@ const Login = () => {
           <p className="text-lg absolute text-white flex items-center mx-40 "></p>
         </div>
         <button className="w-64 mx-9 text- my-2 bg-white hover:bg-slate-300 font-semibold border border-black/40 rounded-md p-2 text-center flex items-center justify-center font-poppins">
-        <Image src={googleicon} alt="Google Icon" className="h-5 w-5 mr-4" />
-         Sign In with Google
+          <Image src={googleicon} alt="Google Icon" className="h-5 w-5 mr-4" />
+          Sign In with Google
         </button>
 
         <div className="w-full mx-20 justify-center">
           <p className="text-sm font-normal text-[#2596be]">
-            Don't have an account?{' '}
+            Do not have an account?{' '}
             <span className="font-semibold underline underline-offset-2 cursor-pointer">
               SignUp
             </span>
