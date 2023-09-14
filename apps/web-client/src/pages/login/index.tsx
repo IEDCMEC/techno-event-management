@@ -1,4 +1,4 @@
-// @ts-ignore
+
 import { useState } from "react";
 import googleicon from  '../../assets/googleicon.png';
 import idea from  '../../assets/idea.png';
