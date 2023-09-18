@@ -1,0 +1,56 @@
+.scan {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.scan video {
+  width: 50%;
+  height: 50%;
+  border-radius: 16px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+.scan_container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+.text_input {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+.text_input input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  outline: none;
+}
+.scan_heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #036491;
+  text-align: center;
+}
+.scan_heading_or {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #036491;
+}
+
+@media only screen and (max-width: 768px) {
+  .scan video {
+    width: 80%;
+    height: 80%;
+  }
+}

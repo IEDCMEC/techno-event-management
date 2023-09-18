@@ -12,10 +12,13 @@
   "devDependencies": {
     "@turbo/gen": "^1.9.9",
     "eslint": "^7.32.0",
+    "husky": "^8.0.0",
     "prettier": "^2.8.8",
-    "turbo": "^1.9.9",
-    "husky": "^8.0.0"
+    "turbo": "^1.9.9"
   },
   "packageManager": "pnpm@7.15.0",
-  "name": "techno-event-management"
+  "name": "techno-event-management",
+  "dependencies": {
+    "react-qr-reader": "3.0.0-beta-1"
+  }
 }
