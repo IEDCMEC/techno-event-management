@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
-import QrReader from 'react-qr-reader';
+// import QrReader from 'react-qr-reader';
+import dynamic from 'next/dynamic';
 import styles from './Scanner.module.css';
+
+const QrReader = dynamic(() => import('react-qr-reader'), {
+  ssr: false,
+});
+
 
 interface ScannerProps {
   qr_pay: boolean;
