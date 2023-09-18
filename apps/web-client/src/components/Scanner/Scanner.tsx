@@ -7,7 +7,6 @@ const QrReader = dynamic(() => import('react-qr-reader'), {
   ssr: false,
 });
 
-
 interface ScannerProps {
   qr_pay: boolean;
   setUserId: (userId: string) => void;
@@ -16,7 +15,7 @@ interface ScannerProps {
   paymentId: string;
 }
 
-const Scanner: React.FC<ScannerProps> = ({
+export const Scanner: React.FC<ScannerProps> = ({
   qr_pay,
   setUserId,
   userId,
@@ -69,4 +68,3 @@ const Scanner: React.FC<ScannerProps> = ({
   );
 };
 
-export default Scanner;
