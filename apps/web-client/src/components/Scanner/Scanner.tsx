@@ -41,7 +41,7 @@ const Scanner: React.FC<ScannerProps> = ({
     <div className={styles.scan_container}>
       <div className={styles.scan}>
         <div className={styles.scan_heading}>Scan the {qr_pay ? 'Payment' : 'Band'} QR code</div>
-        <QrReader onScan={handleScan} onError={handleError} style={{ width: '300px' }} />
+        <QrReader onScan={handleScan} onError={handleError} />
       </div>
 
       <div className={styles.text_input}>
