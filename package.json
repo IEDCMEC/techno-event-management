@@ -12,9 +12,10 @@
   "devDependencies": {
     "@turbo/gen": "^1.9.9",
     "eslint": "^7.32.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^14.0.1",
     "prettier": "^2.8.8",
-    "turbo": "^1.9.9",
-    "husky": "^8.0.0"
+    "turbo": "^1.9.9"
   },
   "packageManager": "pnpm@7.15.0",
   "name": "techno-event-management"
