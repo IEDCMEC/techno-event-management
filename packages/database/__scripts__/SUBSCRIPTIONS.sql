@@ -1,4 +1,4 @@
-INSERT INTO available_subscriptions(name, price)
+INSERT INTO subscription(name, price)
 VALUES ('Free', 0.00),
        ('Basic', 9.99),
        ('Premium', 19.99),
