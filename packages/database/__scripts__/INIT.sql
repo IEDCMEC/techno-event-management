@@ -31,11 +31,12 @@ DROP TABLE IF EXISTS participant_extras_check_in CASCADE;
 
 CREATE TABLE IF NOT EXISTS "user"
 (
-    id       UUID DEFAULT uuid_generate_v4(),
+    id         UUID DEFAULT uuid_generate_v4(),
 
-    name     VARCHAR(255) NOT NULL,
-    email    VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name  VARCHAR(255) NOT NULL,
+    email      VARCHAR(255) NOT NULL,
+    password   VARCHAR(255) NOT NULL,
 
     PRIMARY KEY (id)
 );
