@@ -19,57 +19,57 @@ VALUES ('Jozef', 'Jozef', 'jozef@email.com', 'tailwind fenboy');
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Allen'),
-        (SELECT id FROM role WHERE name = 'admin'));
+        (SELECT id FROM role WHERE name = 'ROLE_ADMIN'));
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Allen'),
-        (SELECT id FROM role WHERE name = 'onsite'));
+        (SELECT id FROM role WHERE name = 'ROLE_ONSITE'));
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Aldrin'),
-        (SELECT id FROM role WHERE name = 'owner'));
+        (SELECT id FROM role WHERE name = 'ROLE_OWNER'));
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Aldrin'),
-        (SELECT id FROM role WHERE name = 'admin'));
+        (SELECT id FROM role WHERE name = 'ROLE_ADMIN'));
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Aldrin'),
-        (SELECT id FROM role WHERE name = 'onsite'));
+        (SELECT id FROM role WHERE name = 'ROLE_ONSITE'));
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Jaison'),
-        (SELECT id FROM role WHERE name = 'admin'));
+        (SELECT id FROM role WHERE name = 'ROLE_ADMIN'));
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Jaison'),
-        (SELECT id FROM role WHERE name = 'onsite'));
+        (SELECT id FROM role WHERE name = 'ROLE_ONSITE'));
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Subramani'),
-        (SELECT id FROM role WHERE name = 'admin'));
+        (SELECT id FROM role WHERE name = 'ROLE_ADMIN'));
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Subramani'),
-        (SELECT id FROM role WHERE name = 'onsite'));
+        (SELECT id FROM role WHERE name = 'ROLE_ONSITE'));
 
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Jithin'),
-        (SELECT id FROM role WHERE name = 'owner'));
+        (SELECT id FROM role WHERE name = 'ROLE_OWNER'));
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Jithin'),
-        (SELECT id FROM role WHERE name = 'admin'));
+        (SELECT id FROM role WHERE name = 'ROLE_ADMIN'));
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Jithin'),
-        (SELECT id FROM role WHERE name = 'onsite'));
+        (SELECT id FROM role WHERE name = 'ROLE_ONSITE'));
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Jozef'),
-        (SELECT id FROM role WHERE name = 'admin'));
+        (SELECT id FROM role WHERE name = 'ROLE_ADMIN'));
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE first_name = 'Jozef'),
-        (SELECT id FROM role WHERE name = 'onsite'));
+        (SELECT id FROM role WHERE name = 'ROLE_ONSITE'));
 
 INSERT INTO "user"(first_name, last_name, email, password)
 VALUES ('checkinbot', 'checkinbot', 'checkinbot@email.com', 'bro is a bot');
@@ -77,11 +77,11 @@ VALUES ('checkinbot', 'checkinbot', 'checkinbot@email.com', 'bro is a bot');
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
         (SELECT id FROM "user" WHERE first_name = 'checkinbot'),
-        (SELECT id FROM role WHERE name = 'onsite'));
+        (SELECT id FROM role WHERE name = 'ROLE_ONSITE'));
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'FOSS MEC'),
         (SELECT id FROM "user" WHERE first_name = 'checkinbot'),
-        (SELECT id FROM role WHERE name = 'onsite'));
+        (SELECT id FROM role WHERE name = 'ROLE_ONSITE'));
 
 INSERT INTO event(organization_id, name)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'), 'Technohack');

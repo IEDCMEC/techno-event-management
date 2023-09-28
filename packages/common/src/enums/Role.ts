@@ -1,5 +1,5 @@
 enum Role {
-  User = 'ROLE_USER',
+  OWNER = 'ROLE_OWNER',
 }
 
 export default Role;

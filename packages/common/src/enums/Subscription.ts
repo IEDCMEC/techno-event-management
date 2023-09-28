@@ -1,5 +1,5 @@
 enum Subscription {
-  Basic = 'SUBSCRIPTION_BASIC',
+  FREE = 'SUBSCRIPTION_FREE',
 }
 
 export default Subscription;
