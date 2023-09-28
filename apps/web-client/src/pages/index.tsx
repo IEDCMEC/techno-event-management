@@ -1,4 +1,4 @@
-import { Scanner } from "@/components/Scanner/Scanner";
+import { Scanner } from '@/components/Scanner/Scanner';
 
 import { useState } from 'react';
 
