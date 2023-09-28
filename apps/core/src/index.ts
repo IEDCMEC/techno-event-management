@@ -13,27 +13,12 @@ const app: Express = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// import { participantsRouter } from './routes/onsite/participants.route';
-// import { checkInRouter } from './routes/onsite/checkin.route';
 import { router } from './routes/routes';
+import { organizationRouter } from './routes/organization.route';
 import { authrouter } from './routes/auth.route';
-// import {authorize} from './middlewares/auth.middleware';
-// app.use('/onsite/participant', participantsRouter);
-// app.use('/onsite/checkin', checkInRouter);
+
+app.use('/', organizationRouter);
 app.use('/core', router);
-
-// ---- !!! ----
-// TODO: Move to another file
-// ---- !!! ----
-import { authorize } from './middlewares/auth.middleware';
-import { organizationController } from './controllers/organization.controller';
-import { organizationService } from './services/organization.service';
-
-app.post(
-  '/organization',
-  authorize,
-  organizationController(organizationService).addNewOrganizationController,
-);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Techno Event Server');
