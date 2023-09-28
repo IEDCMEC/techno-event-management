@@ -67,4 +67,3 @@ export const Scanner: React.FC<ScannerProps> = ({
     </div>
   );
 };
-
