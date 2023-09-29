@@ -10,7 +10,12 @@
 <br/>
 
 <div align="center">
-  <a href="https://github.com/IEDCMEC/techno-event-management/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/iedcmec/techno-event-management"></a>
+  <a href="https://github.com/IEDCMEC/techno-event-management/stargazers">
+    <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/iedcmec/techno-event-management">
+  </a>
+  <a href="https://github.com/IEDCMEC/techno-event-management/LICENSE">
+    <img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="AGPL v3 license" />
+  </a>
   <!-- <a href="#"><img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/technoevent"></a> -->
   <!-- <a href="https://github.com/mfts/papermark/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-AGPLv3-purple"></a> -->
 </div>
@@ -71,3 +76,7 @@ Visit [http://localhost:3000](http://localhost:3000) in your browser.
 <a href="https://github.com/iedcmec/techno-event-management/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=iedcmec/techno-event-management" />
 </a>
+
+# License
+
+Released under the [AGPL v3 license](LICENSE).
