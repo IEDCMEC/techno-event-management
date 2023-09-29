@@ -8,5 +8,4 @@ declare module 'react-qr-reader' {
   }
 
   export const QrReader: React.FC<QrReaderProps>;
-  
 }
