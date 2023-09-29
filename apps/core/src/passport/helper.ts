@@ -7,18 +7,18 @@ var config = {
   secretKey: process.env.SECRET_KEY,
 };
 
-const createUser = async (email: String, password: String, name: String) => {
+const createUser = async (email: String, password: String, firstName: String, lastName: String) => {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
   const data = await pg.query(
-    `INSERT INTO "user" (email, password, name)
-     SELECT $1::varchar, $2, $3
+    `INSERT INTO "user" (email, password, first_name, last_name)
+     SELECT $1::varchar, $2, $3, $4
      WHERE NOT EXISTS (
        SELECT email FROM "user" WHERE email = $1::varchar
      )
-     RETURNING id, email, password, name`,
-    [email, hash, name],
+     RETURNING id, email, password, first_name, last_name`,
+    [email, hash, firstName, lastName],
   );
   if (data.rowCount == 0) throw new Error('User already exists');
   return data.rows[0];

@@ -11,7 +11,12 @@ router.post(
   passport.authenticate('local-signup', { session: false }),
   async (req: any, res, next) => {
     try {
-      const user = await createUser(req.user?.email, req.user?.password, req.body.name);
+      const user = await createUser(
+        req.user?.email,
+        req.user?.password,
+        req.body.firstName,
+        req.body.lastName,
+      );
       res.json({
         user: user,
       });

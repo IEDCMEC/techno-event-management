@@ -3,21 +3,21 @@ DROP EXTENSION IF EXISTS "uuid-ossp" CASCADE;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 DROP TABLE IF EXISTS "user" CASCADE;
-DROP TABLE IF EXISTS available_roles CASCADE;
+DROP TABLE IF EXISTS role CASCADE;
 DROP TABLE IF EXISTS organization CASCADE;
 DROP TABLE IF EXISTS organization_user CASCADE;
-DROP TABLE IF EXISTS available_subscriptions CASCADE;
+DROP TABLE IF EXISTS subscription CASCADE;
 DROP TABLE IF EXISTS organization_subscription CASCADE;
 DROP TABLE IF EXISTS event_volunteer CASCADE;
 
 DROP TABLE IF EXISTS event CASCADE;
 DROP TABLE IF EXISTS participant CASCADE;
-DROP TABLE IF EXISTS available_tags CASCADE;
+DROP TABLE IF EXISTS tag CASCADE;
 DROP TABLE IF EXISTS participant_tag CASCADE;
 DROP TABLE IF EXISTS participant_check_in CASCADE;
-DROP TABLE IF EXISTS available_attributes CASCADE;
+DROP TABLE IF EXISTS attribute CASCADE;
 DROP TABLE IF EXISTS participant_attribute CASCADE;
-DROP TABLE IF EXISTS available_extras CASCADE;
+DROP TABLE IF EXISTS extra CASCADE;
 DROP TABLE IF EXISTS participant_extras CASCADE;
 DROP TABLE IF EXISTS participant_extras_check_in CASCADE;
 -- DROP TABLE IF EXISTS team CASCADE;
@@ -31,16 +31,17 @@ DROP TABLE IF EXISTS participant_extras_check_in CASCADE;
 
 CREATE TABLE IF NOT EXISTS "user"
 (
-    id       UUID DEFAULT uuid_generate_v4(),
+    id         UUID DEFAULT uuid_generate_v4(),
 
-    name     VARCHAR(255) NOT NULL,
-    email    VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name  VARCHAR(255) NOT NULL,
+    email      VARCHAR(255) NOT NULL,
+    password   VARCHAR(255) NOT NULL,
 
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS available_roles
+CREATE TABLE IF NOT EXISTS role
 (
     id   UUID DEFAULT uuid_generate_v4(),
 
@@ -69,10 +70,10 @@ CREATE TABLE IF NOT EXISTS organization_user
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (role_id) REFERENCES available_roles (id)
+    FOREIGN KEY (role_id) REFERENCES role (id)
 );
 
-CREATE TABLE IF NOT EXISTS available_subscriptions
+CREATE TABLE IF NOT EXISTS subscription
 (
     id    UUID DEFAULT uuid_generate_v4(),
 
@@ -91,7 +92,7 @@ CREATE TABLE IF NOT EXISTS organization_subscription
 
     PRIMARY KEY (id),
     FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (subscription_id) REFERENCES available_subscriptions (id)
+    FOREIGN KEY (subscription_id) REFERENCES subscription (id)
 );
 
 
@@ -114,14 +115,13 @@ CREATE TABLE IF NOT EXISTS participant
 
     first_name      VARCHAR(255) NOT NULL,
     last_name       VARCHAR(255) NOT NULL,
-    invite_id       VARCHAR(255) NOT NULL,
 
     PRIMARY KEY (id),
     FOREIGN KEY (organization_id) REFERENCES organization (id),
     FOREIGN KEY (event_id) REFERENCES event (id)
 );
 
-CREATE TABLE IF NOT EXISTS available_tags
+CREATE TABLE IF NOT EXISTS tag
 (
     id              UUID DEFAULT uuid_generate_v4(),
     organization_id UUID         NOT NULL,
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS participant_tag
     PRIMARY KEY (id),
     FOREIGN KEY (organization_id) REFERENCES organization (id),
     FOREIGN KEY (event_id) REFERENCES event (id),
-    FOREIGN KEY (tag_id) REFERENCES available_tags (id),
+    FOREIGN KEY (tag_id) REFERENCES tag (id),
     FOREIGN KEY (participant_id) REFERENCES participant (id)
 );
 
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS participant_check_in
     FOREIGN KEY (checked_in_by) REFERENCES "user" (id)
 );
 
-CREATE TABLE IF NOT EXISTS available_attributes
+CREATE TABLE IF NOT EXISTS attribute
 (
     id              UUID DEFAULT uuid_generate_v4(),
     organization_id UUID         NOT NULL,
@@ -194,11 +194,11 @@ CREATE TABLE IF NOT EXISTS participant_attribute
 
     PRIMARY KEY (id),
     FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (attribute_id) REFERENCES available_attributes (id),
+    FOREIGN KEY (attribute_id) REFERENCES attribute (id),
     FOREIGN KEY (participant_id) REFERENCES participant (id)
 );
 
-CREATE TABLE IF NOT EXISTS available_extras
+CREATE TABLE IF NOT EXISTS extra
 (
     id              UUID DEFAULT uuid_generate_v4(),
     organization_id UUID         NOT NULL,
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS participant_extras
 
     PRIMARY KEY (id),
     FOREIGN KEY (organization_id) REFERENCES organization (id),
-    FOREIGN KEY (extra_id) REFERENCES available_extras (id),
+    FOREIGN KEY (extra_id) REFERENCES extra (id),
     FOREIGN KEY (participant_id) REFERENCES participant (id)
 );
 
@@ -302,7 +302,7 @@ CREATE TABLE IF NOT EXISTS event_volunteer
 --     PRIMARY KEY (id),
 --     FOREIGN KEY (organization_id) REFERENCES organization (id),
 --     FOREIGN KEY (event_id) REFERENCES event (id),
---     FOREIGN KEY (tag_id) REFERENCES available_tags (id),
+--     FOREIGN KEY (tag_id) REFERENCES tag (id),
 --     FOREIGN KEY (team_id) REFERENCES team (id)
 -- );
 --
@@ -337,7 +337,7 @@ CREATE TABLE IF NOT EXISTS event_volunteer
 --
 --     PRIMARY KEY (id),
 --     FOREIGN KEY (organization_id) REFERENCES organization (id),
---     FOREIGN KEY (attribute_id) REFERENCES available_attributes (id),
+--     FOREIGN KEY (attribute_id) REFERENCES attribute (id),
 --     FOREIGN KEY (team_id) REFERENCES team (id)
 -- );
 --
@@ -354,7 +354,7 @@ CREATE TABLE IF NOT EXISTS event_volunteer
 --
 --     PRIMARY KEY (id),
 --     FOREIGN KEY (organization_id) REFERENCES organization (id),
---     FOREIGN KEY (extra_id) REFERENCES available_extras (id),
+--     FOREIGN KEY (extra_id) REFERENCES extra (id),
 --     FOREIGN KEY (team_id) REFERENCES team (id)
 -- );
 --

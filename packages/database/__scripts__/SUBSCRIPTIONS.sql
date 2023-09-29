@@ -1,6 +1,6 @@
-INSERT INTO available_subscriptions(name, price)
-VALUES ('Free', 0.00),
-       ('Basic', 9.99),
-       ('Premium', 19.99),
-       ('Ultimate', 29.99),
-       ('Enterprise', -1);
+INSERT INTO subscription(name, price)
+VALUES ('SUBSCRIPTION_FREE', 0.00),
+       ('SUBSCRIPTION_BASIC', 9.99),
+       ('SUBSCRIPTION_PREMIUM', 19.99),
+       ('SUBSCRIPTION_ULTIMATE', 29.99),
+       ('SUBSCRIPTION_ENTERPRISE', -1.00);

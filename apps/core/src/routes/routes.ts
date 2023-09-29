@@ -1,12 +1,17 @@
 import express, { Router, Request, Response } from 'express';
 import { authorize } from '../middlewares/auth.middleware';
+
 import {
   checkInEventParticipant,
   getAllEventParticipants,
   getEventParticipantById,
   getEventParticipantCheckInStatus,
 } from '../controllers/participant.controller';
-import { addNewEvent, getAllEvents, getEventById } from '../controllers/events.controller';
+
+// Event
+import { eventController } from '../controllers/event.controller';
+import { eventService } from '../services/event.service';
+
 import {
   getAllEventExtras,
   getEventExtraById,
@@ -21,11 +26,20 @@ import {
 
 const router: Router = express.Router();
 
-router.post('/:organizationId/events', addNewEvent);
+// Event routes
+router.post(
+  '/:organizationId/events',
+  authorize,
+  eventController(eventService).addNewEventController,
+);
 
-router.get('/:organizationId/events', authorize, getAllEvents);
+router.get('/:organizationId/events', authorize, eventController(eventService).getAllEvents);
 
-router.get('/:organizationId/events/:eventId', authorize, getEventById);
+router.get(
+  '/:organizationId/events/:eventId',
+  authorize,
+  eventController(eventService).getEventById,
+);
 
 router.get('/:organizationId/events/:eventId/participants', authorize, getAllEventParticipants);
 
