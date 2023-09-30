@@ -203,11 +203,7 @@ importers:
         specifier: latest
         version: 5.2.2
 
-  packages/database:
-    devDependencies:
-      typescript:
-        specifier: latest
-        version: 5.2.2
+  packages/database: {}
 
   packages/eslint-config-custom:
     dependencies:

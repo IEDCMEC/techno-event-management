@@ -375,3 +375,15 @@ CREATE TABLE IF NOT EXISTS event_volunteer
 --     FOREIGN KEY (team_extra_id) REFERENCES team_extras (id),
 --     FOREIGN KEY (checked_in_by) REFERENCES "user" (id)
 -- );
+
+INSERT INTO role(name)
+VALUES ('ROLE_OWNER'),
+       ('ROLE_ADMIN'),
+       ('ROLE_ONSITE');
+
+INSERT INTO subscription(name, price)
+VALUES ('SUBSCRIPTION_FREE', 0.00),
+       ('SUBSCRIPTION_BASIC', 9.99),
+       ('SUBSCRIPTION_PREMIUM', 19.99),
+       ('SUBSCRIPTION_ULTIMATE', 29.99),
+       ('SUBSCRIPTION_ENTERPRISE', -1.00);
