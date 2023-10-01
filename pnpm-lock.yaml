@@ -25,7 +25,7 @@ importers:
       '@types/chai': ^4.3.5
       '@types/express': ^4.17.17
       '@types/mocha': ^10.0.1
-      '@types/node': ^20.2.5
+      '@types/node': ^20.8.0
       '@types/pg': ^8.10.1
       '@typescript-eslint/eslint-plugin': ^5.59.7
       bcryptjs: ^2.4.3
@@ -95,7 +95,7 @@ importers:
 
   apps/web-client:
     specifiers:
-      '@types/node': 20.5.8
+      '@types/node': 20.8.0
       '@types/react': 18.2.21
       '@types/react-dom': 18.2.8
       autoprefixer: 10.4.15
@@ -111,7 +111,7 @@ importers:
       tailwindcss: 3.3.3
       typescript: 5.2.2
     dependencies:
-      '@types/node': 20.5.8
+      '@types/node': 20.8.0
       '@types/react': 18.2.21
       '@types/react-dom': 18.2.8
       autoprefixer: 10.4.15_postcss@8.4.29
@@ -164,7 +164,7 @@ importers:
 
   packages/pgdatabase:
     specifiers:
-      '@types/node': ^20.2.5
+      '@types/node': ^20.8.0
       '@types/pg': ^8.10.1
       common: workspace:*
       dotenv: ^16.0.3
@@ -634,13 +634,8 @@ packages:
     resolution: {integrity: sha512-NaHL0+0lLNhX6d9rs+NSt97WH/gIlRHmszXbQ/8/MV/eVcFNdeJ/GYhrFuUc8K7WuPhRhTSdMkCp8VMzhUq85w==}
     dev: true
 
-  /@types/node/20.5.8:
-    resolution: {integrity: sha512-eajsR9aeljqNhK028VG0Wuw+OaY5LLxYmxeoXynIoE6jannr9/Ucd1LL0hSSoafk5LTYG+FfqsyGt81Q6Zkybw==}
-    dev: false
-
   /@types/node/20.8.0:
     resolution: {integrity: sha512-LzcWltT83s1bthcvjBmiBvGJiiUe84NWRHkw+ZV6Fr41z2FbIzvc815dk2nQ3RAKMuN2fkenM/z3Xv2QzEpYxQ==}
-    dev: true
 
   /@types/pg/8.10.3:
     resolution: {integrity: sha512-BACzsw64lCZesclRpZGu55tnqgFAYcrCBP92xLh1KLypZLCOsvJTSTgaoFVTy3lCys/aZTQzfeDxtjwrvdzL2g==}
