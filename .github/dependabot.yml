@@ -8,3 +8,7 @@ updates:
     directory: "/apps/web-client"
     schedule:
       interval: "daily"
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
