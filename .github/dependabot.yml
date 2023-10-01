@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "pnpm"
+    directory: "/apps/core"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pnpm"
+    directory: "/web-client"
+    schedule:
+      interval: "daily"
