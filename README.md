@@ -4,7 +4,7 @@
 </div>
 
 <div align="center">
-  <a href="#">technoevent.live</a>
+  <a href="https://techno-event-management.vercel.app">techno-event-management.vercel.app</a>
 </div>
 
 <br/>
