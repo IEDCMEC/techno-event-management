@@ -6,7 +6,7 @@
   "dependencies": {
     "eslint": "^7.32.0",
     "eslint-config-next": "^13.4.4",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-config-turbo": "^1.9.9",
     "eslint-plugin-react": "7.33.2"
   },
