@@ -1,4 +1,5 @@
 import Scanner from '@/components/Scanner/Scanner';
+import { Button } from '@/components/ui/button';
 
 import { useState } from 'react';
 
