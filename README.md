@@ -4,7 +4,7 @@
 </div>
 
 <div align="center">
-  <a href="#">technoevent.live</a>
+  <a href="https://techno-event-management.vercel.app">techno-event-management.vercel.app</a>
 </div>
 
 <br/>
@@ -70,6 +70,12 @@ pnpm run dev
 ### 5. Open the app in your browser
 
 Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Contributing
+
+We welcome contributions from the community! If you're interested in contributing to Techno Event Management, please read our [Contribution Guidelines](https://github.com/IEDCMEC/techno-event-management/wiki/Contributing) to get started.
+
+For major changes, please open an issue first to discuss what you would like to change.
 
 ### Our Contributors ✨
 
