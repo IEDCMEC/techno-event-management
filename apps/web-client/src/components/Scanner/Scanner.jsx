@@ -1,18 +1,13 @@
 import React from 'react';
 import { QrReader } from 'react-qr-reader';
 
-interface ScannerProps {
-  result: String;
-  setResult: React.Dispatch<React.SetStateAction<string>>;
-}
-
-const Scanner: React.FC<ScannerProps> = ({ result, setResult }) => {
-  const handleScan = (result: string | null) => {
+const Scanner = ({ result, setResult }) => {
+  const handleScan = (result) => {
     console.log(result);
     setResult(result || '');
   };
 
-  const handleError = (err: Error) => {
+  const handleError = (err) => {
     console.error(err);
   };
 

@@ -4,15 +4,23 @@ import { useRouter } from 'next/router';
 import DashboardLayout from '../../../../layouts/DashboardLayout';
 import ParticipantCard from '@/components/cards/ParticipantCard';
 
+import { Skeleton } from '@/components/ui/skeleton';
+
 const Dashboard = () => {
   const router = useRouter();
   const { orgId = [] } = router.query;
 
+  const [participant, setParticipant] = React.useState('Allen');
+
   return (
     <DashboardLayout>
-      <div className="h-full w-full bg-neutral-100 flex flex-row justify-start items-start gap-4 flex-wrap">
-        <ParticipantCard name="John Doe" email="johndoe@email.com" isCheckedIn={false} />
-      </div>
+      <ParticipantCard
+        name="John Smith"
+        email="john"
+        participant={participant}
+        setParticipant={setParticipant}
+      />
+      <ParticipantCard name="George Smith" email="john" />
     </DashboardLayout>
   );
 };
