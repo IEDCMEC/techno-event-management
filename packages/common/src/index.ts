@@ -8,4 +8,5 @@ import Organization from './types/Organization';
 import Participant from './types/Participant';
 import User from './types/User';
 
-export { Role, Subscription, Attribute, Event, Extra, Organization, Participant, User };
+export { Role, Subscription };
+export type { Attribute, Event, Extra, Organization, Participant, User };
