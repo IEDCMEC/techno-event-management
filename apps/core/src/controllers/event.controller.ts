@@ -33,7 +33,7 @@ const eventController = (eventService: EventService) => {
 
         const events = await eventService().getAllEventsService(organizationId);
 
-        return res.status(201).json({ events: events });
+        return res.status(200).json({ events: events });
       } catch (err) {
         console.log(err);
       }
@@ -52,7 +52,7 @@ const eventController = (eventService: EventService) => {
 
         const event = await eventService().getEventService(organizationId, eventId);
 
-        return res.status(201).json({ event: event });
+        return res.status(200).json({ event: event });
       } catch (err) {
         console.log(err);
       }
