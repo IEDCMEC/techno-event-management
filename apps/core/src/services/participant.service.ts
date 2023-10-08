@@ -1,97 +1,89 @@
-const Participant = require('common').Participant;
-const UUID = require('common').UUID;
-const NodePGParticipantRepository = require('pgdatabase').NodePGParticipantRepository;
+import { Participant } from 'common';
 
-const participantRepository: typeof NodePGParticipantRepository = new NodePGParticipantRepository();
-const ParticipantCheckIn = require('common').ParticipantCheckIn;
+const pg = require('pgdatabase').pg;
 
-const NodePGParticipantCheckInRepository = require('pgdatabase').NodePGParticipantCheckInRepository;
-
-const participantCheckInRepository: typeof NodePGParticipantCheckInRepository =
-  new NodePGParticipantCheckInRepository();
-
-// const addParticiant = async (organizationId: UUID, eventId: UUID, name: UUID) => {};
-
-const getAllParticipants = async (
-  organizationId: typeof UUID,
-  eventId: typeof UUID,
-): Promise<(typeof Participant)[]> => {
-  try {
-    const participants: (typeof Participant)[] = await participantRepository.findAll(
-      organizationId,
-      eventId,
-    );
-    return participants;
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
+type ParticipantService = {
+  addNewParticipantService: (
+    organizationId: string,
+    eventId: string,
+    firstName: string,
+    lastName: string,
+  ) => Promise<Participant>;
+  getAllParticipantsService: (organizationId: string, eventId: string) => Promise<Participant[]>;
+  getParticipantService: (
+    organizationId: string,
+    eventId: string,
+    participantId: string,
+  ) => Promise<Participant>;
 };
 
-const getParticipantById = async (
-  organizationId: typeof UUID,
-  eventId: typeof UUID,
-  participantId: typeof UUID,
-) => {
-  const participant: typeof Participant = await participantRepository.find(
-    organizationId,
-    eventId,
-    participantId,
-  );
-  return participant;
-};
+const participantService = (): ParticipantService => {
+  return {
+    addNewParticipantService: async (
+      organizationId: string,
+      eventId: string,
+      firstName: string,
+      lastName: string,
+    ) => {
+      try {
+        await pg.query('BEGIN');
+        let newParticipant: Participant = (
+          await pg.query(
+            `INSERT INTO participant (organization_id, event_id, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING *`,
+            [organizationId, eventId, firstName, lastName],
+          )
+        ).rows[0];
 
-const getParticipantByInviteId = async (
-  organizationId: typeof UUID,
-  eventId: typeof UUID,
-  inviteId: string,
-) => {
-  const participant: typeof Participant = await participantRepository.findByInviteId(
-    organizationId,
-    eventId,
-    inviteId,
-  );
-  return participant;
-};
-// const getParticipantByTag = async (organizationId: UUID, eventId: UUID, tag: UUID) => {};
-// const getParticipantAttributes = async (
-//   organizationId: UUID,
-//   eventId: UUID,
-//   participantId: UUID,
-// ) => {};
-// const getParticipantExtras = async (organizationId: UUID, eventId: UUID, participantId: UUID) => {};
-// const getParticipantCheckInStatus = async (
-//   organizationId: UUID,
-//   eventId: UUID,
-//   participantId: UUID,
-// ) => {};
+        if (!newParticipant) throw new Error('Something went wrong');
 
-const checkInParticipant = async (
-  organizationId: typeof UUID,
-  eventId: typeof UUID,
-  participantId: typeof UUID,
-  checkedInBy: typeof UUID,
-) => {
-  // const previousCheckin = await checkInRepository.findByParticipantId(
-  //   organizationId,
-  //   eventId,
-  //   participantId,
-  // );
-  // if (previousCheckin) {
-  //   return false;
-  // }
-  // console.log(previousCheckin);
-  // const participantCheckIn: typeof ParticipantCheckIn = new ParticipantCheckIn(
-  //   new UUID(),
-  //   organizationId,
-  //   eventId,
-  //   participantId,
-  //   true,
-  //   new Date(),
-  //   checkedInBy,
-  // );
-  // const checkInSucces = await checkInRepository.create(participantCheckIn);
-  // return checkInSucces;
-};
+        await pg.query('COMMIT');
+        return newParticipant;
+      } catch (err: any) {
+        await pg.query('ROLLBACK');
+        console.error(err);
+        throw new Error('Something went wrong');
+      }
+    },
+    getAllParticipantsService: async (organizationId: string, eventId: string) => {
+      try {
+        let participants: Participant[] = (
+          await pg.query(`SELECT * FROM participant WHERE organization_id = $1 AND event_id = $2`, [
+            organizationId,
+            eventId,
+          ])
+        ).rows;
 
-export { getParticipantById, getParticipantByInviteId, getAllParticipants, checkInParticipant };
+        if (!participants) {
+          throw new Error('Something went wrong');
+        }
+
+        return participants;
+      } catch (err: any) {
+        console.error(err);
+        throw new Error('Something went wrong');
+      }
+    },
+
+    getParticipantService: async (
+      organizationId: string,
+      eventId: string,
+      participantId: string,
+    ) => {
+      try {
+        let participant: Participant = (
+          await pg.query(
+            `SELECT * FROM participant WHERE organization_id = $1 AND event_id = $2 AND id = $3`,
+            [organizationId, eventId, participantId],
+          )
+        ).rows[0];
+
+        return participant;
+      } catch (err: any) {
+        console.error(err);
+        throw new Error('Something went wrong');
+      }
+    },
+  };
+};
+export default participantService;
+export type { ParticipantService };

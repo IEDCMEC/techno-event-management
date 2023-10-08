@@ -1,101 +1,92 @@
 import { Request, Response } from 'express';
-const Participant = require('common').Participant;
+import participantService, { ParticipantService } from '../services/participant.service';
 
-import {
-  getParticipantById,
-  getAllParticipants,
-  getParticipantByInviteId,
-} from '../services/participant.service';
-import { checkInParticipant } from '../services/participant.service';
+const participantController = (participant: ParticipantService) => {
+  return {
+    addNewParticipantController: async (req: Request, res: Response) => {
+      try {
+        const organizationId = req?.params?.organizationId;
+        const eventId = req?.params?.eventId;
+        const { firstName, lastName } = req?.body?.participant;
 
-const getAllEventParticipants = async (req: Request, res: Response) => {
-  try {
-    const { organizationId, eventId } = req.body;
-    if (!organizationId || !eventId) {
-      return res.status(400).json({ error: 'Authentication Error' });
-    }
-    const participants: (typeof Participant)[] = await getAllParticipants(organizationId, eventId);
-    return res.json(participants);
-  } catch (err) {
-    console.log(err);
-  }
+        if (!organizationId || organizationId === '' || organizationId === undefined) {
+          return res.status(400).json({ error: 'Organization ID is required' });
+        }
+
+        if (!eventId || eventId === '' || eventId === undefined) {
+          return res.status(400).json({ error: 'Event ID is required' });
+        }
+
+        if (!firstName || firstName === '' || firstName === undefined) {
+          return res.status(400).json({ error: 'First name is required' });
+        }
+
+        if (!lastName || lastName === '' || lastName === undefined) {
+          return res.status(400).json({ error: 'Last name is required' });
+        }
+
+        const newParticipant = await participantService().addNewParticipantService(
+          organizationId,
+          eventId,
+          firstName,
+          lastName,
+        );
+
+        return res.status(201).json({ participant: newParticipant });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    getAllParticipantsController: async (req: Request, res: Response) => {
+      try {
+        const { organizationId, eventId } = req?.params;
+
+        if (!organizationId || organizationId === '' || organizationId === undefined) {
+          return res.status(400).json({ error: 'Organization ID is required' });
+        }
+
+        if (!eventId || eventId === '' || eventId === undefined) {
+          return res.status(400).json({ error: 'Event ID is required' });
+        }
+
+        const participants = await participantService().getAllParticipantsService(
+          organizationId,
+          eventId,
+        );
+
+        return res.status(201).json({ participants: participants });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    getParticipantController: async (req: Request, res: Response) => {
+      try {
+        const { organizationId, eventId, participantId } = req?.params;
+
+        if (!organizationId || organizationId === '' || organizationId === undefined) {
+          return res.status(400).json({ error: 'Organization ID is required' });
+        }
+
+        if (!eventId || eventId === '' || eventId === undefined) {
+          return res.status(400).json({ error: 'Event ID is required' });
+        }
+
+        if (!participantId || participantId === '' || participantId === undefined) {
+          return res.status(400).json({ error: 'Participant ID is required' });
+        }
+
+        const participant = await participantService().getParticipantService(
+          organizationId,
+          eventId,
+          participantId,
+        );
+
+        return res.status(201).json({ participant: participant });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  };
 };
 
-const getEventParticipantById = async (req: Request, res: Response) => {
-  try {
-    const participantId = req.params.id;
-    const { organizationId, eventId } = req.body;
-
-    if (!organizationId || !eventId) res.status(400).json({ error: 'Authentication Error' });
-
-    if (!participantId) {
-      return res.status(400).json({ error: 'Participant id is required' });
-    }
-
-    const participant: typeof Participant = await getParticipantById(
-      organizationId,
-      eventId,
-      participantId,
-    );
-
-    return res.json(participant);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const getEventParticipantByInviteId = async (req: Request, res: Response) => {
-  try {
-    const inviteId = req.params.inviteId;
-    const { organizationId, eventId } = req.body;
-
-    if (!organizationId || !eventId) res.status(400).json({ error: 'Authentication Error' });
-
-    if (!inviteId) {
-      return res.status(400).json({ error: 'Invite id is required' });
-    }
-
-    const participant: typeof Participant = await getParticipantByInviteId(
-      organizationId,
-      eventId,
-      inviteId,
-    );
-
-    return res.json(participant);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const checkInEventParticipant = async (req: Request, res: Response) => {
-  // try {
-  //   const { organizationId, eventId, userId, participantId } = req.body;
-  //   if (!organizationId || !eventId || !userId) {
-  //     return res.status(400).json({ error: 'Authentication Error' });
-  //   }
-  //   if (!participantId) {
-  //     return res.status(400).json({ error: 'Participant id is required' });
-  //   }
-  //   const checkInSucces = await checkInParticipant(organizationId, eventId, participantId, userId);
-  //   if (!checkInSucces) {
-  //     return res.status(400).json({ error: 'Checkin failed' });
-  //   }
-  //   if (checkInSucces) {
-  //     return res.status(200).json({ message: 'Checkin success' });
-  //   }
-  // } catch (err) {
-  //   console.log(err);
-  // }
-};
-
-const getEventParticipantCheckInStatus = async (req: Request, res: Response) => {
-  return res.json({ message: 'Check in participant' });
-};
-
-export {
-  getAllEventParticipants,
-  getEventParticipantById,
-  getEventParticipantByInviteId,
-  checkInEventParticipant,
-  getEventParticipantCheckInStatus,
-};
+export default participantController;

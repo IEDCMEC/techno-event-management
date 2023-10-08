@@ -4,6 +4,10 @@ import express, { Router } from 'express';
 import eventController from '../controllers/event.controller';
 import eventService from '../services/event.service';
 
+// Participant
+import participantController from '../controllers/participant.controller';
+import participantService from '../services/participant.service';
+
 const router: Router = express.Router();
 
 // Event routes
@@ -13,13 +17,21 @@ router.get('/:organizationId/events', eventController(eventService).getAllEvents
 
 router.get('/:organizationId/events/:eventId', eventController(eventService).getEventController);
 
-// router.get('/:organizationId/events/:eventId/participants', getAllEventParticipants);
+// Participant routes
+router.post(
+  '/:organizationId/events/:eventId/participants',
+  participantController(participantService).addNewParticipantController,
+);
 
-// router.get(
-//   '/:organizationId/events/:eventId/participants/:participantId',
-//   authorize,
-//   getEventParticipantById,
-// );
+router.get(
+  '/:organizationId/events/:eventId/participants',
+  participantController(participantService).getAllParticipantsController,
+);
+
+router.get(
+  '/:organizationId/events/:eventId/participants/:participantId',
+  participantController(participantService).getParticipantController,
+);
 
 // router.post('/:organizationId/events/:eventId/checkin', checkInEventParticipant);
 
