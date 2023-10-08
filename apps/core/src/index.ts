@@ -18,7 +18,10 @@ import { organizationRouter } from './routes/organization.route';
 import { authrouter } from './routes/auth.route';
 
 app.use('/', organizationRouter);
-app.use('/core', router);
+
+import { authorize } from './middlewares/auth.middleware';
+
+app.use('/core', authorize, router);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Techno Event Server');
