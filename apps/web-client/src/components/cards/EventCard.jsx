@@ -1,29 +1,35 @@
 import React from 'react';
 
-const EventCard = () => {
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
+const EventCard = ({ name }) => {
   return (
-    <div className="h-fit w-[80%] md:w-[30%] bg-[#252B3C] flex flex-col py-4 px-4 justify-center items-center">
-      <div className="flex justify-center items-center bg-[#252B3C] w-full h-fit">
-        <img src="/event_image.svg" height="140" width="150" alt="event image" />
-      </div>
-      <div className="flex items-start w-full h-fit py-0.5">
-        <h1 className="text-blue-400 font-bold text-2xl">Technohack</h1>
-      </div>
-
-      <div className="flex items-start flex-row w-full h-full py-0.5">
-        <p className="text-white font-semibold text-lg">Venue:</p>
-      </div>
-      <div className="flex items-start w-full h-fit pb-4">
-        <p className="text-white font-light">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua.
-        </p>
-      </div>
-
-      <div className="w-[40%] h-fit bg-blue-400 rounded-sm flex justify-center items-center py-1">
-        <button>Register</button>
-      </div>
-    </div>
+    <Card className="w-72">
+      <CardHeader>
+        <CardTitle>{name}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Stats</p>
+      </CardContent>
+      <CardFooter className="flex flex-wrap justify-start items-center gap-2">
+        <Button variant="outline" size="sm">
+          Attributes
+        </Button>
+        <Button variant="outline" size="sm">
+          Extras
+        </Button>
+        <Button size="sm">Checkin</Button>
+        <Button size="sm">Participants</Button>
+      </CardFooter>
+    </Card>
   );
 };
 
