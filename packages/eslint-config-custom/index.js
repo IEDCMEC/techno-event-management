@@ -19,12 +19,6 @@ parser: "@typescript-eslint/parser",
     'import/prefer-default-export': 'off',
     'prettier/prettier': ['error'],
     'class-methods-use-this': 'off',
-    'react/function-component-definition': [
-      2,
-      {
-        namedComponents: 'arrow-function',
-      },
-    ],
     'import/no-extraneous-dependencies': 'off',
     'react/require-default-props': 'off',
     'comma-dangle': 'off',
