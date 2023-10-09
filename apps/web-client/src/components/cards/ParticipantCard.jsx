@@ -19,33 +19,30 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const ParticipantCard = ({ name, email }) => {
+const ParticipantCard = ({ participant }) => {
   return (
     <Card className="w-72">
       <CardHeader>
-        <CardTitle>{name}</CardTitle>
+        <CardTitle>
+          {participant.firstName} {participant.lastName}
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="attribute">Attribute</Label>
-              <Input id="attribute" placeholder="Attribute" value="Value" />
-            </div>
-          </div>
-        </form>
-      </CardContent>
+      {/*<CardContent>*/}
+      {/*    <form>*/}
+      {/*        <div className="grid w-full items-center gap-4">*/}
+      {/*            <div className="flex flex-col space-y-1.5">*/}
+      {/*                <Label htmlFor="attribute">Attribute</Label>*/}
+      {/*                <Input id="attribute" placeholder="Attribute" value="Value"/>*/}
+      {/*            </div>*/}
+      {/*        </div>*/}
+      {/*    </form>*/}
+      {/*</CardContent>*/}
       <CardFooter className="flex justify-end">
-        <Button>Checkin</Button>
+        <Button size="sm" disabled={participant.checkedIn}>
+          Checkin
+        </Button>
       </CardFooter>
     </Card>
   );
 };
-
-ParticipantCard.defaultProps = {
-  name: 'John Doe',
-  email: 'johndoe@email.com',
-  isCheckedIn: false,
-};
-
 export default ParticipantCard;

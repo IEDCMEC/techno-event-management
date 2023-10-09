@@ -54,7 +54,7 @@ const participantController = (participant: ParticipantService) => {
           eventId,
         );
 
-        return res.status(201).json({ participants: participants });
+        return res.status(200).json({ participants: participants });
       } catch (err) {
         console.log(err);
       }
@@ -81,7 +81,7 @@ const participantController = (participant: ParticipantService) => {
           participantId,
         );
 
-        return res.status(201).json({ participant: participant });
+        return res.status(200).json({ participant: participant });
       } catch (err) {
         console.log(err);
       }
