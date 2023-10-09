@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import googleicon from '../../assets/googleicon.png';
-import idea from '../../assets/idea.png';
+import googleicon from '../../../assets/googleicon.png';
+import idea from '../../../assets/idea.png';
 import Image from 'next/image';
 
 const colors = {

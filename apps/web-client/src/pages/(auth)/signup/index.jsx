@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import Image from 'next/image';
-import idea from '../../assets/idea.png';
+import idea from '../../../assets/idea.png';
 
 const colors = {
   primary: '#2596be',
