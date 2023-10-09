@@ -16,7 +16,7 @@
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
-    "turbo": "^1.9.9"
+    "turbo": "^1.10.15"
   },
   "packageManager": "pnpm@7.15.0",
   "name": "techno-event-management"
