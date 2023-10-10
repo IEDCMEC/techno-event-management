@@ -118,7 +118,7 @@ importers:
       react-dom: 18.2.0
       react-hook-form: ^7.47.0
       react-qr-reader: 3.0.0-beta-1
-      sass: ^1.66.1
+      sass: ^1.69.1
       tailwind-merge: ^1.14.0
       tailwindcss: 3.3.3
       tailwindcss-animate: ^1.0.7
@@ -141,13 +141,13 @@ importers:
       eslint-config-custom: link:../../packages/eslint-config-custom
       eslint-config-next: 13.5.4_jk7qbkaijtltyu4ajmze3dfiwa
       lucide-react: 0.284.0_react@18.2.0
-      next: 13.5.4_kd27xdkwtzxzrns4nskaavikwi
+      next: 13.5.4_gewzw7coau2uk5vixsbhkmwptu
       postcss: 8.4.31
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.47.0_react@18.2.0
       react-qr-reader: 3.0.0-beta-1_biqbaboplfbrettd7655fr4n2y
-      sass: 1.69.0
+      sass: 1.69.1
       tailwind-merge: 1.14.0
       tailwindcss: 3.3.3
       tailwindcss-animate: 1.0.7_tailwindcss@3.3.3
@@ -4798,7 +4798,7 @@ packages:
     engines: {node: '>= 0.4.0'}
     dev: true
 
-  /next/13.5.4_kd27xdkwtzxzrns4nskaavikwi:
+  /next/13.5.4_gewzw7coau2uk5vixsbhkmwptu:
     resolution: {integrity: sha512-+93un5S779gho8y9ASQhb/bTkQF17FNQOtXLKAj3lsNgltEcF0C5PMLLncDmH+8X1EnJH1kbqAERa29nRXqhjA==}
     engines: {node: '>=16.14.0'}
     hasBin: true
@@ -4820,7 +4820,7 @@ packages:
       postcss: 8.4.31
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      sass: 1.69.0
+      sass: 1.69.1
       styled-jsx: 5.1.1_react@18.2.0
       watchpack: 2.4.0
     optionalDependencies:
@@ -5822,8 +5822,8 @@ packages:
   /safer-buffer/2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
-  /sass/1.69.0:
-    resolution: {integrity: sha512-l3bbFpfTOGgQZCLU/gvm1lbsQ5mC/WnLz3djL2v4WCJBDrWm58PO+jgngcGRNnKUh6wSsdm50YaovTqskZ0xDQ==}
+  /sass/1.69.1:
+    resolution: {integrity: sha512-nc969GvTVz38oqKgYYVHM/Iq7Yl33IILy5uqaH2CWSiSUmRCvw+UR7tA3845Sp4BD5ykCUimvrT3k1EjTwpVUA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
