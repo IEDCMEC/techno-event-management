@@ -1,43 +1,72 @@
-const UUID = require('common').UUID;
-const Event = require('common').Event;
+import { Event } from 'common';
 
 const pg = require('pgdatabase').pg;
 
-const eventService = () => {
-  const addNewEventService = async (organizationId: typeof UUID, name: string) => {
-    try {
-      await pg.query('BEGIN');
-      let newEvent: typeof Event = (
-        await pg.query(
-          `INSERT INTO event (organization_id, name) VALUES ($1, $2) RETURNING organization_id as organizationId`,
-          [organizationId, name],
-        )
-      ).rows[0];
+type EventService = {
+  addNewEventService: (organizationId: string, name: string) => Promise<Event>;
+  getAllEventsService: (organizationId: string) => Promise<Event[]>;
+  getEventService: (organizationId: string, eventId: string) => Promise<Event[]>;
+};
 
-      if (!newEvent) {
+const eventService = (): EventService => {
+  return {
+    addNewEventService: async (organizationId: string, name: string) => {
+      try {
+        await pg.query('BEGIN');
+        let newEvent: Event = (
+          await pg.query(`INSERT INTO event (organization_id, name) VALUES ($1, $2) RETURNING *`, [
+            organizationId,
+            name,
+          ])
+        ).rows[0];
+
+        if (!newEvent) {
+          throw new Error('Something went wrong');
+        }
+
+        await pg.query('COMMIT');
+        return newEvent;
+      } catch (err: any) {
+        await pg.query('ROLLBACK');
+        console.error(err);
         throw new Error('Something went wrong');
       }
+    },
 
-      await pg.query('COMMIT');
-      return newEvent;
-    } catch (err: any) {
-      await pg.query('ROLLBACK');
-      console.error(err);
-    }
-  };
+    getAllEventsService: async (organizationId: string) => {
+      try {
+        let events: Event[] = (
+          await pg.query(`SELECT * FROM event WHERE organization_id = $1`, [organizationId])
+        ).rows;
 
-  const getAllEventsByOrganization = async (organizationId: typeof UUID) => {
-    // const events = await EventRepository.findAll(organizationId);
-    // return events;
-  };
+        if (!events) {
+          throw new Error('Something went wrong');
+        }
 
-  const getEvent = async (organizationId: string, eventId: string) => {};
+        return events;
+      } catch (err: any) {
+        console.error(err);
+        throw new Error('Something went wrong');
+      }
+    },
 
-  return {
-    addNewEventService,
-    getAllEventsByOrganization,
-    getEvent,
+    getEventService: async (organizationId: string, eventId: string) => {
+      try {
+        let event: Event[] = (
+          await pg.query(`SELECT * FROM event WHERE organization_id = $1 AND id = $2`, [
+            organizationId,
+            eventId,
+          ])
+        ).rows[0];
+
+        return event;
+      } catch (err: any) {
+        console.error(err);
+        throw new Error('Something went wrong');
+      }
+    },
   };
 };
 
-export { eventService };
+export default eventService;
+export type { EventService };
