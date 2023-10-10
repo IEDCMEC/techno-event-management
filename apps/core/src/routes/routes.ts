@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express, {Router} from 'express';
 
 // Event
 import eventController from '../controllers/event.controller';
@@ -7,6 +7,8 @@ import eventService from '../services/event.service';
 // Participant
 import participantController from '../controllers/participant.controller';
 import participantService from '../services/participant.service';
+import checkinController from '../controllers/checkin.controller';
+import checkinService from '../services/checkin.service';
 
 const router: Router = express.Router();
 
@@ -19,21 +21,25 @@ router.get('/:organizationId/events/:eventId', eventController(eventService).get
 
 // Participant routes
 router.post(
-  '/:organizationId/events/:eventId/participants',
-  participantController(participantService).addNewParticipantController,
+    '/:organizationId/events/:eventId/participants',
+    participantController(participantService).addNewParticipantController,
 );
 
 router.get(
-  '/:organizationId/events/:eventId/participants',
-  participantController(participantService).getAllParticipantsController,
+    '/:organizationId/events/:eventId/participants',
+    participantController(participantService).getAllParticipantsController,
 );
 
 router.get(
-  '/:organizationId/events/:eventId/participants/:participantId',
-  participantController(participantService).getParticipantController,
+    '/:organizationId/events/:eventId/participants/:participantId',
+    participantController(participantService).getParticipantController,
 );
 
-// router.post('/:organizationId/events/:eventId/checkin', checkInEventParticipant);
+// Checkin routes
+router.post(
+    '/:organizationId/events/:eventId/checkin/participants/:participantId',
+    checkinController(checkinService).checkinParticipantController,
+);
 
 // router.get(
 //   '/:organizationId/events/:eventId/checkin/status',
@@ -70,4 +76,4 @@ router.get(
 //
 // router.get('/:organizationId/members/:userId', getOrganizationMemberById);
 
-export { router };
+export {router};
