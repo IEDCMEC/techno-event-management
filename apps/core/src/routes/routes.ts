@@ -51,6 +51,17 @@ router.post(
     attributeController(attributeService).addNewAttributeController,
 );
 
+router.get(
+    '/:organizationId/events/:eventId/participants/:participantId/attributes',
+    attributeController(attributeService).getParticipantsAllAttributesController,
+);
+
+router.get(
+    '/:organizationId/events/:eventId/participants/:participantId/attributes/:attributeId',
+    attributeController(attributeService).getParticipantAttributeController,
+)
+;
+
 // router.get(
 //   '/:organizationId/events/:eventId/checkin/status',
 //   authorize,
