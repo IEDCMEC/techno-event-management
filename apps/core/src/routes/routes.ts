@@ -10,6 +10,10 @@ import participantService from '../services/participant.service';
 import checkinController from '../controllers/checkin.controller';
 import checkinService from '../services/checkin.service';
 
+// Attribute
+import attributeController from "../controllers/attribute.controller";
+import attributeService from "../services/attribute.service";
+
 const router: Router = express.Router();
 
 // Event routes
@@ -39,6 +43,12 @@ router.get(
 router.post(
     '/:organizationId/events/:eventId/checkin/participants/:participantId',
     checkinController(checkinService).checkinParticipantController,
+);
+
+// Attribute routes
+router.post(
+    '/:organizationId/events/:eventId/attributes',
+    attributeController(attributeService).addNewAttributeController,
 );
 
 // router.get(
