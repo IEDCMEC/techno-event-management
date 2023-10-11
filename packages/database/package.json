@@ -1,3 +1,6 @@
 {
-  "name": "database"
+  "name": "database",
+  "dependencies": {
+    "prisma": "^5.4.2"
+  }
 }
