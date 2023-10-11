@@ -10,10 +10,7 @@ importers:
       husky: ^8.0.0
       lint-staged: ^14.0.1
       prettier: ^3.0.3
-      prisma: ^5.4.2
       turbo: ^1.9.9
-    dependencies:
-      prisma: 5.4.2
     devDependencies:
       '@turbo/gen': 1.10.2_gpvpa7zu4f77ulrjtdeari4mnq
       eslint: 8.51.0
@@ -521,11 +518,6 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       tslib: 2.5.3
-
-  /@prisma/engines/5.4.2:
-    resolution: {integrity: sha512-fqeucJ3LH0e1eyFdT0zRx+oETLancu5+n4lhiYECyEz6H2RDskPJHJYHkVc0LhkU4Uv7fuEnppKU3nVKNzMh8g==}
-    requiresBuild: true
-    dev: false
 
   /@radix-ui/number/1.0.1:
     resolution: {integrity: sha512-T5gIdVO2mmPW3NNhjNgEP3cqMXjXL9UbO0BzWcXfvdBs+BohbQxvd/K5hSVKmn9/lbTdsQVKbUcP5WLCwvUbBg==}
@@ -5431,15 +5423,6 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dev: true
-
-  /prisma/5.4.2:
-    resolution: {integrity: sha512-GDMZwZy7mysB2oXU+angQqJ90iaPFdD0rHaZNkn+dio5NRkGLmMqmXs31//tg/qXT3iB0cTQwnGGQNuirhSTZg==}
-    engines: {node: '>=16.13'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      '@prisma/engines': 5.4.2
-    dev: false
 
   /prop-types/15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
