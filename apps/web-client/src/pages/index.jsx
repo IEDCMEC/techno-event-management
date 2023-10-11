@@ -1,19 +1,21 @@
 import Scanner from '@/components/Scanner/Scanner';
-import { Button } from '@/components/ui/button';
-
 import { useState } from 'react';
+import DashboardLayout from '@/layouts/DashboardLayout';
 
 const Home = () => {
   const [result, setResult] = useState('No result');
 
+  const handleScanResult = (scannedResult) => {
+    setResult(scannedResult);
+  };
+
   return (
     <main>
-      <p>Web Client</p>
-
-      <h1>Web Client</h1>
-
-      <Scanner result={result} setResult={setResult} />
-      {result}
+      <DashboardLayout>
+        <p>Web Client</p>
+        <h1>Web Client</h1>
+        
+      </DashboardLayout>
     </main>
   );
 };
