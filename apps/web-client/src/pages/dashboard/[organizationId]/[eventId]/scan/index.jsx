@@ -1,23 +1,22 @@
 import DashboardLayout from '@/layouts/DashboardLayout';
-import React from 'react'
+import React from 'react';
 import Scanner from '@/components/Scanner/Scanner';
 import { useState } from 'react';
-const index = () => {
 
-     const [setResult, result] = useState('No result');
+const Scan = () => {
+  const [setResult, result] = useState('No result');
 
   const handleScanResult = (scannedResult) => {
     setResult(scannedResult);
   };
   return (
-    
     <div>
-        <DashboardLayout>
-            <Scanner setResult={setResult} result={setResult}/>
+      <DashboardLayout>
+        <Scanner setResult={setResult} result={setResult} />
         <p>Scanned Result: {result}</p>
-        </DashboardLayout>
+      </DashboardLayout>
     </div>
-  )
-}
+  );
+};
 
-export default index
+export default Scan;
