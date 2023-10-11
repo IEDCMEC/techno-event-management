@@ -16,21 +16,10 @@ const Dashboard = () => {
   const router = useRouter();
   const { organizationId } = router.query;
 
-  const [newEvent, setNewEvent] = useState({});
+  const [event, setEvent] = useState({});
 
-  const addNewEvent = async () => {
-    try {
-      const { data, status } = await axiosInstance.post(`/core/${organizationId}/events/newEvent`, {
-        participant,
-      });
-      console.log(data);
-      if (status === 201) {
-        window.alert('Event added successfully');
-        router.push(`/dashboard/${organizationId}/${eventId}`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const addevent = async () => {
+    console.log('Adding new event');
   };
 
   return (
@@ -42,19 +31,17 @@ const Dashboard = () => {
         <p className="text-3xl">Add New Event</p>
         <form
           className="w-3/5 mx-auto flex flex-col gap-4"
-          value={newEvent}
+          value={event}
           onChange={(e) => {
-            setParticipant({ ...newEvent, [e.target.id]: e.target.value });
+            setParticipant({ ...event, [e.target.id]: e.target.value });
           }}
         >
-          <Label htmlFor="event">Event</Label>
-          <Input type="text" id="event" placeholder="John" />
-          <Label htmlFor="eventName">Event Name</Label>
-          <Input type="text" id="eventName" placeholder="Doe" />
+          <Label htmlFor="name">Name</Label>
+          <Input type="text" id="name" placeholder="Big Event" />
           <Button
             onClick={(e) => {
               e.preventDefault();
-              addNewEvent();
+              addevent();
             }}
           >
             Add
