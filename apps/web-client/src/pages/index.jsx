@@ -14,8 +14,7 @@ const Home = () => {
       <DashboardLayout>
         <p>Web Client</p>
         <h1>Web Client</h1>
-        <Scanner setResult={setResult} result={setResult}/>
-        <p>Scanned Result: {result}</p>
+        
       </DashboardLayout>
     </main>
   );
