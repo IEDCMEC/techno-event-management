@@ -1,0 +1,201 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model attribute {
+  id                    String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id       String                  @db.Uuid
+  event_id              String                  @db.Uuid
+  name                  String                  @db.VarChar(255)
+  event                 event                   @relation(fields: [event_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  organization          organization            @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  participant_attribute participant_attribute[]
+}
+
+model event {
+  id              String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id String            @db.Uuid
+  name            String            @db.VarChar(255)
+  attribute       attribute[]
+  organization    organization      @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  event_volunteer event_volunteer[]
+  extra           extra[]
+  participant     participant[]
+  participant_tag participant_tag[]
+  tag             tag[]
+}
+
+model event_volunteer {
+  id                   String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id      String            @db.Uuid
+  event_id             String            @db.Uuid
+  user_id              String            @db.Uuid
+  organization_user_id String            @db.Uuid
+  organization         organization      @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  event                event             @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "event_volunteer_organization_id_fkey1")
+  organization_user    organization_user @relation(fields: [organization_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user                 user              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model extra {
+  id                 String               @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id    String               @db.Uuid
+  event_id           String               @db.Uuid
+  name               String               @db.VarChar(255)
+  event              event                @relation(fields: [event_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  organization       organization         @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  participant_extras participant_extras[]
+}
+
+model organization {
+  id                          String                        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name                        String                        @db.VarChar(255)
+  attribute                   attribute[]
+  event                       event[]
+  event_volunteer             event_volunteer[]
+  extra                       extra[]
+  organization_subscription   organization_subscription[]
+  organization_user           organization_user[]
+  participant                 participant[]
+  participant_attribute       participant_attribute[]
+  participant_check_in        participant_check_in[]
+  participant_extras          participant_extras[]
+  participant_extras_check_in participant_extras_check_in[]
+  participant_tag             participant_tag[]
+  tag                         tag[]
+}
+
+model organization_subscription {
+  id              String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id String       @db.Uuid
+  subscription_id String       @db.Uuid
+  organization    organization @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subscription    subscription @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model organization_user {
+  id              String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id         String            @db.Uuid
+  organization_id String            @db.Uuid
+  role_id         String            @db.Uuid
+  event_volunteer event_volunteer[]
+  organization    organization      @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  role            role              @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user            user              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model participant {
+  id                    String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id       String                  @db.Uuid
+  event_id              String                  @db.Uuid
+  first_name            String                  @db.VarChar(255)
+  last_name             String                  @db.VarChar(255)
+  event                 event                   @relation(fields: [event_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  organization          organization            @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  participant_attribute participant_attribute[]
+  participant_check_in  participant_check_in[]
+  participant_extras    participant_extras[]
+  participant_tag       participant_tag[]
+}
+
+model participant_attribute {
+  id              String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id String       @db.Uuid
+  event_id        String       @db.Uuid
+  attribute_id    String       @db.Uuid
+  participant_id  String       @db.Uuid
+  value           String       @db.VarChar(255)
+  attribute       attribute    @relation(fields: [attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  organization    organization @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  participant     participant  @relation(fields: [participant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model participant_check_in {
+  id              String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id String       @db.Uuid
+  event_id        String       @db.Uuid
+  participant_id  String       @db.Uuid
+  checked_in      Boolean      @default(false)
+  check_in_time   DateTime     @default(now()) @db.Timestamp(6)
+  checked_in_by   String       @db.Uuid
+  user            user         @relation(fields: [checked_in_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  organization    organization @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  participant     participant  @relation(fields: [participant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model participant_extras {
+  id                          String                        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id             String                        @db.Uuid
+  event_id                    String                        @db.Uuid
+  extra_id                    String                        @db.Uuid
+  participant_id              String                        @db.Uuid
+  extra                       extra                         @relation(fields: [extra_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  organization                organization                  @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  participant                 participant                   @relation(fields: [participant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  participant_extras_check_in participant_extras_check_in[]
+}
+
+model participant_extras_check_in {
+  id                   String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id      String             @db.Uuid
+  event_id             String             @db.Uuid
+  participant_extra_id String             @db.Uuid
+  checked_in           Boolean            @default(false)
+  check_in_time        DateTime           @default(now()) @db.Timestamp(6)
+  checked_in_by        String             @db.Uuid
+  user                 user               @relation(fields: [checked_in_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  organization         organization       @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  participant_extras   participant_extras @relation(fields: [participant_extra_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model participant_tag {
+  id              String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id String       @db.Uuid
+  event_id        String       @db.Uuid
+  tag_id          String       @db.Uuid
+  participant_id  String       @db.Uuid
+  event           event        @relation(fields: [event_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  organization    organization @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  participant     participant  @relation(fields: [participant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tag             tag          @relation(fields: [tag_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model role {
+  id                String              @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name              String              @db.VarChar(255)
+  organization_user organization_user[]
+}
+
+model subscription {
+  id                        String                      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name                      String                      @db.VarChar(255)
+  price                     Int
+  organization_subscription organization_subscription[]
+}
+
+model tag {
+  id              String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id String            @db.Uuid
+  event_id        String            @db.Uuid
+  tag             String            @db.VarChar(255)
+  participant_tag participant_tag[]
+  event           event             @relation(fields: [event_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  organization    organization      @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model user {
+  id                          String                        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  first_name                  String                        @db.VarChar(255)
+  last_name                   String                        @db.VarChar(255)
+  email                       String                        @db.VarChar(255)
+  password                    String                        @db.VarChar(255)
+  event_volunteer             event_volunteer[]
+  organization_user           organization_user[]
+  participant_check_in        participant_check_in[]
+  participant_extras_check_in participant_extras_check_in[]
+}
