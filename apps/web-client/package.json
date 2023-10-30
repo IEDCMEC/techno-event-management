@@ -24,7 +24,7 @@
     "clsx": "^2.0.0",
     "eslint": "8.51.0",
     "eslint-config-custom": "workspace:*",
-    "eslint-config-next": "13.5.4",
+    "eslint-config-next": "14.0.0",
     "lucide-react": "^0.290.0",
     "next": "13.5.4",
     "postcss": "8.4.31",
