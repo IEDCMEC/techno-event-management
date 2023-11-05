@@ -25,7 +25,7 @@ To develop and test:
 
 - Specify the type of commit; use consistent set of words to describe changes.
 - Example commit types: feat, fix, chore, refactor, docs, style, test, perf, ci, build, revert.
-- 
+-
 
 ### 3. Commit Message Structure
 
@@ -36,26 +36,30 @@ To develop and test:
 ### Examples
 
 - **Feature Addition:**
+
   ```
   feat: add search bar functionality
   ```
 
 - **Documentation Update:**
+
   ```
   docs: add project description, abstract, hosted link
   ```
 
 - **Breaking Change:**
+
   ```
   feat!: send an email to the customer when a product is shipped
   ```
 
 - **Commit with Scope:**
+
   ```
   feat(api)!: send an email to the customer when a product is shipped
   ```
 
-- **An example for reference (with breaking change)** : 
+- **An example for reference (with breaking change)** :
 
 ```
 chore!: update website layout
@@ -74,19 +78,20 @@ The breaking change notice is important for users to be aware that updating thei
 
 ## Conventional Commits Specification
 
-### Types in detail 
+### Types in detail
+
 - feat – a new feature is introduced with the changes
 - fix – a bug fix has occurred
 - chore – changes that do not relate to a fix or feature and don't modify src or test files (for example updating dependencies)
 - refactor – refactored code that neither fixes a bug nor adds a feature
 - docs – updates to documentation such as a the README or other markdown files
 - style – changes that do not affect the meaning of the code, likely related to code formatting such as white-space, missing semi-colons, and so on.
-test – including new or correcting previous tests
+  test – including new or correcting previous tests
 - perf – performance improvements
 - ci – continuous integration related.
 - build – changes that affect the build system or external dependencies.
 - revert – reverts a previous commit.
-Examples :  feat : add search bar functionality docs : add proj desc, abstract, hosted link
+  Examples : feat : add search bar functionality docs : add proj desc, abstract, hosted link
 
 ### Commit Message Structure
 
@@ -96,6 +101,7 @@ Examples :  feat : add search bar functionality docs : add proj desc, abstract, 
 ### Examples
 
 - **Breaking Change in Footer:**
+
   ```
   feat: allow provided config object to extend other configs
 
@@ -103,11 +109,13 @@ Examples :  feat : add search bar functionality docs : add proj desc, abstract, 
   ```
 
 - **Commit with Scope and Breaking Change/Attention Marker:**
+
   ```
   feat(api)!: send an email to the customer when a product is shipped
   ```
 
 - **Commit with Multiple Footers:**
+
   ```
   fix: prevent racing of requests
 
@@ -116,12 +124,15 @@ Examples :  feat : add search bar functionality docs : add proj desc, abstract, 
   Remove timeouts which were used to mitigate the racing issue but are
   obsolete now.
   ```
-### Some things to note 
+
+### Some things to note
 
 - **Commit Types Case Sensitivity:**
+
   - Any casing may be used, but consistency is recommended.
 
 - **Dealing with Multiple Commit Types:**
+
   - Make multiple commits whenever possible.
 
 - **Handling Wrong Commit Types:**
