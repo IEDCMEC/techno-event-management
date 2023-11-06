@@ -116,7 +116,7 @@ importers:
       postcss: 8.4.31
       react: 18.2.0
       react-dom: 18.2.0
-      react-hook-form: ^7.47.0
+      react-hook-form: ^7.48.2
       react-qr-reader: 3.0.0-beta-1
       sass: ^1.69.1
       tailwind-merge: ^1.14.0
@@ -124,7 +124,7 @@ importers:
       tailwindcss-animate: ^1.0.7
       zod: ^3.22.4
     dependencies:
-      '@hookform/resolvers': 3.3.2_react-hook-form@7.47.0
+      '@hookform/resolvers': 3.3.2_react-hook-form@7.48.2
       '@radix-ui/react-icons': 1.3.0_react@18.2.0
       '@radix-ui/react-label': 2.0.2_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-menubar': 1.0.4_biqbaboplfbrettd7655fr4n2y
@@ -145,7 +145,7 @@ importers:
       postcss: 8.4.31
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      react-hook-form: 7.47.0_react@18.2.0
+      react-hook-form: 7.48.2_react@18.2.0
       react-qr-reader: 3.0.0-beta-1_biqbaboplfbrettd7655fr4n2y
       sass: 1.69.5
       tailwind-merge: 1.14.0
@@ -323,12 +323,12 @@ packages:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
     dev: false
 
-  /@hookform/resolvers/3.3.2_react-hook-form@7.47.0:
+  /@hookform/resolvers/3.3.2_react-hook-form@7.48.2:
     resolution: {integrity: sha512-Tw+GGPnBp+5DOsSg4ek3LCPgkBOuOgS5DsDV7qsWNH9LZc433kgsWICjlsh2J9p04H2K66hsXPPb9qn9ILdUtA==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.47.0_react@18.2.0
+      react-hook-form: 7.48.2_react@18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.11.13:
@@ -5611,8 +5611,8 @@ packages:
       scheduler: 0.23.0
     dev: false
 
-  /react-hook-form/7.47.0_react@18.2.0:
-    resolution: {integrity: sha512-F/TroLjTICipmHeFlMrLtNLceO2xr1jU3CyiNla5zdwsGUGu2UOxxR4UyJgLlhMwLW/Wzp4cpJ7CPfgJIeKdSg==}
+  /react-hook-form/7.48.2_react@18.2.0:
+    resolution: {integrity: sha512-H0T2InFQb1hX7qKtDIZmvpU1Xfn/bdahWBN1fH19gSe4bBEqTfmlr7H3XWTaVtiK4/tpPaI1F3355GPMZYge+A==}
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
