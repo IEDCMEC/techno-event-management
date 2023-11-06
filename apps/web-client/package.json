@@ -22,7 +22,7 @@
     "axios": "^1.5.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "eslint": "8.51.0",
+    "eslint": "8.53.0",
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "13.5.4",
     "lucide-react": "^0.290.0",
