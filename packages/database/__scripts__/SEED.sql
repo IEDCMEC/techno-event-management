@@ -1,8 +1,3 @@
-INSERT INTO organization(name)
-VALUES ('IEDC MEC');
-INSERT INTO organization(name)
-VALUES ('FOSS MEC');
-
 INSERT INTO "user"(first_name, last_name, email, password)
 VALUES ('Allen', 'Allen', 'allen@email.com', 'pass');
 INSERT INTO "user"(first_name, last_name, email, password)
@@ -15,6 +10,11 @@ INSERT INTO "user"(first_name, last_name, email, password)
 VALUES ('Jithin', 'Jithin', 'jithin@email.com', 'no idea');
 INSERT INTO "user"(first_name, last_name, email, password)
 VALUES ('Jozef', 'Jozef', 'jozef@email.com', 'tailwind fenboy');
+
+INSERT INTO organization(name, owner_id)
+VALUES ('IEDC MEC', (SELECT id FROM "user" WHERE email = 'aldrin@email.com'));
+INSERT INTO organization(name, owner_id)
+VALUES ('FOSS MEC', (SELECT id FROM "user" WHERE email = 'jithin@email.com'));
 
 INSERT INTO organization_user(organization_id, user_id, role_id)
 VALUES ((SELECT id FROM organization WHERE name = 'IEDC MEC'),
