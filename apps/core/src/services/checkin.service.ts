@@ -10,9 +10,14 @@ type CheckinService = () => {
     checkinTime: Date,
     checkedInBy: string,
   ) => Promise<Participant>;
+  getParticipantCheckinDetailsService: (
+    organizationId: string,
+    eventId: string,
+    participantId: string,
+  ) => Promise<Participant>;
 };
 
-const checkinService = (): CheckinService => {
+const checkinService: CheckinService = () => {
   return {
     checkinParticipantService: async (
       organizationId: string,
@@ -54,6 +59,34 @@ const checkinService = (): CheckinService => {
         return newParticipantCheckin;
       } catch (err: any) {
         await pg.query('ROLLBACK');
+        console.error(err);
+        throw new Error('Something went wrong');
+      }
+    },
+    getParticipantCheckinDetailsService: async (
+      organizationId: string,
+      eventId: string,
+      participantId: string,
+    ) => {
+      try {
+        let participant: Participant = (
+          await pg.query(
+            `SELECT * FROM participant WHERE organization_id = $1 AND event_id = $2 AND id = $3`,
+            [organizationId, eventId, participantId],
+          )
+        ).rows[0];
+
+        if (!participant) throw new Error('Participant not found');
+
+        let participantCheckinDetails = (
+          await pg.query(
+            `SELECT * FROM participant_check_in WHERE organization_id = $1 AND event_id = $2 AND participant_id = $3`,
+            [organizationId, eventId, participantId],
+          )
+        ).rows[0];
+
+        return participantCheckinDetails;
+      } catch (err: any) {
         console.error(err);
         throw new Error('Something went wrong');
       }

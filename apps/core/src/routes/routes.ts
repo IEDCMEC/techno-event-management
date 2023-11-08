@@ -44,6 +44,10 @@ router.post(
   '/:organizationId/events/:eventId/checkin/participants/:participantId',
   checkinController(checkinService).checkinParticipantController,
 );
+router.get(
+  '/:organizationId/events/:eventId/checkin/participants/:participantId',
+  checkinController(checkinService).getParticipantCheckinDetailsController,
+);
 
 // Attribute routes
 router.post(
