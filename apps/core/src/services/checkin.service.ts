@@ -2,7 +2,15 @@ import { Participant } from 'common';
 
 const pg = require('pgdatabase').pg;
 
-type CheckinService = {};
+type CheckinService = () => {
+  checkinParticipantService: (
+    organizationId: string,
+    eventId: string,
+    participantId: string,
+    checkinTime: Date,
+    checkedInBy: string,
+  ) => Promise<Participant>;
+};
 
 const checkinService = (): CheckinService => {
   return {

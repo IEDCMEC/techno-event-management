@@ -2,7 +2,7 @@ import { Participant } from 'common';
 
 const pg = require('pgdatabase').pg;
 
-type ParticipantService = {
+type ParticipantService = () => {
   addNewParticipantService: (
     organizationId: string,
     eventId: string,
@@ -17,7 +17,7 @@ type ParticipantService = {
   ) => Promise<Participant>;
 };
 
-const participantService = (): ParticipantService => {
+const participantService: ParticipantService = () => {
   return {
     addNewParticipantService: async (
       organizationId: string,

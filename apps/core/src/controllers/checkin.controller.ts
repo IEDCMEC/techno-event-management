@@ -36,7 +36,7 @@ const checkinController = (checkinService: CheckinService) => {
         );
         return res.status(201).json({ newParticipantCheckin });
       } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: 'Something went wrong' });
       }
     },
   };
