@@ -2,13 +2,13 @@ import { Event } from 'common';
 
 const pg = require('pgdatabase').pg;
 
-type EventService = {
+type EventService = () => {
   addNewEventService: (organizationId: string, name: string) => Promise<Event>;
   getAllEventsService: (organizationId: string) => Promise<Event[]>;
   getEventService: (organizationId: string, eventId: string) => Promise<Event[]>;
 };
 
-const eventService = (): EventService => {
+const eventService: EventService = () => {
   return {
     addNewEventService: async (organizationId: string, name: string) => {
       try {
