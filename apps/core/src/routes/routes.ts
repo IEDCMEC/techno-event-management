@@ -1,4 +1,4 @@
-import express, {Router} from 'express';
+import express, { Router } from 'express';
 
 // Event
 import eventController from '../controllers/event.controller';
@@ -11,8 +11,8 @@ import checkinController from '../controllers/checkin.controller';
 import checkinService from '../services/checkin.service';
 
 // Attribute
-import attributeController from "../controllers/attribute.controller";
-import attributeService from "../services/attribute.service";
+import attributeController from '../controllers/attribute.controller';
+import attributeService from '../services/attribute.service';
 
 const router: Router = express.Router();
 
@@ -25,42 +25,41 @@ router.get('/:organizationId/events/:eventId', eventController(eventService).get
 
 // Participant routes
 router.post(
-    '/:organizationId/events/:eventId/participants',
-    participantController(participantService).addNewParticipantController,
+  '/:organizationId/events/:eventId/participants',
+  participantController(participantService).addNewParticipantController,
 );
 
 router.get(
-    '/:organizationId/events/:eventId/participants',
-    participantController(participantService).getAllParticipantsController,
+  '/:organizationId/events/:eventId/participants',
+  participantController(participantService).getAllParticipantsController,
 );
 
 router.get(
-    '/:organizationId/events/:eventId/participants/:participantId',
-    participantController(participantService).getParticipantController,
+  '/:organizationId/events/:eventId/participants/:participantId',
+  participantController(participantService).getParticipantController,
 );
 
 // Checkin routes
 router.post(
-    '/:organizationId/events/:eventId/checkin/participants/:participantId',
-    checkinController(checkinService).checkinParticipantController,
+  '/:organizationId/events/:eventId/checkin/participants/:participantId',
+  checkinController(checkinService).checkinParticipantController,
 );
 
 // Attribute routes
 router.post(
-    '/:organizationId/events/:eventId/attributes',
-    attributeController(attributeService).addNewAttributeController,
+  '/:organizationId/events/:eventId/attributes',
+  attributeController(attributeService).addNewAttributeController,
 );
 
 router.get(
-    '/:organizationId/events/:eventId/participants/:participantId/attributes',
-    attributeController(attributeService).getParticipantsAllAttributesController,
+  '/:organizationId/events/:eventId/participants/:participantId/attributes',
+  attributeController(attributeService).getParticipantsAllAttributesController,
 );
 
 router.get(
-    '/:organizationId/events/:eventId/participants/:participantId/attributes/:attributeId',
-    attributeController(attributeService).getParticipantAttributeController,
-)
-;
+  '/:organizationId/events/:eventId/participants/:participantId/attributes/:attributeId',
+  attributeController(attributeService).getParticipantAttributeController,
+);
 
 // router.get(
 //   '/:organizationId/events/:eventId/checkin/status',
@@ -97,4 +96,4 @@ router.get(
 //
 // router.get('/:organizationId/members/:userId', getOrganizationMemberById);
 
-export {router};
+export { router };
