@@ -15,9 +15,11 @@ app.use(bodyParser.json());
 
 import { router } from './routes/routes';
 import { organizationRouter } from './routes/organization.route';
+import { userRouter } from './routes/user.route';
 import { authrouter } from './routes/auth.route';
 
 app.use('/', organizationRouter);
+app.use('/', userRouter);
 
 import { authorize } from './middlewares/auth.middleware';
 
