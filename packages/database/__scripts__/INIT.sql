@@ -55,8 +55,10 @@ CREATE TABLE IF NOT EXISTS organization
     id   UUID DEFAULT uuid_generate_v4(),
 
     name VARCHAR(255) NOT NULL,
+    owner_id UUID NOT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (owner_id) REFERENCES "user" (id)
 );
 
 CREATE TABLE IF NOT EXISTS organization_user

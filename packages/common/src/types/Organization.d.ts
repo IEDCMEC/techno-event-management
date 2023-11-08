@@ -4,6 +4,7 @@ import User from './User';
 
 type Organization = {
   id: typeof UUID;
+  owner: typeof UUID;
   name: string;
 
   subscriptions?: Subscription[];
