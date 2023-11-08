@@ -36,7 +36,7 @@ const emailExists = async (email: String) => {
   let user: typeof User = data.rows[0];
   let orgs = (
     await pg.query(
-      `SELECT * FROM organization_user JOIN organization ON
+      `SELECT organization_id, name, role_id FROM organization_user JOIN organization ON
    organization_user.organization_id = organization.id WHERE organization_user.user_id = $1`,
       [user.id],
     )
