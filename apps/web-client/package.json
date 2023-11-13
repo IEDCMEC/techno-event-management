@@ -26,7 +26,7 @@
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "13.5.4",
     "lucide-react": "^0.290.0",
-    "next": "13.5.4",
+    "next": "14.0.2",
     "postcss": "8.4.31",
     "react": "18.2.0",
     "react-dom": "18.2.0",
