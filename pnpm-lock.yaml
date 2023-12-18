@@ -179,14 +179,14 @@ importers:
       eslint: ^8.50.0
       eslint-config-next: ^13.5.4
       eslint-config-prettier: ^9.0.0
-      eslint-config-turbo: ^1.9.9
+      eslint-config-turbo: ^1.11.2
       eslint-plugin-react: 7.33.2
       tsconfig: workspace:*
     dependencies:
       eslint: 8.52.0
       eslint-config-next: 13.5.6_it7nz7ykgyhx4jqkg3p3t74zpy
       eslint-config-prettier: 9.0.0_eslint@8.52.0
-      eslint-config-turbo: 1.10.16_eslint@8.52.0
+      eslint-config-turbo: 1.11.2_eslint@8.52.0
       eslint-plugin-react: 7.33.2_eslint@8.52.0
     devDependencies:
       tsconfig: link:../tsconfig
@@ -2838,13 +2838,13 @@ packages:
       eslint-plugin-promise: 6.1.1_eslint@8.52.0
     dev: true
 
-  /eslint-config-turbo/1.10.16_eslint@8.52.0:
-    resolution: {integrity: sha512-O3NQI72bQHV7FvSC6lWj66EGx8drJJjuT1kuInn6nbMLOHdMBhSUX/8uhTAlHRQdlxZk2j9HtgFCIzSc93w42g==}
+  /eslint-config-turbo/1.11.2_eslint@8.52.0:
+    resolution: {integrity: sha512-vqbyCH6kCHFoIAWUmGL61c0BfUQNz0XAl2RzAnEkSQ+PLXvEvuV2HsvL51UOzyyElfJlzZuh9T4BvUqb5KR9Eg==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
       eslint: 8.52.0
-      eslint-plugin-turbo: 1.10.16_eslint@8.52.0
+      eslint-plugin-turbo: 1.11.2_eslint@8.52.0
     dev: false
 
   /eslint-import-resolver-node/0.3.9:
@@ -3326,8 +3326,8 @@ packages:
       string.prototype.matchall: 4.0.10
     dev: false
 
-  /eslint-plugin-turbo/1.10.16_eslint@8.52.0:
-    resolution: {integrity: sha512-ZjrR88MTN64PNGufSEcM0tf+V1xFYVbeiMeuIqr0aiABGomxFLo4DBkQ7WI4WzkZtWQSIA2sP+yxqSboEfL9MQ==}
+  /eslint-plugin-turbo/1.11.2_eslint@8.52.0:
+    resolution: {integrity: sha512-U6DX+WvgGFiwEAqtOjm4Ejd9O4jsw8jlFNkQi0ywxbMnbiTie+exF4Z0F/B1ajtjjeZkBkgRnlU+UkoraBN+bw==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
