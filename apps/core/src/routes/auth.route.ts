@@ -1,4 +1,5 @@
 import express, { Router, Request, Response } from 'express';
+
 const { createUser } = require('../passport/helper');
 const passport = require('passport');
 require('../passport/index')(passport);
@@ -17,12 +18,12 @@ router.post(
         req.body.firstName,
         req.body.lastName,
       );
-      res.json({
+      return res.status(201).json({
         user: user,
       });
     } catch (err: any) {
       console.log(err);
-      res.status(400).json({ error: err.message });
+      return res.status(400).json({ error: err.message });
     }
   },
 );
