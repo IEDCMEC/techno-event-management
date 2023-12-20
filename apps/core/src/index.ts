@@ -10,7 +10,12 @@ const port: any = process.env.PORT;
 
 const app: Express = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: '*',
+  }),
+);
+
 app.use(bodyParser.json());
 
 import { router } from './routes/routes';

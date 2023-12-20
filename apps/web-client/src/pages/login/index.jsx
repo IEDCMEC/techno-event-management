@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import useLocalStorage from '@/hooks/useLocalStorage';
+import { loginService } from '@/services/authenticationService';
 
 export default function Login() {
   const router = useRouter();
@@ -12,19 +13,8 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/login', {
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    });
-    const result = await res.json();
-    setToken(result.user.token);
-    router.push('/');
+    if (await loginService({ email, password })) router.push('/dashboard');
+    else console.error('Error when logging in');
   };
 
   return (

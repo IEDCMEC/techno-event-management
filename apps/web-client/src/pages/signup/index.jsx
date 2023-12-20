@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { signupService } from '@/services/authenticationService';
 
 export default function Signup() {
   const router = useRouter();
@@ -11,19 +12,8 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/signup', {
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    });
-    router.push('/login');
+    if (await signupService({ firstName, lastName, email, password })) router.push('/login');
+    else console.error('Error while signing up');
   };
 
   return (

@@ -1,11 +1,18 @@
 import axios from 'axios';
 
+let token;
+
+if (typeof window !== 'undefined') {
+  token = localStorage.getItem(process.env.NEXT_PUBLIC_AUTH_TOKEN);
+}
+
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer token',
+    Authorization: token ? 'Bearer ' + token : '',
   },
+  validateStatus: () => true,
 });
 
 export default axiosInstance;
