@@ -28,7 +28,7 @@ const attributeController = (attributeService: AttributeService) => {
         );
 
         return res.status(201).json({ attribute: newAttribute });
-      } catch (err) {
+      } catch (err: any) {
         return res.status(500).json({ error: err.message });
       }
     },
@@ -57,7 +57,7 @@ const attributeController = (attributeService: AttributeService) => {
         );
 
         return res.status(200).json({ attributes: participantAttributes });
-      } catch (err) {
+      } catch (err: any) {
         return res.status(500).json({ error: err.message });
       }
     },
@@ -92,7 +92,7 @@ const attributeController = (attributeService: AttributeService) => {
         );
 
         return res.status(200).json({ attribute: participantAttribute });
-      } catch (err) {
+      } catch (err: any) {
         return res.status(500).json({ error: err.message });
       }
     },

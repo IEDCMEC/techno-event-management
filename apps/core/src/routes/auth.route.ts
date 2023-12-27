@@ -19,10 +19,10 @@ router.post(
         req.body.lastName,
       );
       return res.status(201).json({
-        user: user,
+        message: 'Successfully created new user',
       });
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
       return res.status(400).json({ error: err.message });
     }
   },
@@ -32,7 +32,7 @@ router.post(
   '/login',
   passport.authenticate('local-login', { session: false }),
   (req: any, res, next) => {
-    res.json({ user: req.user });
+    res.json({ message: 'Succefully logged in', token: req.user.token });
   },
 );
 export { router as authrouter };

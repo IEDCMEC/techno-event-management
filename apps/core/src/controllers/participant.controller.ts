@@ -7,7 +7,8 @@ const participantController = (participant: ParticipantService) => {
       try {
         const organizationId = req?.params?.organizationId;
         const eventId = req?.params?.eventId;
-        const { firstName, lastName } = req?.body?.participant;
+        const firstName = req?.body?.firstName;
+        const lastName = req?.body?.lastName;
 
         if (!organizationId || organizationId === '' || organizationId === undefined) {
           return res.status(400).json({ error: 'Organization ID is required' });
@@ -32,7 +33,10 @@ const participantController = (participant: ParticipantService) => {
           lastName,
         );
 
-        return res.status(201).json({ participant: newParticipant });
+        return res.status(201).json({
+          message: 'Successfully added new participant to event',
+          participant: newParticipant,
+        });
       } catch (err) {
         console.log(err);
       }
@@ -54,7 +58,10 @@ const participantController = (participant: ParticipantService) => {
           eventId,
         );
 
-        return res.status(200).json({ participants: participants });
+        return res.status(200).json({
+          message: 'Successfully retrieved all participants',
+          participants: participants,
+        });
       } catch (err) {
         console.log(err);
       }

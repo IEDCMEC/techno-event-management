@@ -6,8 +6,8 @@ const organizationController = (organizationService: OrganizationService) => {
   return {
     addNewOrganizationController: async (req: Request, res: Response) => {
       try {
-        const organizationName = req.body.organization.name;
-        const user = req.body.user;
+        const organizationName = req?.body?.name;
+        const user = req?.body?.user;
 
         if (!user || user === '' || user === undefined) {
           return res.status(400).json({ error: 'Authentication error' });
@@ -22,9 +22,12 @@ const organizationController = (organizationService: OrganizationService) => {
           organizationName,
         );
 
-        return res.status(201).json({ organization: newOrganization });
+        return res.status(201).json({
+          message: 'Successfully created new organization',
+          organization: newOrganization,
+        });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     },
   };
