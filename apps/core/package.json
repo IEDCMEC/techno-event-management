@@ -38,7 +38,7 @@
     "chai": "^4.3.7",
     "chai-http": "^4.3.0",
     "concurrently": "^8.0.1",
-    "eslint": "^8.50.0",
+    "eslint": "^8.56.0",
     "eslint-config-custom": "*",
     "eslint-config-standard-with-typescript": "^39.1.0",
     "eslint-plugin-import": "^2.27.5",
