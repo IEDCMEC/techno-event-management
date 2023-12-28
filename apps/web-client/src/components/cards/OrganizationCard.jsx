@@ -11,17 +11,17 @@ import {
 } from '@/components/ui/card';
 import { useRouter } from 'next/router';
 
-const OrganizationCard = ({ id, name, role }) => {
+const OrganizationCard = ({ organization }) => {
   const router = useRouter();
 
   return (
-    <Card className="w-72" onClick={() => router.push(`/dashboard/${id}`)}>
+    <Card className="w-72" onClick={() => router.push(`/dashboard/${organization?.id}`)}>
       <CardHeader>
-        <CardTitle>{name}</CardTitle>
+        <CardTitle>{organization?.name}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <p>{role}</p>
-      </CardContent>
+      {/*<CardContent>*/}
+      {/*  <p>{role}</p>*/}
+      {/*</CardContent>*/}
     </Card>
   );
 };

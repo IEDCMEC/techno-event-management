@@ -1,5 +1,6 @@
 // @ts-ignore
 import { Event } from 'common';
+import { Participant } from 'common/src';
 
 // @ts-ignore
 import { pg } from 'pgdatabase';
@@ -16,10 +17,10 @@ const eventService: EventService = () => {
       try {
         await pg.query('BEGIN');
         let newEvent: Event = (
-          await pg.query(`INSERT INTO event (organization_id, name) VALUES ($1, $2) RETURNING *`, [
-            organizationId,
-            name,
-          ])
+          await pg.query(
+            `INSERT INTO event (organization_id, name) VALUES ($1, $2) RETURNING id, organization_id as "organizationId", name`,
+            [organizationId, name],
+          )
         ).rows[0];
 
         if (!newEvent) {
@@ -38,7 +39,10 @@ const eventService: EventService = () => {
     getAllEventsService: async (organizationId: string) => {
       try {
         let events: Event[] = (
-          await pg.query(`SELECT * FROM event WHERE organization_id = $1`, [organizationId])
+          await pg.query(
+            `SELECT id, organization_id as "organizationId", name FROM event WHERE organization_id = $1`,
+            [organizationId],
+          )
         ).rows;
 
         if (!events) {
@@ -54,12 +58,21 @@ const eventService: EventService = () => {
 
     getEventService: async (organizationId: string, eventId: string) => {
       try {
-        let event: Event[] = (
-          await pg.query(`SELECT * FROM event WHERE organization_id = $1 AND id = $2`, [
-            organizationId,
-            eventId,
-          ])
+        let event: Event = (
+          await pg.query(
+            `SELECT id, organization_id as "organizationId", name FROM event WHERE organization_id = $1 AND id = $2`,
+            [organizationId, eventId],
+          )
         ).rows[0];
+
+        let participants: Participant[] = (
+          await pg.query(
+            `SELECT id, event_id as "eventId", first_name as "firstName", last_name as "lastName" FROM participant WHERE event_id = $1`,
+            [eventId],
+          )
+        ).rows;
+
+        event.participants = participants;
 
         return event;
       } catch (err: any) {

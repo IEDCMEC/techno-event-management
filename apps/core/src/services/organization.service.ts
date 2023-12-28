@@ -1,3 +1,4 @@
+// @ts-ignore
 const { Role, Subscription, User, Organization } = require('common');
 
 const { pg } = require('pgdatabase');

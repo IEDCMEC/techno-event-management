@@ -38,7 +38,7 @@ export const loginService = async ({ email, password }) => {
     );
 
     if (res.status === 200) {
-      localStorage.setItem(process.env.NEXT_PUBLIC_AUTH_TOKEN, res?.data?.user?.token);
+      localStorage.setItem(process.env.NEXT_PUBLIC_AUTH_TOKEN, res?.data?.token);
       return true;
     }
     return false;

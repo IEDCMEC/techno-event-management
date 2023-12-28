@@ -9,17 +9,25 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useRouter } from 'next/router';
 
-const EventCard = ({ name }) => {
+const EventCard = ({ event }) => {
+  const router = useRouter();
+
   return (
-    <Card className="w-72">
+    <Card
+      className="w-72"
+      onClick={() => {
+        router.push(`/dashboard/${event.organizationId}/${event.id}`);
+      }}
+    >
       <CardHeader>
-        <CardTitle>{name}</CardTitle>
+        <CardTitle>{event.name}</CardTitle>
       </CardHeader>
       <CardContent>
         <p>Stats</p>
       </CardContent>
-      <CardFooter className="flex flex-wrap justify-start items-center gap-2">
+      {/* <CardFooter className="flex flex-wrap justify-start items-center gap-2">
         <Button variant="outline" size="sm">
           Attributes
         </Button>
@@ -28,7 +36,7 @@ const EventCard = ({ name }) => {
         </Button>
         <Button size="sm">Checkin</Button>
         <Button size="sm">Participants</Button>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };
