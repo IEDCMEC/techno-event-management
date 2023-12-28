@@ -9,7 +9,7 @@ const checkinController = (checkinService: CheckinService) => {
         const organizationId = req?.params?.organizationId;
         const eventId = req?.params?.eventId;
         const participantId = req?.params?.participantId;
-        const checkinTime = req?.body?.checkinDetails?.checkinTime;
+        const checkinTime = req?.body?.checkinTime;
 
         if (!organizationId || organizationId === '' || organizationId === undefined) {
           return res.status(400).json({ error: 'Organization ID is required' });

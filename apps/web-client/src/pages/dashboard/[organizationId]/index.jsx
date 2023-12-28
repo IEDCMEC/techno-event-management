@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import axiosInstance from '@/lib/axios';
-
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import EventCard from '@/components/cards/EventCard';
 
 import { Skeleton } from '@/components/ui/skeleton';
+import { fetchAllEvents } from '@/services/eventService';
+import { PlusCircledIcon } from '@radix-ui/react-icons';
+import { Button } from '@/components/ui/button';
 
 const Dashboard = () => {
   const router = useRouter();
@@ -17,24 +18,32 @@ const Dashboard = () => {
 
   const fetchEvents = async () => {
     try {
-      const { data, status } = await axiosInstance.get(`/core/${organizationId}/events/`);
-      console.log(data);
-      if (status === 200) {
-        setEvents(data?.events);
-        setLoading(false);
-      }
+      const r = await fetchAllEvents({ organizationId });
+      setEvents(r || []);
+      setLoading(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setLoading(true);
     }
   };
 
   useEffect(() => {
+    if (!organizationId) return;
     fetchEvents();
   }, [organizationId]);
 
   return (
     <DashboardLayout>
+      <div className="flex flex-row justify-end">
+        <Button
+          onClick={() => {
+            router.push(`/dashboard/${organizationId}/new`);
+          }}
+        >
+          <PlusCircledIcon className="mr-2 h-4 w-4" />
+          New
+        </Button>
+      </div>
       <div className="h-full w-full bg-black-russian flex flex-row justify-start items-start overflow-y-auto gap-8 flex-wrap p-6">
         {loading && (
           <>
@@ -44,7 +53,9 @@ const Dashboard = () => {
             <Skeleton className="w-[100px] h-[20px] rounded-full" />
           </>
         )}
-        {!loading && events.map((e) => <EventCard key={e.id} name={e.name} />)}
+        {events.map((e) => (
+          <EventCard key={e.id} event={e} />
+        ))}
       </div>
     </DashboardLayout>
   );

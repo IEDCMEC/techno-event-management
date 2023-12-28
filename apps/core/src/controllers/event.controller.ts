@@ -6,7 +6,7 @@ const eventController = (eventService: EventService) => {
     addNewEventController: async (req: Request, res: Response) => {
       try {
         const organizationId = req?.params?.organizationId;
-        const { name } = req.body.event;
+        const name = req?.body?.name;
 
         if (!organizationId || organizationId === '' || organizationId === undefined) {
           return res.status(400).json({ error: 'Organization ID is required' });
@@ -18,9 +18,12 @@ const eventController = (eventService: EventService) => {
 
         const newEvent = await eventService().addNewEventService(organizationId, name);
 
-        return res.status(201).json({ event: newEvent });
+        return res.status(201).json({
+          message: 'Successfully created new event',
+          event: newEvent,
+        });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     },
     getAllEventsController: async (req: Request, res: Response) => {
@@ -33,9 +36,12 @@ const eventController = (eventService: EventService) => {
 
         const events = await eventService().getAllEventsService(organizationId);
 
-        return res.status(200).json({ events: events });
+        return res.status(200).json({
+          message: 'Successfully retrieved all events',
+          events: events,
+        });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     },
     getEventController: async (req: Request, res: Response) => {
@@ -52,9 +58,12 @@ const eventController = (eventService: EventService) => {
 
         const event = await eventService().getEventService(organizationId, eventId);
 
-        return res.status(200).json({ event: event });
+        return res.status(200).json({
+          message: 'Successfully retrieved event',
+          event: event,
+        });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     },
   };

@@ -18,10 +18,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useRouter } from 'next/router';
 
 const ParticipantCard = ({ participant }) => {
+  const router = useRouter();
+
   return (
-    <Card className="w-72">
+    <Card
+      className="w-72"
+      onClick={() => {
+        router.push(
+          `/dashboard/${participant.organizationId}/${participant.eventId}/participants/${participant.id}`,
+        );
+      }}
+    >
       <CardHeader>
         <CardTitle>
           {participant.firstName} {participant.lastName}
@@ -37,11 +47,11 @@ const ParticipantCard = ({ participant }) => {
       {/*        </div>*/}
       {/*    </form>*/}
       {/*</CardContent>*/}
-      <CardFooter className="flex justify-end">
+      {/* <CardFooter className="flex justify-end">
         <Button size="sm" disabled={participant.checkedIn}>
           Checkin
         </Button>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };

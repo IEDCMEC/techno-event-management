@@ -10,11 +10,11 @@ const userService: UserService = () => {
   return {
     getUserOrganizationsService: async (user: typeof User): Promise<(typeof Organization)[]> => {
       try {
-        const organizations: (typeof Organization)[] = (
+        let organizations: (typeof Organization)[] = (
           await pg.query(
             `
                         SELECT 
-                            organization_id as id, organization.name as name, role.name as role, role_id
+                            organization_id as id, organization.name as name, role.name as role
                         FROM 
                             organization_user JOIN organization
                         ON
@@ -28,6 +28,17 @@ const userService: UserService = () => {
             [user.id],
           )
         ).rows;
+
+        // for (let i = 0; i < organizations.length; i++) {
+        //   const organization = organizations[i];
+
+        //   const events = (
+        //     await pg.query(`SELECT * FROM event WHERE organization_id = $1`, [organization.id])
+        //   ).rows;
+
+        //   organization.events = events;
+        //   organizations[i] = organization;
+        // }
 
         return organizations;
       } catch (err: any) {

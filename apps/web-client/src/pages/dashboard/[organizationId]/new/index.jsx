@@ -2,25 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
-import EventCard from '@/components/cards/EventCard';
-
-import { Skeleton } from '@/components/ui/skeleton';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import axiosInstance from '@/lib/axios';
 import { Button } from '@/components/ui/button';
+import { addNewEvent } from '@/services/eventService';
 
 const Dashboard = () => {
   const router = useRouter();
   const { organizationId } = router.query;
 
   const [event, setEvent] = useState({});
-
-  const addevent = async () => {
-    console.log('Adding new event');
-  };
 
   return (
     <DashboardLayout>
@@ -33,15 +26,18 @@ const Dashboard = () => {
           className="w-3/5 mx-auto flex flex-col gap-4"
           value={event}
           onChange={(e) => {
-            setParticipant({ ...event, [e.target.id]: e.target.value });
+            setEvent({ ...event, [e.target.id]: e.target.value });
           }}
         >
           <Label htmlFor="name">Name</Label>
           <Input type="text" id="name" placeholder="Big Event" />
           <Button
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
-              addevent();
+              console.log({ event });
+              if (await addNewEvent({ organizationId, event }))
+                router.push(`/dashboard/${organizationId}`);
+              else console.error('Error adding event');
             }}
           >
             Add
