@@ -3,6 +3,12 @@ import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 const Sidebar = ({ className }) => {
   const router = useRouter();
@@ -27,6 +33,40 @@ const Sidebar = ({ className }) => {
               Extras
             </Button>
           </div>
+        </div>
+        <div className="px-6 py-2">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Organization 1</AccordionTrigger>
+              <AccordionContent>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>Event 1</AccordionTrigger>
+                    <AccordionContent>Something</AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger>Event 2</AccordionTrigger>
+                    <AccordionContent>Something</AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger>Organization 2</AccordionTrigger>
+              <AccordionContent>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>Event 1</AccordionTrigger>
+                    <AccordionContent>Something</AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger>Event 2</AccordionTrigger>
+                    <AccordionContent>Something</AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
         <div className="px-3 py-2">
           {/*<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Library</h2>*/}

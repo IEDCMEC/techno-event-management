@@ -1,19 +1,18 @@
-import Scanner from '@/components/Scanner/Scanner';
-import { useState } from 'react';
 import DashboardLayout from '@/layouts/DashboardLayout';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const Home = () => {
-  const [result, setResult] = useState('No result');
+  const router = useRouter();
 
-  const handleScanResult = (scannedResult) => {
-    setResult(scannedResult);
-  };
+  useEffect(() => {
+    router.replace('/dashboard');
+  }, []);
 
   return (
     <main>
       <DashboardLayout>
-        <p>Web Client</p>
-        <h1>Web Client</h1>
+        <p className="text-3xl">Please wait ...</p>
       </DashboardLayout>
     </main>
   );
