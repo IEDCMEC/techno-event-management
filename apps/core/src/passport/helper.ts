@@ -1,4 +1,4 @@
-const pg = require('pgdatabase').pg;
+const { pg } = require('pgdatabase');
 const bcrypt = require('bcryptjs');
 const { User } = require('common');
 const jwt = require('jsonwebtoken');

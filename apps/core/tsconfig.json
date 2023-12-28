@@ -2,8 +2,7 @@
   "extends": "tsconfig/tsconfig.json",
   "compilerOptions": {
     "outDir": "./build/",
-    "rootDir": "./src/",
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

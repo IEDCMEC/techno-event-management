@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Participant } from 'common';
 
-const pg = require('pgdatabase').pg;
+const { pg } = require('pgdatabase');
 
 type ParticipantService = () => {
   addNewParticipantService: (

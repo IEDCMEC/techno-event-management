@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 
 const jwt = require('jsonwebtoken');
-const pg = require('pgdatabase').pg;
-const User = require('common').User;
+const { pg } = require('pgdatabase');
+const { User } = require('common');
 
 const accessTokenSecret = process.env.SECRET_KEY;
 

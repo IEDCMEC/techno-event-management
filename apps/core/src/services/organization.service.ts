@@ -1,17 +1,18 @@
-import { Organization } from 'common/src';
-
 // @ts-ignore
 const { Role, Subscription, User, Organization } = require('common');
 
-const pg = require('pgdatabase').pg;
+const { pg } = require('pgdatabase');
 
 type OrganizationService = () => {
-  addNewOrganizationService: (user: typeof User, name: string) => Promise<Organization>;
+  addNewOrganizationService: (user: typeof User, name: string) => Promise<typeof Organization>;
 };
 
 const organizationService: OrganizationService = () => {
   return {
-    addNewOrganizationService: async (user: typeof User, name: string): Promise<Organization> => {
+    addNewOrganizationService: async (
+      user: typeof User,
+      name: string,
+    ): Promise<typeof Organization> => {
       try {
         await pg.query('BEGIN');
         let newOrganization: typeof Organization = (

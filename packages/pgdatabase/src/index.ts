@@ -16,21 +16,21 @@ import NodePGUserRepository from './repositories/UserRepository';
 
 import { pg } from './pg';
 
-export {
-  NodePGAvailableAttributesRepository,
-  NodePGAvailableExtrasRepository,
-  NodePGAvailableRolesRepository,
-  NodePGAvailableSubscriptionsRepository,
-  NodePGAvailableTagsRepository,
-  NodePGEventRepositoryEventRepository,
-  NodePGOrganizationRepository,
-  NodePGOrganizationSubscriptionRepository,
-  NodePGOrganizationUserRepository,
-  NodePGParticipantAttributeRepository,
-  NodePGParticipantCheckInRepository,
-  NodePGParticipantExtrasRepository,
-  NodePGParticipantRepository,
-  NodePGParticipantTagRepository,
-  NodePGUserRepository,
-  pg,
-};
+export { pg };
+// export {
+//   NodePGAvailableAttributesRepository,
+//   NodePGAvailableExtrasRepository,
+//   NodePGAvailableRolesRepository,
+//   NodePGAvailableSubscriptionsRepository,
+//   NodePGAvailableTagsRepository,
+//   NodePGEventRepositoryEventRepository,
+//   NodePGOrganizationRepository,
+//   NodePGOrganizationSubscriptionRepository,
+//   NodePGOrganizationUserRepository,
+//   NodePGParticipantAttributeRepository,
+//   NodePGParticipantCheckInRepository,
+//   NodePGParticipantExtrasRepository,
+//   NodePGParticipantRepository,
+//   NodePGParticipantTagRepository,
+//   NodePGUserRepository,
+// };

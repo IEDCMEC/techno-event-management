@@ -1,4 +1,4 @@
-const pg = require('pgdatabase').pg;
+const { pg } = require('pgdatabase');
 
 type AttributeService = () => {
   addNewAttributeService: (organizationId: string, eventId: string, name: string) => Promise<any>;
