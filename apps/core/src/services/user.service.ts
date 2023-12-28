@@ -1,6 +1,6 @@
 const { User, Organization } = require('common');
 
-const pg = require('pgdatabase').pg;
+const { pg } = require('pgdatabase');
 
 type UserService = () => {
   getUserOrganizationsService: (user: typeof User) => Promise<(typeof Organization)[]>;
