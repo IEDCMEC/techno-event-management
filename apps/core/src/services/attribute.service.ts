@@ -1,13 +1,12 @@
-const pg = require('pgdatabase').pg;
+const { pg } = require('pgdatabase');
 
-type AttributeService = {
+type AttributeService = () => {
   addNewAttributeService: (organizationId: string, eventId: string, name: string) => Promise<any>;
 
   getParticipantsAllAttributesService: (
     organizationId: string,
     eventId: string,
     participantId: string,
-    attributeId: string,
   ) => Promise<any>;
 
   getParticipantAttributeService: (
@@ -18,7 +17,7 @@ type AttributeService = {
   ) => Promise<any>;
 };
 
-const attributeService = (): AttributeService => {
+const attributeService: AttributeService = () => {
   return {
     addNewAttributeService: async (organizationId: string, eventId: string, name: string) => {
       try {

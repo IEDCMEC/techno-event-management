@@ -1,6 +1,8 @@
+// @ts-ignore
 import { Event } from 'common';
 
-const pg = require('pgdatabase').pg;
+// @ts-ignore
+import { pg } from 'pgdatabase';
 
 type EventService = () => {
   addNewEventService: (organizationId: string, name: string) => Promise<Event>;
