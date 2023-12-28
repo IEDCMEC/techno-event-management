@@ -25,6 +25,9 @@ RUN npm install -g pnpm turbo
 RUN pnpm install
 
 COPY --from=builder /app/out/full/ .
+
+ENV PORT=80
+
 RUN pnpm turbo run build --filter=techno-event-core...
 
 WORKDIR /app/apps/core
