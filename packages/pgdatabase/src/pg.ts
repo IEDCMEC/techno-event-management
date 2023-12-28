@@ -5,7 +5,7 @@ require('dotenv').config();
 function getPostgresCredentials() {
   const user = process.env.POSTGRES_USER;
   const password = process.env.POSTGRES_PASSWORD;
-  const host = process.env.POSTGRE_HOST;
+  const host = process.env.POSTGRES_HOST;
   const port = Number(process.env.POSTGRES_PORT);
   const database = process.env.POSTGRES_DATABASE;
 
@@ -18,7 +18,7 @@ function getPostgresCredentials() {
   }
 
   if (!host || host === '' || host === undefined) {
-    throw new Error('Cannot find POSTGRE_HOST');
+    throw new Error('Cannot find POSTGRES_HOST');
   }
 
   if (!port || port === 0 || port === undefined) {
@@ -44,9 +44,9 @@ const pg: Pool = new Pool({
   host: getPostgresCredentials().host,
   port: getPostgresCredentials().port,
   database: getPostgresCredentials().database,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  // ssl: {
+  //   rejectUnauthorized: false,
+  // },
 });
 
 export { pg };
