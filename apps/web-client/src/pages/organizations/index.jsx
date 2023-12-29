@@ -16,8 +16,6 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 
-import OrganizationCard from '@/components/cards/OrganizationCard';
-import { fetchAllOrganizations } from '@/services/organizationService';
 import { useRouter } from 'next/router';
 
 const Dashboard = () => {
@@ -28,9 +26,8 @@ const Dashboard = () => {
 
   const fetchOrganizations = async () => {
     try {
-      const r = await fetchAllOrganizations();
-      console.log(r);
-      setOrganizations(r || []);
+      const { data, status } = await axiosInstance.get('/users/organizations');
+      if (status === 200) setOrganizations(data.organizations || []);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -70,7 +67,7 @@ const Dashboard = () => {
                 <TableCell>
                   <Button
                     onClick={() => {
-                      router.push(`/dashboard/${o.id}`);
+                      router.push(`/organizations/${o.id}`);
                     }}
                   >
                     Manage

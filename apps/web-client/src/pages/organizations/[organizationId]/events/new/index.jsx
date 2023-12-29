@@ -7,13 +7,24 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 import { Button } from '@/components/ui/button';
-import { addNewEvent } from '@/services/eventService';
+import axiosInstance from '@/lib/axios';
 
 const Dashboard = () => {
   const router = useRouter();
   const { organizationId } = router.query;
 
   const [event, setEvent] = useState({});
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { data, status } = await axiosInstance.post(`/core/${organizationId}/events`, {
+      name: event.name,
+    });
+
+    if (status === 201) {
+      router.push(`/organizations/${organizationId}/events`);
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -31,17 +42,7 @@ const Dashboard = () => {
         >
           <Label htmlFor="name">Name</Label>
           <Input type="text" id="name" placeholder="Big Event" />
-          <Button
-            onClick={async (e) => {
-              e.preventDefault();
-              console.log({ event });
-              if (await addNewEvent({ organizationId, event }))
-                router.push(`/dashboard/${organizationId}`);
-              else console.error('Error adding event');
-            }}
-          >
-            Add
-          </Button>
+          <Button onClick={handleSubmit}>Add</Button>
         </form>
       </div>
     </DashboardLayout>

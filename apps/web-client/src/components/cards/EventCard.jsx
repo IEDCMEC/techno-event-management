@@ -18,7 +18,7 @@ const EventCard = ({ event }) => {
     <Card
       className="w-72"
       onClick={() => {
-        router.push(`/dashboard/${event.organizationId}/${event.id}`);
+        router.push(`/organizations/${event.organizationId}/events/${event.id}`);
       }}
     >
       <CardHeader>

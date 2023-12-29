@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import DashboardLayout from '../../../layouts/DashboardLayout';
+import DashboardLayout from '@/layouts/DashboardLayout';
 import EventCard from '@/components/cards/EventCard';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { fetchAllEvents } from '@/services/eventService';
 import { PlusCircledIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
+import axiosInstance from '@/lib/axios';
 
 const Dashboard = () => {
   const router = useRouter();
-  const { organizationId } = router.query;
+  const { organizationId, eventId } = router.query;
 
   const [loading, setLoading] = useState(true);
-  const [events, setEvents] = useState([]);
+  const [participants, setParticipants] = useState([]);
 
-  const fetchEvents = async () => {
+  const fetchParticipants = async () => {
     try {
-      const r = await fetchAllEvents({ organizationId });
-      setEvents(r || []);
+      const { data, status } = await axiosInstance.get(
+        `/core/${organizationId}/events/${eventId}/participants`,
+      );
+
+      if (status === 200) setParticipants(data.participants || []);
+
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -28,16 +32,16 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (!organizationId) return;
-    fetchEvents();
-  }, [organizationId]);
+    if (!organizationId || !eventId) return;
+    fetchParticipants();
+  }, [router, organizationId, eventId]);
 
   return (
     <DashboardLayout>
       <div className="flex flex-row justify-end">
         <Button
           onClick={() => {
-            router.push(`/dashboard/${organizationId}/new`);
+            router.push(`/organizations/${organizationId}/new`);
           }}
         >
           <PlusCircledIcon className="mr-2 h-4 w-4" />
@@ -53,8 +57,8 @@ const Dashboard = () => {
             <Skeleton className="w-[100px] h-[20px] rounded-full" />
           </>
         )}
-        {events.map((e) => (
-          <EventCard key={e.id} event={e} />
+        {participants.map((p) => (
+          <div key={p?.id}>{JSON.stringify(p)}</div>
         ))}
       </div>
     </DashboardLayout>

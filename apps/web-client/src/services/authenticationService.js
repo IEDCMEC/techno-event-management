@@ -47,3 +47,13 @@ export const loginService = async ({ email, password }) => {
     return false;
   }
 };
+
+export const logoutService = async () => {
+  try {
+    localStorage.removeItem(process.env.NEXT_PUBLIC_AUTH_TOKEN);
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};

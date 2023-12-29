@@ -9,10 +9,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { logoutService } from '@/services/authenticationService';
 
 const Sidebar = ({ className }) => {
   const router = useRouter();
   const { organizationId } = router.query;
+
+  const handleLogout = async () => {
+    await logoutService();
+    router.push('/login');
+  };
 
   return (
     <div className={cn('pb-12', className)}>
@@ -21,7 +27,7 @@ const Sidebar = ({ className }) => {
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Quick Access</h2>
           <div className="space-y-1">
             <Button variant="ghost" className="w-full justify-start">
-              <Link href={`/dashboard/${organizationId}`}>Events</Link>
+              <Link href={`/organizations/${organizationId}`}>Events</Link>
             </Button>
             <Button variant="ghost" className="w-full justify-start">
               Participants
@@ -73,6 +79,9 @@ const Sidebar = ({ className }) => {
           <div className="space-y-1">
             <Button variant="ghost" className="w-full justify-start">
               Settings
+            </Button>
+            <Button className="w-full justify-start" onClick={handleLogout}>
+              Logout
             </Button>
           </div>
         </div>

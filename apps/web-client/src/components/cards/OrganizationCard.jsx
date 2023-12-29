@@ -15,7 +15,7 @@ const OrganizationCard = ({ organization }) => {
   const router = useRouter();
 
   return (
-    <Card className="w-72" onClick={() => router.push(`/dashboard/${organization?.id}`)}>
+    <Card className="w-72" onClick={() => router.push(`/organizations/${organization?.id}`)}>
       <CardHeader>
         <CardTitle>{organization?.name}</CardTitle>
       </CardHeader>

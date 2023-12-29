@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 const Home = () => {
   const router = useRouter();
 
-  const { organizationId, eventId } = router.query;
+  const { organizationId } = router.query;
 
   useEffect(() => {
-    if (!organizationId || !eventId) return;
-    router.replace(`/dashboard/${organizationId}/${eventId}/participants`);
-  }, [organizationId, eventId]);
+    if (!organizationId) return;
+    router.replace(`/organizations/${organizationId}/events`);
+  }, [router, organizationId]);
 
   return (
     <main>

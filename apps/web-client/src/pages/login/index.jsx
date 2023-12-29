@@ -13,7 +13,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (await loginService({ email, password })) router.push('/dashboard');
+    if (await loginService({ email, password })) router.push('/organizations');
     else console.error('Error when logging in');
   };
 

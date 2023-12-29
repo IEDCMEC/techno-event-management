@@ -28,7 +28,7 @@ const ParticipantCard = ({ participant }) => {
       className="w-72"
       onClick={() => {
         router.push(
-          `/dashboard/${participant.organizationId}/${participant.eventId}/participants/${participant.id}`,
+          `/organizations/${participant.organizationId}/${participant.eventId}/participants/${participant.id}`,
         );
       }}
     >
