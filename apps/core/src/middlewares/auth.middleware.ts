@@ -19,19 +19,32 @@ const authorize = async (req: Request & typeof User, res: Response, next: NextFu
         return res.sendStatus(403);
       }
 
-      const organizations = (
+      // Todo: Remove names of events and organizations after testing
+      const assets = (
         await pg.query(
-          'SELECT * FROM ORGANIZATION JOIN ORGANIZATION_USER ON ORGANIZATION.ID = ORGANIZATION_USER.ORGANIZATION_ID WHERE ORGANIZATION_USER.USER_ID = $1',
+          ` SELECT 
+              organization.id as "organizationId",
+              organization.name as "organizationName",
+              role_id as "roleId",
+              event.id as "eventId",
+              event.name as "eventName"
+            FROM organization
+              JOIN organization_user 
+                ON organization.id = organization_user.organization_id 
+              JOIN event
+                ON organization.id = event.organization_id
+            WHERE organization_user.user_id = $1`,
           [user.id],
         )
       )?.rows;
 
       req.body.user = user;
-      req.body.organizations = organizations.rows;
+      req.body.user.assets = assets;
+
       next();
     });
   } else {
-    res.sendStatus(401);
+    res.sendStatus(403);
   }
 };
 

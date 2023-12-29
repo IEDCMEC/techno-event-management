@@ -44,9 +44,9 @@ const pg: Pool = new Pool({
   host: getPostgresCredentials().host,
   port: getPostgresCredentials().port,
   database: getPostgresCredentials().database,
-  // ssl: {
-  //   rejectUnauthorized: false,
-  // },
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 export { pg };

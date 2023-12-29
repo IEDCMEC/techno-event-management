@@ -67,8 +67,8 @@ const checkinService: CheckinService = () => {
         return newParticipantCheckin;
       } catch (err: any) {
         await pg.query('ROLLBACK');
-        console.error(err);
-        throw new Error('Something went wrong');
+        console.error(err.message);
+        throw err;
       }
     },
     getParticipantCheckinDetailsService: async (
@@ -116,10 +116,15 @@ const checkinService: CheckinService = () => {
           )
         ).rows[0];
 
+        if (!participantCheckinDetails)
+          participantCheckinDetails = {
+            checkedIn: false,
+          };
+
         return participantCheckinDetails;
       } catch (err: any) {
-        console.error(err);
-        throw new Error('Something went wrong');
+        console.error(err.message);
+        throw err;
       }
     },
   };

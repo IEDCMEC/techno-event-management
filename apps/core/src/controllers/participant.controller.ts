@@ -26,6 +26,14 @@ const participantController = (participant: ParticipantService) => {
           return res.status(400).json({ error: 'Last name is required' });
         }
 
+        if (!req.body.user.assets.find((asset: any) => asset.organizationId === organizationId)) {
+          return res.status(400).json({ error: 'You are not a member of this organization' });
+        }
+
+        if (!req.body.user.assets.find((asset: any) => asset.eventId === eventId)) {
+          return res.status(400).json({ error: 'No such event' });
+        }
+
         const newParticipant = await participantService().addNewParticipantService(
           organizationId,
           eventId,
@@ -37,8 +45,9 @@ const participantController = (participant: ParticipantService) => {
           message: 'Successfully added new participant to event',
           participant: newParticipant,
         });
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        console.log(err.message);
+        return res.status(400).json({ error: err.message });
       }
     },
     getAllParticipantsController: async (req: Request, res: Response) => {
@@ -53,6 +62,14 @@ const participantController = (participant: ParticipantService) => {
           return res.status(400).json({ error: 'Event ID is required' });
         }
 
+        if (!req.body.user.assets.find((asset: any) => asset.organizationId === organizationId)) {
+          return res.status(400).json({ error: 'You are not a member of this organization' });
+        }
+
+        if (!req.body.user.assets.find((asset: any) => asset.eventId === eventId)) {
+          return res.status(400).json({ error: 'No such event' });
+        }
+
         const participants = await participantService().getAllParticipantsService(
           organizationId,
           eventId,
@@ -62,8 +79,9 @@ const participantController = (participant: ParticipantService) => {
           message: 'Successfully retrieved all participants',
           participants: participants,
         });
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        console.log(err.message);
+        return res.status(400).json({ error: err.message });
       }
     },
     getParticipantController: async (req: Request, res: Response) => {
@@ -82,15 +100,27 @@ const participantController = (participant: ParticipantService) => {
           return res.status(400).json({ error: 'Participant ID is required' });
         }
 
+        if (!req.body.user.assets.find((asset: any) => asset.organizationId === organizationId)) {
+          return res.status(400).json({ error: 'You are not a member of this organization' });
+        }
+
+        if (!req.body.user.assets.find((asset: any) => asset.eventId === eventId)) {
+          return res.status(400).json({ error: 'No such event' });
+        }
+
         const participant = await participantService().getParticipantService(
           organizationId,
           eventId,
           participantId,
         );
 
-        return res.status(200).json({ participant: participant });
-      } catch (err) {
-        console.log(err);
+        return res.status(200).json({
+          message: 'Successfully retrieved participant',
+          participant: participant,
+        });
+      } catch (err: any) {
+        console.log(err.message);
+        return res.status(400).json({ error: err.message });
       }
     },
   };
