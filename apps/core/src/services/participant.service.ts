@@ -49,7 +49,7 @@ const participantService: ParticipantService = () => {
       } catch (err: any) {
         await pg.query('ROLLBACK');
         console.error(err);
-        throw new Error('Something went wrong');
+        throw err;
       }
     },
     getAllParticipantsService: async (organizationId: string, eventId: string) => {
@@ -82,8 +82,8 @@ const participantService: ParticipantService = () => {
 
         return participants;
       } catch (err: any) {
-        console.error(err);
-        throw new Error('Something went wrong');
+        console.error(err.message);
+        throw err;
       }
     },
 
@@ -93,7 +93,7 @@ const participantService: ParticipantService = () => {
       participantId: string,
     ) => {
       try {
-        let participant: Participant = (
+        let r: Participant[] = (
           await pg.query(
             `SELECT 
                                     participant.id as id,
@@ -115,12 +115,16 @@ const participantService: ParticipantService = () => {
             [organizationId, eventId, participantId],
           )
         ).rows;
-        [0];
 
+        if (r.length === 0) {
+          throw new Error('No such participant');
+        }
+
+        const participant: Participant = r[0];
         return participant;
       } catch (err: any) {
-        console.error(err);
-        throw new Error('Something went wrong');
+        console.error(err.message);
+        throw err;
       }
     },
   };

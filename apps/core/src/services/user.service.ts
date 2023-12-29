@@ -42,7 +42,7 @@ const userService: UserService = () => {
 
         return organizations;
       } catch (err: any) {
-        console.error(err);
+        console.error(err.message);
         throw err;
       }
     },

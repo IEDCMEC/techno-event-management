@@ -1,13 +1,13 @@
 // @ts-ignore
 import { Event } from 'common';
-import { Participant } from 'common/src';
+import { Participant, User, Organization } from 'common/src';
 
 // @ts-ignore
 import { pg } from 'pgdatabase';
 
 type EventService = () => {
   addNewEventService: (organizationId: string, name: string) => Promise<Event>;
-  getAllEventsService: (organizationId: string) => Promise<Event[]>;
+  getAllEventsService: (user: User, organizationId: string) => Promise<Event[]>;
   getEventService: (organizationId: string, eventId: string) => Promise<Event[]>;
 };
 
@@ -15,6 +15,15 @@ const eventService: EventService = () => {
   return {
     addNewEventService: async (organizationId: string, name: string) => {
       try {
+        const r = await pg.query('SELECT * FROM event WHERE organization_id = $1 AND name = $2', [
+          organizationId,
+          name,
+        ]);
+
+        if (r?.rows?.length > 0) {
+          throw new Error('Event already exists');
+        }
+
         await pg.query('BEGIN');
         let newEvent: Event = (
           await pg.query(
@@ -31,12 +40,12 @@ const eventService: EventService = () => {
         return newEvent;
       } catch (err: any) {
         await pg.query('ROLLBACK');
-        console.error(err);
-        throw new Error('Something went wrong');
+        console.error(err.message);
+        throw err;
       }
     },
 
-    getAllEventsService: async (organizationId: string) => {
+    getAllEventsService: async (user: User, organizationId: string) => {
       try {
         let events: Event[] = (
           await pg.query(
@@ -51,8 +60,8 @@ const eventService: EventService = () => {
 
         return events;
       } catch (err: any) {
-        console.error(err);
-        throw new Error('Something went wrong');
+        console.error(err.message);
+        throw err;
       }
     },
 
@@ -72,12 +81,15 @@ const eventService: EventService = () => {
           )
         ).rows;
 
-        event.participants = participants;
+        event = {
+          ...event,
+          participants: participants,
+        };
 
         return event;
       } catch (err: any) {
-        console.error(err);
-        throw new Error('Something went wrong');
+        console.error(err.message);
+        throw err;
       }
     },
   };

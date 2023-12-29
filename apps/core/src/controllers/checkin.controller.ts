@@ -27,6 +27,14 @@ const checkinController = (checkinService: CheckinService) => {
           return res.status(400).json({ error: 'Checkin time is required' });
         }
 
+        if (!req.body.user.assets.find((asset: any) => asset.organizationId === organizationId)) {
+          return res.status(400).json({ error: 'You are not a member of this organization' });
+        }
+
+        if (!req.body.user.assets.find((asset: any) => asset.eventId === eventId)) {
+          return res.status(400).json({ error: 'No such event' });
+        }
+
         const newParticipantCheckin = await checkinService().checkinParticipantService(
           organizationId,
           eventId,
@@ -34,9 +42,13 @@ const checkinController = (checkinService: CheckinService) => {
           checkinTime,
           user.id,
         );
-        return res.status(200).json({ newParticipantCheckin });
-      } catch (err) {
-        return res.status(500).json({ error: 'Something went wrong' });
+        return res.status(201).json({
+          message: 'Participant checked in successfully',
+          newParticipantCheckin,
+        });
+      } catch (err: any) {
+        console.error(err.message);
+        return res.status(400).json({ error: err.message });
       }
     },
     getParticipantCheckinDetailsController: async (req: Request, res: Response) => {
@@ -58,15 +70,27 @@ const checkinController = (checkinService: CheckinService) => {
           return res.status(400).json({ error: 'Participant ID is required' });
         }
 
+        if (!req.body.user.assets.find((asset: any) => asset.organizationId === organizationId)) {
+          return res.status(400).json({ error: 'You are not a member of this organization' });
+        }
+
+        if (!req.body.user.assets.find((asset: any) => asset.eventId === eventId)) {
+          return res.status(400).json({ error: 'No such event' });
+        }
+
         const participantCheckinDetails =
           await checkinService().getParticipantCheckinDetailsService(
             organizationId,
             eventId,
             participantId,
           );
-        return res.status(200).json({ participantCheckinDetails });
-      } catch (err) {
-        return res.status(500).json({ error: 'Something went wrong' });
+        return res.status(200).json({
+          message: 'Participant checkin details retrieved successfully',
+          participantCheckinDetails,
+        });
+      } catch (err: any) {
+        console.error(err.message);
+        return res.status(400).json({ error: err.message });
       }
     },
   };

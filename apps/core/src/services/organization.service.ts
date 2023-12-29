@@ -3,6 +3,8 @@ const { Role, Subscription, User, Organization } = require('common');
 
 const { pg } = require('pgdatabase');
 
+// Todo: Get organization by id
+
 type OrganizationService = () => {
   addNewOrganizationService: (user: typeof User, name: string) => Promise<typeof Organization>;
 };
@@ -14,6 +16,7 @@ const organizationService: OrganizationService = () => {
       name: string,
     ): Promise<typeof Organization> => {
       try {
+        // Todo: Check duplicate organization name under one user
         await pg.query('BEGIN');
         let newOrganization: typeof Organization = (
           await pg.query(`INSERT INTO organization (name, owner_id) VALUES ($1, $2) RETURNING *`, [
@@ -59,7 +62,7 @@ const organizationService: OrganizationService = () => {
         return newOrganization;
       } catch (err: any) {
         await pg.query('ROLLBACK');
-        console.error(err);
+        console.error(err.message);
       }
     },
   };
