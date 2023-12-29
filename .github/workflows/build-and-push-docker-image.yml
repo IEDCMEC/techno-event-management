@@ -1,0 +1,21 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        docker build -t techno-event-management-core .
+
+    - run: |
+        docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+    - run: |
+        docker tag techno-event-management-core ${{ secrets.DOCKER_USER }}/techno-event-management-core:latest
+        docker push ${{ secrets.DOCKER_USER }}/techno-event-management-core:latest
