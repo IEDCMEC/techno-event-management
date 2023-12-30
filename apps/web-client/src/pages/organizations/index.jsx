@@ -18,7 +18,7 @@ const Dashboard = () => {
     try {
       const { data, status } = await axiosInstance.get('/users/organizations');
       if (status === 200) setOrganizations(data.organizations || []);
-      //setLoading(false);
+      setLoading(false);
     } catch (error) {
       console.error(error);
       setLoading(true);
