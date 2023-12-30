@@ -1,6 +1,7 @@
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
 
 const Home = () => {
   const router = useRouter();
@@ -11,9 +12,11 @@ const Home = () => {
 
   return (
     <main>
-      <DashboardLayout>
-        <p className="text-3xl">Please wait ...</p>
-      </DashboardLayout>
+      <ChakraProvider>
+        <DashboardLayout>
+          <p className="text-3xl">Please wait ...</p>
+        </DashboardLayout>
+      </ChakraProvider>
     </main>
   );
 };
