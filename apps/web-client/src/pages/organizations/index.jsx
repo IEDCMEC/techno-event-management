@@ -4,17 +4,7 @@ import axiosInstance from '@/lib/axios';
 import DashboardLayout from '../../layouts/DashboardLayout';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
+import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
 
 import { useRouter } from 'next/router';
 
@@ -28,7 +18,7 @@ const Dashboard = () => {
     try {
       const { data, status } = await axiosInstance.get('/users/organizations');
       if (status === 200) setOrganizations(data.organizations || []);
-      setLoading(false);
+      //setLoading(false);
     } catch (error) {
       console.error(error);
       setLoading(true);
@@ -44,45 +34,34 @@ const Dashboard = () => {
       <div className="h-full w-full bg-black-russian flex flex-row justify-start items-start overflow-y-auto gap-8 flex-wrap p-6">
         {loading && (
           <>
-            <Skeleton className="w-[100px] h-[20px] rounded-full" />
-            <Skeleton className="w-[100px] h-[20px] rounded-full" />
-            <Skeleton className="w-[100px] h-[20px] rounded-full" />
-            <Skeleton className="w-[100px] h-[20px] rounded-full" />
+            <Skeleton className="w-full h-[20px] rounded-full" />
           </>
         )}
-        <Table>
-          <TableCaption>Organization</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Role</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {organizations.map((o) => (
-              <TableRow key={o.id}>
-                <TableCell>{o.name}</TableCell>
-                <TableCell>{o.role}</TableCell>
-                <TableCell>
-                  <Button
+        {!loading && organizations.length > 0 && (
+          <TableContainer width="100%">
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>Name</Th>
+                  <Th>Role</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {organizations.map((organization) => (
+                  <Tr
+                    key={organization.id}
                     onClick={() => {
-                      router.push(`/organizations/${o.id}`);
+                      router.push(`/organizations/${organization.id}`);
                     }}
                   >
-                    Manage
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={2}>Total</TableCell>
-              <TableCell className="text-right">{organizations?.length}</TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+                    <Td>{organization.name}</Td>
+                    <Td>{organization.role}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
 
         {!loading && organizations.length === 0 && (
           <div className="w-full h-full flex flex-col justify-center items-center">
