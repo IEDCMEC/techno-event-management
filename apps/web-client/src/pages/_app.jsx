@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { ChakraProvider } from '@chakra-ui/react';
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -13,5 +14,9 @@ export default function App({ Component, pageProps }) {
     }
   }, []);
 
-  return <Component {...pageProps} />;
+  return (
+    <ChakraProvider>
+      <Component {...pageProps} />
+    </ChakraProvider>
+  );
 }
