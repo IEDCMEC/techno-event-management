@@ -19,3 +19,11 @@ jobs:
     - run: |
         docker tag techno-event-management-core ${{ secrets.DOCKER_USER }}/techno-event-management-core:latest
         docker push ${{ secrets.DOCKER_USER }}/techno-event-management-core:latest
+    
+  redeploy-backend:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+    - name: Call deploy hook
+      run: |
+        curl -X GET ${{ secrets.BACKEND_DEPLOY_HOOK }}
