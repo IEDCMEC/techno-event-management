@@ -1,7 +1,14 @@
 import '@/styles/globals.css';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { ChakraProvider } from '@chakra-ui/react';
+
+import { extendTheme, ChakraProvider, withDefaultColorScheme } from '@chakra-ui/react';
+
+const theme = extendTheme(
+  withDefaultColorScheme({
+    colorScheme: 'purple',
+  }),
+);
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -12,10 +19,10 @@ export default function App({ Component, pageProps }) {
       if (!token && router.pathname !== '/login' && router.pathname !== '/signup')
         router.push('/login');
     }
-  }, []);
+  }, [router]);
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Component {...pageProps} />
     </ChakraProvider>
   );
