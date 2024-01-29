@@ -30,7 +30,7 @@
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "14.0.4",
     "framer-motion": "^10.16.16",
-    "lucide-react": "^0.302.0",
+    "lucide-react": "^0.316.0",
     "next": "14.0.4",
     "postcss": "8.4.31",
     "react": "18.2.0",
