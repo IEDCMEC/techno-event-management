@@ -10,7 +10,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@turbo/gen": "^1.9.9",
+    "@turbo/gen": "^1.12.1",
     "eslint": "^8.56.0",
     "eslint-config-custom": "workspace:*",
     "husky": "^8.0.0",
