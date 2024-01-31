@@ -32,15 +32,6 @@ app.get('/', (req: Request, res: Response) => {
   return res.send('Techno Event Server');
 });
 
-app.post('/api/auth/newuser', addNewUserToDatabaseOnRegister);
-
-app.use(jwtCheck);
-
-import router from './routes';
-import { decodeUserInfo } from './middlewares/auth0';
-
-app.use('/core', decodeUserInfo, router);
-
 app.get('/health', (req: Request, res: Response) => {
   const healthcheck: any = {
     resource: 'Techno Event Server',
@@ -56,6 +47,15 @@ app.get('/health', (req: Request, res: Response) => {
     res.status(503).send();
   }
 });
+
+app.post('/api/auth/newuser', addNewUserToDatabaseOnRegister);
+
+app.use(jwtCheck);
+
+import router from './routes';
+import { decodeUserInfo } from './middlewares/auth0';
+
+app.use('/core', decodeUserInfo, router);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
