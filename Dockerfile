@@ -10,11 +10,14 @@ COPY . .
 
 RUN pnpm install
 
-RUN pnpm run build --filter=techno-event-core... 
+RUN pnpm run build --filter=techno-event-core-admin... 
 
-FROM gcr.io/distroless/nodejs20-debian11
+RUN ls -la node_modules
 
-COPY --from=builder /app/apps/core/dist .
+FROM node:18-alpine
+
+COPY --from=builder /app/apps/core-admin/dist .
+COPY --from=builder /app/node_modules/.pnpm/@prisma+client*/node_modules/.prisma/client/*.node .
 
 ENV PORT=80
 
