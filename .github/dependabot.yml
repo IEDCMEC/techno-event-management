@@ -1,11 +1,11 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/apps/core"
+    directory: "/apps/core-admin"
     schedule:
       interval: "weekly"
   - package-ecosystem: "npm"
-    directory: "/apps/web-client"
+    directory: "/apps/web-admin"
     schedule:
       interval: "weekly"
   - package-ecosystem: "npm"
