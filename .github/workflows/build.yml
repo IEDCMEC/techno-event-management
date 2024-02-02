@@ -10,20 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - run: |
-        docker build -t techno-event-core-admin .
+      - uses: actions/checkout@v2
+      - run: |
+          docker build -t techno-event-core-admin -f apps/core-admin/Dockerfile .
 
-    - run: |
-        docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-    - run: |
-        docker tag techno-event-core-admin ${{ secrets.DOCKER_USER }}/techno-event-core-admin:latest
-        docker push ${{ secrets.DOCKER_USER }}/techno-event-core-admin:latest
-    
+      - run: |
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: |
+          docker tag techno-event-core-admin ${{ secrets.DOCKER_USER }}/techno-event-core-admin:latest
+          docker push ${{ secrets.DOCKER_USER }}/techno-event-core-admin:latest
+
   redeploy-backend:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-    - name: Call deploy hook
-      run: |
-        curl -X GET ${{ secrets.BACKEND_DEPLOY_HOOK }}
+      - name: Call deploy hook
+        run: |
+          curl -X GET ${{ secrets.BACKEND_DEPLOY_HOOK }}

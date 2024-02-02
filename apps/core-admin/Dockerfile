@@ -6,13 +6,11 @@ WORKDIR /app
 
 RUN npm install -g pnpm turbo
 
-COPY . .
+COPY ../../. .
 
 RUN pnpm install
 
 RUN pnpm run build --filter=techno-event-core-admin... 
-
-RUN ls -la node_modules
 
 FROM node:18-alpine
 
