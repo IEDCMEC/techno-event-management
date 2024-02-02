@@ -12,12 +12,14 @@ const Sidebar = () => {
 
   const { logout } = useAuth0();
 
-  const router = useRouter();
-
   const handleLogout = (e) => {
     e.preventDefault();
     setLoading(true);
-    logout();
+    logout({
+      logoutParams: {
+        returnTo: process.env.NEXT_PUBLIC_AUTH0_REDIRECT_URI,
+      },
+    });
   };
 
   return (
