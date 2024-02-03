@@ -7,7 +7,10 @@ import {
   getParticipantById,
   checkInParticipant,
   getAllParticipantsCheckInDetails,
+  getParticipantAttributes,
+  setParticipantAttribute,
 } from './controllers/participants';
+import { addNewAttribute, getAllAttributes, getAttributeById } from './controllers/attributes';
 
 const router: Router = express.Router();
 
@@ -37,5 +40,18 @@ router.post(
   '/organizations/:orgId/events/:eventId/participants/check-in/:participantId',
   checkInParticipant,
 );
+
+router.get(
+  '/organizations/:orgId/events/:eventId/participants/:participantId/attributes',
+  getParticipantAttributes,
+);
+router.post(
+  '/organizations/:orgId/events/:eventId/participants/:participantId/attributes',
+  setParticipantAttribute,
+);
+
+router.get('/organizations/:orgId/events/:eventId/attributes', getAllAttributes);
+router.get('/organizations/:orgId/events/:eventId/attributes/:attributeId', getAttributeById);
+router.post('/organizations/:orgId/events/:eventId/attributes', addNewAttribute);
 
 export default router;

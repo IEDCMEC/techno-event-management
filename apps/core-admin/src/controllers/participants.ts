@@ -92,6 +92,7 @@ export const getParticipantById = async (req: Request, res: Response) => {
             checkedInByUser: true,
           },
         },
+        participantAttributes: true,
       },
     });
 
@@ -100,6 +101,54 @@ export const getParticipantById = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({ participant });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+export const getParticipantAttributes = async (req: Request, res: Response) => {
+  try {
+    const { orgId, eventId, participantId } = req?.params;
+    const participantAttributes = await prisma.participantAttributes.findMany({
+      where: {
+        participantId,
+      },
+      include: {
+        participant: true,
+        attribute: true,
+      },
+    });
+
+    if (!participantAttributes) {
+      return res.status(500).json({ error: 'Something went wrong' });
+    }
+
+    return res.status(200).json({ participantAttributes });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+export const setParticipantAttribute = async (req: Request, res: Response) => {
+  try {
+    const { orgId, eventId, participantId } = req?.params;
+    const { attributeId, value } = req?.body;
+
+    const participantAttribute = await prisma.participantAttributes.create({
+      data: {
+        participantId,
+        attributeId,
+        value,
+      },
+    });
+
+    if (!participantAttribute) {
+      return res.status(500).json({ error: 'Something went wrong' });
+    }
+
+    return res.status(200).json({ participantAttribute });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });

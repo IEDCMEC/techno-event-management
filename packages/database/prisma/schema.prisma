@@ -10,16 +10,17 @@ datasource db {
 }
 
 model User {
-  id                 String               @id
-  email              String               @unique
-  firstName          String?
-  lastName           String?
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
-  emailVerified      Boolean              @default(false)
-  phoneVerified      Boolean              @default(false)
-  OrganizationUser   OrganizationUser[]
-  ParticipantCheckIn ParticipantCheckIn[]
+  id                       String                     @id
+  email                    String                     @unique
+  firstName                String?
+  lastName                 String?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  emailVerified            Boolean                    @default(false)
+  phoneVerified            Boolean                    @default(false)
+  OrganizationUser         OrganizationUser[]
+  ParticipantCheckIn       ParticipantCheckIn[]
+  ParticipantExtrasCheckIn ParticipantExtrasCheckIn[]
 }
 
 enum Role {
@@ -29,12 +30,15 @@ enum Role {
 }
 
 model Organization {
-  id                 String               @id
-  name               String
-  OrganizationUser   OrganizationUser[]
-  Event              Event[]
-  Participant        Participant[]
-  ParticipantCheckin ParticipantCheckIn[]
+  id                       String                     @id
+  name                     String
+  OrganizationUser         OrganizationUser[]
+  Event                    Event[]
+  Participant              Participant[]
+  ParticipantCheckin       ParticipantCheckIn[]
+  Attributes               Attributes[]
+  Extras                   Extras[]
+  ParticipantExtrasCheckIn ParticipantExtrasCheckIn[]
 }
 
 model OrganizationUser {
@@ -49,28 +53,34 @@ model OrganizationUser {
 }
 
 model Event {
-  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name               String
-  description        String?
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
-  organizationId     String
-  organization       Organization         @relation(fields: [organizationId], references: [id])
-  Participant        Participant[]
-  ParticipantCheckin ParticipantCheckIn[]
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                     String
+  description              String?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  organizationId           String
+  organization             Organization               @relation(fields: [organizationId], references: [id])
+  Participant              Participant[]
+  ParticipantCheckin       ParticipantCheckIn[]
+  attributes               Attributes[]
+  extras                   Extras[]
+  participantExtrasCheckIn ParticipantExtrasCheckIn[]
 }
 
 model Participant {
-  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
-  firstName          String
-  lastName           String?
-  eventId            String               @db.Uuid
-  event              Event                @relation(fields: [eventId], references: [id])
-  organizationId     String
-  organization       Organization         @relation(fields: [organizationId], references: [id])
-  participantCheckIn ParticipantCheckIn[]
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  firstName                String
+  lastName                 String?
+  eventId                  String                     @db.Uuid
+  event                    Event                      @relation(fields: [eventId], references: [id])
+  organizationId           String
+  organization             Organization               @relation(fields: [organizationId], references: [id])
+  participantCheckIn       ParticipantCheckIn[]
+  participantAttributes    ParticipantAttributes[]
+  participantExtras        ParticipantExtras[]
+  participantExtrasCheckIn ParticipantExtrasCheckIn[]
 }
 
 model ParticipantCheckIn {
@@ -84,4 +94,62 @@ model ParticipantCheckIn {
   event           Event        @relation(fields: [eventId], references: [id])
   organizationId  String
   organization    Organization @relation(fields: [organizationId], references: [id])
+}
+
+model Attributes {
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  organizationId        String
+  organization          Organization            @relation(fields: [organizationId], references: [id])
+  eventId               String                  @db.Uuid
+  event                 Event                   @relation(fields: [eventId], references: [id])
+  participantAttributes ParticipantAttributes[]
+}
+
+model ParticipantAttributes {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  value         String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  participantId String      @db.Uuid
+  participant   Participant @relation(fields: [participantId], references: [id])
+  attributeId   String      @db.Uuid
+  attribute     Attributes  @relation(fields: [attributeId], references: [id])
+}
+
+model Extras {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  organizationId    String
+  organization      Organization        @relation(fields: [organizationId], references: [id])
+  eventId           String              @db.Uuid
+  event             Event               @relation(fields: [eventId], references: [id])
+  participantExtras ParticipantExtras[]
+}
+
+model ParticipantExtras {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  participantId String      @db.Uuid
+  participant   Participant @relation(fields: [participantId], references: [id])
+  extraId       String      @db.Uuid
+  extra         Extras      @relation(fields: [extraId], references: [id])
+}
+
+model ParticipantExtrasCheckIn {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  checkedInAt     DateTime
+  checkedInBy     String
+  checkedInByUser User          @relation(fields: [checkedInBy], references: [id])
+  participantId   String        @db.Uuid
+  participant     Participant   @relation(fields: [participantId], references: [id])
+  organization    Organization? @relation(fields: [organizationId], references: [id])
+  organizationId  String?
+  pvent           Event?        @relation(fields: [eventId], references: [id])
+  eventId         String?       @db.Uuid
 }
