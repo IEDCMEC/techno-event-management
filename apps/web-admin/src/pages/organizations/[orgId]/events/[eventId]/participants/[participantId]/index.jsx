@@ -56,7 +56,42 @@ export default function Events() {
           </Text>
         </Box>
         <Box width="100%" height="100%">
-          {JSON.stringify(participant)}
+          <Table variant="striped" colorScheme="">
+            <Tbody>
+              <Tr>
+                <Td>id</Td>
+                <Td>{participant.id}</Td>
+              </Tr>
+              <Tr>
+                <Td>createdAt</Td>
+                <Td>{participant.createdAt}</Td>
+              </Tr>
+              <Tr>
+                <Td>firstName</Td>
+                <Td>{participant.firstName}</Td>
+              </Tr>
+              <Tr>
+                <Td>lastName</Td>
+                <Td>{participant.lastName}</Td>
+              </Tr>
+              <Tr>
+                <Td>eventId</Td>
+                <Td>{participant.eventId}</Td>
+              </Tr>
+              <Tr>
+                <Td>organizationId</Td>
+                <Td>{participant.organizationId}</Td>
+              </Tr>
+              <Tr>
+                <Td>participantCheckIn</Td>
+                <Td>{JSON.stringify(participant.participantCheckIn)}</Td>
+              </Tr>
+              <Tr>
+                <Td>updatedAt</Td>
+                <Td>{participant.updatedAt}</Td>
+              </Tr>
+            </Tbody>
+          </Table>
         </Box>
       </Flex>
     </DashboardLayout>
