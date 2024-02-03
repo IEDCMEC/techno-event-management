@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-
 import {
   Box,
   Flex,
@@ -13,6 +12,7 @@ import {
   Tr,
   TableContainer,
   Text,
+  Button,
 } from '@chakra-ui/react';
 
 import { useFetch } from '@/hooks/useFetch';
@@ -36,7 +36,9 @@ export default function Organizations() {
     };
     fetchOrganizations();
   }, []);
-
+  const handleClick = () => {
+    router.push('organizations/new');
+  };
   return (
     <DashboardLayout>
       <Flex
@@ -47,10 +49,20 @@ export default function Organizations() {
         justifyContent="center"
         gap={8}
       >
-        <Box width="100%" p={8}>
+        <Box width="100%" p={8} display="flex" justifyContent="space-between">
           <Text fontSize="4xl" fontWeight="bold">
             Organizations
           </Text>
+          <Button
+            padding="4"
+            minWidth="-moz-initial"
+            bgColor="rgb(128, 90, 213)"
+            color="white"
+            _hover={{ bgColor: 'rgb(100, 70, 183)' }}
+            onClick={handleClick}
+          >
+            Add Organization
+          </Button>
         </Box>
         <Box width="100%" height="100%">
           <TableContainer width="100%" height="100%">
