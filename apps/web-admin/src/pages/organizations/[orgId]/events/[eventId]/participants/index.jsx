@@ -13,6 +13,7 @@ import {
   Tr,
   TableContainer,
   Text,
+  Button,
 } from '@chakra-ui/react';
 
 import { useFetch } from '@/hooks/useFetch';
@@ -28,6 +29,9 @@ export default function Events() {
   const { loading, get } = useFetch();
 
   const [participants, setParticipants] = useState([]);
+  const handleClick = () => {
+    router.push(`/organizations/${orgId}/events/${eventId}/participants/new/`);
+  };
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -50,10 +54,20 @@ export default function Events() {
         justifyContent="center"
         gap={8}
       >
-        <Box width="100%" p={8}>
+        <Box width="100%" p={8} display="flex" justifyContent="space-between">
           <Text fontSize="4xl" fontWeight="bold">
             Participants
           </Text>
+          <Button
+            padding="4"
+            minWidth="-moz-initial"
+            bgColor="rgb(128, 90, 213)"
+            color="white"
+            _hover={{ bgColor: 'rgb(100, 70, 183)' }}
+            onClick={handleClick}
+          >
+            Add Participant
+          </Button>
         </Box>
         <Box width="100%" height="100%">
           <TableContainer width="100%" height="100%">
