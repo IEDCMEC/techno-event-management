@@ -7,6 +7,7 @@ importers:
       '@turbo/gen': ^1.9.9
       eslint: ^8.56.0
       eslint-config-custom: workspace:*
+
       husky: ^9.0.10
       lint-staged: ^15.0.2
       prettier: ^3.0.3
@@ -15,7 +16,9 @@ importers:
       '@turbo/gen': 1.12.2_5gksl7peq4cf3phgw2ownq7kci
       eslint: 8.56.0
       eslint-config-custom: link:packages/eslint-config-custom
+
       husky: 9.0.10
+
       lint-staged: 15.2.1
       prettier: 3.2.5
       turbo: 1.12.2
@@ -3559,6 +3562,7 @@ packages:
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.14
 
+
   /es-errors/1.0.0:
     resolution: {integrity: sha512-yHV74THqMJUyFKkHyN7hyENcEZM3Dj2a2IrdClY+IT4BFQHkIVwlh8s6uZfjsFydMdNHv0F5mWgAA3ajFbsvVQ==}
     engines: {node: '>= 0.4'}
@@ -3811,7 +3815,9 @@ packages:
       - supports-color
     dev: false
 
+
   /eslint-module-utils/2.8.0_rzg3ygvhoewmy7caurhnki56y4:
+
     resolution: {integrity: sha512-aWajIYfsqCKRDgUfjEXNN/JlrzauMuSEy5sbd7WXbtW3EH6A6MpwEh42c7qD+MqQo9QMJ6fWLAeIJynx0g6OAw==}
     engines: {node: '>=4'}
     peerDependencies:
@@ -3832,11 +3838,14 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
+
+
       debug: 3.2.7
       eslint: 8.56.0
       eslint-import-resolver-node: 0.3.9
     transitivePeerDependencies:
       - supports-color
+
     dev: false
 
   /eslint-module-utils/2.8.0_zcztxup4plast7rl2zjoqpabtm:
@@ -4794,9 +4803,11 @@ packages:
     engines: {node: '>=16.17.0'}
     dev: true
 
+
   /husky/9.0.10:
     resolution: {integrity: sha512-TQGNknoiy6bURzIO77pPRu+XHi6zI7T93rX+QnJsoYFf3xdjKOur+IlfqzJGMHIK/wXrLg+GsvMs8Op7vI2jVA==}
     engines: {node: '>=18'}
+
     hasBin: true
     dev: true
 
