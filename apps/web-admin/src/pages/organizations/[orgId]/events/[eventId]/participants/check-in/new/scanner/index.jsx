@@ -19,9 +19,11 @@ import Scanner from '@/components/Scanner';
 
 import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
+import { useToast } from '@chakra-ui/react';
 
 export default function NewOrganization() {
   const { loading, get, post } = useFetch();
+  const toast = useToast();
 
   const router = useRouter();
 
@@ -46,14 +48,35 @@ export default function NewOrganization() {
     );
     if (status === 200) {
       if (uninterruptedScanMode) {
+
+        console.log(data.participant.firstName, data, status);
+        toast({
+          title: data.participant.firstName + ' Checked In',
+          description: 'Participant checked out successfully.',
+          status: 'success',
+          duration: 3000, // Duration of the toast
+          isClosable: true,
+          position: 'top-right',
+        });
+
+        // setScanResult('');
+
         console.log(data.participant.firstname, status);
         alert('Participant checked in successfully');
         setScanResult('');
+
       } else {
         router.push(`/organizations/${orgId}/events/${eventId}/participants/${scanResult}`);
       }
     } else {
-      alert(data.error);
+      toast({
+        title: data.error,
+        description: 'Something went wrong',
+        status: 'error',
+        duration: 3000, // Duration of the toast
+        isClosable: true,
+        position: 'top-right',
+      });
     }
   };
 
