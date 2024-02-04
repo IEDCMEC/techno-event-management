@@ -48,6 +48,7 @@ export default function NewOrganization() {
     );
     if (status === 200) {
       if (uninterruptedScanMode) {
+
         console.log(data.participant.firstName, data, status);
         toast({
           title: data.participant.firstName + ' Checked In',
@@ -59,6 +60,11 @@ export default function NewOrganization() {
         });
 
         // setScanResult('');
+
+        console.log(data.participant.firstname, status);
+        alert('Participant checked in successfully');
+        setScanResult('');
+
       } else {
         router.push(`/organizations/${orgId}/events/${eventId}/participants/${scanResult}`);
       }

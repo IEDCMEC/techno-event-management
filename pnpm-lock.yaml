@@ -7,7 +7,8 @@ importers:
       '@turbo/gen': ^1.9.9
       eslint: ^8.56.0
       eslint-config-custom: workspace:*
-      husky: ^8.0.0
+
+      husky: ^9.0.10
       lint-staged: ^15.0.2
       prettier: ^3.0.3
       turbo: ^1.9.9
@@ -15,7 +16,9 @@ importers:
       '@turbo/gen': 1.12.2_5gksl7peq4cf3phgw2ownq7kci
       eslint: 8.56.0
       eslint-config-custom: link:packages/eslint-config-custom
-      husky: 8.0.3
+
+      husky: 9.0.10
+
       lint-staged: 15.2.1
       prettier: 3.2.5
       turbo: 1.12.2
@@ -100,86 +103,61 @@ importers:
       webpack-cli: 5.1.4_webpack@5.90.1
 
   apps/core-auth0-actions:
+    specifiers:
+      '@types/chai': ^4.3.5
+      '@types/express': ^4.17.17
+      '@types/node': ^20.10.5
+      '@types/pg': ^8.10.1
+      '@typescript-eslint/eslint-plugin': ^6.7.3
+      body-parser: ^1.20.2
+      concurrently: ^8.0.1
+      cors: ^2.8.5
+      database: workspace:*
+      dotenv: ^16.0.3
+      eslint: ^8.56.0
+      eslint-config-custom: '*'
+      eslint-config-standard-with-typescript: ^43.0.0
+      eslint-plugin-import: ^2.27.5
+      eslint-plugin-n: ^16.5.0
+      eslint-plugin-prettier: ^5.0.0
+      eslint-plugin-promise: ^6.1.1
+      express: ^4.18.2
+      nodemon: ^3.0.1
+      prettier: 3.1.1
+      rimraf: ^5.0.1
+      ts-loader: ^9.5.1
+      tsconfig: workspace:*
+      typescript: ^5.0.4
+      webpack: ^5.89.0
+      webpack-cli: ^5.1.4
     dependencies:
-      body-parser:
-        specifier: ^1.20.2
-        version: 1.20.2
-      cors:
-        specifier: ^2.8.5
-        version: 2.8.5
-      database:
-        specifier: workspace:*
-        version: link:../../packages/database
-      dotenv:
-        specifier: ^16.0.3
-        version: 16.4.1
-      express:
-        specifier: ^4.18.2
-        version: 4.18.2
+      body-parser: 1.20.2
+      cors: 2.8.5
+      database: link:../../packages/database
+      dotenv: 16.4.1
+      express: 4.18.2
     devDependencies:
-      '@types/chai':
-        specifier: ^4.3.5
-        version: 4.3.11
-      '@types/express':
-        specifier: ^4.17.17
-        version: 4.17.21
-      '@types/node':
-        specifier: ^20.10.5
-        version: 20.11.13
-      '@types/pg':
-        specifier: ^8.10.1
-        version: 8.11.0
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^6.7.3
-        version: 6.20.0(@typescript-eslint/parser@6.20.0)(eslint@8.56.0)(typescript@5.3.3)
-      concurrently:
-        specifier: ^8.0.1
-        version: 8.2.2
-      eslint:
-        specifier: ^8.56.0
-        version: 8.56.0
-      eslint-config-custom:
-        specifier: '*'
-        version: link:../../packages/eslint-config-custom
-      eslint-config-standard-with-typescript:
-        specifier: ^43.0.0
-        version: 43.0.1(@typescript-eslint/eslint-plugin@6.20.0)(eslint-plugin-import@2.29.1)(eslint-plugin-n@16.6.2)(eslint-plugin-promise@6.1.1)(eslint@8.56.0)(typescript@5.3.3)
-      eslint-plugin-import:
-        specifier: ^2.27.5
-        version: 2.29.1(@typescript-eslint/parser@6.20.0)(eslint@8.56.0)
-      eslint-plugin-n:
-        specifier: ^16.5.0
-        version: 16.6.2(eslint@8.56.0)
-      eslint-plugin-prettier:
-        specifier: ^5.0.0
-        version: 5.1.3(eslint@8.56.0)(prettier@3.1.1)
-      eslint-plugin-promise:
-        specifier: ^6.1.1
-        version: 6.1.1(eslint@8.56.0)
-      nodemon:
-        specifier: ^3.0.1
-        version: 3.0.3
-      prettier:
-        specifier: 3.1.1
-        version: 3.1.1
-      rimraf:
-        specifier: ^5.0.1
-        version: 5.0.5
-      ts-loader:
-        specifier: ^9.5.1
-        version: 9.5.1(typescript@5.3.3)(webpack@5.90.0)
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../packages/tsconfig
-      typescript:
-        specifier: ^5.0.4
-        version: 5.3.3
-      webpack:
-        specifier: ^5.89.0
-        version: 5.90.0(webpack-cli@5.1.4)
-      webpack-cli:
-        specifier: ^5.1.4
-        version: 5.1.4(webpack@5.90.0)
+      '@types/chai': 4.3.11
+      '@types/express': 4.17.21
+      '@types/node': 20.11.16
+      '@types/pg': 8.11.0
+      '@typescript-eslint/eslint-plugin': 6.20.0_mb4aacsok44wlk3qf5ewcirf74
+      concurrently: 8.2.2
+      eslint: 8.56.0
+      eslint-config-custom: link:../../packages/eslint-config-custom
+      eslint-config-standard-with-typescript: 43.0.1_5lifi7sm3m757q222dcgzunvny
+      eslint-plugin-import: 2.29.1_reu6wblayc2ebs6yvqfzusygdy
+      eslint-plugin-n: 16.6.2_eslint@8.56.0
+      eslint-plugin-prettier: 5.1.3_oxgjun3vccpgyyyxldgmm7ktui
+      eslint-plugin-promise: 6.1.1_eslint@8.56.0
+      nodemon: 3.0.3
+      prettier: 3.1.1
+      rimraf: 5.0.5
+      ts-loader: 9.5.1_jkke4aekx6qisbjiah2hkrbtyy
+      tsconfig: link:../../packages/tsconfig
+      typescript: 5.3.3
+      webpack: 5.90.1_webpack-cli@5.1.4
+      webpack-cli: 5.1.4_webpack@5.90.1
 
   apps/web-admin:
     specifiers:
@@ -3584,6 +3562,7 @@ packages:
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.14
 
+
   /es-errors/1.0.0:
     resolution: {integrity: sha512-yHV74THqMJUyFKkHyN7hyENcEZM3Dj2a2IrdClY+IT4BFQHkIVwlh8s6uZfjsFydMdNHv0F5mWgAA3ajFbsvVQ==}
     engines: {node: '>= 0.4'}
@@ -3836,7 +3815,9 @@ packages:
       - supports-color
     dev: false
 
+
   /eslint-module-utils/2.8.0_rzg3ygvhoewmy7caurhnki56y4:
+
     resolution: {integrity: sha512-aWajIYfsqCKRDgUfjEXNN/JlrzauMuSEy5sbd7WXbtW3EH6A6MpwEh42c7qD+MqQo9QMJ6fWLAeIJynx0g6OAw==}
     engines: {node: '>=4'}
     peerDependencies:
@@ -3857,11 +3838,14 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
+
+
       debug: 3.2.7
       eslint: 8.56.0
       eslint-import-resolver-node: 0.3.9
     transitivePeerDependencies:
       - supports-color
+
     dev: false
 
   /eslint-module-utils/2.8.0_zcztxup4plast7rl2zjoqpabtm:
@@ -4819,9 +4803,11 @@ packages:
     engines: {node: '>=16.17.0'}
     dev: true
 
-  /husky/8.0.3:
-    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
-    engines: {node: '>=14'}
+
+  /husky/9.0.10:
+    resolution: {integrity: sha512-TQGNknoiy6bURzIO77pPRu+XHi6zI7T93rX+QnJsoYFf3xdjKOur+IlfqzJGMHIK/wXrLg+GsvMs8Op7vI2jVA==}
+    engines: {node: '>=18'}
+
     hasBin: true
     dev: true
 
