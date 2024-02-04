@@ -33,6 +33,10 @@ export default function Events() {
     router.push(`/organizations/${orgId}/events/${eventId}/participants/new/`);
   };
 
+  const handleClick1 = () => {
+    router.push(`/organizations/${orgId}/events/${eventId}/participants/new/upload-csv`);
+  };
+
   useEffect(() => {
     const fetchParticipants = async () => {
       const { data, status } = await get(
@@ -67,6 +71,16 @@ export default function Events() {
             onClick={handleClick}
           >
             Add Participant
+          </Button>
+          <Button
+            padding="4"
+            minWidth="-moz-initial"
+            bgColor="rgb(128, 90, 213)"
+            color="white"
+            _hover={{ bgColor: 'rgb(100, 70, 183)' }}
+            onClick={handleClick1}
+          >
+            Add Bulk
           </Button>
         </Box>
         <Box width="100%" height="100%">
