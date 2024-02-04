@@ -5,6 +5,10 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "npm"
+    directory: "/apps/core-auth0-actions"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
     directory: "/apps/web-admin"
     schedule:
       interval: "weekly"
