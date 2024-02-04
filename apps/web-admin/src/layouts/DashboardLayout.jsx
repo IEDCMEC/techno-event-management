@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 export default function DashboardLayout({ children }) {
   const [isMobile] = useMediaQuery('(max-width: 768px)');
-  const [isSidebarOpen, setSidebarOpen] = useState(!isMobile);
+  const [isSidebarOpen, setSidebarOpen] = useState(isMobile);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
