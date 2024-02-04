@@ -9,6 +9,7 @@ import {
   getAllParticipantsCheckInDetails,
   getParticipantAttributes,
   setParticipantAttribute,
+  checkOutParticipant,
 } from './controllers/participants';
 import { addNewAttribute, getAllAttributes, getAttributeById } from './controllers/attributes';
 
@@ -39,6 +40,10 @@ router.get('/organizations/:orgId/events/:eventId/participants/:participantId', 
 router.post(
   '/organizations/:orgId/events/:eventId/participants/check-in/:participantId',
   checkInParticipant,
+);
+router.post(
+  '/organizations/:orgId/events/:eventId/participants/check-out/:participantId',
+  checkOutParticipant,
 );
 
 router.get(

@@ -38,7 +38,7 @@ export default function NewOrganization() {
 
   const handleSubmit = async () => {
     const { data, status } = await post(
-      `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${scanResult}`,
+      `/core/organizations/${orgId}/events/${eventId}/participants/check-out/${scanResult}`,
       {},
       {
         checkedInAt: new Date().toISOString(),
@@ -47,7 +47,7 @@ export default function NewOrganization() {
     if (status === 200) {
       if (uninterruptedScanMode) {
         console.log(data.participant.firstname, status);
-        alert('Participant checked in successfully');
+        alert('Participant checked out successfully');
         setScanResult('');
       } else {
         router.push(`/organizations/${orgId}/events/${eventId}/participants/${scanResult}`);

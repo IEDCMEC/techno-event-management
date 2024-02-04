@@ -170,9 +170,16 @@ export const checkInParticipant = async (req: Request, res: Response) => {
         eventId,
       },
     });
+    const participant = await prisma.participant.findUnique({
+      where: {
+        id: participantId,
+      },
+    });
 
     if (participantAlreadyCheckedIn) {
-      return res.status(400).json({ error: 'Participant already checked in' });
+      return res
+        .status(400)
+        .json({ error: participant.firstName + participant.lastName + ' already checked in' });
     }
 
     const participantCheckIn = await prisma.participantCheckIn.create({
@@ -189,7 +196,44 @@ export const checkInParticipant = async (req: Request, res: Response) => {
       return res.status(500).json({ error: 'Something went wrong' });
     }
 
-    return res.status(200).json({ participantCheckIn });
+    return res.status(200).json({ participantCheckIn, participant });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+export const checkOutParticipant = async (req: Request, res: Response) => {
+  try {
+    const userId = req?.auth?.payload?.sub;
+
+    const { orgId, eventId, participantId } = req?.params;
+
+    const { checkedOutAt } = req?.body;
+
+    const participantAlreadyCheckedOut = await prisma.participantCheckIn.findFirst({
+      where: {
+        participantId,
+        organizationId: orgId,
+        eventId,
+      },
+    });
+
+    if (!participantAlreadyCheckedOut) {
+      return res.status(400).json({ error: 'Participant already checked out' });
+    }
+
+    const participantCheckOut = await prisma.participantCheckIn.delete({
+      where: {
+        participantId,
+      },
+    });
+
+    if (!participantCheckOut) {
+      return res.status(500).json({ error: 'Something went wrong' });
+    }
+
+    return res.status(200).json({ participantCheckOut });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });
