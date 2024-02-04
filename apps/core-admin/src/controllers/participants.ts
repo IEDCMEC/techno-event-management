@@ -37,8 +37,6 @@ export const addNewParticipantInBulk = async (req: Request, res: Response) => {
         return {
           firstName: participant.firstName,
           lastName: participant.lastName,
-          email: participant.email,
-          phone: participant.phoneNumber,
           organizationId: orgId,
           eventId,
         };
