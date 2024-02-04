@@ -26,8 +26,6 @@ const jwtCheck = auth({
   tokenSigningAlg: 'RS256',
 });
 
-import { addNewUserToDatabaseOnRegister } from './controllers/newuser';
-
 app.get('/', (req: Request, res: Response) => {
   return res.send('Techno Event Server');
 });
@@ -47,8 +45,6 @@ app.get('/health', (req: Request, res: Response) => {
     res.status(503).send();
   }
 });
-
-app.post('/api/auth/newuser', addNewUserToDatabaseOnRegister);
 
 app.use(jwtCheck);
 
