@@ -59,6 +59,10 @@ export default function NewOrganization() {
         });
 
         // setScanResult('');
+
+        console.log(data.participant.firstname, status);
+        alert('Participant checked in successfully');
+        setScanResult('');
       } else {
         router.push(`/organizations/${orgId}/events/${eventId}/participants/${scanResult}`);
       }

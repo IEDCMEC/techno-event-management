@@ -44,7 +44,7 @@ export default function DashboardLayout({ children }) {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
       <Box
         flex="1"
-        marginLeft={isSidebarOpen && !isMobile ? '250px' : '0'}
+        marginLeft="0"
         marginTop={isMobile ? '30px' : '0'}
         transition="margin 0.3s ease"
       >
