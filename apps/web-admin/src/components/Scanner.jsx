@@ -16,7 +16,11 @@ const Scanner = ({ result, setResult }) => {
 
   return (
     <div>
-      <QrReader onResult={handleScan} onError={handleError} />
+      <QrReader
+        constraints={{ facingMode: 'environment' }}
+        onResult={handleScan}
+        onError={handleError}
+      />
     </div>
   );
 };
