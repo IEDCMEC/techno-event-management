@@ -6,8 +6,6 @@ export const addNewUserToDatabaseOnRegister = async (req: Request, res: Response
   try {
     const { userId, email } = req.body;
 
-    console.log(req.body);
-
     if (!userId || !email) {
       return res.status(400).send('Invalid Request');
     }
