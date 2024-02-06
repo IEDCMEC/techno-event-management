@@ -27,6 +27,64 @@ export const addNewParticipant = async (req: Request, res: Response) => {
   }
 };
 
+export const addNewParticipantInBulk = async (req: Request, res: Response) => {
+  try {
+    const { orgId, eventId } = req?.params;
+    const { participants } = req?.body;
+
+    const newParticipants = await prisma.participant.createMany({
+      data: participants.map((participant: any) => {
+        return {
+          firstName: participant.firstName,
+          lastName: participant.lastName,
+          organizationId: orgId,
+          eventId,
+        };
+      }),
+    });
+    return res.status(200).json(newParticipants);
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+// export const addNewParticipantInBulk = async (req: Request, res: Response) => {
+//   try {
+//     const { orgId, eventId } = req?.params;
+//     const { participants } = req?.body;
+
+//     const newParticipants = [];
+//     const failedParticipants = [];
+
+//     for (const participant of participants) {
+//       try {
+//         const newParticipant = await prisma.participant.create({
+//           data: {
+//             firstName: participant.firstName,
+//             lastName: participant.lastName,
+//             email: participant.email,
+//             phone: participant.phoneNumber,
+//             organizationId: orgId,
+//             eventId,
+//           },
+//         });
+//         newParticipants.push(newParticipant);
+//       } catch (error) {
+//         console.error(`Failed to add participant: ${participant.firstName} ${participant.lastName}`);
+//         failedParticipants.push(participant);
+//       }
+//     }
+
+//     if (failedParticipants.length > 0) {
+//       return res.status(201).json({ message: 'Some participants were not added', success: newParticipants, failed: failedParticipants });
+//     }
+//     return res.status(200).json({ newParticipants });
+//   } catch (err: any) {
+//     console.error(err);
+//     return res.status(500).json({ error: 'Something went wrong' });
+//   }
+// }
+
 export const getAllParticipants = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId } = req?.params;

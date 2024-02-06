@@ -10,6 +10,7 @@ import {
   getParticipantAttributes,
   setParticipantAttribute,
   checkOutParticipant,
+  addNewParticipantInBulk,
 } from './controllers/participants';
 import { addNewAttribute, getAllAttributes, getAttributeById } from './controllers/attributes';
 
@@ -32,6 +33,8 @@ router.post('/organizations/:orgId/events', createNewEvent);
 
 router.get('/organizations/:orgId/events/:eventId/participants', getAllParticipants);
 router.post('/organizations/:orgId/events/:eventId/participants', addNewParticipant);
+router.post('/organizations/:orgId/events/:eventId/bulkParticipants', addNewParticipantInBulk);
+
 router.get(
   '/organizations/:orgId/events/:eventId/participants/check-in',
   getAllParticipantsCheckInDetails,

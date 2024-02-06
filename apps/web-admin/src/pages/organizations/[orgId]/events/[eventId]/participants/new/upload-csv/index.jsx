@@ -32,8 +32,6 @@ export default function NewOrganization() {
   const columns = [
     { field: 'FirstName', headerName: 'First Name', width: 150 },
     { field: 'LastName', headerName: 'Last Name', width: 150 },
-    { field: 'Email', headerName: 'Email', width: 150 },
-    { field: 'PhoneNumber', headerName: 'Phone Number', width: 150 },
   ];
 
   return (
