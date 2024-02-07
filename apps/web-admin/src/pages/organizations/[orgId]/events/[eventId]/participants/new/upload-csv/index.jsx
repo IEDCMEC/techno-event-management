@@ -2,7 +2,10 @@ import { useState } from 'react';
 import Papa from 'papaparse';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
-import { Flex } from '@chakra-ui/react';
+import { useFetch } from '@/hooks/useFetch';
+
+import { useRouter } from 'next/router';
+import { Flex, Button } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -10,6 +13,11 @@ import { ThemeProvider, createTheme } from '@mui/material';
 const MuiTheme = createTheme({});
 
 export default function NewOrganization() {
+  const { loading, post } = useFetch();
+  const router = useRouter();
+
+  const { orgId, eventId } = router.query;
+
   const [csvData, setCSVData] = useState(null);
 
   const handleFileUpload = (event) => {
@@ -19,9 +27,12 @@ export default function NewOrganization() {
       header: true,
       dynamicTyping: true,
       complete: (result) => {
-        const dataWithId = result.data.map((row, index) => ({ ...row, id: index + 1 }));
+        const filteredData = result.data.filter((row) => {
+          return Object.values(row).every((value) => value !== null && value !== undefined);
+        });
+
+        const dataWithId = filteredData.map((row, index) => ({ ...row, id: index + 1 }));
         setCSVData(dataWithId);
-        console.log('CSV Data as JSON:', dataWithId);
       },
       error: (error) => {
         console.error('Error parsing CSV:', error);
@@ -29,9 +40,25 @@ export default function NewOrganization() {
     });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { data, status } = await post(
+      `/core/organizations/${orgId}/events/${eventId}/participants?isBulk=true`,
+      {},
+      {
+        participants: csvData,
+      },
+    );
+    if (status === 200) {
+      router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+    } else {
+      alert(data.error);
+    }
+  };
+
   const columns = [
-    { field: 'FirstName', headerName: 'First Name', width: 150 },
-    { field: 'LastName', headerName: 'Last Name', width: 150 },
+    { field: 'firstName', headerName: 'First Name', width: 150 },
+    { field: 'lastName', headerName: 'Last Name', width: 150 },
   ];
 
   return (
@@ -67,6 +94,7 @@ export default function NewOrganization() {
             </ThemeProvider>
           )}
         </div>
+        <Button onClick={handleSubmit}>Confirm and Add</Button>
       </Flex>
     </DashboardLayout>
   );

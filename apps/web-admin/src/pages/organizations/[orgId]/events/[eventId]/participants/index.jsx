@@ -62,26 +62,28 @@ export default function Events() {
           <Text fontSize="4xl" fontWeight="bold">
             Participants
           </Text>
-          <Button
-            padding="4"
-            minWidth="-moz-initial"
-            bgColor="rgb(128, 90, 213)"
-            color="white"
-            _hover={{ bgColor: 'rgb(100, 70, 183)' }}
-            onClick={handleClick}
-          >
-            Add Participant
-          </Button>
-          <Button
-            padding="4"
-            minWidth="-moz-initial"
-            bgColor="rgb(128, 90, 213)"
-            color="white"
-            _hover={{ bgColor: 'rgb(100, 70, 183)' }}
-            onClick={handleClick1}
-          >
-            Add Bulk
-          </Button>
+          <Box display="flex" gap={4}>
+            <Button
+              padding="4"
+              minWidth="-moz-initial"
+              bgColor="rgb(128, 90, 213)"
+              color="white"
+              _hover={{ bgColor: 'rgb(100, 70, 183)' }}
+              onClick={handleClick}
+            >
+              Add Participant
+            </Button>
+            <Button
+              padding="4"
+              minWidth="-moz-initial"
+              bgColor="rgb(128, 90, 213)"
+              color="white"
+              _hover={{ bgColor: 'rgb(100, 70, 183)' }}
+              onClick={handleClick1}
+            >
+              Upload CSV
+            </Button>
+          </Box>
         </Box>
         <Box width="100%" height="100%">
           <TableContainer width="100%" height="100%">

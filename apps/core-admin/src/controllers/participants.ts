@@ -5,22 +5,40 @@ import prisma from '../utils/database';
 export const addNewParticipant = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId } = req?.params;
-    const { firstName, lastName } = req?.body;
+    const { isBulk } = req?.query;
 
-    const newParticipant = await prisma.participant.create({
-      data: {
-        firstName,
-        lastName,
-        organizationId: orgId,
-        eventId,
-      },
-    });
+    if (isBulk === 'true') {
+      const { participants } = req?.body;
 
-    if (!newParticipant) {
-      return res.status(500).json({ error: 'Something went wrong' });
+      const newParticipants = await prisma.participant.createMany({
+        data: participants.map((p: any) => {
+          return {
+            firstName: p.firstName,
+            lastName: p.lastName,
+            organizationId: orgId,
+            eventId,
+          };
+        }),
+      });
+      return res.status(200).json({ newParticipants });
+    } else {
+      const { firstName, lastName } = req?.body;
+
+      const newParticipant = await prisma.participant.create({
+        data: {
+          firstName,
+          lastName,
+          organizationId: orgId,
+          eventId,
+        },
+      });
+
+      if (!newParticipant) {
+        return res.status(500).json({ error: 'Something went wrong' });
+      }
+
+      return res.status(200).json({ newParticipant });
     }
-
-    return res.status(200).json({ newParticipant });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });
@@ -48,7 +66,8 @@ export const addNewParticipantInBulk = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Something went wrong' });
   }
 };
-// export const addNewParticipantInBulk = async (req: Request, res: Response) => {
+
+// export const addParticipantsInBulk = async (req: Request, res: Response) => {
 //   try {
 //     const { orgId, eventId } = req?.params;
 //     const { participants } = req?.body;
@@ -70,20 +89,26 @@ export const addNewParticipantInBulk = async (req: Request, res: Response) => {
 //         });
 //         newParticipants.push(newParticipant);
 //       } catch (error) {
-//         console.error(`Failed to add participant: ${participant.firstName} ${participant.lastName}`);
+//         console.error(
+//           `Failed to add participant: ${participant.firstName} ${participant.lastName}`,
+//         );
 //         failedParticipants.push(participant);
 //       }
 //     }
 
 //     if (failedParticipants.length > 0) {
-//       return res.status(201).json({ message: 'Some participants were not added', success: newParticipants, failed: failedParticipants });
+//       return res.status(201).json({
+//         message: 'Some participants were not added',
+//         success: newParticipants,
+//         failed: failedParticipants,
+//       });
 //     }
 //     return res.status(200).json({ newParticipants });
 //   } catch (err: any) {
 //     console.error(err);
 //     return res.status(500).json({ error: 'Something went wrong' });
 //   }
-// }
+// };
 
 export const getAllParticipants = async (req: Request, res: Response) => {
   try {
