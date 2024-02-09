@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner, VStack, AbsoluteCenter } from '@chakra-ui/react';
+
 export const ProtectedRoute = ({ children }) => {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
