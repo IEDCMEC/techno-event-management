@@ -92,10 +92,10 @@ export default function Organizations() {
             <DataGrid
               rows={organizations}
               columns={columns}
-              slots={{
+              components={{
                 Toolbar: GridToolbar,
               }}
-              slotProps={{
+              componentsProps={{
                 toolbar: {
                   showQuickFilter: true,
                   quickFilterProps: { debounceMs: 500 },
