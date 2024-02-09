@@ -1,4 +1,6 @@
 import { useRouter } from 'next/router';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { ThemeProvider, createTheme } from '@mui/material';
 
 import {
   Box,
@@ -20,7 +22,7 @@ import { useFetch } from '@/hooks/useFetch';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
-
+const MuiTheme = createTheme({});
 export default function Events() {
   const router = useRouter();
 
@@ -29,6 +31,11 @@ export default function Events() {
   const { loading, get } = useFetch();
 
   const [participants, setParticipants] = useState([]);
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 150 },
+    { field: 'firstName', headerName: 'First Name', width: 200 },
+    { field: 'lastName', headerName: 'Last Name', width: 200 },
+  ];
   const handleClick = () => {
     router.push(`/organizations/${orgId}/events/${eventId}/participants/new/`);
   };
@@ -86,6 +93,24 @@ export default function Events() {
           </Box>
         </Box>
         <Box width="100%" height="100%">
+          <ThemeProvider theme={MuiTheme}>
+            <DataGrid
+              rows={participants}
+              columns={columns}
+              components={{
+                Toolbar: GridToolbar,
+              }}
+              componentsProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              autoHeight
+            />
+          </ThemeProvider>
+        </Box>
+        {/* <Box width="100%" height="100%">
           <TableContainer width="100%" height="100%">
             <Table variant="simple">
               <TableCaption>Participants</TableCaption>
@@ -120,7 +145,7 @@ export default function Events() {
               </Tfoot>
             </Table>
           </TableContainer>
-        </Box>
+        </Box> */}
       </Flex>
     </DashboardLayout>
   );
