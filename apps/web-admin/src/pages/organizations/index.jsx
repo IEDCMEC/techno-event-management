@@ -17,6 +17,10 @@ import {
 
 import { useFetch } from '@/hooks/useFetch';
 
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { ThemeProvider, createTheme } from '@mui/material';
+const MuiTheme = createTheme({});
+
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
 
@@ -28,6 +32,25 @@ export default function Organizations() {
   const { loading, get } = useFetch();
 
   const [organizations, setOrganizations] = useState([]);
+
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 150 },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 200,
+      renderCell: (params) => (
+        <div
+          onClick={() => {
+            router.push(`/organizations/${params.row.id}`);
+          }}
+          style={{ cursor: 'pointer' }}
+        >
+          {params.value}
+        </div>
+      ),
+    },
+  ];
 
   useEffect(() => {
     const fetchOrganizations = async () => {
@@ -65,37 +88,54 @@ export default function Organizations() {
           </Button>
         </Box>
         <Box width="100%" height="100%">
-          <TableContainer width="100%" height="100%">
-            <Table variant="simple">
-              <TableCaption>Organizations</TableCaption>
-              <Thead>
-                <Tr>
-                  <Th>ID</Th>
-                  <Th>Name</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {organizations.map((organization) => (
-                  <Tr
-                    key={organization?.id}
-                    onClick={() => {
-                      router.push(`/organizations/${organization.id}`);
-                    }}
-                    cursor="pointer"
-                  >
-                    <Td>{organization?.id}</Td>
-                    <Td>{organization?.name}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>{organizations.length} organizations</Th>
-                </Tr>
-              </Tfoot>
-            </Table>
-          </TableContainer>
+          <ThemeProvider theme={MuiTheme}>
+            <DataGrid
+              rows={organizations}
+              columns={columns}
+              slots={{
+                Toolbar: GridToolbar,
+              }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              autoHeight
+            />
+          </ThemeProvider>
         </Box>
+        {/* <TableContainer width="100%" height="100%">
+          <Table variant="simple">
+            <TableCaption>Organizations</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>ID</Th>
+                <Th>Name</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {organizations.map((organization) => (
+                <Tr
+                  key={organization?.id}
+                  onClick={() => {
+                    router.push(`/organizations/${organization.id}`);
+                  }}
+                  cursor="pointer"
+                >
+                  <Td>{organization?.id}</Td>
+                  <Td>{organization?.name}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+            <Tfoot>
+              <Tr>
+                <Th>{organizations.length} organizations</Th>
+              </Tr>
+            </Tfoot>
+          </Table>
+        </TableContainer> */}
+        {/* </Box> */}
       </Flex>
     </DashboardLayout>
   );

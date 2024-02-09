@@ -44,6 +44,10 @@ export default function Events() {
     router.push(`/organizations/${orgId}/events/${eventId}/participants/new/upload-csv`);
   };
 
+  const handleRowClick = (row) => {
+    router.push(`/organizations/${orgId}/events/${eventId}/participants/${row.id}`);
+  };
+
   useEffect(() => {
     const fetchParticipants = async () => {
       const { data, status } = await get(
@@ -97,16 +101,18 @@ export default function Events() {
             <DataGrid
               rows={participants}
               columns={columns}
-              components={{
+              slots={{
                 Toolbar: GridToolbar,
               }}
-              componentsProps={{
+              slotProps={{
                 toolbar: {
                   showQuickFilter: true,
                   quickFilterProps: { debounceMs: 500 },
                 },
               }}
               autoHeight
+              getRowId={(row) => row.id}
+              onRowClick={handleRowClick}
             />
           </ThemeProvider>
         </Box>
