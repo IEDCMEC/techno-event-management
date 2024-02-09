@@ -44,6 +44,10 @@ export default function Events() {
     router.push(`/organizations/${orgId}/events/${eventId}/participants/new/upload-csv`);
   };
 
+  const handleRowClick = (row) => {
+    router.push(`/organizations/${orgId}/events/${eventId}/participants/${row.id}`);
+  };
+
   useEffect(() => {
     const fetchParticipants = async () => {
       const { data, status } = await get(
@@ -107,6 +111,8 @@ export default function Events() {
                 },
               }}
               autoHeight
+              getRowId={(row) => row.id}
+              onRowClick={handleRowClick}
             />
           </ThemeProvider>
         </Box>
