@@ -20,6 +20,9 @@ import { useFetch } from '@/hooks/useFetch';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { ThemeProvider, createTheme } from '@mui/material';
+const MuiTheme = createTheme({});
 
 export default function Events() {
   const router = useRouter();
@@ -32,6 +35,26 @@ export default function Events() {
   const handleClick = () => {
     router.push(`/organizations/${orgId}/events/new/`);
   };
+
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 150 },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 200,
+      renderCell: (params) => (
+        <div
+          onClick={() => {
+            router.push(`/organizations/${orgId}/events/${params.row?.id}`);
+          }}
+          style={{ cursor: 'pointer' }}
+        >
+          {params.value}
+        </div>
+      ),
+    },
+  ];
+
   useEffect(() => {
     const fetchEvents = async () => {
       const { data, status } = await get(`/core/organizations/${orgId}/events`);
@@ -67,7 +90,23 @@ export default function Events() {
           </Button>
         </Box>
         <Box width="100%" height="100%">
-          <TableContainer width="100%" height="100%">
+          <ThemeProvider theme={MuiTheme}>
+            <DataGrid
+              rows={events}
+              columns={columns}
+              slots={{
+                Toolbar: GridToolbar,
+              }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              autoHeight
+            />
+          </ThemeProvider>
+          {/*<TableContainer width="100%" height="100%">
             <Table variant="simple">
               <TableCaption>Events</TableCaption>
               <Thead>
@@ -96,7 +135,7 @@ export default function Events() {
                 </Tr>
               </Tfoot>
             </Table>
-          </TableContainer>
+                  </TableContainer>*/}
         </Box>
       </Flex>
     </DashboardLayout>
