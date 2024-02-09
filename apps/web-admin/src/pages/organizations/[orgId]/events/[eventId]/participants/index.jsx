@@ -101,10 +101,10 @@ export default function Events() {
             <DataGrid
               rows={participants}
               columns={columns}
-              components={{
+              slots={{
                 Toolbar: GridToolbar,
               }}
-              componentsProps={{
+              slotProps={{
                 toolbar: {
                   showQuickFilter: true,
                   quickFilterProps: { debounceMs: 500 },
