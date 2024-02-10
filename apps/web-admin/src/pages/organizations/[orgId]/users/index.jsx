@@ -24,108 +24,38 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { ThemeProvider, createTheme } from '@mui/material';
 const MuiTheme = createTheme({});
 
-export default function Events() {
+export default function Members() {
   const router = useRouter();
 
   const { orgId } = router.query;
 
   const { loading, get } = useFetch();
 
-  const [events, setEvents] = useState([]);
+  const [members, setMembers] = useState([]);
   const handleClick = () => {
-    router.push(`/organizations/${orgId}/events/new/`);
+    router.push(`/organizations/${orgId}/members/new/`);
   };
   const handleRowClick = (row) => {
     router.push(`/organizations/${orgId}/events/${row.id}`);
   };
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
+    { field: 'email', headerName: 'email', width: 150 },
     {
       field: 'name',
       headerName: 'Name',
       width: 200,
-      renderCell: (params) => (
-        <div
-          onClick={() => {
-            router.push(`/organizations/${orgId}/events/${params.row?.id}`);
-          }}
-          style={{ cursor: 'pointer' }}
-        >
-          {params.value}
-        </div>
-      ),
-    },
-    {
-      field: 'check-in',
-      headerName: 'Check-in',
-      width: 200,
-      renderCell: (params) => (
-        <>
-          <div
-            onClick={() => {
-              router.push(
-                `/organizations/${orgId}/events/${params.row?.id}/participants/check-in/new/scanner`,
-              );
-            }}
-            style={{
-              cursor: 'pointer',
-              backgroundColor: 'rgb(88, 28, 209)',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgb(120, 91, 202)',
-              },
-              width: '50%',
-              height: '80%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: '5px',
-            }}
-          >
-            Check-in
-          </div>
-        </>
-      ),
-    },
-    {
-      field: 'Participants',
-      headerName: 'Participants',
-      width: 200,
-      renderCell: (params) => (
-        <>
-          <Button
-            onClick={() => {
-              router.push(`/organizations/${orgId}/events/${params.row?.id}`);
-            }}
-            style={{
-              cursor: 'pointer',
-              backgroundColor: 'rgb(129, 87, 191)',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgb(100, 70, 183)',
-              },
-              width: '50%',
-              height: '80%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: '5px',
-            }}
-          >
-            Participants
-          </Button>
-        </>
-      ),
+      renderCell: (params) => <div style={{ cursor: 'pointer' }}>{params.value}</div>,
     },
   ];
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      const { data, status } = await get(`/core/organizations/${orgId}/events`);
-      setEvents(data.events || []);
+    const fetchmembers = async () => {
+      const { data, status } = await get(`/core/organizations/${orgId}/members`);
+      setMembers(data.organizationUsers || []);
       console.log(data);
     };
-    fetchEvents();
+    fetchmembers();
   }, [orgId]);
 
   return (
@@ -140,7 +70,7 @@ export default function Events() {
       >
         <Box width="100%" p={8} display="flex" justifyContent="space-between">
           <Text fontSize="4xl" fontWeight="bold">
-            Events
+            members
           </Text>
           <Button
             padding="4"
@@ -156,7 +86,7 @@ export default function Events() {
         <Box width="100%" height="100%">
           <ThemeProvider theme={MuiTheme}>
             <DataGrid
-              rows={events}
+              rows={members}
               columns={columns}
               slotProps={{
                 toolbar: {
@@ -172,7 +102,7 @@ export default function Events() {
           </ThemeProvider>
           {/*<TableContainer width="100%" height="100%">
             <Table variant="simple">
-              <TableCaption>Events</TableCaption>
+              <TableCaption>members</TableCaption>
               <Thead>
                 <Tr>
                   <Th>ID</Th>
@@ -180,11 +110,11 @@ export default function Events() {
                 </Tr>
               </Thead>
               <Tbody>
-                {events.map((event) => (
+                {members.map((event) => (
                   <Tr
                     key={event?.id}
                     onClick={() => {
-                      router.push(`/organizations/${orgId}/events/${event?.id}`);
+                      router.push(`/organizations/${orgId}/members/${event?.id}`);
                     }}
                     cursor="pointer"
                   >
@@ -195,7 +125,7 @@ export default function Events() {
               </Tbody>
               <Tfoot>
                 <Tr>
-                  <Th>{events.length} events</Th>
+                  <Th>{members.length} members</Th>
                 </Tr>
               </Tfoot>
             </Table>
