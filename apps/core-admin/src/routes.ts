@@ -1,5 +1,10 @@
 import express, { Router } from 'express';
-import { createNewOrganization, getUsersOrganizations } from './controllers/organizations';
+import {
+  addOrganizationMember,
+  createNewOrganization,
+  getOrganizationMembers,
+  getUsersOrganizations,
+} from './controllers/organizations';
 import { createNewEvent, getEvents } from './controllers/events';
 import {
   addNewParticipant,
@@ -27,6 +32,9 @@ router.get('/', (req: any, res: any) => {
 
 router.get('/organizations', getUsersOrganizations);
 router.post('/organizations', createNewOrganization);
+
+router.get('/organizations/:orgId/members', getOrganizationMembers);
+router.post('/organizations/:orgId/members', addOrganizationMember);
 
 router.get('/organizations/:orgId/events', getEvents);
 router.post('/organizations/:orgId/events', createNewEvent);
