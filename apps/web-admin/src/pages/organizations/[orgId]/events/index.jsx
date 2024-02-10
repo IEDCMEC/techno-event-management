@@ -35,7 +35,9 @@ export default function Events() {
   const handleClick = () => {
     router.push(`/organizations/${orgId}/events/new/`);
   };
-
+  const handleRowClick = (row) => {
+    router.push(`/organizations/${orgId}/events/${row.id}`);
+  };
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
     {
@@ -94,16 +96,28 @@ export default function Events() {
             <DataGrid
               rows={events}
               columns={columns}
-              components={{
-                Toolbar: GridToolbar,
-              }}
-              componentsProps={{
+              slotProps={{
                 toolbar: {
                   showQuickFilter: true,
                   quickFilterProps: { debounceMs: 500 },
                 },
               }}
+              slots={{
+                toolbar: GridToolbar,
+              }}
               autoHeight
+              getRowId={(row) => row.id}
+              sx={{
+                // disable cell selection style
+                '.MuiDataGrid-cell:focus': {
+                  outline: 'none',
+                },
+                // pointer cursor on ALL rows
+                '& .MuiDataGrid-row:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+              onRowClick={handleRowClick}
             />
           </ThemeProvider>
           {/*<TableContainer width="100%" height="100%">

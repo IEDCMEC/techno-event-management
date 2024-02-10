@@ -79,15 +79,14 @@ export default function NewOrganization() {
               <DataGrid
                 rows={csvData}
                 columns={columns}
-                components={{
-                  Toolbar: GridToolbar,
-                }}
-                componentsProps={{
+                slotProps={{
                   toolbar: {
                     showQuickFilter: true,
-
                     quickFilterProps: { debounceMs: 500 },
                   },
+                }}
+                slots={{
+                  toolbar: GridToolbar,
                 }}
                 autoHeight
               />
