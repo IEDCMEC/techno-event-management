@@ -35,7 +35,9 @@ export default function Events() {
   const handleClick = () => {
     router.push(`/organizations/${orgId}/events/new/`);
   };
-
+  const handleRowClick = (row) => {
+    router.push(`/organizations/${orgId}/events/${row.id}`);
+  };
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
     {
@@ -51,6 +53,68 @@ export default function Events() {
         >
           {params.value}
         </div>
+      ),
+    },
+    {
+      field: 'check-in',
+      headerName: 'Check-in',
+      width: 200,
+      renderCell: (params) => (
+        <>
+          <div
+            onClick={() => {
+              router.push(
+                `/organizations/${orgId}/events/${params.row?.id}/participants/check-in/new/scanner`,
+              );
+            }}
+            style={{
+              cursor: 'pointer',
+              backgroundColor: 'rgb(128, 90, 213)',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'rgb(100, 70, 183)',
+              },
+              width: '50%',
+              height: '80%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '5px',
+            }}
+          >
+            Check-in
+          </div>
+        </>
+      ),
+    },
+    {
+      field: 'Participants',
+      headerName: 'Participants',
+      width: 200,
+      renderCell: (params) => (
+        <>
+          <Button
+            onClick={() => {
+              router.push(`/organizations/${orgId}/events/${params.row?.id}`);
+            }}
+            style={{
+              cursor: 'pointer',
+              backgroundColor: 'rgb(128, 90, 213)',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'rgb(100, 70, 183)',
+              },
+              width: '50%',
+              height: '80%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '5px',
+            }}
+          >
+            Participants
+          </Button>
+        </>
       ),
     },
   ];
@@ -94,14 +158,14 @@ export default function Events() {
             <DataGrid
               rows={events}
               columns={columns}
-              components={{
-                Toolbar: GridToolbar,
-              }}
-              componentsProps={{
+              slotProps={{
                 toolbar: {
                   showQuickFilter: true,
                   quickFilterProps: { debounceMs: 500 },
                 },
+              }}
+              slots={{
+                toolbar: GridToolbar,
               }}
               autoHeight
             />

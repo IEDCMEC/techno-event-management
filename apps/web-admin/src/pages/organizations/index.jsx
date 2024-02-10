@@ -32,6 +32,9 @@ export default function Organizations() {
   const { loading, get } = useFetch();
 
   const [organizations, setOrganizations] = useState([]);
+  const handleRowClick = (row) => {
+    router.push(`/organizations/${row.id}`);
+  };
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
@@ -92,16 +95,27 @@ export default function Organizations() {
             <DataGrid
               rows={organizations}
               columns={columns}
-              components={{
-                Toolbar: GridToolbar,
-              }}
-              componentsProps={{
+              slotProps={{
                 toolbar: {
                   showQuickFilter: true,
                   quickFilterProps: { debounceMs: 500 },
                 },
               }}
+              slots={{
+                toolbar: GridToolbar,
+              }}
               autoHeight
+              sx={{
+                // disable cell selection style
+                '.MuiDataGrid-cell:focus': {
+                  outline: 'none',
+                },
+                // pointer cursor on ALL rows
+                '& .MuiDataGrid-row:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+              onRowClick={handleRowClick}
             />
           </ThemeProvider>
         </Box>
