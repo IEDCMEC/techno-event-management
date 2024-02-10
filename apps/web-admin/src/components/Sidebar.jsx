@@ -14,6 +14,7 @@ import {
   useMediaQuery,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { Router, useRouter } from 'next/router';
 const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
@@ -39,19 +40,8 @@ const Sidebar = ({ isOpen, onClose }) => {
               techno
             </Text>
           </Box>
-          <Flex paddingY={4} direction="column" gap={2}>
-            <Text fontSize="xl">
-              <Link href="/organizations">Organizations</Link>
-            </Text>
-            <Text fontSize="xl">
-              <Link href="/events">Events</Link>
-            </Text>
-          </Flex>
-          <Box paddingY={4}>
-            <Text fontSize="xl">
-              <a href="/settings">Settings</a>
-            </Text>
-          </Box>
+          <SidebarContents />
+
           <Box paddingY={4}>
             <Button
               onClick={handleLogout}
@@ -75,19 +65,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                   </Text>
                 </DrawerHeader>
                 <DrawerBody>
-                  <Flex direction="column" gap={2}>
-                    <Text fontSize="xl">
-                      <Link href="/organizations">Organizations</Link>
-                    </Text>
-                    <Text fontSize="xl">
-                      <Link href="/events">Events</Link>
-                    </Text>
-                  </Flex>
-                  <Box paddingY={4}>
-                    <Text fontSize="xl">
-                      <a href="/settings">Settings</a>
-                    </Text>
-                  </Box>
+                  <SidebarContents />
+
                   <Box paddingY={4}>
                     <Button
                       onClick={handleLogout}
@@ -104,6 +83,38 @@ const Sidebar = ({ isOpen, onClose }) => {
           </Drawer>
         </>
       )}
+    </>
+  );
+};
+
+const SidebarContents = () => {
+  // Define an array of sidebar items with labels and paths
+  const sidebarItems = [
+    { label: 'Organizations', path: '/organizations' },
+    { label: 'Events', path: '/events' },
+    { label: 'Settings', path: '/settings' },
+  ];
+  const router = useRouter();
+
+  return (
+    <>
+      <Box paddingY={4}>
+        {/* Map over the sidebarItems array to generate sidebar items */}
+        {sidebarItems.map((item, index) => (
+          <Box
+            key={index}
+            _hover={{ color: 'black.400', backgroundColor: 'gray.100', cursor: 'pointer' }}
+            onClick={() => {
+              router.push(item.path);
+            }}
+            transition="outline 0.2s"
+            borderRadius="md"
+            padding="2"
+          >
+            <Text fontSize="lg">{item.label}</Text>
+          </Box>
+        ))}
+      </Box>
     </>
   );
 };
