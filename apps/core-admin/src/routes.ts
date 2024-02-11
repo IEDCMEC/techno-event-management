@@ -18,6 +18,7 @@ import {
   addNewParticipantInBulk,
 } from './controllers/participants';
 import { addNewAttribute, getAllAttributes, getAttributeById } from './controllers/attributes';
+import { fetchAccountDetails, updateAccountDetails } from './controllers/users';
 
 const router: Router = express.Router();
 
@@ -29,6 +30,9 @@ router.get('/', (req: any, res: any) => {
     return res.status(500);
   }
 });
+
+router.get('/users/me', fetchAccountDetails);
+router.put('/users/me', updateAccountDetails);
 
 router.get('/organizations', getUsersOrganizations);
 router.post('/organizations', createNewOrganization);
