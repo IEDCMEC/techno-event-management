@@ -1,12 +1,46 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
+
+import DashboardLayout from '@/layouts/DashboardLayout';
 
 export default function Organization() {
   const router = useRouter();
 
   const { orgId } = router.query;
 
-  useEffect(() => {
-    router.push(`/organizations/${orgId}/events`);
-  }, [orgId]);
+  return (
+    <DashboardLayout>
+      <Flex
+        direction="column"
+        height="100%"
+        width="100%"
+        alignItems="center"
+        justifyContent="center"
+        gap={8}
+      >
+        <Box width="100%" p={8} display="flex" justifyContent="space-between">
+          <Text fontSize="4xl" fontWeight="bold">
+            {orgId}
+          </Text>
+        </Box>
+        <Box width="100%" height="100%">
+          <Button
+            onClick={() => {
+              router.push(`/organizations/${orgId}/events`);
+            }}
+          >
+            Events
+          </Button>
+          <Button
+            onClick={() => {
+              router.push(`/organizations/${orgId}/members`);
+            }}
+          >
+            Members
+          </Button>
+        </Box>
+      </Flex>
+    </DashboardLayout>
+  );
 }
