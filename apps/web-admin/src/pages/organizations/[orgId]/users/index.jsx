@@ -52,7 +52,7 @@ export default function Members() {
   useEffect(() => {
     const fetchmembers = async () => {
       const { data, status } = await get(`/core/organizations/${orgId}/members`);
-      setMembers(data.organizationUsers || []);
+      setMembers(data.users || []);
       console.log(data);
     };
     fetchmembers();
