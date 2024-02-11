@@ -32,20 +32,29 @@ export default function Members() {
   const { loading, get } = useFetch();
 
   const [members, setMembers] = useState([]);
-  const handleClick = () => {
-    router.push(`/organizations/${orgId}/members/new/`);
-  };
-  const handleRowClick = (row) => {
-    router.push(`/organizations/${orgId}/events/${row.id}`);
-  };
+
   const columns = [
-    { field: 'id', headerName: 'ID', width: 150 },
-    { field: 'email', headerName: 'email', width: 150 },
     {
-      field: 'name',
-      headerName: 'Name',
-      width: 200,
-      renderCell: (params) => <div style={{ cursor: 'pointer' }}>{params.value}</div>,
+      field: 'email',
+      headerName: 'Email',
+      width: 150,
+      valueGetter: (params) => params.row.user.email,
+    },
+    {
+      field: 'firstName',
+      headerName: 'First Name',
+      width: 150,
+      valueGetter: (params) => params.row.user.firstName || 'null',
+    },
+    {
+      field: 'lastName',
+      headerName: 'Last Name',
+      width: 150,
+      valueGetter: (params) => params.row.user.lastName || 'null',
+    },
+    {
+      field: 'role',
+      headerName: 'Role',
     },
   ];
 
@@ -53,7 +62,6 @@ export default function Members() {
     const fetchmembers = async () => {
       const { data, status } = await get(`/core/organizations/${orgId}/members`);
       setMembers(data.organizationUsers || []);
-      console.log(data);
     };
     fetchmembers();
   }, [orgId]);
@@ -78,9 +86,11 @@ export default function Members() {
             bgColor="rgb(128, 90, 213)"
             color="white"
             _hover={{ bgColor: 'rgb(100, 70, 183)' }}
-            onClick={handleClick}
+            onClick={() => {
+              router.push(`/organizations/${orgId}/members/new/`);
+            }}
           >
-            Add Event
+            Add Member
           </Button>
         </Box>
         <Box width="100%" height="100%">
