@@ -3,6 +3,9 @@ import { useRouter } from 'next/router';
 import {
   Box,
   Flex,
+  FormControl,
+  FormLabel,
+  Input,
   Table,
   TableCaption,
   Tbody,
@@ -15,10 +18,15 @@ import {
   Text,
 } from '@chakra-ui/react';
 
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+
 import { useFetch } from '@/hooks/useFetch';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
+
+import { ThemeProvider, createTheme } from '@mui/material';
+const MuiTheme = createTheme({});
 
 export default function Events() {
   const router = useRouter();
@@ -28,6 +36,22 @@ export default function Events() {
   const { loading, get } = useFetch();
 
   const [participant, setParticipant] = useState({});
+  const [participantAttributes, setParticipantAttributes] = useState([]);
+
+  const attributeColumns = [
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 150,
+      valueGetter: (params) => params.row.attribute?.name,
+    },
+    {
+      field: 'value',
+      headerName: 'Value',
+      width: 150,
+      valueGetter: (params) => params.value || 'null',
+    },
+  ];
 
   useEffect(() => {
     const fetchParticipant = async () => {
@@ -35,7 +59,7 @@ export default function Events() {
         `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
       );
       setParticipant(data.participant || []);
-      console.log(data);
+      setParticipantAttributes(data.participant.participantAttributes || []);
     };
     fetchParticipant();
   }, [orgId, eventId, participantId]);
@@ -56,42 +80,54 @@ export default function Events() {
           </Text>
         </Box>
         <Box width="100%" height="100%">
-          <Table variant="striped" colorScheme="">
-            <Tbody>
-              <Tr>
-                <Td>id</Td>
-                <Td>{participant.id}</Td>
-              </Tr>
-              <Tr>
-                <Td>createdAt</Td>
-                <Td>{participant.createdAt}</Td>
-              </Tr>
-              <Tr>
-                <Td>firstName</Td>
-                <Td>{participant.firstName}</Td>
-              </Tr>
-              <Tr>
-                <Td>lastName</Td>
-                <Td>{participant.lastName}</Td>
-              </Tr>
-              <Tr>
-                <Td>eventId</Td>
-                <Td>{participant.eventId}</Td>
-              </Tr>
-              <Tr>
-                <Td>organizationId</Td>
-                <Td>{participant.organizationId}</Td>
-              </Tr>
-              <Tr>
-                <Td>participantCheckIn</Td>
-                <Td>{JSON.stringify(participant.participantCheckIn)}</Td>
-              </Tr>
-              <Tr>
-                <Td>updatedAt</Td>
-                <Td>{participant.updatedAt}</Td>
-              </Tr>
-            </Tbody>
-          </Table>
+          <Text>ID: {participant.id}</Text>
+          <FormControl
+            my={4}
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: 4,
+            }}
+          >
+            <FormLabel>First Name</FormLabel>
+            <Input type="text" name="participant.firstName" value={participant.firstName} />
+          </FormControl>
+          <FormControl
+            my={4}
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: 4,
+            }}
+          >
+            <FormLabel>Last Name</FormLabel>
+            <Input type="text" name="participant.lastName" value={participant.lastName} />
+          </FormControl>
+          <Text fontSize="3xl">Attributes</Text>
+
+          <ThemeProvider theme={MuiTheme}>
+            <DataGrid
+              rows={participantAttributes}
+              columns={attributeColumns}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              slots={{
+                toolbar: GridToolbar,
+              }}
+              getRowId={(row) => {
+                return row.attributeId;
+              }}
+              autoHeight
+            />
+          </ThemeProvider>
         </Box>
       </Flex>
     </DashboardLayout>
