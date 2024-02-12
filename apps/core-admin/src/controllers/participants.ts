@@ -164,9 +164,12 @@ export const getAllParticipantsCheckInDetails = async (req: Request, res: Respon
 export const getParticipantById = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId, participantId } = req?.params;
-    const participant = await prisma.participant.findUnique({
+
+    let participant = await prisma.participant.findUnique({
       where: {
         id: participantId,
+        organizationId: orgId,
+        eventId,
       },
       include: {
         participantCheckIn: {
@@ -175,13 +178,46 @@ export const getParticipantById = async (req: Request, res: Response) => {
             checkedInByUser: true,
           },
         },
-        participantAttributes: true,
+        participantAttributes: {
+          include: {
+            attribute: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        participantExtras: true,
+        participantExtrasCheckIn: true,
       },
     });
 
     if (!participant) {
       return res.status(500).json({ error: 'Something went wrong' });
     }
+
+    const attributes = await prisma.attributes.findMany({
+      where: {
+        organizationId: orgId,
+        eventId,
+      },
+    });
+
+    if (!attributes) {
+      return res.status(500).json({ error: 'Something went wrong' });
+    }
+
+    attributes.forEach((attribute: any) => {
+      if (!participant?.participantAttributes?.find((pa) => pa.attributeId === attribute.id)) {
+        participant.participantAttributes.push({
+          attributeId: attribute.id,
+          value: null,
+          participantId: participant.id,
+          attribute: attribute,
+        });
+      }
+    });
 
     return res.status(200).json({ participant });
   } catch (err: any) {
@@ -219,19 +255,43 @@ export const setParticipantAttribute = async (req: Request, res: Response) => {
     const { orgId, eventId, participantId } = req?.params;
     const { attributeId, value } = req?.body;
 
-    const participantAttribute = await prisma.participantAttributes.create({
-      data: {
+    const participantAttributeExists = await prisma.participantAttributes.findFirst({
+      where: {
         participantId,
         attributeId,
-        value,
       },
     });
 
-    if (!participantAttribute) {
-      return res.status(500).json({ error: 'Something went wrong' });
-    }
+    if (participantAttributeExists) {
+      const participantAttribute = await prisma.participantAttributes.update({
+        where: {
+          id: participantAttributeExists.id,
+        },
+        data: {
+          value,
+        },
+      });
 
-    return res.status(200).json({ participantAttribute });
+      if (!participantAttribute) {
+        return res.status(500).json({ error: 'Something went wrong' });
+      }
+
+      return res.status(200).json({ participantAttribute });
+    } else {
+      const participantAttribute = await prisma.participantAttributes.create({
+        data: {
+          participantId,
+          attributeId,
+          value,
+        },
+      });
+
+      if (!participantAttribute) {
+        return res.status(500).json({ error: 'Something went wrong' });
+      }
+
+      return res.status(200).json({ participantAttribute });
+    }
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });
