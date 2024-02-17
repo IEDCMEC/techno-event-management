@@ -1,0 +1,9 @@
+{
+  "extends": "tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./build/",
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

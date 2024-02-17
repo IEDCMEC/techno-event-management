@@ -63,6 +63,9 @@ export const getOrganizationMembers = async (req: Request, res: Response) => {
       where: {
         organizationId,
       },
+      include: {
+        user: true,
+      },
     });
     const users = await prisma.user.findMany({
       where: {
