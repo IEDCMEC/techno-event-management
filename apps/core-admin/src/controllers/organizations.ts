@@ -67,8 +67,15 @@ export const getOrganizationMembers = async (req: Request, res: Response) => {
         user: true,
       },
     });
+    const users = await prisma.user.findMany({
+      where: {
+        id: {
+          in: organizationUsers.map((ou: { userId: any }) => ou.userId),
+        },
+      },
+    });
 
-    return res.status(200).json({ organizationUsers });
+    return res.status(200).json({ organizationUsers, users });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });

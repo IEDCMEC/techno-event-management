@@ -33,7 +33,7 @@ export default function Organizations() {
 
   const [organizations, setOrganizations] = useState([]);
   const handleRowClick = (row) => {
-    router.push(`/organizations/${row.id}`);
+    router.push(`/organizations/${row.id}/events`);
   };
 
   const columns = [
