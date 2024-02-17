@@ -101,9 +101,6 @@ export default function Events() {
             <DataGrid
               rows={participants}
               columns={columns}
-              slots={{
-                Toolbar: GridToolbar,
-              }}
               slotProps={{
                 toolbar: {
                   showQuickFilter: true,
@@ -121,6 +118,9 @@ export default function Events() {
                 '& .MuiDataGrid-row:hover': {
                   cursor: 'pointer',
                 },
+              }}
+              slots={{
+                toolbar: GridToolbar,
               }}
               onRowClick={handleRowClick}
             />
