@@ -5,7 +5,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { useFetch } from '@/hooks/useFetch';
 
 import { useRouter } from 'next/router';
-import { Flex, Button } from '@chakra-ui/react';
+import { Flex, Button, Box, Text } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -68,10 +68,22 @@ export default function NewOrganization() {
         height="100%"
         width="100%"
         alignItems="center"
-        justifyContent="center"
+        justifyContent="start"
         gap={8}
       >
-        <div>
+        <Box width="100%" p={8} display="flex" justifyContent="space-between">
+          <Text fontSize="4xl" fontWeight="bold">
+            Participants
+          </Text>
+        </Box>
+        <Box
+          height="100%"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          gap={8}
+        >
           <h1>CSV Uploader</h1>
           <input type="file" accept=".csv" onChange={handleFileUpload} />
           {csvData && (
@@ -92,8 +104,8 @@ export default function NewOrganization() {
               />
             </ThemeProvider>
           )}
-        </div>
-        <Button onClick={handleSubmit}>Confirm and Add</Button>
+          <Button onClick={handleSubmit}>Confirm and Add</Button>
+        </Box>
       </Flex>
     </DashboardLayout>
   );

@@ -37,7 +37,7 @@ export default function Members() {
     {
       field: 'email',
       headerName: 'Email',
-      width: 150,
+      width: 250,
       valueGetter: (params) => params.row.user.email,
     },
     {
@@ -110,36 +110,6 @@ export default function Members() {
               autoHeight
             />
           </ThemeProvider>
-          {/*<TableContainer width="100%" height="100%">
-            <Table variant="simple">
-              <TableCaption>members</TableCaption>
-              <Thead>
-                <Tr>
-                  <Th>ID</Th>
-                  <Th>Name</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {members.map((event) => (
-                  <Tr
-                    key={event?.id}
-                    onClick={() => {
-                      router.push(`/organizations/${orgId}/members/${event?.id}`);
-                    }}
-                    cursor="pointer"
-                  >
-                    <Td>{event?.id}</Td>
-                    <Td>{event?.name}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>{members.length} members</Th>
-                </Tr>
-              </Tfoot>
-            </Table>
-                  </TableContainer>*/}
         </Box>
       </Flex>
     </DashboardLayout>

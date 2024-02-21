@@ -32,9 +32,6 @@ export default function Organizations() {
   const { loading, get } = useFetch();
 
   const [organizations, setOrganizations] = useState([]);
-  const handleRowClick = (row) => {
-    router.push(`/organizations/${row.id}/events`);
-  };
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
@@ -62,9 +59,7 @@ export default function Organizations() {
     };
     fetchOrganizations();
   }, []);
-  const handleClick = () => {
-    router.push('organizations/new');
-  };
+
   return (
     <DashboardLayout>
       <Flex
@@ -85,7 +80,9 @@ export default function Organizations() {
             bgColor="rgb(128, 90, 213)"
             color="white"
             _hover={{ bgColor: 'rgb(100, 70, 183)' }}
-            onClick={handleClick}
+            onClick={() => {
+              router.push('organizations/new');
+            }}
           >
             Add Organization
           </Button>
@@ -115,41 +112,12 @@ export default function Organizations() {
                   cursor: 'pointer',
                 },
               }}
-              onRowClick={handleRowClick}
+              onRowClick={(row) => {
+                router.push(`/organizations/${row.id}/events`);
+              }}
             />
           </ThemeProvider>
         </Box>
-        {/* <TableContainer width="100%" height="100%">
-          <Table variant="simple">
-            <TableCaption>Organizations</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>ID</Th>
-                <Th>Name</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {organizations.map((organization) => (
-                <Tr
-                  key={organization?.id}
-                  onClick={() => {
-                    router.push(`/organizations/${organization.id}`);
-                  }}
-                  cursor="pointer"
-                >
-                  <Td>{organization?.id}</Td>
-                  <Td>{organization?.name}</Td>
-                </Tr>
-              ))}
-            </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>{organizations.length} organizations</Th>
-              </Tr>
-            </Tfoot>
-          </Table>
-        </TableContainer> */}
-        {/* </Box> */}
       </Flex>
     </DashboardLayout>
   );

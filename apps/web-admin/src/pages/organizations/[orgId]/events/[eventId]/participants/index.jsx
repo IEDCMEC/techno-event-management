@@ -32,7 +32,7 @@ export default function Events() {
 
   const [participants, setParticipants] = useState([]);
   const columns = [
-    { field: 'id', headerName: 'ID', width: 150 },
+    { field: 'id', headerName: 'ID', width: 300 },
     { field: 'firstName', headerName: 'First Name', width: 200 },
     { field: 'lastName', headerName: 'Last Name', width: 200 },
   ];

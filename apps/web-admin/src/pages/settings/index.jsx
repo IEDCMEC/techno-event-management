@@ -61,7 +61,6 @@ export default function Settings() {
             <Text fontSize="2xl" fontWeight="bold">
               Account Settings
             </Text>
-            {JSON.stringify(accountDetails)}
             <Box width="100%" display="flex" flexDirection="column" justifyContent="start" gap={4}>
               <FormControl
                 isRequired
@@ -84,7 +83,6 @@ export default function Settings() {
                   }}
                 />
               </FormControl>
-
               <FormControl
                 isRequired
                 my={4}
