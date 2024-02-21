@@ -64,7 +64,7 @@ export default function NewOrganization() {
           <CardBody>
             <form onSubmit={handleSubmit}>
               <FormControl isRequired my={4}>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>First Name</FormLabel>
                 <Input
                   type="text"
                   name="firstName"

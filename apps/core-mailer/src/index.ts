@@ -32,15 +32,7 @@ app.get('/health', (req: Request, res: Response) => {
   }
 });
 
-app.post('/send-mail', async (req: Request, res: Response) => {
-  const { email, subject, text } = req.body;
-  try {
-    await sendMail(email, subject, text);
-    res.status(200).send('Email sent successfully');
-  } catch (error) {
-    res.status(500).send('Email failed to send');
-  }
-});
+app.post('/send-mail', sendMail);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

@@ -47,7 +47,7 @@ export default function Events() {
         height="100%"
         width="100%"
         alignItems="center"
-        justifyContent="center"
+        justifyContent="start "
         gap={8}
       >
         <Box width="100%" p={8}>

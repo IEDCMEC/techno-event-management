@@ -1,10 +1,10 @@
-FROM node:16-alpine AS builder
-RUN apk update && apk add --no-cache libc6-compat
-RUN corepack enable && corepack prepare pnpm@8.15.1 --activate 
+FROM node:18-alpine AS builder
+RUN apk add --no-cache libc6-compat
+RUN apk update
 
 WORKDIR /app
 
-RUN npm install turbo
+RUN npm install -g pnpm turbo
 
 COPY ../../. .
 

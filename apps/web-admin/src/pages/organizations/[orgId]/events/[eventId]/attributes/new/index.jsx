@@ -49,41 +49,43 @@ export default function NewOrganization() {
         direction="column"
         height="100%"
         width="100%"
-        alignItems="center"
-        justifyContent="center"
+        alignItems="start"
+        justifyContent="start"
         gap={8}
       >
-        <Box textAlign="center">
-          <Text fontSize="3xl" fontWeight="bold">
-            Add new attribute
+        <Box width="100%" p={8} display="flex" justifyContent="space-between">
+          <Text fontSize="4xl" fontWeight="bold">
+            Add New Attribute
           </Text>
         </Box>
-        <Card width="100%" maxWidth="400px" height="auto">
-          <CardBody>
-            <form onSubmit={handleSubmit}>
-              <FormControl isRequired my={4}>
-                <FormLabel>Name</FormLabel>
-                <Input
-                  type="text"
-                  name="name"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                />
-              </FormControl>
-              <Button
-                type="submit"
-                width="100%"
-                my="4"
-                isLoading={loading}
-                loadingText="Please Wait"
-              >
-                Add
-              </Button>
-            </form>
-          </CardBody>
-        </Card>
+        <Flex width="100%" justifyContent="center">
+          <Card width="100%" maxWidth="400px" height="auto">
+            <CardBody>
+              <form onSubmit={handleSubmit}>
+                <FormControl isRequired my={4}>
+                  <FormLabel>Name</FormLabel>
+                  <Input
+                    type="text"
+                    name="name"
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                    }}
+                  />
+                </FormControl>
+                <Button
+                  type="submit"
+                  width="100%"
+                  my="4"
+                  isLoading={loading}
+                  loadingText="Please Wait"
+                >
+                  Add
+                </Button>
+              </form>
+            </CardBody>
+          </Card>
+        </Flex>
       </Flex>
     </DashboardLayout>
   );

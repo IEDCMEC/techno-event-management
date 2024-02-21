@@ -15,9 +15,16 @@ import {
   getParticipantAttributes,
   setParticipantAttribute,
   checkOutParticipant,
-  addNewParticipantInBulk,
+  editParticipant,
+  updateParticipantAttribute,
 } from './controllers/participants';
-import { addNewAttribute, getAllAttributes, getAttributeById } from './controllers/attributes';
+import {
+  addNewAttribute,
+  editAttribute,
+  getAllAttributes,
+  getAttributeById,
+  getAttributeParticipants,
+} from './controllers/attributes';
 import { fetchAccountDetails, updateAccountDetails } from './controllers/users';
 
 const router: Router = express.Router();
@@ -45,7 +52,7 @@ router.post('/organizations/:orgId/events', createNewEvent);
 
 router.get('/organizations/:orgId/events/:eventId/participants', getAllParticipants);
 router.post('/organizations/:orgId/events/:eventId/participants', addNewParticipant);
-router.post('/organizations/:orgId/events/:eventId/bulkParticipants', addNewParticipantInBulk);
+router.put('/organizations/:orgId/events/:eventId/participants/:participantId', editParticipant);
 
 router.get(
   '/organizations/:orgId/events/:eventId/participants/check-in',
@@ -69,9 +76,18 @@ router.post(
   '/organizations/:orgId/events/:eventId/participants/:participantId/attributes',
   setParticipantAttribute,
 );
+router.put(
+  '/organizations/:orgId/events/:eventId/participants/:participantId/attributes/:attributeId',
+  updateParticipantAttribute,
+);
 
 router.get('/organizations/:orgId/events/:eventId/attributes', getAllAttributes);
 router.get('/organizations/:orgId/events/:eventId/attributes/:attributeId', getAttributeById);
+router.get(
+  '/organizations/:orgId/events/:eventId/attributes/:attributeId/participants',
+  getAttributeParticipants,
+);
+router.put('/organizations/:orgId/events/:eventId/attributes/:attributeId', editAttribute);
 router.post('/organizations/:orgId/events/:eventId/attributes', addNewAttribute);
 
 export default router;

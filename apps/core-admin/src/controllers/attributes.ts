@@ -28,7 +28,7 @@ export const getAttributeById = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId, attributeId } = req?.params;
 
-    const attribute = await prisma.attributes.findMany({
+    const attribute = await prisma.attributes.findFirst({
       where: {
         organizationId: orgId,
         eventId,
@@ -54,6 +54,29 @@ export const getAttributeById = async (req: Request, res: Response) => {
   }
 };
 
+export const editAttribute = async (req: Request, res: Response) => {
+  try {
+    const { orgId, eventId, attributeId } = req?.params;
+    const { name } = req?.body;
+
+    if (!name) return res.status(400).json({ error: 'Name is required' });
+
+    const updatedAttribute = await prisma.attributes.update({
+      where: {
+        id: attributeId,
+      },
+      data: {
+        name,
+      },
+    });
+
+    return res.status(200).json({ updatedAttribute });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
 export const addNewAttribute = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId } = req?.params;
@@ -68,6 +91,31 @@ export const addNewAttribute = async (req: Request, res: Response) => {
     });
 
     return res.status(200).json({ newAttribute });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+export const getAttributeParticipants = async (req: Request, res: Response) => {
+  try {
+    const { orgId, eventId, attributeId } = req?.params;
+
+    const participants = await prisma.participant.findMany({
+      where: {
+        eventId,
+        organizationId: orgId,
+      },
+      include: {
+        participantAttributes: {
+          where: {
+            attributeId,
+          },
+        },
+      },
+    });
+
+    return res.status(200).json({ participants });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });

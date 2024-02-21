@@ -24,7 +24,7 @@ export default function Organization() {
             {orgId}
           </Text>
         </Box>
-        <Box width="100%" height="100%">
+        <Flex width="100%" height="100%" gap={4}>
           <Button
             onClick={() => {
               router.push(`/organizations/${orgId}/events`);
@@ -39,7 +39,7 @@ export default function Organization() {
           >
             Members
           </Button>
-        </Box>
+        </Flex>
       </Flex>
     </DashboardLayout>
   );
