@@ -71,9 +71,8 @@ export default function Members() {
               <TableCaption>Members</TableCaption>
               <Thead>
                 <Tr>
-                  <Th>ID</Th>
-                  <Th>Email</Th>
                   <Th>Role</Th>
+                  <Th>Email</Th>
                   <Th>First Name</Th>
                   <Th>Last Name</Th>
                 </Tr>
@@ -81,9 +80,8 @@ export default function Members() {
               <Tbody>
                 {members.map((member) => (
                   <Tr key={member?.id}>
-                    <Td>{member?.id}</Td>
-                    <Td>{member?.email}</Td>
                     <Td>{member?.role}</Td>
+                    <Td>{member?.email}</Td>
                     <Td>{member?.firstName}</Td>
                     <Td>{member?.lastName}</Td>
                   </Tr>
