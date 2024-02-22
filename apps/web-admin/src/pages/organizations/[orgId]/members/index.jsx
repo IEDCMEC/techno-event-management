@@ -20,9 +20,6 @@ import { useFetch } from '@/hooks/useFetch';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { ThemeProvider, createTheme } from '@mui/material';
-const MuiTheme = createTheme({});
 
 export default function Members() {
   const router = useRouter();
@@ -32,31 +29,6 @@ export default function Members() {
   const { loading, get } = useFetch();
 
   const [members, setMembers] = useState([]);
-
-  const columns = [
-    {
-      field: 'email',
-      headerName: 'Email',
-      width: 250,
-      valueGetter: (params) => params.row.user.email,
-    },
-    {
-      field: 'firstName',
-      headerName: 'First Name',
-      width: 150,
-      valueGetter: (params) => params.row.user.firstName || 'null',
-    },
-    {
-      field: 'lastName',
-      headerName: 'Last Name',
-      width: 150,
-      valueGetter: (params) => params.row.user.lastName || 'null',
-    },
-    {
-      field: 'role',
-      headerName: 'Role',
-    },
-  ];
 
   useEffect(() => {
     const fetchmembers = async () => {
@@ -78,7 +50,7 @@ export default function Members() {
       >
         <Box width="100%" p={8} display="flex" justifyContent="space-between">
           <Text fontSize="4xl" fontWeight="bold">
-            members
+            Members
           </Text>
           <Button
             padding="4"
@@ -94,22 +66,36 @@ export default function Members() {
           </Button>
         </Box>
         <Box width="100%" height="100%">
-          <ThemeProvider theme={MuiTheme}>
-            <DataGrid
-              rows={members}
-              columns={columns}
-              slotProps={{
-                toolbar: {
-                  showQuickFilter: true,
-                  quickFilterProps: { debounceMs: 500 },
-                },
-              }}
-              slots={{
-                toolbar: GridToolbar,
-              }}
-              autoHeight
-            />
-          </ThemeProvider>
+          <TableContainer width="100%" height="100%">
+            <Table variant="simple">
+              <TableCaption>Members</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>ID</Th>
+                  <Th>Email</Th>
+                  <Th>Role</Th>
+                  <Th>First Name</Th>
+                  <Th>Last Name</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {members.map((member) => (
+                  <Tr key={member?.id}>
+                    <Td>{member?.id}</Td>
+                    <Td>{member?.email}</Td>
+                    <Td>{member?.role}</Td>
+                    <Td>{member?.firstName}</Td>
+                    <Td>{member?.lastName}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+              <Tfoot>
+                <Tr>
+                  <Th>{members.length} members</Th>
+                </Tr>
+              </Tfoot>
+            </Table>
+          </TableContainer>
         </Box>
       </Flex>
     </DashboardLayout>
