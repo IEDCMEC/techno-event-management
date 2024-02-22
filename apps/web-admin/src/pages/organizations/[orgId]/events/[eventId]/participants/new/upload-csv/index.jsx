@@ -131,7 +131,9 @@ export default function NewOrganization() {
                   autoHeight
                 />
               </ThemeProvider>
-              <Button onClick={handleSubmit}>Confirm and Add</Button>
+              <Button onClick={handleSubmit} isLoading={loading}>
+                Confirm and Add
+              </Button>
             </>
           )}
         </Box>
