@@ -1,17 +1,38 @@
-import { Card, CardBody, Image, Text } from '@chakra-ui/react';
+import { Card, CardBody, Image, Text, Box } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 const ItemCard = (props) => {
-  if ((props.logo = '')) {
-    props.logo = '/ThisIsAnORG.png';
+  const router = useRouter();
+
+  if (props.logo == '') {
+    var logo = '/ThisIsAnORG.png';
+  } else {
+    var logo = props.logo;
   }
   return (
-    <Card maxW="md">
-      <CardBody>
-        <Image src={props.logo} alt="logo of org" maxH="100px" maxW="150px" borderRadius="lg" />
-        <Text as="b" fontSize="xl">
-          {props.name}{' '}
-        </Text>
-      </CardBody>
-    </Card>
+    <Box
+      boxShadow="base"
+      backgroundColor="D9D9D9"
+      borderRadius="30px"
+      borderColor="gray"
+      height="180px"
+      width="180px"
+      display="flex"
+      flexDir="column"
+      alignItems="center"
+    >
+      <Image
+        src={logo}
+        alt="logo of org"
+        maxH="100px"
+        maxW="150px"
+        borderRadius="30px"
+        p="10px"
+        textAlign="center"
+      />
+      <Text as="b" fontSize="xl" maxW="150px" textAlign="center">
+        {props.name}
+      </Text>
+    </Box>
   );
 };
 

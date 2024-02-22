@@ -29,7 +29,6 @@ import ItemCard from '@/components/ItemCard';
 
 export default function Organizations() {
   const router = useRouter();
-
   const { orgId } = router.query;
 
   const { loading, get } = useFetch();
@@ -97,20 +96,46 @@ export default function Organizations() {
             Organizations
           </Text>
         </Box>
-        <Button
-          padding="4"
-          minWidth="-moz-initial"
-          bgColor="rgb(128, 90, 213)"
-          color="white"
-          _hover={{ bgColor: 'rgb(100, 70, 183)' }}
-          onClick={handleClick}
-        >
-          Add Organization
-        </Button>
 
-        <Box width="100%" height="100%">
-          <ThemeProvider theme={MuiTheme}>
-            <DataGrid
+        <Box
+          display="block"
+          borderRadius="30px"
+          gap="30px"
+          backgroundColor="#F4F4F4"
+          p="30px"
+          marginLeft="30px"
+        >
+          <Button
+            padding="4"
+            minWidth="-moz-initial"
+            bgColor="rgb(128, 90, 213)"
+            color="white"
+            _hover={{ bgColor: 'rgb(100, 70, 183)' }}
+            onClick={handleClick}
+            marginBottom="30px"
+          >
+            Add Organization
+          </Button>
+          <Box width="100%" height="100%" borderRadius="30px" display="flex" gap="30px">
+            {/* <ThemeProvider theme={MuiTheme}> */}
+            {organizations.map((organization) => {
+              return (
+                <Box
+                  key={organization.id}
+                  as="button"
+                  width="180px"
+                  height=" 180px"
+                  onClick={() => {
+                    router.push(`/organizations/${organization.id}`);
+                  }}
+                >
+                  <ItemCard name={organization.name} logo="" />
+                </Box>
+              );
+            })}
+          </Box>
+
+          {/*<DataGrid
               rows={organizations}
               columns={columns}
               slotProps={{
@@ -134,8 +159,9 @@ export default function Organizations() {
                 },
               }}
               onRowClick={handleRowClick}
-            />
-          </ThemeProvider>
+            />*/}
+
+          {/* </ThemeProvider> */}
         </Box>
         {/* <TableContainer width="100%" height="100%">
           <Table variant="simple">
