@@ -5,6 +5,7 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Button,
   Input,
   Table,
   TableCaption,
@@ -33,25 +34,24 @@ export default function Events() {
 
   const { orgId, eventId, participantId } = router.query;
 
-  const { loading, get } = useFetch();
+  const { loading, get, put } = useFetch();
 
   const [participant, setParticipant] = useState({});
   const [participantAttributes, setParticipantAttributes] = useState([]);
 
-  const attributeColumns = [
-    {
-      field: 'name',
-      headerName: 'Name',
-      width: 150,
-      valueGetter: (params) => params.row.attribute?.name,
-    },
-    {
-      field: 'value',
-      headerName: 'Value',
-      width: 150,
-      valueGetter: (params) => params.value || 'null',
-    },
-  ];
+  const handleSubmit = async () => {
+    const { status } = await put(
+      `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
+      {},
+      { firstName: participant.firstName, lastName: participant.lastName },
+    );
+
+    if (status === 200) {
+      alert('Participant updated successfully');
+    } else {
+      alert('Failed to update participant');
+    }
+  };
 
   useEffect(() => {
     const fetchParticipant = async () => {
@@ -75,60 +75,76 @@ export default function Events() {
         gap={8}
       >
         <Box width="100%" p={8}>
-          <Text fontSize="4xl" fontWeight="bold">
-            Participant Details
+          <Flex justifyContent="space-between" alignItems="center">
+            <Text fontSize="4xl" fontWeight="bold">
+              Participant Details
+            </Text>
+            <Button onClick={handleSubmit}>Save</Button>
+          </Flex>
+        </Box>
+        <Flex width="100%" height="100%" flexDirection="column" gap={4}>
+          <Flex flexDirection="column" justifyContent="center" alignItems="start" gap={4}>
+            <Text>ID: {participant.id}</Text>
+            <Flex alignItems="center" gap={4}>
+              <Text fontWeight={500}>First Name</Text>
+              <Input
+                type="text"
+                name="firstName"
+                width="auto"
+                value={participant.firstName}
+                onChange={(e) => {
+                  setParticipant({ ...participant, firstName: e.target.value });
+                }}
+              />
+            </Flex>
+            <Flex alignItems="center" gap={4}>
+              <Text fontWeight={500}>Last Name</Text>
+              <Input
+                type="text"
+                name="lastName"
+                width="auto"
+                value={participant.lastName}
+                onChange={(e) => {
+                  setParticipant({ ...participant, lastName: e.target.value });
+                }}
+              />
+            </Flex>
+          </Flex>
+          <Text fontSize="3xl" fontWeight={500}>
+            Attributes
           </Text>
-        </Box>
-        <Box width="100%" height="100%">
-          <Text>ID: {participant.id}</Text>
-          <FormControl
-            my={4}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: 4,
-            }}
-          >
-            <FormLabel>First Name</FormLabel>
-            <Input type="text" name="participant.firstName" value={participant.firstName} />
-          </FormControl>
-          <FormControl
-            my={4}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: 4,
-            }}
-          >
-            <FormLabel>Last Name</FormLabel>
-            <Input type="text" name="participant.lastName" value={participant.lastName} />
-          </FormControl>
-          <Text fontSize="3xl">Attributes</Text>
-
-          <ThemeProvider theme={MuiTheme}>
-            <DataGrid
-              rows={participantAttributes}
-              columns={attributeColumns}
-              slotProps={{
-                toolbar: {
-                  showQuickFilter: true,
-                  quickFilterProps: { debounceMs: 500 },
-                },
-              }}
-              slots={{
-                toolbar: GridToolbar,
-              }}
-              getRowId={(row) => {
-                return row.attributeId;
-              }}
-              autoHeight
-            />
-          </ThemeProvider>
-        </Box>
+          <TableContainer width="100%" height="100%">
+            <Table variant="simple">
+              <TableCaption>Attributes</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>ID</Th>
+                  <Th>Name</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {participantAttributes.map((participantAttribute) => (
+                  <Tr key={participantAttribute?.id}>
+                    <Td>{participantAttribute?.attribute?.name}</Td>
+                    <Td>
+                      <Input
+                        type="text"
+                        name="lastName"
+                        width="auto"
+                        value={participantAttribute?.value}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+              <Tfoot>
+                <Tr>
+                  <Th>{participantAttributes.length} attributes</Th>
+                </Tr>
+              </Tfoot>
+            </Table>
+          </TableContainer>
+        </Flex>
       </Flex>
     </DashboardLayout>
   );

@@ -5,7 +5,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { useFetch } from '@/hooks/useFetch';
 
 import { useRouter } from 'next/router';
-import { Flex, Button } from '@chakra-ui/react';
+import { Flex, Button, Box, Text } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -19,6 +19,10 @@ export default function NewOrganization() {
   const { orgId, eventId } = router.query;
 
   const [csvData, setCSVData] = useState(null);
+  const [columns, setColumns] = useState([
+    { field: 'firstName', headerName: 'First Name' },
+    { field: 'lastName', headerName: 'Last Name' },
+  ]);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -32,7 +36,30 @@ export default function NewOrganization() {
         });
 
         const dataWithId = filteredData.map((row, index) => ({ ...row, id: index + 1 }));
+
+        setColumns(
+          Object.keys(dataWithId[0])
+            .filter((key) => key !== 'id')
+            .map((key) => ({ field: key, headerName: key })),
+        );
+
+        if (
+          columns.find(
+            (column) =>
+              column.field !== 'firstName' &&
+              column.field !== 'lastName' &&
+              !column.field.startsWith('_'),
+          )
+        ) {
+          alert('Extra fields should be prefixed with an underscore (_).');
+        }
+
+        if (columns.find((column) => column.field !== 'firstName' || column.field !== 'lastName')) {
+          alert('The extra fields marked with _ will be inserted as attributes.');
+        }
+
         setCSVData(dataWithId);
+        console.log(dataWithId);
       },
       error: (error) => {
         console.error('Error parsing CSV:', error);
@@ -56,11 +83,6 @@ export default function NewOrganization() {
     }
   };
 
-  const columns = [
-    { field: 'firstName', headerName: 'First Name', width: 150 },
-    { field: 'lastName', headerName: 'Last Name', width: 150 },
-  ];
-
   return (
     <DashboardLayout>
       <Flex
@@ -68,32 +90,53 @@ export default function NewOrganization() {
         height="100%"
         width="100%"
         alignItems="center"
-        justifyContent="center"
+        justifyContent="start"
         gap={8}
       >
-        <div>
-          <h1>CSV Uploader</h1>
+        <Box width="100%" p={8} display="flex" justifyContent="space-between">
+          <Text fontSize="4xl" fontWeight="bold">
+            Participants
+          </Text>
+        </Box>
+        <Box
+          height="100%"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          gap={8}
+        >
+          {!csvData && (
+            <Text fontSize="xl">
+              Upload a CSV file of participants. The required columns are firstName, lastName. Extra
+              columns should be prefixed with an underscore (_).
+            </Text>
+          )}
           <input type="file" accept=".csv" onChange={handleFileUpload} />
           {csvData && (
-            <ThemeProvider theme={MuiTheme}>
-              <DataGrid
-                rows={csvData}
-                columns={columns}
-                slotProps={{
-                  toolbar: {
-                    showQuickFilter: true,
-                    quickFilterProps: { debounceMs: 500 },
-                  },
-                }}
-                slots={{
-                  toolbar: GridToolbar,
-                }}
-                autoHeight
-              />
-            </ThemeProvider>
+            <>
+              <ThemeProvider theme={MuiTheme}>
+                <DataGrid
+                  rows={csvData}
+                  columns={columns}
+                  slotProps={{
+                    toolbar: {
+                      showQuickFilter: true,
+                      quickFilterProps: { debounceMs: 500 },
+                    },
+                  }}
+                  slots={{
+                    toolbar: GridToolbar,
+                  }}
+                  autoHeight
+                />
+              </ThemeProvider>
+              <Button onClick={handleSubmit} isLoading={loading}>
+                Confirm and Add
+              </Button>
+            </>
           )}
-        </div>
-        <Button onClick={handleSubmit}>Confirm and Add</Button>
+        </Box>
       </Flex>
     </DashboardLayout>
   );

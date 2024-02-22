@@ -59,7 +59,7 @@ export const getOrganizationMembers = async (req: Request, res: Response) => {
   try {
     const organizationId = req.params.orgId;
 
-    const organizationUsers = await prisma.organizationUser.findMany({
+    let organizationUsers = await prisma.organizationUser.findMany({
       where: {
         organizationId,
       },
@@ -67,6 +67,18 @@ export const getOrganizationMembers = async (req: Request, res: Response) => {
         user: true,
       },
     });
+
+    organizationUsers = organizationUsers.map((organizationUser: any) => ({
+      id: organizationUser.id,
+      role: organizationUser.role,
+      createdAt: organizationUser.createdAt,
+      updatedAt: organizationUser.updatedAt,
+      organizationId: organizationUser.organizationId,
+      userId: organizationUser.userId,
+      firstName: organizationUser.user.firstName,
+      lastName: organizationUser.user.lastName,
+      email: organizationUser.user.email,
+    }));
 
     return res.status(200).json({ organizationUsers });
   } catch (err: any) {

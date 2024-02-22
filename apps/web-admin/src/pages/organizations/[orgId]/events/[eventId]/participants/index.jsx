@@ -32,7 +32,7 @@ export default function Events() {
 
   const [participants, setParticipants] = useState([]);
   const columns = [
-    { field: 'id', headerName: 'ID', width: 150 },
+    { field: 'id', headerName: 'ID', width: 300 },
     { field: 'firstName', headerName: 'First Name', width: 200 },
     { field: 'lastName', headerName: 'Last Name', width: 200 },
   ];
@@ -101,9 +101,6 @@ export default function Events() {
             <DataGrid
               rows={participants}
               columns={columns}
-              slots={{
-                Toolbar: GridToolbar,
-              }}
               slotProps={{
                 toolbar: {
                   showQuickFilter: true,
@@ -121,6 +118,9 @@ export default function Events() {
                 '& .MuiDataGrid-row:hover': {
                   cursor: 'pointer',
                 },
+              }}
+              slots={{
+                toolbar: GridToolbar,
               }}
               onRowClick={handleRowClick}
             />

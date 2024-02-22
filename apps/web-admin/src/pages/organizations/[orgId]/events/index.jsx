@@ -142,16 +142,25 @@ export default function Events() {
           <Text fontSize="4xl" fontWeight="bold">
             Events
           </Text>
-          <Button
-            padding="4"
-            minWidth="-moz-initial"
-            bgColor="rgb(128, 90, 213)"
-            color="white"
-            _hover={{ bgColor: 'rgb(100, 70, 183)' }}
-            onClick={handleClick}
-          >
-            Add Event
-          </Button>
+          <Box display={'flex'} gap={4}>
+            <Button
+              padding="4"
+              minWidth="-moz-initial"
+              bgColor="rgb(128, 90, 213)"
+              color="white"
+              _hover={{ bgColor: 'rgb(100, 70, 183)' }}
+              onClick={handleClick}
+            >
+              Add Event
+            </Button>
+            <Button
+              onClick={() => {
+                router.push(`/organizations/${orgId}/members`);
+              }}
+            >
+              Members
+            </Button>
+          </Box>
         </Box>
         <Box width="100%" height="100%">
           <ThemeProvider theme={MuiTheme}>

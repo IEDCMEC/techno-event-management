@@ -1,9 +1,12 @@
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import {
   Box,
   Flex,
   Table,
   TableCaption,
+  Card,
+  CardBody,
   Tbody,
   Td,
   Tfoot,
@@ -34,9 +37,6 @@ export default function Organizations() {
   const { loading, get } = useFetch();
 
   const [organizations, setOrganizations] = useState([]);
-  const handleRowClick = (row) => {
-    router.push(`/organizations/${row.id}`);
-  };
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
@@ -64,9 +64,7 @@ export default function Organizations() {
     };
     fetchOrganizations();
   }, []);
-  const handleClick = () => {
-    router.push('organizations/new');
-  };
+
   return (
     <DashboardLayout>
       <Flex
@@ -162,38 +160,36 @@ export default function Organizations() {
             />*/}
 
           {/* </ThemeProvider> */}
+          {organizations.length === 0 && (
+            <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
+              <Text fontSize="2xl" fontWeight="semibold">
+                You do not have any organizations yet. Please{' '}
+                <Link href="/organizations/new">
+                  <Text as="span" color="purple" textDecoration="underline">
+                    create one
+                  </Text>
+                </Link>{' '}
+                to start managing events.
+              </Text>
+            </Flex>
+          )}
+          <Flex gap={4}>
+            {organizations.map((organization) => (
+              <Card
+                key={organization.id}
+                cursor="pointer"
+                onClick={() => {
+                  router.push(`/organizations/${organization.id}`);
+                }}
+              >
+                <CardBody>
+                  <Text>{organization?.id}</Text>
+                  <Text>{organization?.name}</Text>
+                </CardBody>
+              </Card>
+            ))}
+          </Flex>
         </Box>
-        {/* <TableContainer width="100%" height="100%">
-          <Table variant="simple">
-            <TableCaption>Organizations</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>ID</Th>
-                <Th>Name</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {organizations.map((organization) => (
-                <Tr
-                  key={organization?.id}
-                  onClick={() => {
-                    router.push(`/organizations/${organization.id}`);
-                  }}
-                  cursor="pointer"
-                >
-                  <Td>{organization?.id}</Td>
-                  <Td>{organization?.name}</Td>
-                </Tr>
-              ))}
-            </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>{organizations.length} organizations</Th>
-              </Tr>
-            </Tfoot>
-          </Table>
-        </TableContainer> */}
-        {/* </Box> */}
       </Flex>
     </DashboardLayout>
   );
