@@ -8,25 +8,81 @@ export const addNewParticipant = async (req: Request, res: Response) => {
     const { isBulk } = req?.query;
 
     if (isBulk === 'true') {
+      //
+      // Bulk participant addition
+      //
+
       const { participants } = req?.body;
 
       if (!participants || participants.length === 0) {
         return res.status(400).json({ error: 'No participants provided' });
       }
 
-      const newParticipants = await prisma.participant.createMany({
-        data: participants.map((p: any) => {
-          return {
-            firstName: p.firstName,
-            lastName: p.lastName,
+      let attributesToBeAdded: string[] = [];
+
+      for (const key in participants[0]) {
+        if (key.startsWith('_')) {
+          attributesToBeAdded.push(key.split('_')[1]);
+        }
+      }
+
+      await prisma.$transaction(async (tx) => {
+        const attributesAlreadyPresent = await tx.attributes.findMany({
+          where: {
             organizationId: orgId,
             eventId,
-          };
-        }),
+          },
+        });
+
+        const newAttributes = attributesToBeAdded.filter(
+          (attribute) => !attributesAlreadyPresent.find((a) => a.name === attribute),
+        );
+
+        const newAttributesAdded = await tx.attributes.createMany({
+          data: newAttributes.map((attribute) => {
+            return {
+              name: attribute,
+              organizationId: orgId,
+              eventId,
+            };
+          }),
+        });
+
+        const attributes = await tx.attributes.findMany({
+          where: {
+            organizationId: orgId,
+            eventId,
+          },
+        });
+
+        console.log(attributes);
+
+        const newParticipants = await tx.participant.createMany({
+          data: participants.map((p: any) => {
+            return {
+              firstName: p.firstName,
+              lastName: p.lastName,
+              organizationId: orgId,
+              eventId,
+              // participantAttributes: {
+              //   create: attributes.map((attribute: any) => {
+              //     return {
+              //       attributeId: attribute.id,
+              //       value: p[`_${attribute.name}`],
+              //     };
+              //   }),
+              // },
+            };
+          }),
+        });
+
+        return res.status(200).json({ newParticipants });
       });
-      return res.status(200).json({ newParticipants });
     } else {
-      const { firstName, lastName } = req?.body;
+      //
+      // Single participant addition
+      //
+      const { firstName, lastName, attributes } = req?.body;
 
       const newParticipant = await prisma.participant.create({
         data: {
@@ -34,6 +90,14 @@ export const addNewParticipant = async (req: Request, res: Response) => {
           lastName,
           organizationId: orgId,
           eventId,
+          participantAttributes: {
+            create: attributes.map((attribute: any) => {
+              return {
+                attributeId: attribute.id,
+                value: attribute.value,
+              };
+            }),
+          },
         },
       });
 
