@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-
+import { BsArrowLeft } from 'react-icons/bs';
 import {
   Box,
   Flex,
@@ -43,6 +43,10 @@ export default function Events() {
     };
     fetchAttributes();
   }, [orgId, eventId]);
+  const iconStyle = {
+    fontSize: '45px', // Adjust the size as needed
+    marginTop: '8px',
+  };
 
   return (
     <DashboardLayout>
@@ -55,6 +59,9 @@ export default function Events() {
         gap={8}
       >
         <Box width="100%" p={8} display="flex" justifyContent="space-between">
+          <button onClick={() => router.push(`/organizations/${orgId}/events/${eventId}`)}>
+            <BsArrowLeft style={iconStyle} />
+          </button>
           <Text fontSize="4xl" fontWeight="bold">
             Attributes
           </Text>

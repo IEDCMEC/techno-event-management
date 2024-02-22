@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BsArrowLeft } from 'react-icons/bs';
 
 import { useFetch } from '@/hooks/useFetch';
 
@@ -78,8 +79,15 @@ export default function NewOrganization() {
     }
   };
 
+  const iconStyle = {
+    fontSize: '45px', // Adjust the size as needed
+    marginTop: '8px',
+  };
   return (
     <DashboardLayout>
+      <button onClick={() => router.push(`/organizations/${orgId}/events/`)}>
+        <BsArrowLeft style={iconStyle} />
+      </button>
       <Flex
         direction="column"
         height="100%"

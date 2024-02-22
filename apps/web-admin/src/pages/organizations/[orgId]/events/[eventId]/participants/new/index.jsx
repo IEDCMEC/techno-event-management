@@ -25,10 +25,8 @@ export default function NewOrganization() {
 
   const { orgId, eventId } = router.query;
 
-  const [attributes, setAttributes] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [attributeValues, setAttributeValues] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +36,6 @@ export default function NewOrganization() {
       {
         firstName,
         lastName,
-        attributes: attributeValues,
       },
     );
     if (status === 200) {
@@ -47,19 +44,6 @@ export default function NewOrganization() {
       alert(data.error);
     }
   };
-
-  useEffect(() => {
-    const fetchAttributes = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/attributes`,
-      );
-      if (status === 200) {
-        setAttributes(data.attributes);
-        setAttributeValues(data.attributes.map((attribute) => ({ id: attribute.id })));
-      }
-    };
-    fetchAttributes();
-  }, [orgId, eventId]);
 
   return (
     <DashboardLayout>
@@ -101,39 +85,6 @@ export default function NewOrganization() {
                   }}
                 />
               </FormControl>
-              {attributes.map((attribute) => (
-                <FormControl my={4} key={attribute.id}>
-                  <FormLabel>{attribute.name}</FormLabel>
-                  <Input
-                    type="text"
-                    name={attribute.name}
-                    value={attributeValues.find((value) => value.id === attribute.id)?.value || ''}
-                    onChange={(e) => {
-                      setAttributeValues((prev) => {
-                        const index = prev.findIndex((value) => value.id === attribute.id);
-                        if (index === -1) {
-                          return [
-                            ...prev,
-                            {
-                              id: attribute.id,
-                              value: e.target.value,
-                            },
-                          ];
-                        }
-                        return prev.map((value) => {
-                          if (value.id === attribute.id) {
-                            return {
-                              ...value,
-                              value: e.target.value,
-                            };
-                          }
-                          return value;
-                        });
-                      });
-                    }}
-                  />
-                </FormControl>
-              ))}
               <Button
                 type="submit"
                 width="100%"

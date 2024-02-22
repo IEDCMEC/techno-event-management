@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-
+import CIcon from '@coreui/icons-react';
+import * as icon from '@coreui/icons';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useRouter } from 'next/router';
 

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { BsArrowLeft } from 'react-icons/bs';
 
 import { useState } from 'react';
 
@@ -10,6 +11,7 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect } from 'react';
 
 export default function Settings() {
+  const router = useRouter();
   const { loading, get, put } = useFetch();
 
   const [accountDetails, setAccountDetails] = useState({});
@@ -31,7 +33,10 @@ export default function Settings() {
       alert('Failed to update account details');
     }
   };
-
+  const iconStyle = {
+    fontSize: '45px', // Adjust the size as needed
+    marginTop: '8px',
+  };
   return (
     <DashboardLayout>
       <Flex
@@ -43,6 +48,9 @@ export default function Settings() {
         gap={8}
       >
         <Box width="100%" p={8} display="flex" justifyContent="space-between">
+          <button onClick={() => router.push('/organizations/')}>
+            <BsArrowLeft style={iconStyle} />
+          </button>
           <Text fontSize="4xl" fontWeight="bold">
             Settings
           </Text>
