@@ -1,92 +1,73 @@
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
-import { FiArrowLeftCircle } from 'react-icons/fi';
-import ItemCard from '@/components/ItemCard';
-export default function Organization() {
+import { useFetch } from '@/hooks/useFetch';
+import { useAlert } from '@/hooks/useAlert';
+
+export default function OrganizationById() {
   const router = useRouter();
-
   const { orgId } = router.query;
+  const showAlert = useAlert();
 
-  const children = [
-    { id: 0, section: 'events', path: '/events', thumb: '' },
-    { id: 1, section: 'members', path: '/members', thumb: '' },
-  ];
+  const { loading, get } = useFetch();
+
+  const [organization, setOrganization] = useState([]);
+
+  useEffect(() => {
+    const fetchOrganizationStats = async () => {
+      const { data, status } = await get(`/core/organizations/${orgId}`);
+      if (status === 200) {
+        setOrganization(data.organization || []);
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
+    };
+    fetchOrganizationStats();
+  }, []);
+
   return (
-    <DashboardLayout>
-      <Flex
-        direction="column"
-        height="100%"
-        width="100%"
-        alignItems="center"
-        justifyContent="center"
-        gap={8}
-      >
-        <Box width="100%" p={8} display="flex" justifyContent="space-between">
-          <Box width="100%" p={8} paddingTop="100px" display="flex" alignItems="center" gap="10px">
-            <Box
-              borderRadius="2000px"
-              borderColor="black"
-              colorScheme="gray"
-              variant="ghost"
-              height="60px"
-              display="inline"
-              cursor="pointer"
-              onClick={() => {
-                router.back();
-              }}
-            >
-              <FiArrowLeftCircle size={60} />
-            </Box>
-            <Text fontSize="6xl" fontWeight="bold">
-              {orgId}
-            </Text>
-          </Box>
-        </Box>
-
-        <Box
-          width="100%"
-          height="100%"
-          borderRadius="30px"
-          gap="50px"
-          backgroundColor="#F4F4F4"
-          p="30px"
-          marginLeft="30px"
+    <DashboardLayout
+      pageTitle="Organization"
+      previousPage={`/organizations`}
+      headerButton={
+        <>
+          <Button
+            onClick={() => {
+              router.push(`/organizations/${orgId}/settings`);
+            }}
+            isLoading={loading}
+          >
+            Organization Settings
+          </Button>
+        </>
+      }
+      debugInfo={JSON.stringify(organization)}
+    >
+      <Flex gap={4}>
+        <Button
+          onClick={() => {
+            router.push(`/organizations/${orgId}/events`);
+          }}
+          isLoading={loading}
         >
-          {children.map((child) => {
-            return (
-              <Box
-                key={child.id}
-                as="button"
-                onClick={() => {
-                  router.push(`/organizations/${orgId}/${child.path}`);
-                }}
-              >
-                <ItemCard name={child.section} logo={child.thumb} />
-              </Box>
-            );
-          })}
-
-          {/* <Box width="100%" height="100%">
-          <Button
-            onClick={() => {
-              router.push(`/organizations/${orgId}/events`);
-            }}
-          >
-            Events
-          </Button>
-          <Button
-            onClick={() => {
-              router.push(`/organizations/${orgId}/members`);
-            }}
-          >
-            Members
-          </Button>
-        </Box> */}
-        </Box>
+          Events
+        </Button>
+        <Button
+          onClick={() => {
+            router.push(`/organizations/${orgId}/members`);
+          }}
+          isLoading={loading}
+        >
+          Members
+        </Button>
       </Flex>
     </DashboardLayout>
   );
