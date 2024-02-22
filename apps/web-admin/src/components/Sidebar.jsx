@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+
 import {
   Box,
   Text,
@@ -12,13 +13,24 @@ import {
   DrawerContent,
   DrawerCloseButton,
   useMediaQuery,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { Router, useRouter } from 'next/router';
+
+import LogoutIcon from '@mui/icons-material/Logout';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import { ManageAccountsTwoTone } from '@mui/icons-material';
+
 const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
+  const router = useRouter();
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -34,22 +46,43 @@ const Sidebar = ({ isOpen, onClose }) => {
     <>
       {/* Desktop Sidebar */}
       {!isMobile ? (
-        <Box display={{ base: 'none', md: 'block' }} padding={4} height="100%" width={80}>
+        <Box
+          display={{ base: 'flex', md: 'block' }}
+          padding={4}
+          height="100%"
+          width={80}
+          backgroundColor="#F4F4F4"
+          justifyContent="space-between"
+          flexDirection="row"
+        >
           <Box paddingY={4}>
             <Text fontSize="4xl" fontWeight="bold">
               techno
             </Text>
           </Box>
-          <SidebarContents />
+          <SideBarTree />
+          <Box paddingY={4} width="100%" display="flex" justifyContent="space-evenly">
+            <AccountLoggedIn />
 
-          <Box paddingY={4}>
             <Button
               onClick={handleLogout}
               isLoading={loading}
               loadingText="Please Wait"
-              width="100%"
+              colorScheme="gray"
+              variant="solid"
             >
-              Logout
+              <LogoutIcon />
+            </Button>
+
+            <Button
+              onClick={() => {
+                router.push('/settings');
+              }}
+              isLoading={loading}
+              loadingText="Please Wait"
+              colorScheme="gray"
+            >
+              <ManageAccountsOutlinedIcon />
             </Button>
           </Box>
         </Box>
@@ -72,9 +105,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                       onClick={handleLogout}
                       isLoading={loading}
                       loadingText="Please Wait"
-                      width="100%"
+                      //width="100%"
                     >
-                      Logout
+                      <LogoutIcon />
                     </Button>
                   </Box>
                 </DrawerBody>
@@ -116,6 +149,44 @@ const SidebarContents = () => {
         ))}
       </Box>
     </>
+  );
+};
+
+const SideBarTree = () => {
+  const router = useRouter();
+
+  return (
+    <div>
+      <Button
+        onClick={() => {
+          router.push('/organizations');
+        }}
+      >
+        Organizations
+      </Button>
+    </div>
+  );
+};
+
+const AccountLoggedIn = () => {
+  // const [open,setOpen] = useState(false);
+
+  //const handleClick = () =>{
+  //setOpen(!open);
+  //}
+  return (
+    <div>
+      <Popover>
+        <PopoverTrigger>
+          <Button colorScheme="gray">
+            <PermIdentityIcon />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent maxWidth="50%" marginLeft="8px">
+          <PopoverBody> You are logged in as: </PopoverBody>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 };
 

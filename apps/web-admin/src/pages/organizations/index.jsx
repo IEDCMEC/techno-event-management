@@ -26,11 +26,12 @@ const MuiTheme = createTheme({});
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
-import { purple } from '@mui/material/colors';
+import { FiArrowLeftCircle } from 'react-icons/fi';
+
+import ItemCard from '@/components/ItemCard';
 
 export default function Organizations() {
   const router = useRouter();
-
   const { orgId } = router.query;
 
   const { loading, get } = useFetch();
@@ -74,24 +75,91 @@ export default function Organizations() {
         justifyContent="center"
         gap={8}
       >
-        <Box width="100%" p={8} display="flex" justifyContent="space-between">
-          <Text fontSize="4xl" fontWeight="bold">
+        <Box width="100%" p={8} paddingTop="100px" display="flex" alignItems="center" gap="10px">
+          <Box
+            borderRadius="2000px"
+            borderColor="black"
+            colorScheme="gray"
+            variant="ghost"
+            height="60px"
+            display="inline"
+            cursor="pointer"
+            onClick={() => {
+              router.back();
+            }}
+          >
+            <FiArrowLeftCircle size={60} />
+          </Box>
+          <Text fontSize="6xl" fontWeight="bold">
             Organizations
           </Text>
+        </Box>
+
+        <Box
+          display="block"
+          borderRadius="30px"
+          gap="30px"
+          backgroundColor="#F4F4F4"
+          p="30px"
+          marginLeft="30px"
+        >
           <Button
             padding="4"
             minWidth="-moz-initial"
             bgColor="rgb(128, 90, 213)"
             color="white"
             _hover={{ bgColor: 'rgb(100, 70, 183)' }}
-            onClick={() => {
-              router.push('organizations/new');
-            }}
+            onClick={handleClick}
+            marginBottom="30px"
           >
             Add Organization
           </Button>
-        </Box>
-        <Box width="100%" height="100%">
+          <Box width="100%" height="100%" borderRadius="30px" display="flex" gap="30px">
+            {/* <ThemeProvider theme={MuiTheme}> */}
+            {organizations.map((organization) => {
+              return (
+                <Box
+                  key={organization.id}
+                  as="button"
+                  width="180px"
+                  height=" 180px"
+                  onClick={() => {
+                    router.push(`/organizations/${organization.id}`);
+                  }}
+                >
+                  <ItemCard name={organization.name} logo="" />
+                </Box>
+              );
+            })}
+          </Box>
+
+          {/*<DataGrid
+              rows={organizations}
+              columns={columns}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              slots={{
+                toolbar: GridToolbar,
+              }}
+              autoHeight
+              sx={{
+                // disable cell selection style
+                '.MuiDataGrid-cell:focus': {
+                  outline: 'none',
+                },
+                // pointer cursor on ALL rows
+                '& .MuiDataGrid-row:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+              onRowClick={handleRowClick}
+            />*/}
+
+          {/* </ThemeProvider> */}
           {organizations.length === 0 && (
             <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
               <Text fontSize="2xl" fontWeight="semibold">
