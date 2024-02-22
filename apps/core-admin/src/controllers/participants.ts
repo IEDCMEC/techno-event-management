@@ -59,7 +59,7 @@ export const addNewParticipant = async (req: Request, res: Response) => {
           const newParticipant = await tx.participant.create({
             data: {
               firstName: p.firstName,
-              lastName: p.firstName,
+              lastName: p.lastName,
               organizationId: orgId,
               eventId,
               participantAttributes: {
