@@ -109,7 +109,9 @@ export default function Organizations() {
             bgColor="rgb(128, 90, 213)"
             color="white"
             _hover={{ bgColor: 'rgb(100, 70, 183)' }}
-            onClick={handleClick}
+            onClick={() => {
+              router.push('organizations/new');
+            }}
             marginBottom="30px"
           >
             Add Organization
