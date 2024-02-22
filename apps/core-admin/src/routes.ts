@@ -26,6 +26,7 @@ import {
   getAttributeParticipants,
 } from './controllers/attributes';
 import { fetchAccountDetails, updateAccountDetails } from './controllers/users';
+import { validateOrganizationUser, validateOrganizationAdmin } from './middlewares/authorization';
 
 const router: Router = express.Router();
 
@@ -44,8 +45,8 @@ router.put('/users/me', updateAccountDetails);
 router.get('/organizations', getUsersOrganizations);
 router.post('/organizations', createNewOrganization);
 
-router.get('/organizations/:orgId/members', getOrganizationMembers);
-router.post('/organizations/:orgId/members', addOrganizationMember);
+router.get('/organizations/:orgId/members', validateOrganizationUser, getOrganizationMembers);
+router.post('/organizations/:orgId/members', validateOrganizationAdmin, addOrganizationMember);
 
 router.get('/organizations/:orgId/events', getEvents);
 router.post('/organizations/:orgId/events', createNewEvent);
