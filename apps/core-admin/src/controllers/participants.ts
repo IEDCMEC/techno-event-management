@@ -26,7 +26,7 @@ export const addNewParticipant = async (req: Request, res: Response) => {
         }
       }
 
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx: typeof prisma) => {
         const attributesAlreadyPresent = await tx.attributes.findMany({
           where: {
             organizationId: orgId,
@@ -35,7 +35,7 @@ export const addNewParticipant = async (req: Request, res: Response) => {
         });
 
         const newAttributes = attributesToBeAdded.filter(
-          (attribute) => !attributesAlreadyPresent.find((a) => a.name === attribute),
+          (attribute) => !attributesAlreadyPresent.find((a: any) => a.name === attribute),
         );
 
         const newAttributesAdded = await tx.attributes.createMany({
@@ -55,28 +55,30 @@ export const addNewParticipant = async (req: Request, res: Response) => {
           },
         });
 
-        console.log(attributes);
-
-        const newParticipants = await tx.participant.createMany({
-          data: participants.map((p: any) => {
-            return {
+        for (const p of participants) {
+          const newParticipant = await tx.participant.create({
+            data: {
               firstName: p.firstName,
-              lastName: p.lastName,
+              lastName: p.firstName,
               organizationId: orgId,
               eventId,
-              // participantAttributes: {
-              //   create: attributes.map((attribute: any) => {
-              //     return {
-              //       attributeId: attribute.id,
-              //       value: p[`_${attribute.name}`],
-              //     };
-              //   }),
-              // },
-            };
-          }),
-        });
+              participantAttributes: {
+                create: attributes.map((attribute: any) => {
+                  return {
+                    attributeId: attribute.id,
+                    value: p[`_${attribute.name}`],
+                  };
+                }),
+              },
+            },
+          });
 
-        return res.status(200).json({ newParticipants });
+          if (!newParticipant) {
+            throw new Error('Something went wrong');
+          }
+        }
+
+        return res.status(200).json({ success: true });
       });
     } else {
       //
