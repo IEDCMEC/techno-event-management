@@ -1,51 +1,87 @@
-import { Box, IconButton, useMediaQuery, Button } from '@chakra-ui/react';
-
-import Sidebar from '@/components/Sidebar';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-export default function DashboardLayout({ children }) {
+import { Box, useMediaQuery, Flex, Text } from '@chakra-ui/react';
+import { IoMdArrowRoundBack } from 'react-icons/io';
+import { RxHamburgerMenu } from 'react-icons/rx';
+
+import Sidebar from '@/components/Sidebar';
+
+export default function DashboardLayout({ previousPage, pageTitle, headerButton, children }) {
+  const router = useRouter();
+
   const [isMobile] = useMediaQuery('(max-width: 768px)');
   const [isSidebarOpen, setSidebarOpen] = useState(isMobile);
 
   return (
-    <Box
-      sx={{
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'row',
-      }}
-    >
+    <Flex height="100vh" overflow="hidden" flexDirection={isMobile ? 'column' : 'row'}>
       {isMobile && (
-        <Button
-          colorScheme="#dfdfdf"
-          onClick={() => {
-            setSidebarOpen(true);
-          }}
-          position="fixed"
-          top={4}
-          left={4}
+        <Flex
+          height={24}
+          p={4}
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            x="0px"
-            y="0px"
-            width="30"
-            height="30"
-            viewBox="0 0 24 24"
+          <Text fontSize="4xl" fontWeight="bold">
+            {pageTitle}
+          </Text>
+          <Flex
+            height={10}
+            width={10}
+            justifyContent="center"
+            alignItems="center"
+            onClick={() => {
+              setSidebarOpen(true);
+            }}
           >
-            <path d="M 2 5 L 2 7 L 22 7 L 22 5 L 2 5 z M 2 11 L 2 13 L 22 13 L 22 11 L 2 11 z M 2 17 L 2 19 L 22 19 L 22 17 L 2 17 z"></path>
-          </svg>
-        </Button>
+            <RxHamburgerMenu fontSize={30} color="black" />
+          </Flex>
+        </Flex>
       )}
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <Box
-        flex="1"
-        marginLeft="0"
-        marginTop={isMobile ? '30px' : '0'}
+      <Flex
+        height="100%"
+        width="100%"
+        overflowY="hidden"
+        flexDirection="column"
         transition="margin 0.3s ease"
       >
-        {children}
-      </Box>
-    </Box>
+        <Flex
+          height={isMobile ? 'auto' : 40}
+          width="100%"
+          p={4}
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          {!isMobile && (
+            <Flex alignItems="center" gap={10}>
+              <IoMdArrowRoundBack
+                size={30}
+                onClick={() => {
+                  router.push(previousPage);
+                }}
+              />
+              <Text fontSize="4xl" fontWeight="bold">
+                {pageTitle}
+              </Text>
+            </Flex>
+          )}
+          <Flex
+            height="100%"
+            width="100%"
+            justifyContent={isMobile ? 'space-evenly' : 'flex-end'}
+            alignItems="center"
+            gap={4}
+          >
+            {headerButton}
+          </Flex>
+        </Flex>
+        <Box height="100%" overflowY="hidden" p={4}>
+          {children}
+        </Box>
+      </Flex>
+    </Flex>
   );
 }
