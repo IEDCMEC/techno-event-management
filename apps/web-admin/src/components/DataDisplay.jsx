@@ -1,7 +1,13 @@
 import { DataGrid, GridToolbar, LinearProgress } from '@mui/x-data-grid';
 import { ThemeProvider, createTheme } from '@mui/material';
 
-const MuiTheme = createTheme({});
+const MuiTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#805ad5',
+    },
+  },
+});
 
 export default function DataDisplay({ loading, rows, columns, onRowClick }) {
   return (
@@ -26,6 +32,8 @@ export default function DataDisplay({ loading, rows, columns, onRowClick }) {
             cursor: 'pointer',
           },
         }}
+        checkboxSelection
+        disableRowSelectionOnClick
         onRowClick={onRowClick}
       />
     </ThemeProvider>

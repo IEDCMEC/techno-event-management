@@ -34,8 +34,8 @@ export default function Participants() {
         setParticipants(data.participants || []);
       } else {
         showAlert({
-          title: 'Something went wrong',
-          description: 'Failed to fetch participants',
+          title: 'Error',
+          description: data.error,
           status: 'error',
         });
       }
@@ -53,6 +53,7 @@ export default function Participants() {
             onClick={() => {
               router.push(`/organizations/${orgId}/events/${eventId}/participants/new/`);
             }}
+            isLoading={loading}
           >
             Add Participant
           </Button>
@@ -60,11 +61,13 @@ export default function Participants() {
             onClick={() => {
               router.push(`/organizations/${orgId}/events/${eventId}/participants/new/upload-csv`);
             }}
+            isLoading={loading}
           >
             Upload CSV
           </Button>
         </>
       }
+      debugInfo={JSON.stringify(participants)}
     >
       <DataDisplay
         loading={loading}

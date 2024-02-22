@@ -3,6 +3,7 @@ import {
   addOrganizationMember,
   createNewOrganization,
   getOrganizationMembers,
+  getOrganizationStats,
   getUsersOrganizations,
 } from './controllers/organizations';
 import { createNewEvent, getEvents } from './controllers/events';
@@ -43,6 +44,7 @@ router.get('/users/me', fetchAccountDetails);
 router.put('/users/me', updateAccountDetails);
 
 router.get('/organizations', getUsersOrganizations);
+router.get('/organizations/:orgId', getOrganizationStats);
 router.post('/organizations', createNewOrganization);
 
 router.get('/organizations/:orgId/members', validateOrganizationUser, getOrganizationMembers);
