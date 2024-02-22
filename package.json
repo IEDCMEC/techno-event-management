@@ -19,5 +19,10 @@
     "turbo": "^1.9.9"
   },
   "packageManager": "pnpm@7.15.0",
-  "name": "techno-event-management"
+  "name": "techno-event-management",
+  "dependencies": {
+    "@react-icons/all-files": "^4.1.0",
+    "react-icons": "^5.0.1",
+    "react-router-dom": "^6.22.1"
+  }
 }
