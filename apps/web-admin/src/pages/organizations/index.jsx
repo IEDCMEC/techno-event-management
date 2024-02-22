@@ -1,9 +1,12 @@
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import {
   Box,
   Flex,
   Table,
   TableCaption,
+  Card,
+  CardBody,
   Tbody,
   Td,
   Tfoot,
@@ -23,6 +26,7 @@ const MuiTheme = createTheme({});
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
+import { purple } from '@mui/material/colors';
 
 export default function Organizations() {
   const router = useRouter();
@@ -88,35 +92,35 @@ export default function Organizations() {
           </Button>
         </Box>
         <Box width="100%" height="100%">
-          <ThemeProvider theme={MuiTheme}>
-            <DataGrid
-              rows={organizations}
-              columns={columns}
-              slotProps={{
-                toolbar: {
-                  showQuickFilter: true,
-                  quickFilterProps: { debounceMs: 500 },
-                },
-              }}
-              slots={{
-                toolbar: GridToolbar,
-              }}
-              autoHeight
-              sx={{
-                // disable cell selection style
-                '.MuiDataGrid-cell:focus': {
-                  outline: 'none',
-                },
-                // pointer cursor on ALL rows
-                '& .MuiDataGrid-row:hover': {
-                  cursor: 'pointer',
-                },
-              }}
-              onRowClick={(row) => {
-                router.push(`/organizations/${row.id}/events`);
-              }}
-            />
-          </ThemeProvider>
+          {organizations.length === 0 && (
+            <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
+              <Text fontSize="2xl" fontWeight="semibold">
+                You do not have any organizations yet. Please{' '}
+                <Link href="/organizations/new">
+                  <Text as="span" color="purple" textDecoration="underline">
+                    create one
+                  </Text>
+                </Link>{' '}
+                to start managing events.
+              </Text>
+            </Flex>
+          )}
+          <Flex gap={4}>
+            {organizations.map((organization) => (
+              <Card
+                key={organization.id}
+                cursor="pointer"
+                onClick={() => {
+                  router.push(`/organizations/${organization.id}`);
+                }}
+              >
+                <CardBody>
+                  <Text>{organization?.id}</Text>
+                  <Text>{organization?.name}</Text>
+                </CardBody>
+              </Card>
+            ))}
+          </Flex>
         </Box>
       </Flex>
     </DashboardLayout>

@@ -40,7 +40,7 @@ export default function NewOrganization() {
       },
     );
     if (status === 200) {
-      router.push(`/organizations/${orgId}/users`);
+      router.push(`/organizations/${orgId}/members`);
     } else {
       alert(data.error);
     }
