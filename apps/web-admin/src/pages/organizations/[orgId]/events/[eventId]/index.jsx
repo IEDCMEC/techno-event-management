@@ -1,56 +1,82 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
+
 import DashboardLayout from '@/layouts/DashboardLayout';
 
-export default function Event() {
+import { useFetch } from '@/hooks/useFetch';
+import { useAlert } from '@/hooks/useAlert';
+
+export default function EventById() {
   const router = useRouter();
-
   const { orgId, eventId } = router.query;
+  const showAlert = useAlert();
 
-  // useEffect(() => {
-  //   router.push(`/organizations/${orgId}/events/${eventId}/participants`);
-  // }, [orgId, eventId]);
+  const { loading, get } = useFetch();
+
+  const [event, setEvent] = useState([]);
+
+  useEffect(() => {
+    const fetchEventStats = async () => {
+      const { data, status } = await get(`/core/organizations/${orgId}/events/${eventId}`);
+      if (status === 200) {
+        setEvent(data.event || []);
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
+    };
+    fetchEventStats();
+  }, []);
 
   return (
-    <DashboardLayout>
-      <Flex
-        direction="column"
-        height="100%"
-        width="100%"
-        alignItems="center"
-        justifyContent="center"
-        gap={8}
-      >
-        <Box width="100%" p={8} display="flex" justifyContent="space-between">
-          <Text fontSize="4xl" fontWeight="bold">
-            {eventId}
-          </Text>
-        </Box>
-        <Flex width="100%" height="100%" gap={4}>
+    <DashboardLayout
+      pageTitle={event?.name}
+      previousPage={`/organizations/${orgId}/events`}
+      headerButton={
+        <>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+              router.push(`/organizations/${orgId}/events/${eventId}/settings`);
             }}
+            isLoading={loading}
+            disabled="true"
           >
-            Participants
+            Event Settings
           </Button>
-          <Button
-            onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/attributes`);
-            }}
-          >
-            Attributes
-          </Button>
-          <Button
-            onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in`);
-            }}
-          >
-            Check-in
-          </Button>
-        </Flex>
+        </>
+      }
+      debugInfo={JSON.stringify(event)}
+    >
+      <Flex gap={4}>
+        <Button
+          onClick={() => {
+            router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+          }}
+          isLoading={loading}
+        >
+          Participants
+        </Button>
+        <Button
+          onClick={() => {
+            router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in`);
+          }}
+          isLoading={loading}
+        >
+          Participant Check In
+        </Button>
+        <Button
+          onClick={() => {
+            router.push(`/organizations/${orgId}/events/${eventId}/attributes`);
+          }}
+          isLoading={loading}
+        >
+          Attributes
+        </Button>
       </Flex>
     </DashboardLayout>
   );

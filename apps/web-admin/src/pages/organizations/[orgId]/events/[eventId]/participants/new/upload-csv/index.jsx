@@ -1,22 +1,22 @@
-import { useState } from 'react';
-import Papa from 'papaparse';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-
-import { useFetch } from '@/hooks/useFetch';
-
 import { useRouter } from 'next/router';
-import { Flex, Button, Box, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
+import { Button, Text, Flex, Box } from '@chakra-ui/react';
+import Papa from 'papaparse';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { ThemeProvider, createTheme } from '@mui/material';
 
-const MuiTheme = createTheme({});
+import DataDisplay from '@/components/DataDisplay';
 
-export default function NewOrganization() {
-  const { loading, post } = useFetch();
+import { useAlert } from '@/hooks/useAlert';
+import { useFetch } from '@/hooks/useFetch';
+
+export default function NewParticipantByCSVUpload() {
   const router = useRouter();
+  const showAlert = useAlert();
 
   const { orgId, eventId } = router.query;
+  const { loading, post } = useFetch();
 
   const [csvData, setCSVData] = useState(null);
   const [columns, setColumns] = useState([
@@ -51,15 +51,24 @@ export default function NewOrganization() {
               !column.field.startsWith('_'),
           )
         ) {
-          alert('Extra fields should be prefixed with an underscore (_).');
+          showAlert({
+            title: 'Error',
+            description: 'Extra fields should be prefixed with an underscore (_)',
+            status: 'error',
+            duration: 10000,
+          });
         }
 
         if (columns.find((column) => column.field !== 'firstName' || column.field !== 'lastName')) {
-          alert('The extra fields marked with _ will be inserted as attributes.');
+          showAlert({
+            title: 'Info',
+            description: 'Extra fields marked with _ will be inserted as attributes',
+            status: 'info',
+            duration: 10000,
+          });
         }
 
         setCSVData(dataWithId);
-        console.log(dataWithId);
       },
       error: (error) => {
         console.error('Error parsing CSV:', error);
@@ -67,8 +76,36 @@ export default function NewOrganization() {
     });
   };
 
+  //
+  // Checking for underscore prefixed fields
+  //
+  useEffect(() => {
+    if (columns.length <= 2) return;
+    if (
+      columns.find(
+        (column) =>
+          column.field !== 'firstName' &&
+          column.field !== 'lastName' &&
+          !column.field.startsWith('_'),
+      )
+    ) {
+      showAlert({
+        title: 'Error',
+        description: 'Extra fields should be prefixed with an underscore (_)',
+        status: 'error',
+        duration: 10000,
+      });
+      setCSVData(null);
+      setColumns([
+        { field: 'firstName', headerName: 'First Name' },
+        { field: 'lastName', headerName: 'Last Name' },
+      ]);
+    }
+  }, [columns]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const { data, status } = await post(
       `/core/organizations/${orgId}/events/${eventId}/participants?isBulk=true`,
       {},
@@ -77,67 +114,50 @@ export default function NewOrganization() {
       },
     );
     if (status === 200) {
+      showAlert({
+        title: 'Success',
+        description: 'Participant has been added successfully.',
+        status: 'success',
+      });
       router.push(`/organizations/${orgId}/events/${eventId}/participants`);
     } else {
-      alert(data.error);
+      showAlert({
+        title: 'Error',
+        description: data.error,
+        status: 'error',
+      });
     }
   };
 
   return (
-    <DashboardLayout>
-      <Flex
-        direction="column"
+    <DashboardLayout
+      pageTitle="Upload CSV"
+      previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
+      debugInfo={JSON.stringify(csvData)}
+    >
+      <Box
         height="100%"
         width="100%"
+        flexDirection="column"
+        justifyContent="center"
         alignItems="center"
-        justifyContent="start"
-        gap={8}
       >
-        <Box width="100%" p={8} display="flex" justifyContent="space-between">
-          <Text fontSize="4xl" fontWeight="bold">
-            Participants
+        {!csvData && (
+          <Text fontSize="xl">
+            Upload a CSV file of participants. The required columns are firstName, lastName. Extra
+            columns should be prefixed with an underscore (_).
           </Text>
-        </Box>
-        <Box
-          height="100%"
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-          gap={8}
-        >
-          {!csvData && (
-            <Text fontSize="xl">
-              Upload a CSV file of participants. The required columns are firstName, lastName. Extra
-              columns should be prefixed with an underscore (_).
-            </Text>
-          )}
+        )}
+        <Flex justifyContent="space-between" alignItems="center">
           <input type="file" accept=".csv" onChange={handleFileUpload} />
           {csvData && (
-            <>
-              <ThemeProvider theme={MuiTheme}>
-                <DataGrid
-                  rows={csvData}
-                  columns={columns}
-                  slotProps={{
-                    toolbar: {
-                      showQuickFilter: true,
-                      quickFilterProps: { debounceMs: 500 },
-                    },
-                  }}
-                  slots={{
-                    toolbar: GridToolbar,
-                  }}
-                  autoHeight
-                />
-              </ThemeProvider>
-              <Button onClick={handleSubmit} isLoading={loading}>
-                Confirm and Add
-              </Button>
-            </>
+            <Button onClick={handleSubmit} isLoading={loading}>
+              Confirm and Add
+            </Button>
           )}
-        </Box>
-      </Flex>
+        </Flex>
+        {csvData && <DataDisplay loading={loading} rows={csvData} columns={columns} />}
+      </Box>
     </DashboardLayout>
   );
 }

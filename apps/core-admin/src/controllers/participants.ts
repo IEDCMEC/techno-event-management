@@ -63,18 +63,21 @@ export const addNewParticipant = async (req: Request, res: Response) => {
               organizationId: orgId,
               eventId,
               participantAttributes: {
-                create: attributes.map((attribute: any) => {
-                  return {
+                create: attributes
+                  .map((attribute: any) => ({
                     attributeId: attribute.id,
                     value: p[`_${attribute.name}`],
-                  };
-                }),
+                  }))
+                  .filter(
+                    (attribute: any) => attribute.value !== undefined && attribute.value !== null,
+                  ),
               },
             },
           });
 
           if (!newParticipant) {
-            throw new Error('Something went wrong');
+            console.error('Error adding participant in bulk');
+            return res.status(500).json({ error: 'Something went wrong' });
           }
         }
 
@@ -85,6 +88,12 @@ export const addNewParticipant = async (req: Request, res: Response) => {
       // Single participant addition
       //
       const { firstName, lastName, attributes } = req?.body;
+
+      attributes.filter((attribute: any) => {
+        if (!attribute.value) {
+          return res.status(400).json({ error: 'All attributes must have a value' });
+        }
+      });
 
       const newParticipant = await prisma.participant.create({
         data: {
@@ -148,16 +157,31 @@ export const editParticipant = async (req: Request, res: Response) => {
 export const getAllParticipants = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId } = req?.params;
-    const participants = await prisma.participant.findMany({
+    let participants = await prisma.participant.findMany({
       where: {
         organizationId: orgId,
         eventId,
+      },
+      include: {
+        participantAttributes: true,
+        participantCheckIn: true,
       },
     });
 
     if (!participants) {
       return res.status(500).json({ error: 'Something went wrong' });
     }
+
+    participants = participants.map((participant: any) => {
+      return {
+        id: participant.id,
+        addedAt: participant.createdAt,
+        firstName: participant.firstName,
+        lastName: participant.lastName,
+        numberOfAttributesAssigned: participant.participantAttributes.length,
+        checkedIn: participant.participantCheckIn.length > 0 ? true : false,
+      };
+    });
 
     return res.status(200).json({ participants });
   } catch (err: any) {
@@ -170,7 +194,7 @@ export const getAllParticipantsCheckInDetails = async (req: Request, res: Respon
   try {
     const { orgId, eventId } = req?.params;
 
-    const participantsCheckIn = await prisma.participant.findMany({
+    let participants = await prisma.participant.findMany({
       where: {
         organizationId: orgId,
         eventId,
@@ -178,6 +202,7 @@ export const getAllParticipantsCheckInDetails = async (req: Request, res: Respon
       include: {
         participantCheckIn: {
           select: {
+            id: true,
             checkedInAt: true,
             checkedInByUser: true,
           },
@@ -185,11 +210,39 @@ export const getAllParticipantsCheckInDetails = async (req: Request, res: Respon
       },
     });
 
-    if (!participantsCheckIn) {
+    if (!participants) {
       return res.status(500).json({ error: 'Something went wrong' });
     }
 
-    return res.status(200).json({ participantsCheckIn });
+    participants = participants.map((participant: any) => {
+      return {
+        id: participant.participantCheckIn.id ? participant.participantCheckIn.id : participant.id,
+        participantId: participant.id,
+        firstName: participant.firstName,
+        lastName: participant.lastName,
+        checkIn: {
+          status: participant.participantCheckIn.length > 0 ? true : false,
+          checkedInAt:
+            participant.participantCheckIn.length > 0
+              ? participant.participantCheckIn[0].checkedInAt
+              : null,
+          checkedInByFirstName:
+            participant.participantCheckIn.length > 0
+              ? participant.participantCheckIn[0].checkedInByUser.firstName
+              : null,
+          checkedInByLastName:
+            participant.participantCheckIn.length > 0
+              ? participant.participantCheckIn[0].checkedInByUser.lastName
+              : null,
+          checkedInByEmail:
+            participant.participantCheckIn.length > 0
+              ? participant.participantCheckIn[0].checkedInByUser.email
+              : null,
+        },
+      };
+    });
+
+    return res.status(200).json({ participantsCheckIn: participants });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });
@@ -215,16 +268,9 @@ export const getParticipantById = async (req: Request, res: Response) => {
         },
         participantAttributes: {
           include: {
-            attribute: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
+            attribute: true,
           },
         },
-        participantExtras: true,
-        participantExtrasCheckIn: true,
       },
     });
 
@@ -244,15 +290,60 @@ export const getParticipantById = async (req: Request, res: Response) => {
     }
 
     attributes.forEach((attribute: any) => {
-      if (!participant?.participantAttributes?.find((pa: any) => pa.attributeId === attribute.id)) {
-        participant.participantAttributes.push({
-          attributeId: attribute.id,
+      const existingAttribute = participant?.participantAttributes?.find(
+        (pa: any) => pa.attributeId === attribute.id,
+      );
+
+      if (!existingAttribute) {
+        if (!participant.attributes) {
+          participant.attributes = [];
+        }
+
+        participant.attributes.push({
+          id: attribute.id,
+          name: attribute.name,
           value: null,
-          participantId: participant.id,
-          attribute: attribute,
+        });
+      } else {
+        if (!participant.attributes) {
+          participant.attributes = [];
+        }
+
+        participant.attributes.push({
+          id: attribute.id,
+          name: attribute.name,
+          value: existingAttribute.value,
         });
       }
     });
+
+    participant = {
+      id: participant.id,
+      addedAt: participant.createdAt,
+      firstName: participant.firstName,
+      lastName: participant.lastName,
+      attributes: participant.attributes,
+      numberOfAttributesAssigned: participant.participantAttributes.length,
+      checkIn: {
+        status: participant.participantCheckIn.length > 0 ? true : false,
+        checkedInAt:
+          participant.participantCheckIn.length > 0
+            ? participant.participantCheckIn[0].checkedInAt
+            : null,
+        checkedInByFirstName:
+          participant.participantCheckIn.length > 0
+            ? participant.participantCheckIn[0].checkedInByUser.firstName
+            : null,
+        checkedInByLastName:
+          participant.participantCheckIn.length > 0
+            ? participant.participantCheckIn[0].checkedInByUser.lastName
+            : null,
+        checkedInByEmail:
+          participant.participantCheckIn.length > 0
+            ? participant.participantCheckIn[0].checkedInByUser.email
+            : null,
+      },
+    };
 
     return res.status(200).json({ participant });
   } catch (err: any) {
@@ -379,20 +470,19 @@ export const checkInParticipant = async (req: Request, res: Response) => {
         organizationId: orgId,
         eventId,
       },
-    });
-    const participant = await prisma.participant.findUnique({
-      where: {
-        id: participantId,
+      include: {
+        participant: true,
+        checkedInByUser: true,
       },
     });
 
     if (participantAlreadyCheckedIn) {
-      return res
-        .status(400)
-        .json({ error: participant.firstName + participant.lastName + ' already checked in' });
+      return res.status(400).json({
+        error: `${participantAlreadyCheckedIn?.participant?.firstName} ${participantAlreadyCheckedIn?.participant?.lastName} has already been checked-in at ${participantAlreadyCheckedIn.checkedInAt} by ${participantAlreadyCheckedIn.checkedInByUser.email}`,
+      });
     }
 
-    const participantCheckIn = await prisma.participantCheckIn.create({
+    let participantCheckIn = await prisma.participantCheckIn.create({
       data: {
         participantId,
         organizationId: orgId,
@@ -406,7 +496,21 @@ export const checkInParticipant = async (req: Request, res: Response) => {
       return res.status(500).json({ error: 'Something went wrong' });
     }
 
-    return res.status(200).json({ participantCheckIn, participant });
+    participantCheckIn = await prisma.participantCheckIn.findFirst({
+      where: {
+        participantId,
+        organizationId: orgId,
+        eventId,
+      },
+      include: {
+        participant: true,
+      },
+    });
+
+    return res.status(200).json({
+      participantCheckIn,
+      message: `${participantCheckIn?.participant?.firstName} ${participantCheckIn?.participant?.lastName} has been successfully checked-in at ${participantCheckIn?.checkedInAt}`,
+    });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });

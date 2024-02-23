@@ -1,150 +1,81 @@
 import { useRouter } from 'next/router';
-
-import {
-  Box,
-  Flex,
-  FormControl,
-  FormLabel,
-  Button,
-  Input,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-  TableContainer,
-  Text,
-} from '@chakra-ui/react';
-
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-
-import { useFetch } from '@/hooks/useFetch';
-
-import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
 
-import { ThemeProvider, createTheme } from '@mui/material';
-const MuiTheme = createTheme({});
+import { Text, Flex } from '@chakra-ui/react';
 
-export default function Events() {
+import DashboardLayout from '@/layouts/DashboardLayout';
+
+import { useFetch } from '@/hooks/useFetch';
+import { useAlert } from '@/hooks/useAlert';
+
+import DataDisplay from '@/components/DataDisplay';
+
+const columns = [
+  { field: 'id', headerName: 'ID', width: 200 },
+  { field: 'name', headerName: 'Name', width: 200 },
+  { field: 'value', headerName: 'Value', width: 200 },
+];
+
+export default function ParticipantById() {
   const router = useRouter();
-
   const { orgId, eventId, participantId } = router.query;
+  const showAlert = useAlert();
 
-  const { loading, get, put } = useFetch();
+  const { loading, get } = useFetch();
 
-  const [participant, setParticipant] = useState({});
+  const [participant, setParticipant] = useState([]);
   const [participantAttributes, setParticipantAttributes] = useState([]);
-
-  const handleSubmit = async () => {
-    const { status } = await put(
-      `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
-      {},
-      { firstName: participant.firstName, lastName: participant.lastName },
-    );
-
-    if (status === 200) {
-      alert('Participant updated successfully');
-    } else {
-      alert('Failed to update participant');
-    }
-  };
+  const [participantCheckIn, setParticipantCheckIn] = useState({});
 
   useEffect(() => {
     const fetchParticipant = async () => {
       const { data, status } = await get(
         `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
       );
-      setParticipant(data.participant || []);
-      setParticipantAttributes(data.participant.participantAttributes || []);
+      if (status === 200) {
+        setParticipant(data.participant || []);
+        setParticipantAttributes(data.participant.attributes || []);
+        setParticipantCheckIn(data.participant.checkIn || {});
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
     };
     fetchParticipant();
-  }, [orgId, eventId, participantId]);
+  }, []);
 
   return (
-    <DashboardLayout>
-      <Flex
-        direction="column"
-        height="100%"
-        width="100%"
-        alignItems="center"
-        justifyContent="center"
-        gap={8}
-      >
-        <Box width="100%" p={8}>
-          <Flex justifyContent="space-between" alignItems="center">
-            <Text fontSize="4xl" fontWeight="bold">
-              Participant Details
-            </Text>
-            <Button onClick={handleSubmit}>Save</Button>
-          </Flex>
-        </Box>
-        <Flex width="100%" height="100%" flexDirection="column" gap={4}>
-          <Flex flexDirection="column" justifyContent="center" alignItems="start" gap={4}>
-            <Text>ID: {participant.id}</Text>
-            <Flex alignItems="center" gap={4}>
-              <Text fontWeight={500}>First Name</Text>
-              <Input
-                type="text"
-                name="firstName"
-                width="auto"
-                value={participant.firstName}
-                onChange={(e) => {
-                  setParticipant({ ...participant, firstName: e.target.value });
-                }}
-              />
-            </Flex>
-            <Flex alignItems="center" gap={4}>
-              <Text fontWeight={500}>Last Name</Text>
-              <Input
-                type="text"
-                name="lastName"
-                width="auto"
-                value={participant.lastName}
-                onChange={(e) => {
-                  setParticipant({ ...participant, lastName: e.target.value });
-                }}
-              />
-            </Flex>
-          </Flex>
-          <Text fontSize="3xl" fontWeight={500}>
-            Attributes
-          </Text>
-          <TableContainer width="100%" height="100%">
-            <Table variant="simple">
-              <TableCaption>Attributes</TableCaption>
-              <Thead>
-                <Tr>
-                  <Th>ID</Th>
-                  <Th>Name</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {participantAttributes.map((participantAttribute) => (
-                  <Tr key={participantAttribute?.id}>
-                    <Td>{participantAttribute?.attribute?.name}</Td>
-                    <Td>
-                      <Input
-                        type="text"
-                        name="lastName"
-                        width="auto"
-                        value={participantAttribute?.value}
-                      />
-                    </Td>
-                  </Tr>
-                ))}
-              </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>{participantAttributes.length} attributes</Th>
-                </Tr>
-              </Tfoot>
-            </Table>
-          </TableContainer>
+    <DashboardLayout
+      pageTitle="Participant Details"
+      previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
+      debugInfo={JSON.stringify(participant)}
+    >
+      <Flex flexDirection="column">
+        <Flex flexDirection="column">
+          <Text>ID: {participant.id}</Text>
+          <Text>Fist Name: {participant.firstName}</Text>
+          <Text>Last Name: {participant.lastName}</Text>
         </Flex>
+        <Text>Check In</Text>
+        <Flex flexDirection="column">
+          <Text>Status: {participantCheckIn.status ? 'true' : 'false'}</Text>
+          <Text>Checked In At: {participantCheckIn.checkedInAt}</Text>
+          <Flex>
+            <Text>Checked In By: {participantCheckIn.checkedInByEmail}</Text>
+          </Flex>
+        </Flex>
+        <Text>Attributes - {participant.numberOfAttributesAssigned} assigned</Text>
+        <DataDisplay
+          loading={loading}
+          columns={columns}
+          rows={participantAttributes}
+          // onRowClick={(row) => {
+          //   router.push(`/organizations/${orgId}/events/${eventId}/attributes/${row.id}`);
+          // }}
+        />
       </Flex>
     </DashboardLayout>
   );
