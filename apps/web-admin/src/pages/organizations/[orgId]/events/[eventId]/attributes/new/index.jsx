@@ -1,28 +1,18 @@
-import { useState, useEffect } from 'react';
-
-import { useFetch } from '@/hooks/useFetch';
-
-import {
-  Button,
-  Box,
-  Card,
-  CardBody,
-  FormControl,
-  FormLabel,
-  Input,
-  Flex,
-  Text,
-  Select,
-} from '@chakra-ui/react';
-
+import { useState } from 'react';
 import { useRouter } from 'next/router';
+
+import { Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
+
 import DashboardLayout from '@/layouts/DashboardLayout';
 
-export default function NewOrganization() {
-  const { loading, get, post } = useFetch();
+import { useAlert } from '@/hooks/useAlert';
+import { useFetch } from '@/hooks/useFetch';
+
+export default function NewAttribute() {
+  const { loading, post } = useFetch();
+  const showAlert = useAlert();
 
   const router = useRouter();
-
   const { orgId, eventId } = router.query;
 
   const [name, setName] = useState('');
@@ -37,56 +27,42 @@ export default function NewOrganization() {
       },
     );
     if (status === 200) {
+      showAlert({
+        title: 'Success',
+        description: 'Attribute has been added successfully.',
+        status: 'success',
+      });
       router.push(`/organizations/${orgId}/events/${eventId}/attributes`);
     } else {
-      alert(data.error);
+      showAlert({
+        title: 'Error',
+        description: data.error,
+        status: 'error',
+      });
     }
   };
 
   return (
-    <DashboardLayout>
-      <Flex
-        direction="column"
-        height="100%"
-        width="100%"
-        alignItems="start"
-        justifyContent="start"
-        gap={8}
-      >
-        <Box width="100%" p={8} display="flex" justifyContent="space-between">
-          <Text fontSize="4xl" fontWeight="bold">
-            Add New Attribute
-          </Text>
-        </Box>
-        <Flex width="100%" justifyContent="center">
-          <Card width="100%" maxWidth="400px" height="auto">
-            <CardBody>
-              <form onSubmit={handleSubmit}>
-                <FormControl isRequired my={4}>
-                  <FormLabel>Name</FormLabel>
-                  <Input
-                    type="text"
-                    name="name"
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                    }}
-                  />
-                </FormControl>
-                <Button
-                  type="submit"
-                  width="100%"
-                  my="4"
-                  isLoading={loading}
-                  loadingText="Please Wait"
-                >
-                  Add
-                </Button>
-              </form>
-            </CardBody>
-          </Card>
-        </Flex>
-      </Flex>
+    <DashboardLayout
+      pageTitle="Add Attribute"
+      previousPage={`/organizations/${orgId}/events/${eventId}/attributes`}
+    >
+      <form onSubmit={handleSubmit}>
+        <FormControl isRequired my={4}>
+          <FormLabel>Name</FormLabel>
+          <Input
+            type="text"
+            name="name"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
+        </FormControl>
+        <Button type="submit" width="100%" my="4" isLoading={loading} loadingText="Please Wait">
+          Add
+        </Button>
+      </form>
     </DashboardLayout>
   );
 }

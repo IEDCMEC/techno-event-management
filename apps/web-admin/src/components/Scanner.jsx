@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { QrReader } from 'react-qr-reader';
-import { Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
 const Scanner = ({ result, setResult }) => {
   const handleScan = (result) => {
@@ -15,13 +15,13 @@ const Scanner = ({ result, setResult }) => {
   };
 
   return (
-    <div>
+    <Box height="100%" width="100%">
       <QrReader
         constraints={{ facingMode: 'environment' }}
         onResult={handleScan}
         onError={handleError}
       />
-    </div>
+    </Box>
   );
 };
 

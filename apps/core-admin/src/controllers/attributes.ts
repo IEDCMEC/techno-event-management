@@ -6,11 +6,23 @@ export const getAllAttributes = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId } = req?.params;
 
-    const attributes = await prisma.attributes.findMany({
+    let attributes = await prisma.attributes.findMany({
       where: {
         organizationId: orgId,
         eventId: eventId,
       },
+      include: {
+        participantAttributes: true,
+      },
+    });
+
+    attributes = attributes.map((attribute: any) => {
+      return {
+        id: attribute.id,
+        name: attribute.name,
+        createdAt: attribute.createdAt,
+        numberOfParticipantsWithAttributeAssigned: attribute.participantAttributes.length,
+      };
     });
 
     if (!attributes) {
@@ -28,7 +40,7 @@ export const getAttributeById = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId, attributeId } = req?.params;
 
-    const attribute = await prisma.attributes.findFirst({
+    let attribute = await prisma.attributes.findFirst({
       where: {
         organizationId: orgId,
         eventId,
@@ -46,6 +58,24 @@ export const getAttributeById = async (req: Request, res: Response) => {
     if (!attribute) {
       return res.status(404).json({ error: 'No attributes found' });
     }
+
+    attribute = {
+      id: attribute.id,
+      name: attribute.name,
+      createdAt: attribute.createdAt,
+      numberOfParticipantsWithAttributeAssigned: attribute.participantAttributes.length,
+      participantAttributeDetails: attribute.participantAttributes.map(
+        (participantAttribute: any) => {
+          return {
+            id: participantAttribute.id,
+            value: participantAttribute.value,
+            addedAt: participantAttribute.createdAt,
+            firstName: participantAttribute.participant.firstName,
+            lastName: participantAttribute.participant.lastName,
+          };
+        },
+      ),
+    };
 
     return res.status(200).json({ attribute });
   } catch (err: any) {

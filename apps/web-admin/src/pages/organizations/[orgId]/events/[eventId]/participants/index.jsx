@@ -11,9 +11,11 @@ import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 
 const columns = [
-  { field: 'id', headerName: 'ID' },
   { field: 'firstName', headerName: 'First Name', width: 200 },
   { field: 'lastName', headerName: 'Last Name', width: 200 },
+  { field: 'checkedIn', headerName: 'CheckedIn', width: 200 },
+  { field: 'numberOfAttributesAssigned', headerName: 'Attributes Assigned', width: 200 },
+  { field: 'addedAt', headerName: 'Added At', width: 200 },
 ];
 
 export default function Participants() {

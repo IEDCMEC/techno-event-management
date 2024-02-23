@@ -35,7 +35,7 @@ export default function OrganizationById() {
 
   return (
     <DashboardLayout
-      pageTitle="Organization"
+      pageTitle={organization?.name}
       previousPage={`/organizations`}
       headerButton={
         <>

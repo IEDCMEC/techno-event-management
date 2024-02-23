@@ -6,7 +6,7 @@ import {
   getOrganizationStats,
   getUsersOrganizations,
 } from './controllers/organizations';
-import { createNewEvent, getEvents } from './controllers/events';
+import { createNewEvent, getEventStats, getEvents } from './controllers/events';
 import {
   addNewParticipant,
   getAllParticipants,
@@ -51,6 +51,7 @@ router.get('/organizations/:orgId/members', validateOrganizationUser, getOrganiz
 router.post('/organizations/:orgId/members', validateOrganizationAdmin, addOrganizationMember);
 
 router.get('/organizations/:orgId/events', getEvents);
+router.get('/organizations/:orgId/events/:eventId', getEventStats);
 router.post('/organizations/:orgId/events', createNewEvent);
 
 router.get('/organizations/:orgId/events/:eventId/participants', getAllParticipants);
