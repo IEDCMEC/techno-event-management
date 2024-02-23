@@ -19,10 +19,13 @@ export const addNewParticipant = async (req: Request, res: Response) => {
       }
 
       let attributesToBeAdded: string[] = [];
+      let extrasToBeAdded: string[] = [];
 
       for (const key in participants[0]) {
         if (key.startsWith('_')) {
           attributesToBeAdded.push(key.split('_')[1]);
+        } else if (key.startsWith('&')) {
+          extrasToBeAdded.push(key.split('&')[1]);
         }
       }
 
@@ -34,8 +37,19 @@ export const addNewParticipant = async (req: Request, res: Response) => {
           },
         });
 
+        const extrasAlreadyPresent = await tx.extras.findMany({
+          where: {
+            organizationId: orgId,
+            eventId,
+          },
+        });
+
         const newAttributes = attributesToBeAdded.filter(
           (attribute) => !attributesAlreadyPresent.find((a: any) => a.name === attribute),
+        );
+
+        const newExtras = extrasToBeAdded.filter(
+          (extra) => !extrasAlreadyPresent.find((e: any) => e.name === extra),
         );
 
         const newAttributesAdded = await tx.attributes.createMany({
@@ -48,7 +62,24 @@ export const addNewParticipant = async (req: Request, res: Response) => {
           }),
         });
 
+        const newExtrasAdded = await tx.extras.createMany({
+          data: newExtras.map((extra) => {
+            return {
+              name: extra,
+              organizationId: orgId,
+              eventId,
+            };
+          }),
+        });
+
         const attributes = await tx.attributes.findMany({
+          where: {
+            organizationId: orgId,
+            eventId,
+          },
+        });
+
+        const extras = await tx.extras.findMany({
           where: {
             organizationId: orgId,
             eventId,
@@ -71,6 +102,13 @@ export const addNewParticipant = async (req: Request, res: Response) => {
                   .filter(
                     (attribute: any) => attribute.value !== undefined && attribute.value !== null,
                   ),
+              },
+              participantExtras: {
+                create: extras
+                  .filter((extra: any) => p[`&${extra.name}`] === true)
+                  .map((extra: any) => ({
+                    extraId: extra.id,
+                  })),
               },
             },
           });
@@ -165,6 +203,7 @@ export const getAllParticipants = async (req: Request, res: Response) => {
       include: {
         participantAttributes: true,
         participantCheckIn: true,
+        participantExtras: true,
       },
     });
 
@@ -179,6 +218,7 @@ export const getAllParticipants = async (req: Request, res: Response) => {
         firstName: participant.firstName,
         lastName: participant.lastName,
         numberOfAttributesAssigned: participant.participantAttributes.length,
+        numnerOfExtrasAssigned: participant.participantExtras.length,
         checkedIn: participant.participantCheckIn.length > 0 ? true : false,
       };
     });
@@ -271,6 +311,17 @@ export const getParticipantById = async (req: Request, res: Response) => {
             attribute: true,
           },
         },
+        participantExtras: {
+          include: {
+            extra: true,
+          },
+        },
+        participantExtrasCheckIn: {
+          select: {
+            checkedInAt: true,
+            checkedInByUser: true,
+          },
+        },
       },
     });
 
@@ -317,13 +368,77 @@ export const getParticipantById = async (req: Request, res: Response) => {
       }
     });
 
+    const extras = await prisma.extras.findMany({
+      where: {
+        organizationId: orgId,
+        eventId,
+      },
+    });
+
+    if (!extras) {
+      return res.status(500).json({ error: 'Something went wrong' });
+    }
+
+    extras.forEach((extra: any) => {
+      const existingExtra = participant?.participantExtras?.find(
+        (pe: any) => pe.extraId === extra.id,
+      );
+
+      if (!existingExtra) {
+        if (!participant.extras) {
+          participant.extras = [];
+        }
+
+        participant.extras.push({
+          id: extra.id,
+          name: extra.name,
+          assigned: false,
+          checkedIn: false,
+        });
+      } else {
+        if (!participant.extras) {
+          participant.extras = [];
+        }
+
+        participant.extras.push({
+          id: extra.id,
+          name: extra.name,
+          assigned: true,
+          checkIn: {
+            status: participant.participantExtrasCheckIn.length > 0 ? true : false,
+            at:
+              participant.participantExtrasCheckIn.length > 0
+                ? participant.participantExtrasCheckIn[0].checkedInAt
+                : null,
+            by: {
+              email:
+                participant.participantExtrasCheckIn.length > 0
+                  ? participant.participantExtrasCheckIn[0].checkedInByUser.email
+                  : null,
+              firstName:
+                participant.participantExtrasCheckIn.length > 0
+                  ? participant.participantExtrasCheckIn[0].checkedInByUser.firstName
+                  : null,
+              lastName:
+                participant.participantExtrasCheckIn.length > 0
+                  ? participant.participantExtrasCheckIn[0].checkedInByUser.lastName
+                  : null,
+            },
+          },
+        });
+      }
+    });
+
     participant = {
       id: participant.id,
       addedAt: participant.createdAt,
       firstName: participant.firstName,
       lastName: participant.lastName,
       attributes: participant.attributes,
+      extras: participant.extras,
       numberOfAttributesAssigned: participant.participantAttributes.length,
+      numberOfExtrasAssigned: participant.participantExtras.length,
+      numberOfExtrasCheckedIn: participant.participantExtrasCheckIn.length,
       checkIn: {
         status: participant.participantCheckIn.length > 0 ? true : false,
         checkedInAt:
@@ -523,23 +638,33 @@ export const checkOutParticipant = async (req: Request, res: Response) => {
 
     const { orgId, eventId, participantId } = req?.params;
 
-    const { checkedOutAt } = req?.body;
-
-    const participantAlreadyCheckedOut = await prisma.participantCheckIn.findFirst({
+    const isParticipantCheckedIn = await prisma.participantCheckIn.findFirst({
       where: {
         participantId,
         organizationId: orgId,
         eventId,
       },
+      include: {
+        participant: true,
+        checkedInByUser: true,
+      },
     });
 
-    if (!participantAlreadyCheckedOut) {
-      return res.status(400).json({ error: 'Participant already checked out' });
+    const participant = await prisma.participant.findUnique({
+      where: {
+        id: participantId,
+      },
+    });
+
+    if (!isParticipantCheckedIn) {
+      return res.status(400).json({
+        error: `${participant?.firstName} ${participant?.lastName} is not checked-in`,
+      });
     }
 
     const participantCheckOut = await prisma.participantCheckIn.delete({
       where: {
-        participantId,
+        id: isParticipantCheckedIn.id,
       },
     });
 
@@ -547,7 +672,9 @@ export const checkOutParticipant = async (req: Request, res: Response) => {
       return res.status(500).json({ error: 'Something went wrong' });
     }
 
-    return res.status(200).json({ participantCheckOut });
+    return res.status(200).json({
+      message: `${participant?.firstName} ${participant?.lastName} has been successfully checked-out`,
+    });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });

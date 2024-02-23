@@ -12,31 +12,32 @@ import DataDisplay from '@/components/DataDisplay';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
-  { field: 'numberOfParticipants', headerName: 'No of Participants', width: 200 },
   {
-    field: 'numberOfParticipantsCheckedIn',
+    field: 'numberOfParticipantsWithExtrasAssigned',
+    headerName: 'No of Participants Assigned',
+    width: 200,
+  },
+  {
+    field: 'numberOfParticipantsWithExtrasCheckedIn',
     headerName: 'No of Participants Checked In',
     width: 200,
   },
-  { field: 'numberOfAttributes', headerName: 'No of Attributes', width: 200 },
-  { field: 'numberOfExtras', headerName: 'No of Extras', width: 200 },
-  { field: 'createdAt', headerName: 'Created At', width: 200 },
 ];
 
-export default function Events() {
+export default function Extras() {
   const router = useRouter();
-  const { orgId } = router.query;
+  const { orgId, eventId } = router.query;
   const showAlert = useAlert();
 
   const { loading, get } = useFetch();
 
-  const [events, setEvents] = useState([]);
+  const [extras, setExtras] = useState([]);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      const { data, status } = await get(`/core/organizations/${orgId}/events`);
+    const fetchExtras = async () => {
+      const { data, status } = await get(`/core/organizations/${orgId}/events/${eventId}/extras`);
       if (status === 200) {
-        setEvents(data.events || []);
+        setExtras(data.extras || []);
       } else {
         showAlert({
           title: 'Error',
@@ -45,33 +46,33 @@ export default function Events() {
         });
       }
     };
-    fetchEvents();
+    fetchExtras();
   }, []);
 
   return (
     <DashboardLayout
-      pageTitle="Event"
-      previousPage={`/organizations/${orgId}`}
+      pageTitle="Extras"
+      previousPage={`/organizations/${orgId}/events/${eventId}`}
       headerButton={
         <>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/new`);
+              router.push(`/organizations/${orgId}/events/${eventId}/extras/new`);
             }}
             isLoading={loading}
           >
-            New Event
+            Add Extra
           </Button>
         </>
       }
-      debugInfo={events}
+      debugInfo={extras}
     >
       <DataDisplay
         loading={loading}
         columns={columns}
-        rows={events}
+        rows={extras}
         onRowClick={(row) => {
-          router.push(`/organizations/${orgId}/events/${row.id}`);
+          router.push(`/organizations/${orgId}/events/${eventId}/extras/${row.id}`);
         }}
       />
     </DashboardLayout>

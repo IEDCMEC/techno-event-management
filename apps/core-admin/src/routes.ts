@@ -28,6 +28,7 @@ import {
 } from './controllers/attributes';
 import { fetchAccountDetails, updateAccountDetails } from './controllers/users';
 import { validateOrganizationUser, validateOrganizationAdmin } from './middlewares/authorization';
+import { addNewExtra, checkInExtra, getAllExtras, getExtraById } from './controllers/extras';
 
 const router: Router = express.Router();
 
@@ -93,5 +94,10 @@ router.get(
 );
 router.put('/organizations/:orgId/events/:eventId/attributes/:attributeId', editAttribute);
 router.post('/organizations/:orgId/events/:eventId/attributes', addNewAttribute);
+
+router.get('/organizations/:orgId/events/:eventId/extras', getAllExtras);
+router.get('/organizations/:orgId/events/:eventId/extras/:extraId', getExtraById);
+router.post('/organizations/:orgId/events/:eventId/extras/:extraId/check-in', checkInExtra);
+router.post('/organizations/:orgId/events/:eventId/extras', addNewExtra);
 
 export default router;

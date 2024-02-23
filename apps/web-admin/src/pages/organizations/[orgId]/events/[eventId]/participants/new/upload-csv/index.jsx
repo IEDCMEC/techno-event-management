@@ -48,12 +48,13 @@ export default function NewParticipantByCSVUpload() {
             (column) =>
               column.field !== 'firstName' &&
               column.field !== 'lastName' &&
-              !column.field.startsWith('_'),
+              !(column.field.startsWith('_') || column.field.startsWith('&')),
           )
         ) {
           showAlert({
             title: 'Error',
-            description: 'Extra fields should be prefixed with an underscore (_)',
+            description:
+              'Extra attributes should be prefixed with an underscore (_) and extras to be checked-in should be prefixed with an asterisk (&)',
             status: 'error',
             duration: 10000,
           });
@@ -62,7 +63,8 @@ export default function NewParticipantByCSVUpload() {
         if (columns.find((column) => column.field !== 'firstName' || column.field !== 'lastName')) {
           showAlert({
             title: 'Info',
-            description: 'Extra fields marked with _ will be inserted as attributes',
+            description:
+              'Extra columns marked with _ will be inserted as attributes and & will be inserted as extras to be checked-in.',
             status: 'info',
             duration: 10000,
           });
@@ -86,7 +88,7 @@ export default function NewParticipantByCSVUpload() {
         (column) =>
           column.field !== 'firstName' &&
           column.field !== 'lastName' &&
-          !column.field.startsWith('_'),
+          !(column.field.startsWith('_') || column.field.startsWith('&')),
       )
     ) {
       showAlert({
@@ -116,7 +118,7 @@ export default function NewParticipantByCSVUpload() {
     if (status === 200) {
       showAlert({
         title: 'Success',
-        description: 'Participant has been added successfully.',
+        description: 'Participants have been added successfully.',
         status: 'success',
       });
       router.push(`/organizations/${orgId}/events/${eventId}/participants`);
@@ -133,7 +135,7 @@ export default function NewParticipantByCSVUpload() {
     <DashboardLayout
       pageTitle="Upload CSV"
       previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
-      debugInfo={JSON.stringify(csvData)}
+      debugInfo={csvData}
     >
       <Box
         height="100%"
@@ -145,7 +147,8 @@ export default function NewParticipantByCSVUpload() {
         {!csvData && (
           <Text fontSize="xl">
             Upload a CSV file of participants. The required columns are firstName, lastName. Extra
-            columns should be prefixed with an underscore (_).
+            attributes should be prefixed with an underscore (_) and extras to be checked-in should
+            be prefixed with and ampersand (&).
           </Text>
         )}
         <Flex justifyContent="space-between" alignItems="center">

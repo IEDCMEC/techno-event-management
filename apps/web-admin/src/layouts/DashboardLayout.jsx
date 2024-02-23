@@ -92,7 +92,7 @@ export default function DashboardLayout({
       </Flex>
       {!isMobile && (
         <Box fontSize="xs" maxHeight={4} overflow="hidden">
-          {debugInfo}
+          {JSON.stringify(debugInfo)}
         </Box>
       )}
     </Flex>
