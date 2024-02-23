@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Button } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
@@ -61,27 +61,53 @@ export default function ParticipantsCheckIn() {
       previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
       headerButton={
         <>
-          <Button
-            onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in/new/`);
-            }}
-            isLoading={loading}
-          >
-            Check-In Participant
-          </Button>
-          <Button
-            onClick={() => {
-              router.push(
-                `/organizations/${orgId}/events/${eventId}/participants/check-in/new/scanner`,
-              );
-            }}
-            isLoading={loading}
-          >
-            Open Scanner
-          </Button>
+          <Flex flexDirection="column" gap={4}>
+            <Button
+              onClick={() => {
+                router.push(
+                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-in/`,
+                );
+              }}
+              isLoading={loading}
+            >
+              Check-In Participant
+            </Button>
+            <Button
+              onClick={() => {
+                router.push(
+                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-in/scanner`,
+                );
+              }}
+              isLoading={loading}
+            >
+              Open Scanner
+            </Button>
+          </Flex>
+          <Flex flexDirection="column" gap={4}>
+            <Button
+              onClick={() => {
+                router.push(
+                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-out/`,
+                );
+              }}
+              isLoading={loading}
+            >
+              Check-Out Participant
+            </Button>
+            <Button
+              onClick={() => {
+                router.push(
+                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-out/scanner`,
+                );
+              }}
+              isLoading={loading}
+            >
+              Open Scanner
+            </Button>
+          </Flex>
         </>
       }
-      debugInfo={JSON.stringify(participantsCheckIn)}
+      debugInfo={participantsCheckIn}
     >
       <DataDisplay
         loading={loading}

@@ -28,6 +28,7 @@ export const getEvents = async (req: Request, res: Response) => {
       include: {
         Participant: true,
         attributes: true,
+        extras: true,
         ParticipantCheckin: true,
       },
     });
@@ -40,6 +41,7 @@ export const getEvents = async (req: Request, res: Response) => {
         createdAt: event.createdAt,
         numberOfParticipants: event.Participant.length,
         numberOfAttributes: event.attributes.length,
+        numberOfExtras: event.extras.length,
         numberOfParticipantsCheckedIn: event.ParticipantCheckin.length,
       };
     });
@@ -77,6 +79,7 @@ export const getEventStats = async (req: Request, res: Response) => {
       include: {
         Participant: true,
         attributes: true,
+        extras: true,
         ParticipantCheckin: true,
       },
     });
@@ -92,6 +95,7 @@ export const getEventStats = async (req: Request, res: Response) => {
       createdAt: event.createdAt,
       numberOfParticipants: event.Participant.length,
       numberOfAttributes: event.attributes.length,
+      numberOfExtras: event.extras.length,
       numberOfParticipantsCheckedIn: event.ParticipantCheckin.length,
     };
 

@@ -77,6 +77,14 @@ export default function EventById() {
         >
           Attributes
         </Button>
+        <Button
+          onClick={() => {
+            router.push(`/organizations/${orgId}/events/${eventId}/extras`);
+          }}
+          isLoading={loading}
+        >
+          Extras
+        </Button>
       </Flex>
     </DashboardLayout>
   );

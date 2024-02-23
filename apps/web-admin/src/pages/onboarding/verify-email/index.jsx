@@ -17,11 +17,7 @@ export default function VerifyEmail() {
   }, [user, isAuthenticated, isLoading]);
 
   return (
-    <DashboardLayout
-      pageTitle="Email Not Verified"
-      previousPage={`/`}
-      debugInfo={JSON.stringify(user)}
-    >
+    <DashboardLayout pageTitle="Email Not Verified" previousPage={`/`} debugInfo={user}>
       <Flex height="100%" width="100%" alignItems="center" justifyContent="center">
         <Text fontSize="3xl">
           Please verify your email to continue using the application. Do not forget to check the
