@@ -16,11 +16,31 @@ export default function CheckInParticipantWithScanner() {
   const router = useRouter();
   const { orgId, eventId } = router.query;
 
-  const [previousPartiicpantId, setPreviousParticipantId] = useState(null);
   const [participantId, setParticipantId] = useState(null);
-  const [participants, setParticipants] = useState([]);
+  const [participantDetails, setParticipantDetails] = useState(null);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    if (participantId) {
+      const fetchParticipantDetails = async () => {
+        const { data, status } = await get(
+          `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
+        );
+        if (status === 200) {
+          setParticipantDetails(data.participant);
+          console.log(data.participant);
+        } else {
+          showAlert({
+            title: 'Error',
+            description: data.error,
+            status: 'error',
+          });
+        }
+      };
+      fetchParticipantDetails();
+    }
+  }, [orgId, eventId, participantId]);
+
+  const handleCheckIn = async () => {
     const { data, status } = await post(
       `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${participantId}`,
       {},
@@ -34,56 +54,20 @@ export default function CheckInParticipantWithScanner() {
         description: data.message,
         status: 'success',
       });
-      setPreviousParticipantId(participantId);
       setParticipantId(null);
+      setParticipantDetails(null);
     } else {
       showAlert({
         title: 'Error',
         description: data.error,
         status: 'error',
       });
-      setParticipantId(null);
-      setPreviousParticipantId(null);
     }
   };
 
-  useEffect(() => {
-    if (participantId && previousPartiicpantId !== participantId) handleSubmit();
-  }, [participantId]);
-
-  //
-  // Periodically clear the previous participant id
-  //
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setPreviousParticipantId(null);
-      setParticipantId(null);
-    }, 10000);
-
-    return () => clearInterval(intervalId);
-  }, [previousPartiicpantId]);
-
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/participants`,
-      );
-      if (status === 200) {
-        setParticipants(data.participants);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-    fetchParticipants();
-  }, [orgId, eventId]);
-
   return (
     <DashboardLayout
-      pageTitle="Check In  Participant"
+      pageTitle="Check In Participant"
       previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
       headerButton={
         <>
@@ -91,7 +75,7 @@ export default function CheckInParticipantWithScanner() {
             <Button
               onClick={() => {
                 router.push(
-                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-in/scanner-slow`,
+                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-in/scanner`,
                 );
               }}
               isLoading={loading}
@@ -101,10 +85,18 @@ export default function CheckInParticipantWithScanner() {
           </Flex>
         </>
       }
-      debugInfo={JSON.stringify(participantId) + JSON.stringify(previousPartiicpantId)}
     >
-      <Flex height="50%" width="50%" justifyContent={'center'} alignItems={'center'}>
-        <Scanner result={participantId} setResult={setParticipantId} />
+      <Flex height="100%" width="100%" flexDirection="column" alignItems="center">
+        {participantDetails && (
+          <div>
+            <p>Name: {participantDetails.firstName + ' ' + participantDetails.lastName}</p>
+            <p>Email: {participantDetails.email}</p>
+            <Button onClick={handleCheckIn} isLoading={loading}>
+              Check In
+            </Button>
+          </div>
+        )}
+        <Scanner setResult={setParticipantId} />
       </Flex>
     </DashboardLayout>
   );
