@@ -117,6 +117,40 @@ export default function CheckInParticipant() {
             ))}
           </Select>
         </FormControl>
+
+        <FormControl my={4}>
+          <FormLabel>Phone Number</FormLabel>
+          <Select
+            placeholder="Select Phone Number"
+            value={participantId}
+            onChange={(e) => {
+              setParticipantId(e.target.value);
+            }}
+          >
+            {participants.map((participant) => (
+              <option key={participant.id} value={participant.id}>
+                {participant.phone}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl my={4}>
+          <FormLabel>Email</FormLabel>
+          <Select
+            placeholder="Select Email"
+            value={participantId}
+            onChange={(e) => {
+              setParticipantId(e.target.value);
+            }}
+          >
+            {participants.map((participant) => (
+              <option key={participant.id} value={participant.id}>
+                {participant.email}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+
         <Button type="submit" width="100%" my="4" isLoading={loading} loadingText="Please Wait">
           Check In
         </Button>

@@ -13,6 +13,8 @@ import { useFetch } from '@/hooks/useFetch';
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
   { field: 'lastName', headerName: 'Last Name', width: 200 },
+  { field: 'email', headerName: 'Email', width: 200 },
+  { field: 'phone', headerName: 'Phone', width: 200 },
   {
     field: 'checkedInAt',
     headerName: 'Check-In At',

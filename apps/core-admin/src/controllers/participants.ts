@@ -93,6 +93,9 @@ export const addNewParticipant = async (req: Request, res: Response) => {
               lastName: p.lastName,
               organizationId: orgId,
               eventId,
+              email: p.email,
+              phone: p.phone,
+
               participantAttributes: {
                 create: attributes
                   .map((attribute: any) => ({
@@ -125,7 +128,7 @@ export const addNewParticipant = async (req: Request, res: Response) => {
       //
       // Single participant addition
       //
-      const { firstName, lastName, attributes } = req?.body;
+      const { firstName, lastName, attributes, phone, email } = req?.body;
 
       attributes.filter((attribute: any) => {
         if (!attribute.value) {
@@ -139,6 +142,8 @@ export const addNewParticipant = async (req: Request, res: Response) => {
           lastName,
           organizationId: orgId,
           eventId,
+          email,
+          phone,
           participantAttributes: {
             create: attributes.map((attribute: any) => {
               return {
@@ -165,7 +170,7 @@ export const addNewParticipant = async (req: Request, res: Response) => {
 export const editParticipant = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId, participantId } = req?.params;
-    const { firstName, lastName } = req?.body;
+    const { firstName, lastName, phone, email } = req?.body;
 
     if (!firstName || !lastName) {
       return res.status(400).json({ error: 'First name and last name are required' });
@@ -178,6 +183,8 @@ export const editParticipant = async (req: Request, res: Response) => {
       data: {
         firstName,
         lastName,
+        phone,
+        email,
       },
     });
 
@@ -217,6 +224,8 @@ export const getAllParticipants = async (req: Request, res: Response) => {
         addedAt: participant.createdAt,
         firstName: participant.firstName,
         lastName: participant.lastName,
+        phone: participant.phone,
+        email: participant.email,
         numberOfAttributesAssigned: participant.participantAttributes.length,
         numnerOfExtrasAssigned: participant.participantExtras.length,
         checkedIn: participant.participantCheckIn.length > 0 ? true : false,
@@ -260,6 +269,8 @@ export const getAllParticipantsCheckInDetails = async (req: Request, res: Respon
         participantId: participant.id,
         firstName: participant.firstName,
         lastName: participant.lastName,
+        phone: participant.phone,
+        email: participant.email,
         checkIn: {
           status: participant.participantCheckIn.length > 0 ? true : false,
           checkedInAt:
@@ -436,6 +447,8 @@ export const getParticipantById = async (req: Request, res: Response) => {
       lastName: participant.lastName,
       attributes: participant.attributes,
       extras: participant.extras,
+      email: participant.email,
+      phone: participant.phone,
       numberOfAttributesAssigned: participant.participantAttributes.length,
       numberOfExtrasAssigned: participant.participantExtras.length,
       numberOfExtrasCheckedIn: participant.participantExtrasCheckIn.length,

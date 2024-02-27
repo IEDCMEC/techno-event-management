@@ -82,6 +82,8 @@ export default function ParticipantById() {
           <Text>ID: {participant.id}</Text>
           <Text>Fist Name: {participant.firstName}</Text>
           <Text>Last Name: {participant.lastName}</Text>
+          <Text>Email: {participant.email}</Text>
+          <Text>Phone: {participant.phone}</Text>
         </Flex>
         <Text>Check In</Text>
         <Flex flexDirection="column">
