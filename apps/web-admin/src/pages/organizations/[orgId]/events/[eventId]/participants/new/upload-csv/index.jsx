@@ -22,6 +22,8 @@ export default function NewParticipantByCSVUpload() {
   const [columns, setColumns] = useState([
     { field: 'firstName', headerName: 'First Name' },
     { field: 'lastName', headerName: 'Last Name' },
+    { field: 'email', headerName: 'Email' },
+    { field: 'phone', headerName: 'Phone' },
   ]);
 
   const handleFileUpload = (event) => {
@@ -29,7 +31,12 @@ export default function NewParticipantByCSVUpload() {
 
     Papa.parse(file, {
       header: true,
-      dynamicTyping: true,
+      dynamicTyping: (field) => {
+        // Keep 'phone' field as string
+        if (field === 'phone') return false;
+        // Convert other fields
+        return true;
+      },
       complete: (result) => {
         const filteredData = result.data.filter((row) => {
           return Object.values(row).every((value) => value !== null && value !== undefined);
@@ -48,6 +55,8 @@ export default function NewParticipantByCSVUpload() {
             (column) =>
               column.field !== 'firstName' &&
               column.field !== 'lastName' &&
+              column.field !== 'email' &&
+              column.field !== 'phone' &&
               !(column.field.startsWith('_') || column.field.startsWith('&')),
           )
         ) {
@@ -60,7 +69,15 @@ export default function NewParticipantByCSVUpload() {
           });
         }
 
-        if (columns.find((column) => column.field !== 'firstName' || column.field !== 'lastName')) {
+        if (
+          columns.find(
+            (column) =>
+              column.field !== 'firstName' ||
+              column.field !== 'lastName' ||
+              column.field !== 'email' ||
+              column.field !== 'phone',
+          )
+        ) {
           showAlert({
             title: 'Info',
             description:
@@ -88,6 +105,8 @@ export default function NewParticipantByCSVUpload() {
         (column) =>
           column.field !== 'firstName' &&
           column.field !== 'lastName' &&
+          column.field !== 'email' &&
+          column.field !== 'phone' &&
           !(column.field.startsWith('_') || column.field.startsWith('&')),
       )
     ) {
@@ -101,6 +120,8 @@ export default function NewParticipantByCSVUpload() {
       setColumns([
         { field: 'firstName', headerName: 'First Name' },
         { field: 'lastName', headerName: 'Last Name' },
+        { field: 'email', headerName: 'Email' },
+        { field: 'phone', headerName: 'Phone' },
       ]);
     }
   }, [columns]);
@@ -146,9 +167,9 @@ export default function NewParticipantByCSVUpload() {
       >
         {!csvData && (
           <Text fontSize="xl">
-            Upload a CSV file of participants. The required columns are firstName, lastName. Extra
-            attributes should be prefixed with an underscore (_) and extras to be checked-in should
-            be prefixed with and ampersand (&).
+            Upload a CSV file of participants. The required columns are firstName, lastName , phone
+            , email. Extra attributes should be prefixed with an underscore (_) and extras to be
+            checked-in should be prefixed with and ampersand (&).
           </Text>
         )}
         <Flex justifyContent="space-between" alignItems="center">

@@ -18,6 +18,8 @@ export default function NewParticipant() {
   const [attributes, setAttributes] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [attributeValues, setAttributeValues] = useState([]);
 
   const handleSubmit = async (e) => {
@@ -102,6 +104,24 @@ export default function NewParticipant() {
             }}
           />
         </FormControl>
+        <FormLabel>Email</FormLabel>
+        <Input
+          type="text"
+          name="email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        />
+        <FormLabel>Phone</FormLabel>
+        <Input
+          type="text"
+          name="phone"
+          value={phone}
+          onChange={(e) => {
+            setPhone(e.target.value);
+          }}
+        />{' '}
         {attributes.map((attribute) => (
           <FormControl my={4} key={attribute.id}>
             <FormLabel>{attribute.name}</FormLabel>
