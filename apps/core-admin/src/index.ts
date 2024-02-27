@@ -1,6 +1,5 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { validateUUID } from './middlewares/validateParams';
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -47,7 +46,6 @@ app.get('/health', (req: Request, res: Response) => {
   }
 });
 
-app.param('eventId', validateUUID);
 app.use(jwtCheck);
 
 import router from './routes';
