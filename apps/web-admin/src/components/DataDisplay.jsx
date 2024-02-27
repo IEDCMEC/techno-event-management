@@ -32,6 +32,7 @@ export default function DataDisplay({ loading, rows, columns, onRowClick }) {
             cursor: 'pointer',
           },
         }}
+        editMode="row"
         checkboxSelection
         disableRowSelectionOnClick
         onRowClick={onRowClick}

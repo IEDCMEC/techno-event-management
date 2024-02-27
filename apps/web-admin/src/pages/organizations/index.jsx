@@ -56,7 +56,7 @@ export default function Organizations() {
           </Button>
         </>
       }
-      debugInfo={JSON.stringify(organizations)}
+      debugInfo={organizations}
     >
       <DataDisplay
         loading={loading}
