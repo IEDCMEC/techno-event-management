@@ -172,7 +172,7 @@ export const addNewParticipant = async (req: Request, res: Response) => {
 export const editParticipant = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId, participantId } = req?.params;
-    const { firstName, lastName, phone, email } = req?.body;
+    const { firstName, lastName, phone, email, checkInKey } = req?.body;
 
     if (!firstName || !lastName) {
       return res.status(400).json({ error: 'First name and last name are required' });
