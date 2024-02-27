@@ -64,14 +64,8 @@ router.get(
   getAllParticipantsCheckInDetails,
 );
 router.get('/organizations/:orgId/events/:eventId/participants/:participantId', getParticipantById);
-router.post(
-  '/organizations/:orgId/events/:eventId/participants/check-in/:participantId',
-  checkInParticipant,
-);
-router.post(
-  '/organizations/:orgId/events/:eventId/participants/check-out/:participantId',
-  checkOutParticipant,
-);
+router.post('/organizations/:orgId/events/:eventId/participants/check-in/', checkInParticipant);
+router.post('/organizations/:orgId/events/:eventId/participants/check-out', checkOutParticipant);
 
 router.get(
   '/organizations/:orgId/events/:eventId/participants/:participantId/attributes',

@@ -95,6 +95,7 @@ export const addNewParticipant = async (req: Request, res: Response) => {
               eventId,
               email: p.email,
               phone: p.phone,
+              checkInKey: p.checkInKey,
 
               participantAttributes: {
                 create: attributes
@@ -128,7 +129,7 @@ export const addNewParticipant = async (req: Request, res: Response) => {
       //
       // Single participant addition
       //
-      const { firstName, lastName, attributes, phone, email } = req?.body;
+      const { firstName, lastName, attributes, phone, email, checkInKey } = req?.body;
 
       attributes.filter((attribute: any) => {
         if (!attribute.value) {
@@ -144,6 +145,7 @@ export const addNewParticipant = async (req: Request, res: Response) => {
           eventId,
           email,
           phone,
+          checkInKey,
           participantAttributes: {
             create: attributes.map((attribute: any) => {
               return {
@@ -185,6 +187,7 @@ export const editParticipant = async (req: Request, res: Response) => {
         lastName,
         phone,
         email,
+        checkInKey,
       },
     });
 
@@ -226,6 +229,7 @@ export const getAllParticipants = async (req: Request, res: Response) => {
         lastName: participant.lastName,
         phone: participant.phone,
         email: participant.email,
+        checkInKey: participant.checkInKey,
         numberOfAttributesAssigned: participant.participantAttributes.length,
         numnerOfExtrasAssigned: participant.participantExtras.length,
         checkedIn: participant.participantCheckIn.length > 0 ? true : false,
@@ -271,6 +275,7 @@ export const getAllParticipantsCheckInDetails = async (req: Request, res: Respon
         lastName: participant.lastName,
         phone: participant.phone,
         email: participant.email,
+        checkInKey: participant.checkInKey,
         checkIn: {
           status: participant.participantCheckIn.length > 0 ? true : false,
           checkedInAt:
@@ -449,6 +454,7 @@ export const getParticipantById = async (req: Request, res: Response) => {
       extras: participant.extras,
       email: participant.email,
       phone: participant.phone,
+      checkInKey: participant.checkInKey,
       numberOfAttributesAssigned: participant.participantAttributes.length,
       numberOfExtrasAssigned: participant.participantExtras.length,
       numberOfExtrasCheckedIn: participant.participantExtrasCheckIn.length,
@@ -584,35 +590,38 @@ export const checkInParticipant = async (req: Request, res: Response) => {
   try {
     const userId = req?.auth?.payload?.sub;
 
-    const { orgId, eventId, participantId } = req?.params;
+    const { orgId, eventId } = req?.params;
 
-    const { checkedInAt } = req?.body;
+    const { checkedInAt, checkInKey } = req?.body;
 
-    if (!checkedInAt) {
-      return res.status(400).json({ error: 'checkedInAt is required' });
+    if (!checkedInAt || !checkInKey) {
+      return res.status(400).json({ error: 'checkInAt and checkInKey is required' });
     }
 
-    const participantAlreadyCheckedIn = await prisma.participantCheckIn.findFirst({
+    const participantAlreadyCheckedIn = await prisma.participant.findFirst({
       where: {
-        participantId,
         organizationId: orgId,
         eventId,
+        checkInKey,
       },
       include: {
-        participant: true,
-        checkedInByUser: true,
+        participantCheckIn: {
+          include: {
+            checkedInByUser: true,
+          },
+        },
       },
     });
 
-    if (participantAlreadyCheckedIn) {
+    if (participantAlreadyCheckedIn.participantCheckIn.length > 0) {
       return res.status(400).json({
-        error: `${participantAlreadyCheckedIn?.participant?.firstName} ${participantAlreadyCheckedIn?.participant?.lastName} has already been checked-in at ${participantAlreadyCheckedIn.checkedInAt} by ${participantAlreadyCheckedIn.checkedInByUser.email}`,
+        error: `${participantAlreadyCheckedIn?.firstName} ${participantAlreadyCheckedIn?.lastName} has already been checked-in at ${participantAlreadyCheckedIn.participantCheckIn[0].checkedInAt} by ${participantAlreadyCheckedIn.participantCheckIn[0].checkedInByUser.email}`,
       });
     }
 
     let participantCheckIn = await prisma.participantCheckIn.create({
       data: {
-        participantId,
+        participantId: participantAlreadyCheckedIn.id,
         organizationId: orgId,
         eventId,
         checkedInBy: userId,
@@ -626,7 +635,7 @@ export const checkInParticipant = async (req: Request, res: Response) => {
 
     participantCheckIn = await prisma.participantCheckIn.findFirst({
       where: {
-        participantId,
+        participantId: participantAlreadyCheckedIn.id,
         organizationId: orgId,
         eventId,
       },
@@ -649,35 +658,38 @@ export const checkOutParticipant = async (req: Request, res: Response) => {
   try {
     const userId = req?.auth?.payload?.sub;
 
-    const { orgId, eventId, participantId } = req?.params;
+    const { orgId, eventId } = req?.params;
 
-    const isParticipantCheckedIn = await prisma.participantCheckIn.findFirst({
+    const { checkInKey } = req?.body;
+
+    if (!checkInKey) {
+      return res.status(400).json({ error: 'checkInKey is required' });
+    }
+
+    const isparticipantCheckedIn = await prisma.participant.findFirst({
       where: {
-        participantId,
         organizationId: orgId,
         eventId,
+        checkInKey,
       },
       include: {
-        participant: true,
-        checkedInByUser: true,
+        participantCheckIn: {
+          include: {
+            checkedInByUser: true,
+          },
+        },
       },
     });
 
-    const participant = await prisma.participant.findUnique({
-      where: {
-        id: participantId,
-      },
-    });
-
-    if (!isParticipantCheckedIn) {
+    if (isparticipantCheckedIn.participantCheckIn.length == 0) {
       return res.status(400).json({
-        error: `${participant?.firstName} ${participant?.lastName} is not checked-in`,
+        error: `${isparticipantCheckedIn?.firstName} ${isparticipantCheckedIn?.lastName} is not checked in`,
       });
     }
 
-    const participantCheckOut = await prisma.participantCheckIn.delete({
+    let participantCheckOut = await prisma.participantCheckIn.delete({
       where: {
-        id: isParticipantCheckedIn.id,
+        id: isparticipantCheckedIn.participantCheckIn[0].id,
       },
     });
 
@@ -686,7 +698,7 @@ export const checkOutParticipant = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({
-      message: `${participant?.firstName} ${participant?.lastName} has been successfully checked-out`,
+      message: `${isparticipantCheckedIn?.firstName} ${isparticipantCheckedIn?.lastName} has been successfully checked-out`,
     });
   } catch (err: any) {
     console.error(err);

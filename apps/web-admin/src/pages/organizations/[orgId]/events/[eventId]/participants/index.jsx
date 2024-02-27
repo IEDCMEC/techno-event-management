@@ -15,6 +15,7 @@ const columns = [
   { field: 'lastName', headerName: 'Last Name', width: 200 },
   { field: 'email', headerName: 'Email', width: 200 },
   { field: 'phone', headerName: 'Phone', width: 200 },
+  { field: 'checkInKey', headerName: 'Check In Key', width: 200 },
   { field: 'checkedIn', headerName: 'CheckedIn', width: 200 },
   { field: 'numberOfAttributesAssigned', headerName: 'Attributes Assigned', width: 200 },
   { field: 'numnerOfExtrasAssigned', headerName: 'Extras Assigned', width: 200 },

@@ -8,23 +8,26 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 
-export default function CheckInParticipant() {
+export default function CheckOutParticipant() {
   const { loading, post, get } = useFetch();
   const showAlert = useAlert();
 
   const router = useRouter();
   const { orgId, eventId } = router.query;
 
-  const [participantId, setParticipantId] = useState(null);
+  const [checkInKey, setcheckInKey] = useState(null);
   const [participants, setParticipants] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { data, status } = await post(
-      `/core/organizations/${orgId}/events/${eventId}/participants/check-out/${participantId}`,
+      `/core/organizations/${orgId}/events/${eventId}/participants/check-out`,
       {},
-      {},
+      {
+        checkInKey,
+        checkedInAt: new Date().toISOString(),
+      },
     );
     if (status === 200) {
       showAlert({
@@ -32,7 +35,7 @@ export default function CheckInParticipant() {
         description: 'Participant has been checked out successfully.',
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in`);
+      router.push(`/organizations/${orgId}/events/${eventId}/participants/check-out`);
     } else {
       showAlert({
         title: 'Error',
@@ -60,24 +63,28 @@ export default function CheckInParticipant() {
     fetchParticipants();
   }, [orgId, eventId]);
 
+  useEffect(() => {
+    console.log('checkInKey', checkInKey);
+  }, [checkInKey]);
+
   return (
     <DashboardLayout
-      pageTitle="Check In Participant"
+      pageTitle="Check out Participant"
       previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
-      debugInfo={JSON.stringify(participantId)}
+      debugInfo={JSON.stringify(checkInKey)}
     >
       <form onSubmit={handleSubmit}>
         <FormControl my={4}>
           <FormLabel>Participant ID</FormLabel>
           <Select
             placeholder="Select Participant ID"
-            value={participantId}
+            value={checkInKey}
             onChange={(e) => {
-              setParticipantId(e.target.value);
+              setcheckInKey(e.target.value);
             }}
           >
             {participants.map((participant) => (
-              <option key={participant.id} value={participant.id}>
+              <option key={participant.id} value={participant.checkInKey}>
                 {participant.id}
               </option>
             ))}
@@ -87,13 +94,13 @@ export default function CheckInParticipant() {
           <FormLabel>First Name</FormLabel>
           <Select
             placeholder="Select First Name"
-            value={participantId}
+            value={checkInKey}
             onChange={(e) => {
-              setParticipantId(e.target.value);
+              setcheckInKey(e.target.value);
             }}
           >
             {participants.map((participant) => (
-              <option key={participant.id} value={participant.id}>
+              <option key={participant.id} value={participant.checkInKey}>
                 {participant.firstName}
               </option>
             ))}
@@ -103,18 +110,68 @@ export default function CheckInParticipant() {
           <FormLabel>Last Name</FormLabel>
           <Select
             placeholder="Select Last Name"
-            value={participantId}
+            value={checkInKey}
             onChange={(e) => {
-              setParticipantId(e.target.value);
+              setcheckInKey(e.target.value);
             }}
           >
             {participants.map((participant) => (
-              <option key={participant.id} value={participant.id}>
+              <option key={participant.id} value={participant.checkInKey}>
                 {participant.lastName}
               </option>
             ))}
           </Select>
         </FormControl>
+
+        <FormControl my={4}>
+          <FormLabel>Phone Number</FormLabel>
+          <Select
+            placeholder="Select Phone Number"
+            value={checkInKey}
+            onChange={(e) => {
+              setcheckInKey(e.target.value);
+            }}
+          >
+            {participants.map((participant) => (
+              <option key={participant.id} value={participant.checkInKey}>
+                {participant.phone}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl my={4}>
+          <FormLabel>Email</FormLabel>
+          <Select
+            placeholder="Select Email"
+            value={checkInKey}
+            onChange={(e) => {
+              setcheckInKey(e.target.value);
+            }}
+          >
+            {participants.map((participant) => (
+              <option key={participant.id} value={participant.checkInKey}>
+                {participant.email}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl my={4}>
+          <FormLabel>Check In Key</FormLabel>
+          <Select
+            placeholder="Add Check In Key"
+            value={checkInKey}
+            onChange={(e) => {
+              setcheckInKey(e.target.value);
+            }}
+          >
+            {participants.map((participant) => (
+              <option key={participant.id} value={participant.checkInKey}>
+                {participant.checkInKey}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+
         <Button type="submit" width="100%" my="4" isLoading={loading} loadingText="Please Wait">
           Check In
         </Button>

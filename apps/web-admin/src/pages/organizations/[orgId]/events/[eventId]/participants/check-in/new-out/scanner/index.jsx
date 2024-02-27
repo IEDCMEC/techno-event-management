@@ -9,22 +9,25 @@ import Scanner from '@/components/Scanner';
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 
-export default function CheckInParticipantWithScanner() {
+export default function CheckOutParticipantWithScanner() {
   const { loading, post, get } = useFetch();
   const showAlert = useAlert();
 
   const router = useRouter();
   const { orgId, eventId } = router.query;
 
-  const [previousPartiicpantId, setPreviousParticipantId] = useState(null);
-  const [participantId, setParticipantId] = useState(null);
+  const [previousCheckInKey, setPreviousCheckInKey] = useState(null);
+  const [checkInKey, setCheckInKey] = useState(null);
   const [participants, setParticipants] = useState([]);
 
   const handleSubmit = async () => {
     const { data, status } = await post(
-      `/core/organizations/${orgId}/events/${eventId}/participants/check-out/${participantId}`,
+      `/core/organizations/${orgId}/events/${eventId}/participants/check-out`,
       {},
-      {},
+      {
+        checkInKey,
+        checkedInAt: new Date().toISOString(),
+      },
     );
     if (status === 200) {
       showAlert({
@@ -32,34 +35,34 @@ export default function CheckInParticipantWithScanner() {
         description: data.message,
         status: 'success',
       });
-      setPreviousParticipantId(participantId);
-      setParticipantId(null);
+      setPreviousCheckInKey(checkInKey);
+      setCheckInKey(null);
     } else {
       showAlert({
         title: 'Error',
         description: data.error,
         status: 'error',
       });
-      setParticipantId(null);
-      setPreviousParticipantId(null);
+      setCheckInKey(null);
+      setPreviousCheckInKey(null);
     }
   };
 
   useEffect(() => {
-    if (participantId && previousPartiicpantId !== participantId) handleSubmit();
-  }, [participantId]);
+    if (checkInKey && previousCheckInKey !== checkInKey) handleSubmit();
+  }, [checkInKey]);
 
   //
   // Periodically clear the previous participant id
   //
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setPreviousParticipantId(null);
-      setParticipantId(null);
+      setPreviousCheckInKey(null);
+      setCheckInKey(null);
     }, 10000);
 
     return () => clearInterval(intervalId);
-  }, [previousPartiicpantId]);
+  }, [previousCheckInKey]);
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -81,65 +84,12 @@ export default function CheckInParticipantWithScanner() {
 
   return (
     <DashboardLayout
-      pageTitle="Check In  Participant"
+      pageTitle="Check Out Participant"
       previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
-      debugInfo={participantId + ' ' + previousPartiicpantId}
+      debugInfo={JSON.stringify(checkInKey) + JSON.stringify(previousCheckInKey)}
     >
-      {/* <form onSubmit={handleSubmit}>
-        <FormControl my={4}>
-          <FormLabel>Participant ID</FormLabel>
-          <Select
-            placeholder="Select Participant ID"
-            value={participantId}
-            onChange={(e) => {
-              setParticipantId(e.target.value);
-            }}
-          >
-            {participants.map((participant) => (
-              <option key={participant.id} value={participant.id}>
-                {participant.id}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl my={4}>
-          <FormLabel>First Name</FormLabel>
-          <Select
-            placeholder="Select First Name"
-            value={participantId}
-            onChange={(e) => {
-              setParticipantId(e.target.value);
-            }}
-          >
-            {participants.map((participant) => (
-              <option key={participant.id} value={participant.id}>
-                {participant.firstName}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl my={4}>
-          <FormLabel>Last Name</FormLabel>
-          <Select
-            placeholder="Select Last Name"
-            value={participantId}
-            onChange={(e) => {
-              setParticipantId(e.target.value);
-            }}
-          >
-            {participants.map((participant) => (
-              <option key={participant.id} value={participant.id}>
-                {participant.lastName}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-        <Button type="submit" width="100%" my="4" isLoading={loading} loadingText="Please Wait">
-          Check In
-        </Button>
-      </form> */}
       <Flex height="100%" width="100%">
-        <Scanner result={participantId} setResult={setParticipantId} />
+        <Scanner result={checkInKey} setResult={setCheckInKey} />
       </Flex>
     </DashboardLayout>
   );
