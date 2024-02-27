@@ -16,15 +16,16 @@ export default function CheckInParticipantWithScanner() {
   const router = useRouter();
   const { orgId, eventId } = router.query;
 
-  const [previousPartiicpantId, setPreviousParticipantId] = useState(null);
-  const [participantId, setParticipantId] = useState(null);
+  const [previousCheckInKey, setPreviousCheckInKey] = useState(null);
+  const [checkInKey, setCheckInKey] = useState(null);
   const [participants, setParticipants] = useState([]);
 
   const handleSubmit = async () => {
     const { data, status } = await post(
-      `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${participantId}`,
+      `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
       {},
       {
+        checkInKey,
         checkedInAt: new Date().toISOString(),
       },
     );
@@ -34,34 +35,34 @@ export default function CheckInParticipantWithScanner() {
         description: data.message,
         status: 'success',
       });
-      setPreviousParticipantId(participantId);
-      setParticipantId(null);
+      setPreviousCheckInKey(checkInKey);
+      setCheckInKey(null);
     } else {
       showAlert({
         title: 'Error',
         description: data.error,
         status: 'error',
       });
-      setParticipantId(null);
-      setPreviousParticipantId(null);
+      setCheckInKey(null);
+      setPreviousCheckInKey(null);
     }
   };
 
   useEffect(() => {
-    if (participantId && previousPartiicpantId !== participantId) handleSubmit();
-  }, [participantId]);
+    if (checkInKey && previousCheckInKey !== checkInKey) handleSubmit();
+  }, [checkInKey]);
 
   //
   // Periodically clear the previous participant id
   //
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setPreviousParticipantId(null);
-      setParticipantId(null);
+      setPreviousCheckInKey(null);
+      setCheckInKey(null);
     }, 10000);
 
     return () => clearInterval(intervalId);
-  }, [previousPartiicpantId]);
+  }, [previousCheckInKey]);
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -85,26 +86,10 @@ export default function CheckInParticipantWithScanner() {
     <DashboardLayout
       pageTitle="Check In  Participant"
       previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
-      headerButton={
-        <>
-          <Flex flexDirection="column" gap={4}>
-            <Button
-              onClick={() => {
-                router.push(
-                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-in/scanner-slow`,
-                );
-              }}
-              isLoading={loading}
-            >
-              Quick Scan
-            </Button>
-          </Flex>
-        </>
-      }
-      debugInfo={JSON.stringify(participantId) + JSON.stringify(previousPartiicpantId)}
+      debugInfo={checkInKey + ' ' + previousCheckInKey}
     >
-      <Flex height="50%" width="50%" justifyContent={'center'} alignItems={'center'}>
-        <Scanner result={participantId} setResult={setParticipantId} />
+      <Flex height="100%" width="100%">
+        <Scanner result={checkInKey} setResult={setCheckInKey} />
       </Flex>
     </DashboardLayout>
   );

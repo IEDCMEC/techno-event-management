@@ -20,6 +20,7 @@ export default function NewParticipant() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [checkInKey, setCheckInKey] = useState('');
   const [attributeValues, setAttributeValues] = useState([]);
 
   const handleSubmit = async (e) => {
@@ -121,7 +122,16 @@ export default function NewParticipant() {
           onChange={(e) => {
             setPhone(e.target.value);
           }}
-        />{' '}
+        />
+        <FormLabel>Check In Key</FormLabel>
+        <Input
+          type="text"
+          name="checkInKey"
+          value={checkInKey}
+          onChange={(e) => {
+            setCheckInKey(e.target.value);
+          }}
+        />
         {attributes.map((attribute) => (
           <FormControl my={4} key={attribute.id}>
             <FormLabel>{attribute.name}</FormLabel>
