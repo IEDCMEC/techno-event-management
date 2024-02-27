@@ -71,6 +71,8 @@ model Participant {
   updatedAt                DateTime                   @updatedAt
   firstName                String
   lastName                 String?
+  email                    String?                    
+  phone                    String?
   eventId                  String                     @db.Uuid
   event                    Event                      @relation(fields: [eventId], references: [id])
   organizationId           String
@@ -79,6 +81,7 @@ model Participant {
   participantAttributes    ParticipantAttributes[]
   participantExtras        ParticipantExtras[]
   participantExtrasCheckIn ParticipantExtrasCheckIn[]
+
 }
 
 model ParticipantCheckIn {
