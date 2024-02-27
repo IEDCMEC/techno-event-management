@@ -49,7 +49,7 @@ export default function OrganizationById() {
           </Button>
         </>
       }
-      debugInfo={JSON.stringify(organization)}
+      debugInfo={organization}
     >
       <Flex gap={4}>
         <Button

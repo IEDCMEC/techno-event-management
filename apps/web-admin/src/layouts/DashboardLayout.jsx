@@ -63,7 +63,7 @@ export default function DashboardLayout({
             alignItems="center"
           >
             {!isMobile && (
-              <Flex alignItems="center" gap={10}>
+              <Flex width="100%" alignItems="center" gap={10}>
                 <IoMdArrowRoundBack
                   size={30}
                   onClick={() => {
