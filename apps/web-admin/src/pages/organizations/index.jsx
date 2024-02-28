@@ -90,14 +90,15 @@ export default function Organizations() {
               router.back();
             }}
           >
-            <FiArrowLeftCircle size={60} />
+            <FiArrowLeftCircle size={50} />
           </Box>
-          <Text fontSize="6xl" fontWeight="bold">
+          <Text fontSize="4xl" fontWeight="bold">
             Organizations
           </Text>
         </Box>
-
         <Box
+          width="100%"
+          height="100%"
           display="block"
           borderRadius="30px"
           gap="30px"
