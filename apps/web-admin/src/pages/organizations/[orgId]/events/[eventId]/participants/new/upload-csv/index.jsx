@@ -1,37 +1,104 @@
-import { useState } from 'react';
-import Papa from 'papaparse';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-
-import { useFetch } from '@/hooks/useFetch';
-
 import { useRouter } from 'next/router';
-import { Flex, Button } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
+import { Button, Text, Flex, Box } from '@chakra-ui/react';
+import Papa from 'papaparse';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { ThemeProvider, createTheme } from '@mui/material';
 
-const MuiTheme = createTheme({});
+import DataDisplay from '@/components/DataDisplay';
 
-export default function NewOrganization() {
-  const { loading, post } = useFetch();
+import { useAlert } from '@/hooks/useAlert';
+import { useFetch } from '@/hooks/useFetch';
+
+export default function NewParticipantByCSVUpload() {
   const router = useRouter();
+  const showAlert = useAlert();
 
   const { orgId, eventId } = router.query;
+  const { loading, post } = useFetch();
 
   const [csvData, setCSVData] = useState(null);
+  const [columns, setColumns] = useState([
+    { field: 'firstName', headerName: 'First Name' },
+    { field: 'lastName', headerName: 'Last Name' },
+    { field: 'email', headerName: 'Email' },
+    { field: 'phone', headerName: 'Phone' },
+    { field: 'checkInKey', headerName: 'Check In Key' },
+  ]);
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
 
     Papa.parse(file, {
       header: true,
-      dynamicTyping: true,
+
       complete: (result) => {
         const filteredData = result.data.filter((row) => {
           return Object.values(row).every((value) => value !== null && value !== undefined);
         });
 
+        if (filteredData[filteredData.length - 1].firstName === '') {
+          showAlert({
+            title: 'Error',
+            description: 'Please remove the blank line at the end of the CSV file.',
+            status: 'error',
+            duration: 10000,
+          });
+          setCSVData(null);
+          e.target.value = '';
+          return;
+        }
+
         const dataWithId = filteredData.map((row, index) => ({ ...row, id: index + 1 }));
+
+        setColumns(
+          Object.keys(dataWithId[0])
+            .filter((key) => key !== 'id')
+            .map((key) => ({ field: key, headerName: key })),
+        );
+
+        if (
+          columns.find(
+            (column) =>
+              column.field !== 'firstName' &&
+              column.field !== 'lastName' &&
+              column.field !== 'email' &&
+              column.field !== 'phone' &&
+              column.field !== 'checkInKey' &&
+              !(column.field.startsWith('_') || column.field.startsWith('&')),
+          )
+        ) {
+          showAlert({
+            title: 'Error',
+            description:
+              'Extra attributes should be prefixed with an underscore (_) and extras to be checked-in should be prefixed with an asterisk (&)',
+            status: 'error',
+            duration: 10000,
+          });
+          setCSVData(null);
+          e.target.value = '';
+        }
+
+        if (
+          columns.find(
+            (column) =>
+              column.field !== 'firstName' ||
+              column.field !== 'lastName' ||
+              column.field !== 'email' ||
+              column.field !== 'phone' ||
+              column.field !== 'checkInKey',
+          )
+        ) {
+          showAlert({
+            title: 'Info',
+            description:
+              'Extra columns marked with _ will be inserted as attributes and & will be inserted as extras to be checked-in.',
+            status: 'info',
+            duration: 10000,
+          });
+        }
+
         setCSVData(dataWithId);
       },
       error: (error) => {
@@ -40,8 +107,61 @@ export default function NewOrganization() {
     });
   };
 
+  //
+  // Checking for underscore prefixed fields
+  //
+  useEffect(() => {
+    if (columns.length <= 2) return;
+    if (columns.find((column) => column.field === '')) {
+      showAlert({
+        title: 'Error',
+        description: 'Please make sure that the CSV file is properly formatted.',
+        status: 'error',
+        duration: 10000,
+      });
+      setCSVData(null);
+      e.target.value = '';
+      setColumns([
+        { field: 'firstName', headerName: 'First Name' },
+        { field: 'lastName', headerName: 'Last Name' },
+        { field: 'email', headerName: 'Email' },
+        { field: 'phone', headerName: 'Phone' },
+        { field: 'checkInKey', headerName: 'Check In Key' },
+      ]);
+    } else if (
+      columns.find(
+        (column) =>
+          column.field !== 'firstName' &&
+          column.field !== 'lastName' &&
+          column.field !== 'email' &&
+          column.field !== 'phone' &&
+          column.field !== 'checkInKey' &&
+          !(column.field.startsWith('_') || column.field.startsWith('&')),
+      )
+    ) {
+      console.log({ columns });
+
+      showAlert({
+        title: 'Error',
+        description: 'Extra fields should be prefixed with an underscore (_)',
+        status: 'error',
+        duration: 10000,
+      });
+      setCSVData(null);
+      e.target.value = '';
+      setColumns([
+        { field: 'firstName', headerName: 'First Name' },
+        { field: 'lastName', headerName: 'Last Name' },
+        { field: 'email', headerName: 'Email' },
+        { field: 'phone', headerName: 'Phone' },
+        { field: 'checkInKey', headerName: 'Check In Key' },
+      ]);
+    }
+  }, [columns]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const { data, status } = await post(
       `/core/organizations/${orgId}/events/${eventId}/participants?isBulk=true`,
       {},
@@ -50,51 +170,51 @@ export default function NewOrganization() {
       },
     );
     if (status === 200) {
+      showAlert({
+        title: 'Success',
+        description: 'Participants have been added successfully.',
+        status: 'success',
+      });
       router.push(`/organizations/${orgId}/events/${eventId}/participants`);
     } else {
-      alert(data.error);
+      showAlert({
+        title: 'Error',
+        description: data.error,
+        status: 'error',
+      });
     }
   };
 
-  const columns = [
-    { field: 'firstName', headerName: 'First Name', width: 150 },
-    { field: 'lastName', headerName: 'Last Name', width: 150 },
-  ];
-
   return (
-    <DashboardLayout>
-      <Flex
-        direction="column"
+    <DashboardLayout
+      pageTitle="Upload CSV"
+      previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
+      debugInfo={csvData}
+    >
+      <Box
         height="100%"
         width="100%"
-        alignItems="center"
+        flexDirection="column"
         justifyContent="center"
-        gap={8}
+        alignItems="center"
       >
-        <div>
-          <h1>CSV Uploader</h1>
+        {!csvData && (
+          <Text fontSize="xl">
+            Upload a CSV file of participants. The required columns are firstName, lastName, phone,
+            checkInKey, email. Extra attributes should be prefixed with an underscore (_) and extras
+            to be checked-in should be prefixed with and ampersand (&).
+          </Text>
+        )}
+        <Flex justifyContent="space-between" alignItems="center">
           <input type="file" accept=".csv" onChange={handleFileUpload} />
           {csvData && (
-            <ThemeProvider theme={MuiTheme}>
-              <DataGrid
-                rows={csvData}
-                columns={columns}
-                slotProps={{
-                  toolbar: {
-                    showQuickFilter: true,
-                    quickFilterProps: { debounceMs: 500 },
-                  },
-                }}
-                slots={{
-                  toolbar: GridToolbar,
-                }}
-                autoHeight
-              />
-            </ThemeProvider>
+            <Button onClick={handleSubmit} isLoading={loading}>
+              Confirm and Add
+            </Button>
           )}
-        </div>
-        <Button onClick={handleSubmit}>Confirm and Add</Button>
-      </Flex>
+        </Flex>
+        {csvData && <DataDisplay loading={loading} rows={csvData} columns={columns} />}
+      </Box>
     </DashboardLayout>
   );
 }

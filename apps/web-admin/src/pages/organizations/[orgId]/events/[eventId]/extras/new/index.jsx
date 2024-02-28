@@ -8,7 +8,7 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 
-export default function NewAttribute() {
+export default function NewExtra() {
   const { loading, post } = useFetch();
   const showAlert = useAlert();
 
@@ -20,7 +20,7 @@ export default function NewAttribute() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { data, status } = await post(
-      `/core/organizations/${orgId}/events/${eventId}/attributes`,
+      `/core/organizations/${orgId}/events/${eventId}/extras`,
       {},
       {
         name,
@@ -29,10 +29,10 @@ export default function NewAttribute() {
     if (status === 200) {
       showAlert({
         title: 'Success',
-        description: 'Attribute has been added successfully.',
+        description: 'Extra has been added successfully.',
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/events/${eventId}/attributes`);
+      router.push(`/organizations/${orgId}/events/${eventId}/extras`);
     } else {
       showAlert({
         title: 'Error',
@@ -44,8 +44,8 @@ export default function NewAttribute() {
 
   return (
     <DashboardLayout
-      pageTitle="Add Attribute"
-      previousPage={`/organizations/${orgId}/events/${eventId}/attributes`}
+      pageTitle="Add Extra"
+      previousPage={`/organizations/${orgId}/events/${eventId}/extras`}
     >
       <form onSubmit={handleSubmit}>
         <FormControl isRequired my={4}>

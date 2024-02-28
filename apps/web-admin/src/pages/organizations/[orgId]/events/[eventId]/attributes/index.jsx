@@ -1,109 +1,78 @@
 import { useRouter } from 'next/router';
-
-import {
-  Box,
-  Flex,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-  TableContainer,
-  Text,
-  Button,
-} from '@chakra-ui/react';
-
-import { useFetch } from '@/hooks/useFetch';
-
-import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
 
-export default function Events() {
-  const router = useRouter();
+import { Button } from '@chakra-ui/react';
 
+import DashboardLayout from '@/layouts/DashboardLayout';
+
+import { useFetch } from '@/hooks/useFetch';
+import { useAlert } from '@/hooks/useAlert';
+
+import DataDisplay from '@/components/DataDisplay';
+
+const columns = [
+  { field: 'name', headerName: 'Name', width: 200 },
+  {
+    field: 'numberOfParticipantsWithAttributeAssigned',
+    headerName: 'No of Participants Assigned',
+    width: 200,
+  },
+];
+
+export default function Attributes() {
+  const router = useRouter();
   const { orgId, eventId } = router.query;
+  const showAlert = useAlert();
 
   const { loading, get } = useFetch();
 
+  const [event, setEvent] = useState([]);
   const [attributes, setAttributes] = useState([]);
-  const handleClick = () => {
-    router.push(`/organizations/${orgId}/events/${eventId}/attributes/new`);
-  };
 
   useEffect(() => {
     const fetchAttributes = async () => {
       const { data, status } = await get(
         `/core/organizations/${orgId}/events/${eventId}/attributes`,
       );
-      setAttributes(data.attributes || []);
-      console.log(data);
+      if (status === 200) {
+        setAttributes(data.attributes || []);
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
     };
     fetchAttributes();
-  }, [orgId, eventId]);
+  }, []);
 
   return (
-    <DashboardLayout>
-      <Flex
-        direction="column"
-        height="100%"
-        width="100%"
-        alignItems="center"
-        justifyContent="center"
-        gap={8}
-      >
-        <Box width="100%" p={8} display="flex" justifyContent="space-between">
-          <Text fontSize="4xl" fontWeight="bold">
-            Attributes
-          </Text>
+    <DashboardLayout
+      pageTitle="Attributes"
+      previousPage={`/organizations/${orgId}/events/${eventId}`}
+      headerButton={
+        <>
           <Button
-            padding="4"
-            minWidth="-moz-initial"
-            bgColor="rgb(128, 90, 213)"
-            color="white"
-            _hover={{ bgColor: 'rgb(100, 70, 183)' }}
-            onClick={handleClick}
+            onClick={() => {
+              router.push(`/organizations/${orgId}/events/${eventId}/attributes/new`);
+            }}
+            isLoading={loading}
           >
             Add Attribute
           </Button>
-        </Box>
-        <Box width="100%" height="100%">
-          <TableContainer width="100%" height="100%">
-            <Table variant="simple">
-              <TableCaption>Attributes</TableCaption>
-              <Thead>
-                <Tr>
-                  <Th>ID</Th>
-                  <Th>Name</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {attributes.map((attribute) => (
-                  <Tr
-                    key={attribute?.id}
-                    onClick={() => {
-                      router.push(
-                        `/organizations/${orgId}/events/${eventId}/attributes/${attribute?.id}`,
-                      );
-                    }}
-                    cursor="pointer"
-                  >
-                    <Td>{attribute?.id}</Td>
-                    <Td>{attribute?.name}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>{attributes.length} attributes</Th>
-                </Tr>
-              </Tfoot>
-            </Table>
-          </TableContainer>
-        </Box>
-      </Flex>
+        </>
+      }
+      debugInfo={JSON.stringify(attributes)}
+    >
+      <DataDisplay
+        loading={loading}
+        columns={columns}
+        rows={attributes}
+        onRowClick={(row) => {
+          router.push(`/organizations/${orgId}/events/${eventId}/attributes/${row.id}`);
+        }}
+      />
     </DashboardLayout>
   );
 }

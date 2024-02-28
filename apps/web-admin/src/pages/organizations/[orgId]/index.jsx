@@ -1,15 +1,40 @@
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { Box, Text } from '@chakra-ui/react';
 
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
+import { useFetch } from '@/hooks/useFetch';
+import { useAlert } from '@/hooks/useAlert';
+
 import { FiArrowLeftCircle } from 'react-icons/fi';
 import ItemCard from '@/components/ItemCard';
-export default function Organization() {
+export default function OrganizationById() {
   const router = useRouter();
-
   const { orgId } = router.query;
+  const showAlert = useAlert();
+
+  const { loading, get } = useFetch();
+
+  const [organization, setOrganization] = useState([]);
+
+  useEffect(() => {
+    const fetchOrganizationStats = async () => {
+      const { data, status } = await get(`/core/organizations/${orgId}`);
+      if (status === 200) {
+        setOrganization(data.organization || []);
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
+    };
+    fetchOrganizationStats();
+  }, []);
 
   const children = [
     { id: 0, section: 'events', path: '/events', thumb: '' },
@@ -68,24 +93,39 @@ export default function Organization() {
               </Box>
             );
           })}
-
-          {/* <Box width="100%" height="100%">
-          <Button
-            onClick={() => {
-              router.push(`/organizations/${orgId}/events`);
-            }}
-          >
-            Events
-          </Button>
-          <Button
-            onClick={() => {
-              router.push(`/organizations/${orgId}/members`);
-            }}
-          >
-            Members
-          </Button>
-        </Box> */}
         </Box>
+
+        {/* <Box width="100%" height="100%">
+          <Button
+            onClick={() => {
+              router.push(`/organizations/${orgId}/settings`);
+            }}
+            isLoading={loading}
+          >
+            Organization Settings
+          </Button>
+        </>
+      }
+      debugInfo={organization}
+    >
+      <Flex gap={4}>
+        <Button
+          onClick={() => {
+            router.push(`/organizations/${orgId}/events`);
+          }}
+          isLoading={loading}
+        >
+          Events
+        </Button>
+        <Button
+          onClick={() => {
+            router.push(`/organizations/${orgId}/members`);
+          }}
+          isLoading={loading}
+        >
+          Members
+        </Button>
+        */}
       </Flex>
     </DashboardLayout>
   );

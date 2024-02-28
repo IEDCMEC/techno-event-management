@@ -34,11 +34,44 @@ export const createNewOrganization = async (req: Request, res: Response) => {
   }
 };
 
+export const getOrganizationStats = async (req: Request, res: Response) => {
+  try {
+    const organizationId = req.params.orgId;
+
+    let organization = await prisma.organization.findUnique({
+      where: {
+        id: organizationId,
+      },
+      include: {
+        Event: true,
+        OrganizationUser: true,
+      },
+    });
+
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
+    }
+
+    organization = {
+      id: organization.id,
+      name: organization.name,
+      createdAt: organization.createdAt,
+      numberOfEvents: organization.Event.length,
+      numberOfMembers: organization.OrganizationUser.length,
+    };
+
+    return res.status(200).json({ organization });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
 export const getUsersOrganizations = async (req: Request, res: Response) => {
   try {
     const userId = req?.auth?.payload?.sub;
 
-    const organizations = await prisma.organization.findMany({
+    let organizations = await prisma.organization.findMany({
       where: {
         OrganizationUser: {
           some: {
@@ -46,7 +79,16 @@ export const getUsersOrganizations = async (req: Request, res: Response) => {
           },
         },
       },
+      include: {
+        Event: true,
+      },
     });
+
+    organizations = organizations.map((organization: any) => ({
+      id: organization.id,
+      name: organization.name,
+      numberOfEvents: organization.Event.length,
+    }));
 
     return res.status(200).json({ organizations });
   } catch (err: any) {
@@ -59,7 +101,7 @@ export const getOrganizationMembers = async (req: Request, res: Response) => {
   try {
     const organizationId = req.params.orgId;
 
-    const organizationUsers = await prisma.organizationUser.findMany({
+    let organizationUsers = await prisma.organizationUser.findMany({
       where: {
         organizationId,
       },
@@ -67,6 +109,16 @@ export const getOrganizationMembers = async (req: Request, res: Response) => {
         user: true,
       },
     });
+
+    organizationUsers = organizationUsers.map((organizationUser: any) => ({
+      id: organizationUser.id,
+      role: organizationUser.role,
+      addedAt: organizationUser.createdAt,
+      organizationId: organizationUser.organizationId,
+      firstName: organizationUser.user.firstName,
+      lastName: organizationUser.user.lastName,
+      email: organizationUser.user.email,
+    }));
 
     return res.status(200).json({ organizationUsers });
   } catch (err: any) {

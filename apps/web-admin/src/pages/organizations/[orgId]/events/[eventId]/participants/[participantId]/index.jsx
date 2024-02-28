@@ -1,134 +1,104 @@
 import { useRouter } from 'next/router';
-
-import {
-  Box,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-  TableContainer,
-  Text,
-} from '@chakra-ui/react';
-
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-
-import { useFetch } from '@/hooks/useFetch';
-
-import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
 
-import { ThemeProvider, createTheme } from '@mui/material';
-const MuiTheme = createTheme({});
+import { Text, Flex } from '@chakra-ui/react';
 
-export default function Events() {
+import DashboardLayout from '@/layouts/DashboardLayout';
+
+import { useFetch } from '@/hooks/useFetch';
+import { useAlert } from '@/hooks/useAlert';
+
+import DataDisplay from '@/components/DataDisplay';
+
+const attributeColumns = [
+  { field: 'name', headerName: 'Name', width: 200 },
+  { field: 'value', headerName: 'Value', width: 200 },
+];
+
+const extraColumns = [
+  { field: 'name', headerName: 'Name', width: 200 },
+  { field: 'assigned', headerName: 'Assigned', width: 200 },
+  {
+    field: 'status',
+    headerName: 'Checked In',
+    width: 200,
+    valueGetter: (params) => (params.row?.checkIn?.status ? 'true' : 'false'),
+  },
+  {
+    field: 'at',
+    headerName: 'Checked In At',
+    width: 200,
+    valueGetter: (params) => params.row?.checkIn?.at,
+  },
+  {
+    field: 'by',
+    headerName: 'Checked In By',
+    width: 200,
+    valueGetter: (params) => params.row?.checkIn?.by?.email,
+  },
+];
+
+export default function ParticipantById() {
   const router = useRouter();
-
   const { orgId, eventId, participantId } = router.query;
+  const showAlert = useAlert();
 
   const { loading, get } = useFetch();
 
-  const [participant, setParticipant] = useState({});
+  const [participant, setParticipant] = useState([]);
   const [participantAttributes, setParticipantAttributes] = useState([]);
-
-  const attributeColumns = [
-    {
-      field: 'name',
-      headerName: 'Name',
-      width: 150,
-      valueGetter: (params) => params.row.attribute?.name,
-    },
-    {
-      field: 'value',
-      headerName: 'Value',
-      width: 150,
-      valueGetter: (params) => params.value || 'null',
-    },
-  ];
+  const [participantExtras, setParticipantExtras] = useState([]);
+  const [participantCheckIn, setParticipantCheckIn] = useState({});
 
   useEffect(() => {
     const fetchParticipant = async () => {
       const { data, status } = await get(
         `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
       );
-      setParticipant(data.participant || []);
-      setParticipantAttributes(data.participant.participantAttributes || []);
+      if (status === 200) {
+        setParticipant(data.participant || []);
+        setParticipantAttributes(data.participant.attributes || []);
+        setParticipantExtras(data.participant.extras || []);
+        setParticipantCheckIn(data.participant.checkIn || {});
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
     };
     fetchParticipant();
-  }, [orgId, eventId, participantId]);
+  }, []);
 
   return (
-    <DashboardLayout>
-      <Flex
-        direction="column"
-        height="100%"
-        width="100%"
-        alignItems="center"
-        justifyContent="center"
-        gap={8}
-      >
-        <Box width="100%" p={8}>
-          <Text fontSize="4xl" fontWeight="bold">
-            Participant Details
-          </Text>
-        </Box>
-        <Box width="100%" height="100%">
+    <DashboardLayout
+      pageTitle="Participant Details"
+      previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
+      debugInfo={participant}
+    >
+      <Flex flexDirection="column">
+        <Flex flexDirection="column">
           <Text>ID: {participant.id}</Text>
-          <FormControl
-            my={4}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: 4,
-            }}
-          >
-            <FormLabel>First Name</FormLabel>
-            <Input type="text" name="participant.firstName" value={participant.firstName} />
-          </FormControl>
-          <FormControl
-            my={4}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: 4,
-            }}
-          >
-            <FormLabel>Last Name</FormLabel>
-            <Input type="text" name="participant.lastName" value={participant.lastName} />
-          </FormControl>
-          <Text fontSize="3xl">Attributes</Text>
-
-          <ThemeProvider theme={MuiTheme}>
-            <DataGrid
-              rows={participantAttributes}
-              columns={attributeColumns}
-              slotProps={{
-                toolbar: {
-                  showQuickFilter: true,
-                  quickFilterProps: { debounceMs: 500 },
-                },
-              }}
-              slots={{
-                toolbar: GridToolbar,
-              }}
-              getRowId={(row) => {
-                return row.attributeId;
-              }}
-              autoHeight
-            />
-          </ThemeProvider>
-        </Box>
+          <Text>Fist Name: {participant.firstName}</Text>
+          <Text>Last Name: {participant.lastName}</Text>
+          <Text>Email: {participant.email}</Text>
+          <Text>Phone: {participant.phone}</Text>
+          <Text>Check In Key: {participant.checkInKey}</Text>
+        </Flex>
+        <Text>Check In</Text>
+        <Flex flexDirection="column">
+          <Text>Status: {participantCheckIn.status ? 'true' : 'false'}</Text>
+          <Text>Checked In At: {participantCheckIn.checkedInAt}</Text>
+          <Flex>
+            <Text>Checked In By: {participantCheckIn.checkedInByEmail}</Text>
+          </Flex>
+        </Flex>
+        <Text>Attributes - {participant.numberOfAttributesAssigned} assigned</Text>
+        <DataDisplay loading={loading} columns={attributeColumns} rows={participantAttributes} />
+        <Text>Extras - {participant.numberOfExtrasAssigned} assigned</Text>
+        <Text>Extras - {participant.numberOfExtrasCheckedIn} checked in</Text>
+        <DataDisplay loading={loading} columns={extraColumns} rows={participantExtras} />
       </Flex>
     </DashboardLayout>
   );

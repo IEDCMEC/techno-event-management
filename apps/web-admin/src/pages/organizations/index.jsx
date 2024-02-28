@@ -1,28 +1,20 @@
 import { useRouter } from 'next/router';
-import {
-  Box,
-  Flex,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-  TableContainer,
-  Text,
-  Button,
-} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
-import { useFetch } from '@/hooks/useFetch';
-
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { ThemeProvider, createTheme } from '@mui/material';
-const MuiTheme = createTheme({});
+import { Box, Text, Flex, Button } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { useEffect, useState } from 'react';
+
+import { useFetch } from '@/hooks/useFetch';
+import { useAlert } from '@/hooks/useAlert';
+
+import DataDisplay from '@/components/DataDisplay';
+
+const columns = [
+  { field: 'id', headerName: 'ID', width: 200 },
+  { field: 'name', headerName: 'Name', width: 200 },
+  { field: 'numberOfEvents', headerName: 'No of Events', width: 200 },
+];
 import { FiArrowLeftCircle } from 'react-icons/fi';
 
 import ItemCard from '@/components/ItemCard';
@@ -34,39 +26,26 @@ export default function Organizations() {
   const { loading, get } = useFetch();
 
   const [organizations, setOrganizations] = useState([]);
-  const handleRowClick = (row) => {
-    router.push(`/organizations/${row.id}`);
-  };
-
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 150 },
-    {
-      field: 'name',
-      headerName: 'Name',
-      width: 200,
-      renderCell: (params) => (
-        <div
-          onClick={() => {
-            router.push(`/organizations/${params.row.id}`);
-          }}
-          style={{ cursor: 'pointer' }}
-        >
-          {params.value}
-        </div>
-      ),
-    },
-  ];
 
   useEffect(() => {
     const fetchOrganizations = async () => {
       const { data, status } = await get('/core/organizations');
-      setOrganizations(data.organizations || []);
+      if (status === 200) {
+        setOrganizations(data.organizations || []);
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
     };
     fetchOrganizations();
   }, []);
   const handleClick = () => {
     router.push('organizations/new');
   };
+
   return (
     <DashboardLayout>
       <Flex
@@ -107,15 +86,13 @@ export default function Organizations() {
           marginLeft="30px"
         >
           <Button
-            padding="4"
-            minWidth="-moz-initial"
-            bgColor="rgb(128, 90, 213)"
-            color="white"
-            _hover={{ bgColor: 'rgb(100, 70, 183)' }}
-            onClick={handleClick}
+            onClick={() => {
+              router.push(`/organizations/new`);
+            }}
+            isLoading={loading}
             marginBottom="30px"
           >
-            Add Organization
+            Create Organization
           </Button>
           <Box width="100%" height="100%" borderRadius="30px" display="flex" gap="30px">
             {/* <ThemeProvider theme={MuiTheme}> */}

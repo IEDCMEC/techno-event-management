@@ -44,16 +44,15 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Desktop Sidebar */}
       {!isMobile ? (
         <Box
-          display={{ base: 'flex', md: 'block' }}
           padding={4}
           height="100%"
+          minWidth={50}
           width={80}
           backgroundColor="#F4F4F4"
           justifyContent="space-between"
-          flexDirection="row"
+          display={{ base: 'none', md: 'block' }}
         >
           <Box paddingY={4}>
             <Text fontSize="4xl" fontWeight="bold">
@@ -121,10 +120,8 @@ const Sidebar = ({ isOpen, onClose }) => {
 };
 
 const SidebarContents = () => {
-  // Define an array of sidebar items with labels and paths
   const sidebarItems = [
     { label: 'Organizations', path: '/organizations' },
-    { label: 'Events', path: '/events' },
     { label: 'Settings', path: '/settings' },
   ];
   const router = useRouter();

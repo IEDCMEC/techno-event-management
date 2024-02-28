@@ -1,147 +1,66 @@
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-import {
-  Box,
-  Flex,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-  TableContainer,
-  Text,
-  Button,
-} from '@chakra-ui/react';
-
-import { useFetch } from '@/hooks/useFetch';
+import { Button } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { useEffect, useState } from 'react';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { ThemeProvider, createTheme } from '@mui/material';
-const MuiTheme = createTheme({});
+import DataDisplay from '@/components/DataDisplay';
 
-export default function Members() {
+import { useFetch } from '@/hooks/useFetch';
+import { useAlert } from '@/hooks/useAlert';
+
+const columns = [
+  { field: 'role', headerName: 'Role', width: 200 },
+  { field: 'email', headerName: 'Email', width: 200 },
+  { field: 'firstName', headerName: 'First Name', width: 200 },
+  { field: 'lastName', headerName: 'Last Name', width: 200 },
+  { field: 'addedAt', headerName: 'Added At', width: 200 },
+];
+
+export default function OrganizationMembers() {
   const router = useRouter();
-
   const { orgId } = router.query;
+  const showAlert = useAlert();
 
   const { loading, get } = useFetch();
 
   const [members, setMembers] = useState([]);
 
-  const columns = [
-    {
-      field: 'email',
-      headerName: 'Email',
-      width: 150,
-      valueGetter: (params) => params.row.user.email,
-    },
-    {
-      field: 'firstName',
-      headerName: 'First Name',
-      width: 150,
-      valueGetter: (params) => params.row.user.firstName || 'null',
-    },
-    {
-      field: 'lastName',
-      headerName: 'Last Name',
-      width: 150,
-      valueGetter: (params) => params.row.user.lastName || 'null',
-    },
-    {
-      field: 'role',
-      headerName: 'Role',
-    },
-  ];
-
   useEffect(() => {
-    const fetchmembers = async () => {
+    const fetchOrganizationMembers = async () => {
       const { data, status } = await get(`/core/organizations/${orgId}/members`);
-      setMembers(data.organizationUsers || []);
+      if (status === 200) {
+        setMembers(data.organizationUsers || []);
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
     };
-    fetchmembers();
-  }, [orgId]);
+    fetchOrganizationMembers();
+  }, []);
 
   return (
-    <DashboardLayout>
-      <Flex
-        direction="column"
-        height="100%"
-        width="100%"
-        alignItems="center"
-        justifyContent="center"
-        gap={8}
-      >
-        <Box width="100%" p={8} display="flex" justifyContent="space-between">
-          <Text fontSize="4xl" fontWeight="bold">
-            members
-          </Text>
+    <DashboardLayout
+      pageTitle="Members"
+      previousPage={`/organizations/${orgId}`}
+      headerButton={
+        <>
           <Button
-            padding="4"
-            minWidth="-moz-initial"
-            bgColor="rgb(128, 90, 213)"
-            color="white"
-            _hover={{ bgColor: 'rgb(100, 70, 183)' }}
             onClick={() => {
-              router.push(`/organizations/${orgId}/members/new/`);
+              router.push(`/organizations/${orgId}/members/new`);
             }}
+            isLoading={loading}
           >
             Add Member
           </Button>
-        </Box>
-        <Box width="100%" height="100%">
-          <ThemeProvider theme={MuiTheme}>
-            <DataGrid
-              rows={members}
-              columns={columns}
-              slotProps={{
-                toolbar: {
-                  showQuickFilter: true,
-                  quickFilterProps: { debounceMs: 500 },
-                },
-              }}
-              slots={{
-                toolbar: GridToolbar,
-              }}
-              autoHeight
-            />
-          </ThemeProvider>
-          {/*<TableContainer width="100%" height="100%">
-            <Table variant="simple">
-              <TableCaption>members</TableCaption>
-              <Thead>
-                <Tr>
-                  <Th>ID</Th>
-                  <Th>Name</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {members.map((event) => (
-                  <Tr
-                    key={event?.id}
-                    onClick={() => {
-                      router.push(`/organizations/${orgId}/members/${event?.id}`);
-                    }}
-                    cursor="pointer"
-                  >
-                    <Td>{event?.id}</Td>
-                    <Td>{event?.name}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>{members.length} members</Th>
-                </Tr>
-              </Tfoot>
-            </Table>
-                  </TableContainer>*/}
-        </Box>
-      </Flex>
+        </>
+      }
+      debugInfo={members}
+    >
+      <DataDisplay loading={loading} columns={columns} rows={members} />
     </DashboardLayout>
   );
 }
