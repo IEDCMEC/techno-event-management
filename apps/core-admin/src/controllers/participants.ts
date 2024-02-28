@@ -172,7 +172,7 @@ export const addNewParticipant = async (req: Request, res: Response) => {
 export const editParticipant = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId, participantId } = req?.params;
-    const { firstName, lastName, phone, email, checkInKey } = req?.body;
+    const { firstName, lastName, phone, email, checkInKey, attributes } = req?.body;
 
     if (!firstName || !lastName) {
       return res.status(400).json({ error: 'First name and last name are required' });
@@ -191,10 +191,38 @@ export const editParticipant = async (req: Request, res: Response) => {
       },
     });
 
+    const awaitAttributes = attributes?.map(async (attribute: any) => {
+      try {
+        const participantAttribute = await prisma.participantAttributes.updateMany({
+          where: {
+            attributeId: attribute.id,
+            participantId: participantId,
+          },
+          data: {
+            value: attribute.value,
+          },
+        });
+        if (participantAttribute.count === 0) {
+          const newParticipantAttribute = await prisma.participantAttributes.create({
+            data: {
+              participantId,
+              attributeId: attribute.id,
+              value: attribute.value,
+            },
+          });
+          return newParticipantAttribute;
+        }
+        return participantAttribute;
+      } catch (err: any) {
+        console.error(err);
+        return res.status(500).json({ error: 'Something went wrong' });
+      }
+    });
+
     if (!updatedParticipant) {
       return res.status(500).json({ error: 'Something went wrong' });
     }
-
+    console.log('updatedParticipant');
     return res.status(200).json({ updatedParticipant });
   } catch (err: any) {
     console.error(err);
