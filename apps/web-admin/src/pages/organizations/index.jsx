@@ -22,6 +22,7 @@ import ItemCard from '@/components/ItemCard';
 export default function Organizations() {
   const router = useRouter();
   const { orgId } = router.query;
+  const showAlert = useAlert();
 
   const { loading, get } = useFetch();
 
