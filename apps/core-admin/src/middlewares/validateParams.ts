@@ -5,7 +5,6 @@ const regex =
 
 export function validateUUID(req: Request, res: Response, next: NextFunction, eventId: string) {
   if (!regex.test(eventId)) {
-    console.error('Invalid eventId: must be a valid UUID');
     return res.status(400).send('Invalid eventId: must be a valid UUID');
   }
 

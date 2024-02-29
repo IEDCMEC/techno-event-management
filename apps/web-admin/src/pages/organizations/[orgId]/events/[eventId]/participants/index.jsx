@@ -22,6 +22,18 @@ const columns = [
   { field: 'addedAt', headerName: 'Added At', width: 200 },
 ];
 
+const columns = [
+  { field: 'firstName', headerName: 'First Name', width: 200, editable: true },
+  { field: 'lastName', headerName: 'Last Name', width: 200 },
+  { field: 'email', headerName: 'Email', width: 200 },
+  { field: 'phone', headerName: 'Phone', width: 200 },
+  { field: 'checkInKey', headerName: 'Check In Key', width: 200 },
+  { field: 'checkedIn', headerName: 'CheckedIn', width: 200 },
+  { field: 'numberOfAttributesAssigned', headerName: 'Attributes Assigned', width: 200 },
+  { field: 'numnerOfExtrasAssigned', headerName: 'Extras Assigned', width: 200 },
+  { field: 'addedAt', headerName: 'Added At', width: 200 },
+];
+
 export default function Participants() {
   const router = useRouter();
   const showAlert = useAlert();
