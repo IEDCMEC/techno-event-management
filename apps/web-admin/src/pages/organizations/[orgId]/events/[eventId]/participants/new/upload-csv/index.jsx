@@ -46,7 +46,7 @@ export default function NewParticipantByCSVUpload() {
             duration: 10000,
           });
           setCSVData(null);
-          e.target.value = '';
+          //e.target.value = '';
           return;
         }
 
@@ -77,7 +77,7 @@ export default function NewParticipantByCSVUpload() {
             duration: 10000,
           });
           setCSVData(null);
-          e.target.value = '';
+          //e.target.value = '';
         }
 
         if (
@@ -120,7 +120,7 @@ export default function NewParticipantByCSVUpload() {
         duration: 10000,
       });
       setCSVData(null);
-      e.target.value = '';
+      //e.target.value = '';
       setColumns([
         { field: 'firstName', headerName: 'First Name' },
         { field: 'lastName', headerName: 'Last Name' },
@@ -148,7 +148,7 @@ export default function NewParticipantByCSVUpload() {
         duration: 10000,
       });
       setCSVData(null);
-      e.target.value = '';
+      // e.target.value = '';
       setColumns([
         { field: 'firstName', headerName: 'First Name' },
         { field: 'lastName', headerName: 'Last Name' },

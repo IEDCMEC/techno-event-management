@@ -164,6 +164,11 @@ export const addNewParticipant = async (req: Request, res: Response) => {
       return res.status(200).json({ newParticipant });
     }
   } catch (err: any) {
+    if (err.code === 'P2002') {
+      return res
+        .status(400)
+        .json({ error: 'An email present in CSV data already exists in the event' });
+    }
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });
   }

@@ -71,7 +71,7 @@ model Participant {
   updatedAt                DateTime                   @updatedAt
   firstName                String
   lastName                 String?
-  email                    String?
+  email                    String
   phone                    String?
   checkInKey               String?
   eventId                  String                     @db.Uuid
@@ -82,6 +82,8 @@ model Participant {
   participantAttributes    ParticipantAttributes[]
   participantExtras        ParticipantExtras[]
   participantExtrasCheckIn ParticipantExtrasCheckIn[]
+
+  @@unique([email, eventId])
 }
 
 model ParticipantCheckIn {
