@@ -6,7 +6,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 const theme = extendTheme(
   withDefaultColorScheme({
-    colorScheme: 'purple',
+    colorScheme: 'teal',
   }),
 );
 
