@@ -22,8 +22,8 @@ app.use(
 app.use(bodyParser.json());
 
 const jwtCheck = auth({
-  audience: 'https://core.techno.iedcmec.in/api',
-  issuerBaseURL: 'https://dev-techno.jp.auth0.com',
+  audience: process.env.AUTH0_AUDIENCE,
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
   tokenSigningAlg: 'RS256',
 });
 

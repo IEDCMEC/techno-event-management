@@ -26,7 +26,8 @@ jobs:
     steps:
       - name: Call deploy hook
         run: |
-          curl -X GET ${{ secrets.CORE_ADMIN_DEPLOY_HOOK }}
+          curl -X GET ${{ secrets.DEV_CORE_ADMIN_DEPLOY_HOOK }}
+          curl -X GET ${{ secrets.PROD_CORE_ADMIN_DEPLOY_HOOK }}
           
   build-and-push-core-auth0-actions:
     runs-on: ubuntu-latest
@@ -48,4 +49,5 @@ jobs:
     steps:
       - name: Call deploy hook
         run: |
-          curl -X GET ${{ secrets.CORE_AUTH0_ACTIONS_DEPLOY_HOOK }}
+          curl -X GET ${{ secrets.DEV_CORE_AUTH0_ACTIONS_DEPLOY_HOOK }}
+          curl -X GET ${{ secrets.PROD_CORE_AUTH0_ACTIONS_DEPLOY_HOOK }}
