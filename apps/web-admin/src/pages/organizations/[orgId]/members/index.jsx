@@ -58,7 +58,7 @@ export default function OrganizationMembers() {
           </Button>
         </>
       }
-      debugInfo={JSON.stringify(members)}
+      debugInfo={members}
     >
       <DataDisplay loading={loading} columns={columns} rows={members} />
     </DashboardLayout>

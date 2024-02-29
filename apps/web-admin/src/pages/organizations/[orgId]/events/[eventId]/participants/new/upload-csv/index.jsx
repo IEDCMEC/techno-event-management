@@ -27,8 +27,8 @@ export default function NewParticipantByCSVUpload() {
     { field: 'checkInKey', headerName: 'Check In Key' },
   ]);
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
 
     Papa.parse(file, {
       header: true,
@@ -38,9 +38,19 @@ export default function NewParticipantByCSVUpload() {
           return Object.values(row).every((value) => value !== null && value !== undefined);
         });
 
-        const dataWithId = filteredData.map((row, index) => ({ ...row, id: index + 1 }));
+        if (filteredData[filteredData.length - 1].firstName === '') {
+          showAlert({
+            title: 'Error',
+            description: 'Please remove the blank line at the end of the CSV file.',
+            status: 'error',
+            duration: 10000,
+          });
+          setCSVData(null);
+          e.target.value = '';
+          return;
+        }
 
-        console.log(dataWithId);
+        const dataWithId = filteredData.map((row, index) => ({ ...row, id: index + 1 }));
 
         setColumns(
           Object.keys(dataWithId[0])
@@ -66,6 +76,8 @@ export default function NewParticipantByCSVUpload() {
             status: 'error',
             duration: 10000,
           });
+          setCSVData(null);
+          e.target.value = '';
         }
 
         if (
@@ -100,7 +112,23 @@ export default function NewParticipantByCSVUpload() {
   //
   useEffect(() => {
     if (columns.length <= 2) return;
-    if (
+    if (columns.find((column) => column.field === '')) {
+      showAlert({
+        title: 'Error',
+        description: 'Please make sure that the CSV file is properly formatted.',
+        status: 'error',
+        duration: 10000,
+      });
+      setCSVData(null);
+      e.target.value = '';
+      setColumns([
+        { field: 'firstName', headerName: 'First Name' },
+        { field: 'lastName', headerName: 'Last Name' },
+        { field: 'email', headerName: 'Email' },
+        { field: 'phone', headerName: 'Phone' },
+        { field: 'checkInKey', headerName: 'Check In Key' },
+      ]);
+    } else if (
       columns.find(
         (column) =>
           column.field !== 'firstName' &&
@@ -120,6 +148,7 @@ export default function NewParticipantByCSVUpload() {
         duration: 10000,
       });
       setCSVData(null);
+      e.target.value = '';
       setColumns([
         { field: 'firstName', headerName: 'First Name' },
         { field: 'lastName', headerName: 'Last Name' },
