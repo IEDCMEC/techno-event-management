@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
+import { validateUUID } from './middlewares/validateParams';
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -21,8 +22,8 @@ app.use(
 app.use(bodyParser.json());
 
 const jwtCheck = auth({
-  audience: 'https://core.techno.iedcmec.in/api',
-  issuerBaseURL: 'https://dev-techno.jp.auth0.com',
+  audience: process.env.AUTH0_AUDIENCE,
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
   tokenSigningAlg: 'RS256',
 });
 
@@ -46,6 +47,7 @@ app.get('/health', (req: Request, res: Response) => {
   }
 });
 
+app.param('eventId', validateUUID);
 app.use(jwtCheck);
 
 import router from './routes';

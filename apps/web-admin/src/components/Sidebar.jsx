@@ -37,7 +37,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         <Box padding={4} height="100%" minWidth={50} width={80}>
           <Box paddingY={4}>
             <Text fontSize="4xl" fontWeight="bold">
-              techno
+              Event Sync
             </Text>
           </Box>
           <SidebarContents />

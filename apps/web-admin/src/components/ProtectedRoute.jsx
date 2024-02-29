@@ -9,7 +9,7 @@ export const ProtectedRoute = ({ children }) => {
   const handleLogin = async () => {
     loginWithRedirect({
       authorizationParams: {
-        audience: 'https://core.techno.iedcmec.in/api',
+        audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
       },
     });
   };
