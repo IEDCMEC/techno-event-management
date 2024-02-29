@@ -20,7 +20,7 @@ export const useFetch = () => {
             'Bearer ' +
             (await getAccessTokenSilently({
               authorizationParams: {
-                audience: 'https://core.techno.iedcmec.in/api',
+                audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
               },
             })),
         },
@@ -48,7 +48,7 @@ export const useFetch = () => {
             'Bearer ' +
             (await getAccessTokenSilently({
               authorizationParams: {
-                audience: 'https://core.techno.iedcmec.in/api',
+                audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
               },
             })),
         },
@@ -76,7 +76,7 @@ export const useFetch = () => {
             'Bearer ' +
             (await getAccessTokenSilently({
               authorizationParams: {
-                audience: 'https://core.techno.iedcmec.in/api',
+                audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
               },
             })),
         },
@@ -104,7 +104,7 @@ export const useFetch = () => {
             'Bearer ' +
             (await getAccessTokenSilently({
               authorizationParams: {
-                audience: 'https://core.techno.iedcmec.in/api',
+                audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
               },
             })),
         },
