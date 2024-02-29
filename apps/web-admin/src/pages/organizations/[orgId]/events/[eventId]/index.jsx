@@ -53,7 +53,7 @@ export default function EventById() {
       debugInfo={JSON.stringify(event)}
     >
       <Flex gap={4}>
-        <Button
+        {/*<Button
           onClick={() => {
             router.push(`/organizations/${orgId}/events/${eventId}/participants`);
           }}
@@ -61,7 +61,7 @@ export default function EventById() {
         >
           Participants
         </Button>
-        <Button
+          <Box
           onClick={() => {
             router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in`);
           }}
@@ -84,7 +84,7 @@ export default function EventById() {
           isLoading={loading}
         >
           Extras
-        </Button>
+        </Button>*/}
       </Flex>
     </DashboardLayout>
   );

@@ -48,7 +48,7 @@ export default function Organizations() {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout previousPage={`/organizations/`} pageTitle="Organization">
       <Flex
         direction="column"
         height="100%"
@@ -57,7 +57,7 @@ export default function Organizations() {
         justifyContent="center"
         gap={8}
       >
-        <Box width="100%" p={8} paddingTop="100px" display="flex" alignItems="center" gap="10px">
+        {/*<Box width="100%" p={8} paddingTop="100px" display="flex" alignItems="center" gap="10px">
           <Box
             borderRadius="2000px"
             borderColor="black"
@@ -75,7 +75,7 @@ export default function Organizations() {
           <Text fontSize="4xl" fontWeight="bold">
             Organizations
           </Text>
-        </Box>
+        </Box> */}
         <Box
           width="100%"
           height="100%"

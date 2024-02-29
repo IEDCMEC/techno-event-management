@@ -41,7 +41,7 @@ export default function OrganizationById() {
     { id: 1, section: 'members', path: '/members', thumb: '' },
   ];
   return (
-    <DashboardLayout>
+    <DashboardLayout pageTitle={orgId} previousPage={`/organizations/`}>
       <Flex
         direction="column"
         height="100%"
@@ -50,7 +50,7 @@ export default function OrganizationById() {
         justifyContent="center"
         gap={8}
       >
-        <Box width="100%" p={8} paddingTop="100px" display="flex" alignItems="center">
+        {/*<Box width="100%" p={8} paddingTop="100px" display="flex" alignItems="center">
           <Box
             borderRadius="2000px"
             colorScheme="gray"
@@ -68,7 +68,7 @@ export default function OrganizationById() {
           <Text fontSize="4xl" fontWeight="bold" paddingLeft="10px">
             {orgId}
           </Text>
-        </Box>
+        </Box> */}
 
         <Box
           width="100%"
