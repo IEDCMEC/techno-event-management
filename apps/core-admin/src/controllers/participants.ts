@@ -222,7 +222,6 @@ export const editParticipant = async (req: Request, res: Response) => {
     if (!updatedParticipant) {
       return res.status(500).json({ error: 'Something went wrong' });
     }
-    console.log('updatedParticipant');
     return res.status(200).json({ updatedParticipant });
   } catch (err: any) {
     console.error(err);
