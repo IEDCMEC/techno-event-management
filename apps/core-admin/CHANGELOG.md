@@ -1,0 +1,12 @@
+# techno-event-core-admin
+
+## 0.1.0
+
+### Minor Changes
+
+- Initialise changeset
+
+### Patch Changes
+
+- Updated dependencies
+  - database@0.1.0
