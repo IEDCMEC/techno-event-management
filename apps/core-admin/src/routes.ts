@@ -18,6 +18,7 @@ import {
   checkOutParticipant,
   editParticipant,
   updateParticipantAttribute,
+  getParticipantBycheckInKey,
 } from './controllers/participants';
 import {
   addNewAttribute,
@@ -70,7 +71,13 @@ router.get(
   getAllParticipantsCheckInDetails,
 );
 router.get('/organizations/:orgId/events/:eventId/participants/:participantId', getParticipantById);
-router.post('/organizations/:orgId/events/:eventId/participants/check-in/', checkInParticipant);
+
+router.get(
+  '/organizations/:orgId/events/:eventId/participants/check-in/:checkInKey',
+  getParticipantBycheckInKey,
+);
+
+router.post('/organizations/:orgId/events/:eventId/participants/check-in', checkInParticipant);
 router.post('/organizations/:orgId/events/:eventId/participants/check-out', checkOutParticipant);
 
 router.get(

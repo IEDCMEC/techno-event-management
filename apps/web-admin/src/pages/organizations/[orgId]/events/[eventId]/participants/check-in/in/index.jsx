@@ -70,7 +70,7 @@ export default function CheckInParticipant() {
   return (
     <DashboardLayout
       pageTitle="Check In Participant"
-      previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
+      previousPage={`/organizations/${orgId}/events/${eventId}/participants/check-in`}
       debugInfo={JSON.stringify(checkInKey)}
     >
       <form onSubmit={handleSubmit}>

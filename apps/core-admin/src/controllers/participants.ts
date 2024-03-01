@@ -518,6 +518,191 @@ export const getParticipantById = async (req: Request, res: Response) => {
   }
 };
 
+export const getParticipantBycheckInKey = async (req: Request, res: Response) => {
+  try {
+    const { orgId, eventId, checkInKey } = req?.params;
+
+    let participant = await prisma.participant.findFirst({
+      where: {
+        organizationId: orgId,
+        eventId,
+        checkInKey,
+      },
+      include: {
+        participantCheckIn: {
+          select: {
+            checkedInAt: true,
+            checkedInByUser: true,
+          },
+        },
+        participantAttributes: {
+          include: {
+            attribute: true,
+          },
+        },
+        participantExtras: {
+          include: {
+            extra: true,
+          },
+        },
+        participantExtrasCheckIn: {
+          select: {
+            checkedInAt: true,
+            checkedInByUser: true,
+          },
+        },
+      },
+    });
+
+    if (!participant) {
+      return res.status(400).json({ error: 'Participant not found' });
+    }
+
+    const attributes = await prisma.attributes.findMany({
+      where: {
+        organizationId: orgId,
+        eventId,
+      },
+    });
+
+    if (!attributes) {
+      return res.status(500).json({ error: 'Something went wrong' });
+    }
+
+    attributes.forEach((attribute: any) => {
+      const existingAttribute = participant?.participantAttributes?.find(
+        (pa: any) => pa.attributeId === attribute.id,
+      );
+
+      if (!existingAttribute) {
+        if (!participant.attributes) {
+          participant.attributes = [];
+        }
+
+        participant.attributes.push({
+          id: attribute.id,
+          name: attribute.name,
+          value: null,
+        });
+      } else {
+        if (!participant.attributes) {
+          participant.attributes = [];
+        }
+
+        participant.attributes.push({
+          id: attribute.id,
+          name: attribute.name,
+          value: existingAttribute.value,
+        });
+      }
+    });
+
+    const extras = await prisma.extras.findMany({
+      where: {
+        organizationId: orgId,
+        eventId,
+      },
+    });
+
+    if (!extras) {
+      return res.status(500).json({ error: 'Something went wrong' });
+    }
+
+    extras.forEach((extra: any) => {
+      const existingExtra = participant?.participantExtras?.find(
+        (pe: any) => pe.extraId === extra.id,
+      );
+
+      if (!existingExtra) {
+        if (!participant.extras) {
+          participant.extras = [];
+        }
+
+        participant.extras = [];
+        participant.extras.push({
+          id: extra.id,
+          name: extra.name,
+          assigned: false,
+          checkedIn: false,
+        });
+
+        return;
+      } else {
+        if (!participant.extras) {
+          participant.extras = [];
+        }
+
+        participant.extras.push({
+          id: extra.id,
+          name: extra.name,
+          assigned: true,
+          checkIn: {
+            status: participant.participantExtrasCheckIn.length > 0 ? true : false,
+            at:
+              participant.participantExtrasCheckIn.length > 0
+                ? participant.participantExtrasCheckIn[0].checkedInAt
+                : null,
+            by: {
+              email:
+                participant.participantExtrasCheckIn.length > 0
+                  ? participant.participantExtrasCheckIn[0].checkedInByUser.email
+                  : null,
+              firstName:
+                participant.participantExtrasCheckIn.length > 0
+                  ? participant.participantExtrasCheckIn[0].checkedInByUser.firstName
+                  : null,
+              lastName:
+                participant.participantExtrasCheckIn.length > 0
+                  ? participant.participantExtrasCheckIn[0].checkedInByUser.lastName
+                  : null,
+            },
+          },
+        });
+      }
+    });
+
+    participant = {
+      id: participant.id,
+      addedAt: participant.createdAt,
+      firstName: participant.firstName,
+      lastName: participant.lastName,
+      attributes: participant.attributes,
+      extras: participant.extras,
+      email: participant.email,
+      phone: participant.phone,
+      checkInKey: participant.checkInKey,
+      numberOfAttributesAssigned: participant.participantAttributes.length,
+      numberOfExtrasAssigned: participant.participantExtras.length,
+      numberOfExtrasCheckedIn: participant.participantExtrasCheckIn.length,
+      checkIn: {
+        status: participant.participantCheckIn.length > 0 ? true : false,
+        at:
+          participant.participantCheckIn.length > 0
+            ? participant.participantCheckIn[0].checkedInAt
+            : null,
+        by: {
+          email:
+            participant.participantCheckIn.length > 0
+              ? participant.participantCheckIn[0].checkedInByUser.email
+              : null,
+          firstName:
+            participant.participantCheckIn.length > 0
+              ? participant.participantCheckIn[0].checkedInByUser.firstName
+              : null,
+          lastName:
+            participant.participantCheckIn.length > 0
+              ? participant.participantCheckIn[0].checkedInByUser.lastName
+              : null,
+        },
+      },
+    };
+    return res.status(200).json({ participant });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
 export const getParticipantAttributes = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId, participantId } = req?.params;
@@ -644,6 +829,10 @@ export const checkInParticipant = async (req: Request, res: Response) => {
         },
       },
     });
+
+    if (!participantAlreadyCheckedIn) {
+      return res.status(404).json({ error: 'Participant not found' });
+    }
 
     if (participantAlreadyCheckedIn.participantCheckIn.length > 0) {
       return res.status(400).json({

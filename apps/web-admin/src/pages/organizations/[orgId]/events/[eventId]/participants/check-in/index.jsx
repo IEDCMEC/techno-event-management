@@ -67,9 +67,7 @@ export default function ParticipantsCheckIn() {
           <Flex flexDirection="column" gap={4}>
             <Button
               onClick={() => {
-                router.push(
-                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-in/`,
-                );
+                router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in/in/`);
               }}
               isLoading={loading}
             >
@@ -78,7 +76,7 @@ export default function ParticipantsCheckIn() {
             <Button
               onClick={() => {
                 router.push(
-                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-in/scanner`,
+                  `/organizations/${orgId}/events/${eventId}/participants/check-in/in/scanner`,
                 );
               }}
               isLoading={loading}
@@ -89,9 +87,7 @@ export default function ParticipantsCheckIn() {
           <Flex flexDirection="column" gap={4}>
             <Button
               onClick={() => {
-                router.push(
-                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-out/`,
-                );
+                router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in/out/`);
               }}
               isLoading={loading}
             >
@@ -100,7 +96,7 @@ export default function ParticipantsCheckIn() {
             <Button
               onClick={() => {
                 router.push(
-                  `/organizations/${orgId}/events/${eventId}/participants/check-in/new-out/scanner`,
+                  `/organizations/${orgId}/events/${eventId}/participants/check-in/out/scanner`,
                 );
               }}
               isLoading={loading}

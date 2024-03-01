@@ -5,7 +5,6 @@ import { Box } from '@chakra-ui/react';
 const Scanner = ({ result, setResult }) => {
   const handleScan = (result) => {
     if (result) {
-      console.log(result);
       setResult(result?.text);
     }
   };
@@ -15,13 +14,13 @@ const Scanner = ({ result, setResult }) => {
   };
 
   return (
-    <Box height="100%" width="100%">
-      <QrReader
-        constraints={{ facingMode: 'environment' }}
-        onResult={handleScan}
-        onError={handleError}
-      />
-    </Box>
+    <QrReader
+      height="100%"
+      width="100%"
+      constraints={{ facingMode: 'environment' }}
+      onResult={handleScan}
+      onError={handleError}
+    />
   );
 };
 
