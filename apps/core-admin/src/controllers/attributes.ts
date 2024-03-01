@@ -72,6 +72,8 @@ export const getAttributeById = async (req: Request, res: Response) => {
             addedAt: participantAttribute.createdAt,
             firstName: participantAttribute.participant.firstName,
             lastName: participantAttribute.participant.lastName,
+            email: participantAttribute.participant.email,
+            phone: participantAttribute.participant.phone,
           };
         },
       ),

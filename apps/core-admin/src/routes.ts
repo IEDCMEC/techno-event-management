@@ -29,8 +29,14 @@ import {
 import { fetchAccountDetails, updateAccountDetails } from './controllers/users';
 import { validateOrganizationUser, validateOrganizationAdmin } from './middlewares/authorization';
 import { addNewExtra, checkInExtra, getAllExtras, getExtraById } from './controllers/extras';
+import { validateUUID } from './middlewares/validateParams';
 
 const router: Router = express.Router();
+
+router.param('eventId', validateUUID);
+router.param('attributeId', validateUUID);
+router.param('participantId', validateUUID);
+router.param('extraId', validateUUID);
 
 router.get('/', (req: any, res: any) => {
   try {
