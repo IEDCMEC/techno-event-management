@@ -10,6 +10,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@turbo/gen": "^1.9.9",
     "eslint": "^8.56.0",
     "eslint-config-custom": "workspace:*",
@@ -19,5 +20,6 @@
     "turbo": "^1.9.9"
   },
   "packageManager": "pnpm@7.15.0",
-  "name": "techno-event-management"
+  "name": "techno-event-management",
+  "version": "0.0.0"
 }
