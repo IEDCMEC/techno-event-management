@@ -172,10 +172,11 @@ export default function NewParticipantByCSVUpload() {
     if (status === 200) {
       showAlert({
         title: 'Success',
-        description: 'Participants have been added successfully.',
+        description: data.message,
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+      if (data.success) router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+      else console.error(data.participantsNotAdded);
     } else {
       showAlert({
         title: 'Error',

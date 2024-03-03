@@ -19,7 +19,11 @@ app.use(
   }),
 );
 
-app.use(bodyParser.json());
+app.use(
+  bodyParser.json({
+    limit: '50mb',
+  }),
+);
 
 const jwtCheck = auth({
   audience: process.env.AUTH0_AUDIENCE,

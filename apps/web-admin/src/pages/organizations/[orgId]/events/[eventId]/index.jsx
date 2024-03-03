@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Button, Flex } from '@chakra-ui/react';
+import { Button, Flex, Text } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
@@ -52,39 +52,61 @@ export default function EventById() {
       }
       debugInfo={JSON.stringify(event)}
     >
-      <Flex gap={4}>
-        <Button
-          onClick={() => {
-            router.push(`/organizations/${orgId}/events/${eventId}/participants`);
-          }}
-          isLoading={loading}
+      <Flex flexDirection="column" height="100%">
+        <Flex gap={4}>
+          <Button
+            onClick={() => {
+              router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+            }}
+            isLoading={loading}
+          >
+            Participants
+          </Button>
+          <Button
+            onClick={() => {
+              router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in`);
+            }}
+            isLoading={loading}
+          >
+            Participant Check In
+          </Button>
+          <Button
+            onClick={() => {
+              router.push(`/organizations/${orgId}/events/${eventId}/attributes`);
+            }}
+            isLoading={loading}
+          >
+            Attributes
+          </Button>
+          <Button
+            onClick={() => {
+              router.push(`/organizations/${orgId}/events/${eventId}/extras`);
+            }}
+            isLoading={loading}
+          >
+            Extras
+          </Button>
+        </Flex>
+        <Flex
+          height="100%"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          gap={4}
         >
-          Participants
-        </Button>
-        <Button
-          onClick={() => {
-            router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in`);
-          }}
-          isLoading={loading}
-        >
-          Participant Check In
-        </Button>
-        <Button
-          onClick={() => {
-            router.push(`/organizations/${orgId}/events/${eventId}/attributes`);
-          }}
-          isLoading={loading}
-        >
-          Attributes
-        </Button>
-        <Button
-          onClick={() => {
-            router.push(`/organizations/${orgId}/events/${eventId}/extras`);
-          }}
-          isLoading={loading}
-        >
-          Extras
-        </Button>
+          <Text fontSize="3xl">
+            Total Participants:{' '}
+            <Text as="span" fontWeight="bold">
+              {event.numberOfParticipants}
+            </Text>
+          </Text>
+          <Text fontSize="3xl">
+            Participants checked in:{' '}
+            <Text as="span" fontWeight="bold">
+              {event.numberOfParticipantsCheckedIn}
+            </Text>
+          </Text>
+        </Flex>
       </Flex>
     </DashboardLayout>
   );

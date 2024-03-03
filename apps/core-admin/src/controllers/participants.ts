@@ -29,64 +29,66 @@ export const addNewParticipant = async (req: Request, res: Response) => {
         }
       }
 
-      await prisma.$transaction(async (tx: typeof prisma) => {
-        const attributesAlreadyPresent = await tx.attributes.findMany({
-          where: {
+      const attributesAlreadyPresent = await prisma.attributes.findMany({
+        where: {
+          organizationId: orgId,
+          eventId,
+        },
+      });
+
+      const extrasAlreadyPresent = await prisma.extras.findMany({
+        where: {
+          organizationId: orgId,
+          eventId,
+        },
+      });
+
+      const newAttributes = attributesToBeAdded.filter(
+        (attribute) => !attributesAlreadyPresent.find((a: any) => a.name === attribute),
+      );
+
+      const newExtras = extrasToBeAdded.filter(
+        (extra) => !extrasAlreadyPresent.find((e: any) => e.name === extra),
+      );
+
+      const newAttributesAdded = await prisma.attributes.createMany({
+        data: newAttributes.map((attribute) => {
+          return {
+            name: attribute,
             organizationId: orgId,
             eventId,
-          },
-        });
+          };
+        }),
+      });
 
-        const extrasAlreadyPresent = await tx.extras.findMany({
-          where: {
+      const newExtrasAdded = await prisma.extras.createMany({
+        data: newExtras.map((extra) => {
+          return {
+            name: extra,
             organizationId: orgId,
             eventId,
-          },
-        });
+          };
+        }),
+      });
 
-        const newAttributes = attributesToBeAdded.filter(
-          (attribute) => !attributesAlreadyPresent.find((a: any) => a.name === attribute),
-        );
+      const attributes = await prisma.attributes.findMany({
+        where: {
+          organizationId: orgId,
+          eventId,
+        },
+      });
 
-        const newExtras = extrasToBeAdded.filter(
-          (extra) => !extrasAlreadyPresent.find((e: any) => e.name === extra),
-        );
+      const extras = await prisma.extras.findMany({
+        where: {
+          organizationId: orgId,
+          eventId,
+        },
+      });
 
-        const newAttributesAdded = await tx.attributes.createMany({
-          data: newAttributes.map((attribute) => {
-            return {
-              name: attribute,
-              organizationId: orgId,
-              eventId,
-            };
-          }),
-        });
+      let participantsNotAdded: any[] = [];
 
-        const newExtrasAdded = await tx.extras.createMany({
-          data: newExtras.map((extra) => {
-            return {
-              name: extra,
-              organizationId: orgId,
-              eventId,
-            };
-          }),
-        });
-
-        const attributes = await tx.attributes.findMany({
-          where: {
-            organizationId: orgId,
-            eventId,
-          },
-        });
-
-        const extras = await tx.extras.findMany({
-          where: {
-            organizationId: orgId,
-            eventId,
-          },
-        });
-
-        for (const p of participants) {
+      for (const p of participants) {
+        await prisma.$transaction(async (tx: typeof prisma) => {
           const newParticipant = await tx.participant.create({
             data: {
               firstName: p.firstName,
@@ -118,13 +120,25 @@ export const addNewParticipant = async (req: Request, res: Response) => {
           });
 
           if (!newParticipant) {
-            console.error('Error adding participant in bulk');
-            return res.status(500).json({ error: 'Something went wrong' });
+            participantsNotAdded.push(p);
+            // console.log(`Participant ${p.firstName} ${p.lastName} not added`);
+          } else {
+            // console.log(`Participant ${p.firstName} ${p.lastName} added`);
           }
-        }
+        });
+      }
 
-        return res.status(200).json({ success: true });
-      });
+      if (participantsNotAdded.length > 0) {
+        return res.status(200).json({
+          participantsNotAdded,
+          success: false,
+          message: 'Some participants were not added',
+        });
+      }
+
+      return res
+        .status(200)
+        .json({ success: true, message: 'All participants added successfully' });
     } else {
       //
       // Single participant addition
