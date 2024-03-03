@@ -19,6 +19,7 @@ export default function CheckInParticipantWithScanner() {
   const [previousCheckInKey, setPreviousCheckInKey] = useState(null);
   const [checkInKey, setCheckInKey] = useState(null);
   const [participant, setParticipant] = useState(null);
+  const [participants, setParticipants] = useState([]);
 
   const [fastMode, setFastMode] = useState(false);
 
@@ -77,7 +78,23 @@ export default function CheckInParticipantWithScanner() {
       handleSubmit();
     }
   }, [checkInKey]);
-
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      const { data, status } = await get(
+        `/core/organizations/${orgId}/events/${eventId}/participants`,
+      );
+      if (status === 200) {
+        setParticipants(data.participants);
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
+    };
+    fetchParticipants();
+  }, [orgId, eventId]);
   useEffect(() => {
     if (fastMode) {
       showAlert({
@@ -115,6 +132,33 @@ export default function CheckInParticipantWithScanner() {
         <Box width={['100%', '60%', '50%', '30%']}>
           <Scanner result={checkInKey} setResult={setCheckInKey} />
         </Box>
+        <Select
+          placeholder="Select Participant ID"
+          value={checkInKey}
+          onChange={(e) => {
+            setCheckInKey(e.target.value);
+          }}
+        >
+          {participants.map((participant) => (
+            <option key={participant.id} value={participant.checkInKey}>
+              {participant.id}
+            </option>
+          ))}
+        </Select>
+        <Select
+          placeholder="Select First Name"
+          value={checkInKey}
+          onChange={(e) => {
+            setCheckInKey(e.target.value);
+          }}
+        >
+          {participants.map((participant) => (
+            <option key={participant.id} value={participant.checkInKey}>
+              {participant.firstName}
+            </option>
+          ))}
+        </Select>
+
         {!fastMode && participant && (
           <Flex width="100%" flexDirection="column" alignItems="center" gap="6">
             <Flex gap="1" width="100%" justifyContent="space-between">
