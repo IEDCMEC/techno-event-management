@@ -8,6 +8,17 @@ import Scanner from '@/components/Scanner';
 
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import { Autocomplete } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { ThemeProvider, createTheme } from '@mui/material';
+
+const MuiTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#319795',
+    },
+  },
+});
 
 export default function CheckInParticipantWithScanner() {
   const { loading, post, get } = useFetch();
@@ -124,15 +135,27 @@ export default function CheckInParticipantWithScanner() {
       previousPage={`/organizations/${orgId}/events/${eventId}/participants/check-in`}
       debugInfo={checkInKey + ' ' + previousCheckInKey}
     >
-      <Flex height="100%" width="100%" flexDirection="column" alignItems="center">
-        <Flex pb="6" justifyContent="center" alignItems="center" gap="6">
-          <Text fontSize="xl">Fast Mode</Text>
-          <Switch colorScheme="red" size="md" onChange={() => setFastMode(!fastMode)} />
-        </Flex>
-        <Box width={['100%', '60%', '50%', '30%']}>
-          <Scanner result={checkInKey} setResult={setCheckInKey} />
-        </Box>
-        <Select
+      <ThemeProvider theme={MuiTheme}>
+        <Autocomplete
+          disablePortal
+          id="participant-id-autocomplete"
+          options={participants}
+          getOptionLabel={(participant) => participant.firstName}
+          value={checkInKey}
+          onChange={(event, newValue) => {
+            setCheckInKey(newValue);
+          }}
+          renderInput={(params) => <TextField {...params} label="Select Participant ID" />}
+        />
+        <Flex height="100%" width="100%" flexDirection="column" alignItems="center">
+          <Flex pb="6" justifyContent="center" alignItems="center" gap="6">
+            <Text fontSize="xl">Fast Mode</Text>
+            <Switch colorScheme="red" size="md" onChange={() => setFastMode(!fastMode)} />
+          </Flex>
+          <Box width={['100%', '60%', '50%', '30%']}>
+            <Scanner result={checkInKey} setResult={setCheckInKey} />
+          </Box>
+          {/* <Select
           placeholder="Select Participant ID"
           value={checkInKey}
           onChange={(e) => {
@@ -157,48 +180,49 @@ export default function CheckInParticipantWithScanner() {
               {participant.firstName}
             </option>
           ))}
-        </Select>
+        </Select> */}
 
-        {!fastMode && participant && (
-          <Flex width="100%" flexDirection="column" alignItems="center" gap="6">
-            <Flex gap="1" width="100%" justifyContent="space-between">
-              <Flex width="100%" flexDirection="column">
-                <Text>First Name: {participant?.firstName}</Text>
-                <Text>Last Name: {participant?.lastName}</Text>
-                <Text>Email: {participant?.email}</Text>
-                <Text>Phone: {participant?.phone}</Text>
-              </Flex>
-              <Flex width="100%" flexDirection="column">
-                {participant.checkIn.status ? (
-                  <>
-                    <Text color="red" fontSize="xl">
-                      Checked In
+          {!fastMode && participant && (
+            <Flex width="100%" flexDirection="column" alignItems="center" gap="6">
+              <Flex gap="1" width="100%" justifyContent="space-between">
+                <Flex width="100%" flexDirection="column">
+                  <Text>First Name: {participant?.firstName}</Text>
+                  <Text>Last Name: {participant?.lastName}</Text>
+                  <Text>Email: {participant?.email}</Text>
+                  <Text>Phone: {participant?.phone}</Text>
+                </Flex>
+                <Flex width="100%" flexDirection="column">
+                  {participant.checkIn.status ? (
+                    <>
+                      <Text color="red" fontSize="xl">
+                        Checked In
+                      </Text>
+                      <Text>Checked in at: {participant.checkIn.at}</Text>
+                      <Text>Checked in by: {participant.checkIn.by.email}</Text>
+                    </>
+                  ) : (
+                    <Text color="green" fontSize="xl">
+                      Not Checked In
                     </Text>
-                    <Text>Checked in at: {participant.checkIn.at}</Text>
-                    <Text>Checked in by: {participant.checkIn.by.email}</Text>
-                  </>
-                ) : (
-                  <Text color="green" fontSize="xl">
-                    Not Checked In
-                  </Text>
-                )}
+                  )}
+                </Flex>
+              </Flex>
+              <Flex gap="6">
+                <Button onClick={handleSubmit}>Confirm</Button>
+                <Button
+                  onClick={() => {
+                    setCheckInKey(null);
+                    setParticipant(null);
+                    setPreviousCheckInKey(null);
+                  }}
+                >
+                  Clear
+                </Button>
               </Flex>
             </Flex>
-            <Flex gap="6">
-              <Button onClick={handleSubmit}>Confirm</Button>
-              <Button
-                onClick={() => {
-                  setCheckInKey(null);
-                  setParticipant(null);
-                  setPreviousCheckInKey(null);
-                }}
-              >
-                Clear
-              </Button>
-            </Flex>
-          </Flex>
-        )}
-      </Flex>
+          )}
+        </Flex>
+      </ThemeProvider>
     </DashboardLayout>
   );
 }
