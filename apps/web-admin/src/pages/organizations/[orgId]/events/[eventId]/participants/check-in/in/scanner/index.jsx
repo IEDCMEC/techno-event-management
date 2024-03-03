@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { Button, FormControl, FormLabel, Select, Flex, Switch, Box, Text } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, Select, Flex, Box, Text } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import Scanner from '@/components/Scanner';
 
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
-import { Autocomplete } from '@mui/material';
+import { Autocomplete, Switch } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { ThemeProvider, createTheme } from '@mui/material';
 
@@ -147,40 +147,42 @@ export default function CheckInParticipantWithScanner() {
           }}
           renderInput={(params) => <TextField {...params} label="Select Participant ID" />}
         />
+
         <Flex height="100%" width="100%" flexDirection="column" alignItems="center">
           <Flex pb="6" justifyContent="center" alignItems="center" gap="6">
             <Text fontSize="xl">Fast Mode</Text>
             <Switch colorScheme="red" size="md" onChange={() => setFastMode(!fastMode)} />
           </Flex>
+
           <Box width={['100%', '60%', '50%', '30%']}>
             <Scanner result={checkInKey} setResult={setCheckInKey} />
           </Box>
           {/* <Select
-          placeholder="Select Participant ID"
-          value={checkInKey}
-          onChange={(e) => {
-            setCheckInKey(e.target.value);
-          }}
-        >
-          {participants.map((participant) => (
-            <option key={participant.id} value={participant.checkInKey}>
-              {participant.id}
-            </option>
-          ))}
-        </Select>
-        <Select
-          placeholder="Select First Name"
-          value={checkInKey}
-          onChange={(e) => {
-            setCheckInKey(e.target.value);
-          }}
-        >
-          {participants.map((participant) => (
-            <option key={participant.id} value={participant.checkInKey}>
-              {participant.firstName}
-            </option>
-          ))}
-        </Select> */}
+            placeholder="Select Participant ID"
+            value={checkInKey}
+            onChange={(e) => {
+              setCheckInKey(e.target.value);
+            }}
+          >
+            {participants.map((participant) => (
+              <option key={participant.id} value={participant.checkInKey}>
+                {participant.id}
+              </option>
+            ))}
+          </Select>
+          <Select
+            placeholder="Select First Name"
+            value={checkInKey}
+            onChange={(e) => {
+              setCheckInKey(e.target.value);
+            }}
+          >
+            {participants.map((participant) => (
+              <option key={participant.id} value={participant.checkInKey}>
+                {participant.firstName}
+              </option>
+            ))}
+          </Select> */}
 
           {!fastMode && participant && (
             <Flex width="100%" flexDirection="column" alignItems="center" gap="6">
