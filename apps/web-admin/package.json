@@ -23,7 +23,7 @@
     "axios": "^1.5.1",
     "clsx": "^2.0.0",
     "database": "workspace:*",
-    "eslint": "8.56.0",
+    "eslint": "8.57.0",
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "14.0.4",
     "framer-motion": "^11.0.6",
