@@ -40,12 +40,11 @@ Techno Event Management is an event management suite which helps with managing a
 Here's what you need to be able to run Techno Event:
 
 - Node.js (version >= 18)
-- PostgreSQL
 
 ### 1. Clone the repository
 
 ```shell
-git clone https://github.com
+git clone https://github.com/iedcmec/techno-event-management.git
 cd techno-event-management
 ```
 
@@ -55,15 +54,29 @@ cd techno-event-management
 pnpm install
 ```
 
-### 3. Copy the environment variables to `.env`
+### 3. Set up the development environment
 
 ```shell
-cp .env.example .env
+pnpm run setup
 ```
 
 ### 4. Run the dev server
 
 ```shell
+pnpm run dev
+```
+
+### 4.1 Only run the frontend dev server
+
+```shell
+cd apps/web-admin
+pnpm run dev
+```
+
+### 4.2 Only run the backend dev server
+
+```shell
+cd apps/core-admin
 pnpm run dev
 ```
 
