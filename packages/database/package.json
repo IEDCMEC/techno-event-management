@@ -5,7 +5,8 @@
   "types": "./index.d.ts",
   "scripts": {
     "db:generate": "prisma generate",
-    "db:push": "prisma db push --skip-generate"
+    "db:push": "prisma db push --skip-generate",
+    "setup": "node -e \"require('fs').rename('.env.example','.env',function(err){if(err){console.log(err);}console.log('Environment variables set up successfully');});\""
   },
   "dependencies": {
     "@prisma/client": "^5.7.1"

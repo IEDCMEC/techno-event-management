@@ -7,6 +7,7 @@
     "build": "npm run clean & webpack --config webpack.config.js",
     "clean": "rimraf dist & rimraf build",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/index.js\"",
+    "setup": "node -e \"require('fs').rename('.env.example','.env',function(err){if(err){console.log(err);}console.log('Environment variables set up successfully');});\"",
     "start": "node dist/app.js",
     "test": "mocha -r ts-node/register 'tests/**/*.ts' --timeout 10000 --exit",
     "lint": "eslint --ext .ts src"
