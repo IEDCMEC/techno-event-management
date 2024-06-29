@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "setup": "node -e \"require('fs').rename('.env.example','.env',function(err){if(err){console.log(err);}console.log('Environment variables set up successfully');});\"",
+    "setup": "node -e \"require('fs').copyFile('.env.example', '.env', (err) => {if (err) {console.log(err);} else {console.log('Environment variables set up successfully');}});\"",
     "lint": "next lint"
   },
   "dependencies": {
