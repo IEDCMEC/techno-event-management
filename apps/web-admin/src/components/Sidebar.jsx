@@ -61,7 +61,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <DrawerCloseButton />
                 <DrawerHeader>
                   <Text fontSize="2xl" fontWeight="bold">
-                    techno
+                    Event Sync
                   </Text>
                 </DrawerHeader>
                 <DrawerBody>
