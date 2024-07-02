@@ -19,7 +19,7 @@ export default function Settings() {
   useEffect(() => {
     const fetchAccountDetails = async () => {
       const { data, status } = await get('/core/users/me');
-      setAccountDetails(data.accountDetails || []);
+      setAccountDetails(data.accountDetails || {});
     };
     fetchAccountDetails();
   }, []);
@@ -32,7 +32,7 @@ export default function Settings() {
         description: 'Account details updated successfully.',
         status: 'success',
       });
-      setAccountDetails(data.accountDetails || []);
+      setAccountDetails(data.accountDetails || {});
     } else {
       showAlert({
         title: 'Error',
@@ -64,7 +64,7 @@ export default function Settings() {
             <Input
               type="text"
               name="firstName"
-              value={accountDetails.firstName}
+              value={accountDetails.firstName || ''}
               onChange={(e) => {
                 setAccountDetails({ ...accountDetails, firstName: e.target.value });
               }}
@@ -85,7 +85,7 @@ export default function Settings() {
             <Input
               type="text"
               name="lastName"
-              value={accountDetails.lastName}
+              value={accountDetails.lastName || ''}
               onChange={(e) => {
                 setAccountDetails({ ...accountDetails, lastName: e.target.value });
               }}
