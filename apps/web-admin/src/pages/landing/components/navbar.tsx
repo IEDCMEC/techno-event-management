@@ -16,11 +16,8 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from '@chakra-ui/react';
-
 import Image from 'next/image';
-
 import { HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
-
 import { logo, logo_text } from '../assets';
 
 export default function Navbar() {
@@ -38,6 +35,7 @@ export default function Navbar() {
       width={'full'}
       zIndex={100}
       backdropFilter="blur(8px)"
+      boxShadow="0px 12px 25px rgba(0, 0, 0, 0.02)"
     >
       <Flex
         minH={'72px'}
@@ -135,7 +133,7 @@ export default function Navbar() {
 const DesktopNav = () => {
   const linkColor = useColorModeValue('brand.black_v1', 'gray.200');
   const linkHoverColor = useColorModeValue('brand.black_v2', 'white');
-  const popoverContentBgColor = useColorModeValue('brand.nav_white', 'brand.black_v1');
+  const popoverContentBgColor = useColorModeValue('brand.white', 'brand.black_v1');
 
   return (
     <Stack direction={'row'} spacing={'22px'} mx={'12px'}>
@@ -160,8 +158,9 @@ const DesktopNav = () => {
 
             {navItem.children && (
               <PopoverContent
-                backdropFilter="blur(8px)"
+                // backdropFilter="blur(8px)"
                 // blur issue
+                // the ui looks better with a bg blur of 8px with a bg:nav_white as in MobileNav
                 mt={'24px'}
                 border={0}
                 zIndex={100}
