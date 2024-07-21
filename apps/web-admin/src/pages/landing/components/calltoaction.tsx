@@ -1,6 +1,7 @@
 import React from 'react';
-import { Heading, Text, Button, Stack, Flex, background } from '@chakra-ui/react';
+import { Heading, Text, Button, Stack, Flex } from '@chakra-ui/react';
 import { HiMiniArrowUpRight } from 'react-icons/hi2';
+import { IoIosPlayCircle } from 'react-icons/io';
 
 const CallToAction = () => {
   return (
@@ -57,7 +58,6 @@ const CallToAction = () => {
         textAlign={'center'}
         color={'brand.black_v1'}
         fontSize={{ base: '17px', md: '22px' }}
-        // fontSize={{ md:'22px' }}
         fontWeight={500}
         lineHeight={'30.8px'}
         wordBreak={'break-word'}
@@ -71,9 +71,9 @@ const CallToAction = () => {
         spacing={4}
         align="center"
         mt={'32px'}
-        maxW={'400px'}
+        maxW={'500px'}
         width={'full'}
-        px={{ base: '50px' }}
+        px={{ base: '50px', md: 'none' }}
         display={'flex'}
         justifyContent={'center'}
       >
@@ -82,7 +82,7 @@ const CallToAction = () => {
           lineHeight={'24px'}
           letterSpacing={'-0.2px'}
           wordBreak={'break-word'}
-          width={{ base: 'full', md: '124px' }}
+          width={{ base: 'full', md: 'fit' }}
         >
           Start for free
         </Button>
@@ -92,9 +92,10 @@ const CallToAction = () => {
           lineHeight={'24px'}
           letterSpacing={'-0.2px'}
           wordBreak={'break-word'}
-          // width={{ base: 'full' }}
-          width={{ base: 'full', md: '124px' }}
+          width={{ base: 'full', md: 'fit' }}
+          gap={2}
         >
+          <IoIosPlayCircle style={{ width: '25px', height: '25px' }} />
           Watch Demo
         </Button>
       </Stack>

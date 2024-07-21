@@ -135,7 +135,7 @@ export default function Navbar() {
 const DesktopNav = () => {
   const linkColor = useColorModeValue('brand.black_v1', 'gray.200');
   const linkHoverColor = useColorModeValue('brand.black_v2', 'white');
-  const popoverContentBgColor = useColorModeValue('brand.white', 'brand.black_v1');
+  const popoverContentBgColor = useColorModeValue('brand.nav_white', 'brand.black_v1');
 
   return (
     <Stack direction={'row'} spacing={'22px'} mx={'12px'}>
@@ -145,7 +145,6 @@ const DesktopNav = () => {
             <PopoverTrigger>
               <Box
                 as="a"
-                // p={3}
                 href={navItem.href ?? '#'}
                 fontSize={'sm'}
                 fontWeight={500}
@@ -161,6 +160,8 @@ const DesktopNav = () => {
 
             {navItem.children && (
               <PopoverContent
+                backdropFilter="blur(8px)"
+                // blur issue
                 mt={'24px'}
                 border={0}
                 zIndex={100}
@@ -193,7 +194,6 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
       display={'block'}
       p={2}
       rounded={'md'}
-      // bg={'brand.black'}
       _hover={{ bg: useColorModeValue('rgba(173, 197, 242, 0.17)', 'gray.900') }}
     >
       <Stack direction={'row'} align={'center'}>
@@ -229,7 +229,7 @@ const MobileNav = () => {
       bg={useColorModeValue('brand.nav_white', 'gray.800')}
       p={4}
       display={{ lg: 'none' }}
-      blur={'6px'}
+      blur={'8px'}
     >
       <SomeButtons />
       {NAV_ITEMS.map((navItem) => (
@@ -260,7 +260,11 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
         px={3}
         rounded={'12px'}
       >
-        <Text fontWeight={600} fontSize={'16px'} color={useColorModeValue('gray.600', 'gray.200')}>
+        <Text
+          fontWeight={600}
+          fontSize={'16px'}
+          color={useColorModeValue('brand.black_v2', 'gray.200')}
+        >
           {label}
         </Text>
         {children && (
@@ -276,16 +280,34 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
 
       <Collapse in={isOpen} animateOpacity style={{ marginTop: '0!important' }}>
         <Stack
-          mt={2}
-          pl={4}
-          borderLeft={1}
+          mt={1}
+          borderLeftWidth={3}
           borderStyle={'solid'}
-          borderColor={useColorModeValue('gray.200', 'gray.700')}
+          borderColor={useColorModeValue('brand.socials_bg', 'gray.700')}
+          pl={3}
           align={'start'}
         >
           {children &&
             children.map((child) => (
-              <Box as="a" key={child.label} py={2} href={child.href}>
+              <Box
+                as="a"
+                key={child.label}
+                py={2}
+                href={child.href}
+                _hover={{
+                  textDecoration: 'none',
+                  bg: 'rgba(217, 228, 249, 0.38)',
+                }}
+                fontStyle={'normal'}
+                fontWeight={500}
+                px={3}
+                rounded={'12px'}
+                w={'full'}
+                height={'48px'}
+                color={'brand.black_v2'}
+                display={'flex'}
+                alignItems={'center'}
+              >
                 {child.label}
               </Box>
             ))}
