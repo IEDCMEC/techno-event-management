@@ -37,5 +37,10 @@
     "react-icons": "^5.0.1",
     "react-qr-reader": "3.0.0-beta-1",
     "sass": "^1.69.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.5.0",
+    "@types/react": "18.3.4",
+    "typescript": "^5.0.4"
   }
 }
