@@ -19,10 +19,20 @@ import {
 import Image from 'next/image';
 import { HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { logo, logo_text } from '../assets';
+// import { handleLogin } from '@/components/ProtectedRoute';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
+  const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
+  const handleLogin = async () => {
+    loginWithRedirect({
+      authorizationParams: {
+        audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
+      },
+    });
+  };
   const logoSrc = useBreakpointValue({
     base: logo,
     md: logo_text,
@@ -65,6 +75,7 @@ export default function Navbar() {
           display={{ base: 'none', lg: 'flex' }}
         >
           <Button
+            onClick={handleLogin}
             as={'a'}
             fontSize={'sm'}
             fontWeight={500}
@@ -138,7 +149,7 @@ const DesktopNav = () => {
   return (
     <Stack direction={'row'} spacing={'22px'} mx={'12px'}>
       {NAV_ITEMS.map((navItem) => (
-        <Box key={navItem.label}>
+        <Box key={navItem.key}>
           <Popover trigger={'hover'} placement={'bottom-start'}>
             <PopoverTrigger>
               <Box
@@ -172,7 +183,7 @@ const DesktopNav = () => {
               >
                 <Stack>
                   {navItem.children.map((child) => (
-                    <DesktopSubNav key={child.label} {...child} />
+                    <DesktopSubNav key={child.key} {...child} />
                   ))}
                 </Stack>
               </PopoverContent>
@@ -232,7 +243,7 @@ const MobileNav = () => {
     >
       <SomeButtons />
       {NAV_ITEMS.map((navItem) => (
-        <MobileNavItem key={navItem.label} {...navItem} />
+        <MobileNavItem key={navItem.key} {...navItem} />
       ))}
     </Stack>
   );
@@ -290,7 +301,7 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
             children.map((child) => (
               <Box
                 as="a"
-                key={child.label}
+                key={child.key}
                 py={2}
                 href={child.href}
                 _hover={{
@@ -321,18 +332,22 @@ interface NavItem {
   subLabel?: string;
   children?: Array<NavItem>;
   href?: string;
+  key?: number;
 }
 
 const NAV_ITEMS: Array<NavItem> = [
   {
+    key: 1,
     label: 'Product',
     children: [
       {
+        key: 1,
         label: 'Laborum dolore velit',
         subLabel: 'Cupidatat irure commodo reprehenderit.',
         href: '#',
       },
       {
+        key: 2,
         label: 'Laborum dolore velit',
         subLabel: 'Cupidatat irure commodo reprehenderit.',
         href: '#',
@@ -340,27 +355,33 @@ const NAV_ITEMS: Array<NavItem> = [
     ],
   },
   {
+    key: 2,
     label: 'Customers',
     href: '#',
   },
   {
+    key: 3,
     label: 'Pricing',
     href: '#',
   },
   {
+    key: 4,
     label: 'Company',
     children: [
       {
+        key: 1,
         label: 'Laborum dolore velit',
         subLabel: 'Cupidatat irure commodo reprehenderit.',
         href: '#',
       },
       {
+        key: 2,
         label: 'Laborum dolore velit',
         subLabel: 'Cupidatat irure commodo reprehenderit.',
         href: '#',
       },
       {
+        key: 3,
         label: 'Laborum dolore velit',
         subLabel: 'Cupidatat irure commodo reprehenderit.',
         href: '#',

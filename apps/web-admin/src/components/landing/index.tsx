@@ -1,11 +1,12 @@
+'use-client';
 import React from 'react';
 import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
 import theme, { Fonts } from './theme';
 import Navbar from './components/navbar';
-import CallToAction from './components/calltoaction';
+import CallToAction from '@/components/landing/components/calltoaction';
 import Image from 'next/image';
-import { dash_frame } from './assets';
-import Footer from './components/footer';
+import { dash_frame } from '@/components/landing/assets';
+import Footer from '@/components/landing/components/footer';
 
 const Landing = () => {
   return (
