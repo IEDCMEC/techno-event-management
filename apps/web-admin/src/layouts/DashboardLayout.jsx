@@ -8,12 +8,7 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import Sidebar from '@/components/Sidebar';
 import { useAuth0 } from '@auth0/auth0-react';
 
-export default function DashboardLayout({
-  previousPage,
-  pageTitle,
-  headerButton,
-  children,
-}) {
+export default function DashboardLayout({ previousPage, pageTitle, headerButton, children }) {
   const router = useRouter();
 
   const [isMobile] = useMediaQuery('(max-width: 768px)');
@@ -95,6 +90,6 @@ export default function DashboardLayout({
       </Flex>
     );
   } else {
-    return <div></div>;
+    return <div>{children}</div>;
   }
 }

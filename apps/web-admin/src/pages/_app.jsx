@@ -19,6 +19,8 @@ export default function App({ Component, pageProps }) {
         redirect_uri: process.env.NEXT_PUBLIC_AUTH0_REDIRECT_URI,
         audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
       }}
+      useRefreshTokens={true}
+      cacheLocation="localstorage"
     >
       <ProtectedRoute>
         <ChakraProvider theme={theme}>
