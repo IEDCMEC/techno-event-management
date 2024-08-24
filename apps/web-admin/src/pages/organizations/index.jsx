@@ -1,3 +1,4 @@
+'use-client';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -9,7 +10,7 @@ import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 
 import DataDisplay from '@/components/DataDisplay';
-
+import { useAuth0 } from '@auth0/auth0-react';
 const columns = [
   { field: 'id', headerName: 'ID', width: 200 },
   { field: 'name', headerName: 'Name', width: 200 },
@@ -19,7 +20,7 @@ const columns = [
 export default function Organizations() {
   const router = useRouter();
   const showAlert = useAlert();
-
+  const { user, isAuthenticated } = useAuth0();
   const { loading, get } = useFetch();
 
   const [organizations, setOrganizations] = useState([]);
@@ -38,6 +39,7 @@ export default function Organizations() {
       }
     };
     fetchOrganizations();
+    console.log(user, isAuthenticated);
   }, []);
 
   return (

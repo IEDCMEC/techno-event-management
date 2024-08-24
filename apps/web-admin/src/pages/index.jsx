@@ -12,8 +12,8 @@ function Dashboard() {
   useEffect(() => {
     if (!isAuthenticated) router.replace('/');
     else router.replace('/organizations');
-    // console.log(isAuthenticated)
-  }, [router]);
+    console.log(isAuthenticated);
+  }, [router.pathname]);
 
   return <DashboardLayout>{!isAuthenticated && <Landing />}</DashboardLayout>;
 }
