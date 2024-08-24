@@ -39,7 +39,6 @@ export default function Organizations() {
       }
     };
     fetchOrganizations();
-    console.log(user, isAuthenticated);
   }, []);
 
   return (
