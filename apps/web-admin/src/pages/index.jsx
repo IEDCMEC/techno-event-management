@@ -12,7 +12,7 @@ function Dashboard() {
   useEffect(() => {
     if (!isAuthenticated) router.replace('/');
     else router.replace('/organizations');
-  }, [router.pathname]);
+  }, [router, isAuthenticated]);
 
   return <DashboardLayout>{!isAuthenticated && <Landing />}</DashboardLayout>;
 }
