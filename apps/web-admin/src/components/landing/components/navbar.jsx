@@ -27,11 +27,12 @@ export default function Navbar() {
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
   const handleLogin = async () => {
-    loginWithRedirect({
+    await loginWithRedirect({
       authorizationParams: {
         audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
       },
     });
+    console.log(user);
   };
   const logoSrc = useBreakpointValue({
     base: logo,

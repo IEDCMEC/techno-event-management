@@ -10,9 +10,14 @@ function Dashboard() {
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
   useEffect(() => {
-    if (!isAuthenticated) router.replace('/');
-    else router.replace('/organizations');
-  }, [router, isAuthenticated]);
+    if (!isAuthenticated) {
+      router.push('/');
+    } else {
+      router.push('/organizations');
+    }
+  }, [isAuthenticated]);
+  //   useEffect(()=>{
+  // },[router.pathname])
 
   return <DashboardLayout>{!isAuthenticated && <Landing />}</DashboardLayout>;
 }
