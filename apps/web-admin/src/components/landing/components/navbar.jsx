@@ -195,7 +195,7 @@ const DesktopNav = () => {
   );
 };
 
-const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
+const DesktopSubNav = ({ label, href, subLabel }) => {
   return (
     <Box
       as="a"
@@ -249,7 +249,7 @@ const MobileNav = () => {
   );
 };
 
-const MobileNavItem = ({ label, children, href }: NavItem) => {
+const MobileNavItem = ({ label, children, href }) => {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
@@ -327,15 +327,15 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
   );
 };
 
-interface NavItem {
-  label: string;
-  subLabel?: string;
-  children?: Array<NavItem>;
-  href?: string;
-  key?: number;
-}
+// interface NavItem {
+//   label: string;
+//   subLabel?: string;
+//   children?: Array<NavItem>;
+//   href?: string;
+//   key?: number;
+// }
 
-const NAV_ITEMS: Array<NavItem> = [
+const NAV_ITEMS = [
   {
     key: 1,
     label: 'Product',
@@ -391,6 +391,17 @@ const NAV_ITEMS: Array<NavItem> = [
 ];
 
 const SomeButtons = () => {
+  const handleLogin = async () => {
+    loginWithRedirect({
+      authorizationParams: {
+        audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
+      },
+    });
+  };
+  const logoSrc = useBreakpointValue({
+    base: logo,
+    md: logo_text,
+  });
   return (
     <Stack
       flex={{ base: 1, md: 0 }}
@@ -419,6 +430,7 @@ const SomeButtons = () => {
         _hover={{
           bg: 'brand.black_v1_border',
         }}
+        onClick={handleLogin}
       >
         Sign In
       </Button>
