@@ -11,6 +11,8 @@ import { useAlert } from '@/hooks/useAlert';
 export default function OrganizationById() {
   const router = useRouter();
   const { orgId } = router.query;
+  console.log(orgId);
+
   const showAlert = useAlert();
 
   const { loading, get } = useFetch();
@@ -19,19 +21,21 @@ export default function OrganizationById() {
 
   useEffect(() => {
     const fetchOrganizationStats = async () => {
-      const { data, status } = await get(`/core/organizations/${orgId}`);
-      if (status === 200) {
-        setOrganization(data.organization || []);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
+      if (orgId !== undefined) {
+        const { data, status } = await get(`/core/organizations/${orgId}`);
+        if (status === 200) {
+          setOrganization(data.organization || []);
+        } else {
+          showAlert({
+            title: 'Error',
+            description: data.error,
+            status: 'error',
+          });
+        }
       }
     };
     fetchOrganizationStats();
-  }, []);
+  }, [orgId]);
 
   return (
     <DashboardLayout

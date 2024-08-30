@@ -6,7 +6,7 @@ export const createNewOrganization = async (req: Request, res: Response) => {
   try {
     const userId = req?.auth?.payload?.sub;
     const { id, name } = req.body;
-
+    console.log(id, name);
     const newOrganization = await prisma.organization.create({
       data: {
         id,
