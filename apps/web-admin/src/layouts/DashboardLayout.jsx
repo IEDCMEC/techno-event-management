@@ -8,19 +8,13 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import Sidebar from '@/components/Sidebar';
 import { useAuth0 } from '@auth0/auth0-react';
 
-export default function DashboardLayout({
-  previousPage,
-  pageTitle,
-  headerButton,
-  children,
-  debugInfo,
-}) {
+export default function DashboardLayout({ previousPage, pageTitle, headerButton, children }) {
   const router = useRouter();
 
   const [isMobile] = useMediaQuery('(max-width: 768px)');
   const [isSidebarOpen, setSidebarOpen] = useState(isMobile);
   const { user, isAuthenticated, isLoading } = useAuth0();
-  // console.log(user, isLoading, isAuthenticated)
+
   if (isAuthenticated) {
     return (
       <Flex height="100vh" flexDirection="column">
@@ -93,14 +87,9 @@ export default function DashboardLayout({
             </Box>
           </Flex>
         </Flex>
-        {!isMobile && (
-          <Box fontSize="xs" maxHeight={4} overflow="hidden">
-            {JSON.stringify(debugInfo)}
-          </Box>
-        )}
       </Flex>
     );
   } else {
-    return <div></div>;
+    return <div>{children}</div>;
   }
 }

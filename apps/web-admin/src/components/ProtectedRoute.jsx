@@ -15,7 +15,7 @@ export const ProtectedRoute = ({ children }) => {
   };
 
   if (!isLoading) {
-    if (!isAuthenticated && router.pathname !== '/auth') handleLogin();
+    if (!isAuthenticated && router.pathname !== '/auth') router.replace('/');
     else if (isAuthenticated && !user.email_verified) {
       router.push('/onboarding/verify-email');
       return children;
