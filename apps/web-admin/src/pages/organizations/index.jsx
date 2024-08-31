@@ -10,6 +10,8 @@ import { useAlert } from '@/hooks/useAlert';
 
 import DataDisplay from '@/components/DataDisplay';
 
+import { CSVLink } from 'react-csv';
+
 const columns = [
   { field: 'id', headerName: 'ID', width: 200 },
   { field: 'name', headerName: 'Name', width: 200 },
@@ -40,6 +42,28 @@ export default function Organizations() {
     fetchOrganizations();
   }, []);
 
+  const exportToCsv = () => {
+    const csvData = organizations.map((org) => ({
+      ID: org.id,
+      Name: org.name,
+      NumOfEvent: org.numberOfEvents,
+    }));
+
+    return (
+      <CSVLink
+        data={csvData}
+        filename={`orgs.csv`}
+        style={{ textDecoration: 'none' }} // Remove underline for link
+      >
+        <Button
+          color="white" // color from other buttons
+        >
+          {' '}
+          Export to CSV
+        </Button>
+      </CSVLink>
+    );
+  };
   return (
     <DashboardLayout
       pageTitle="Organizations"
@@ -54,6 +78,7 @@ export default function Organizations() {
           >
             Create Organization
           </Button>
+          {exportToCsv()}
         </>
       }
       debugInfo={organizations}
