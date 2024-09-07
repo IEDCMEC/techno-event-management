@@ -1,46 +1,15 @@
 import { useRouter } from 'next/router';
-
-import { useState } from 'react';
-
-import { useFetch } from '@/hooks/useFetch';
-import { useAlert } from '@/hooks/useAlert';
+import { useContext } from 'react';
+import { account } from '@/contexts/MyContext';
 
 import { Box, Flex, Text, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { useEffect } from 'react';
 
 export default function Settings() {
-  const { loading, get, put } = useFetch();
-  const showAlert = useAlert();
-
-  const [accountDetails, setAccountDetails] = useState({});
-
-  useEffect(() => {
-    const fetchAccountDetails = async () => {
-      const { data, status } = await get('/core/users/me');
-      setAccountDetails(data.accountDetails || {});
-    };
-    fetchAccountDetails();
-  }, []);
-
-  const updateAccountDetails = async () => {
-    const { data, status } = await put('/core/users/me', {}, accountDetails);
-    if (status === 200) {
-      showAlert({
-        title: 'Success',
-        description: 'Account details updated successfully.',
-        status: 'success',
-      });
-      setAccountDetails(data.accountDetails || {});
-    } else {
-      showAlert({
-        title: 'Error',
-        description: data.error,
-        status: 'error',
-      });
-    }
-  };
+  //const { loading, get, put } = useFetch();
+  //const showAlert = useAlert();
+  const { accountDetails, setAccountDetails, updateAccountDetails } = useContext(account);
 
   return (
     <DashboardLayout pageTitle="Settings" previousPage={`/`} debugInfo={accountDetails}>
