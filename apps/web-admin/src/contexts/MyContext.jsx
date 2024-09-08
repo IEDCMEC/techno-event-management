@@ -12,6 +12,8 @@ const MyContext = ({ children }) => {
     const fetchAccountDetails = async () => {
       if (isAuthenticated) {
         const { data, status } = await get('/core/users/me');
+        const response = await get('/core/users/mycreds');
+        console.log(response);
         setAccountDetails(data.accountDetails || {});
       }
     };
@@ -20,6 +22,7 @@ const MyContext = ({ children }) => {
 
   const updateAccountDetails = async () => {
     const { data, status } = await put('/core/users/me', {}, accountDetails);
+    // console.log(data);
     if (status === 200) {
       showAlert({
         title: 'Success',

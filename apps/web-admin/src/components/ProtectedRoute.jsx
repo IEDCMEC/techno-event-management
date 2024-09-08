@@ -2,9 +2,14 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner, VStack, AbsoluteCenter } from '@chakra-ui/react';
+import { useFetch } from '@/hooks/useFetch';
+import { useContext } from 'react';
+import { account } from '@/contexts/MyContext';
+
 export const ProtectedRoute = ({ children }) => {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const { accountDetails, setAccountDetails, updateAccountDetails } = useContext(account);
 
   const handleLogin = async () => {
     loginWithRedirect({
@@ -13,11 +18,52 @@ export const ProtectedRoute = ({ children }) => {
       },
     });
   };
+  const { loading, get, post } = useFetch();
+  useEffect(() => {
+    console.log(accountDetails);
+    accountDetails.orgId && router.replace(`/organizations/${accountDetails.orgId}`);
+  }, [accountDetails]);
+  async function postOrg() {
+    const id = user.sub.substring(6);
+    const name = user.nickname;
+    const { data, mystatus } = await post(`/core/organizations`, {}, { id, name });
+    if (mystatus === 200) {
+      showAlert({
+        title: 'Success',
+        description: 'Organization has been created successfully.',
+        status: 'success',
+      });
+    }
+  }
+  async function checkOrg() {
+    const response = await get('/core/users/mycreds');
+    // console.log(response.data.data);
+    if (response.status === 200) {
+      setAccountDetails((preValue) => {
+        return {
+          ...preValue,
+          role: `${response.data.data.role}`,
+          orgId: `${response.data.data.organizationId}`,
+        };
+      });
+    } else {
+      postOrg();
+    }
+  }
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/');
+    } else {
+      checkOrg();
+      // console.log(user.sub.substring(6));
+    }
+  }, [isAuthenticated]);
   if (!isLoading) {
     if (!isAuthenticated && router.pathname !== '/auth') router.replace('/');
     else if (isAuthenticated && !user.email_verified) {
-      router.push('/onboarding/verify-email');
+      router.replace('/onboarding/verify-email');
+      console.log('reroute');
       return children;
     }
     return children;

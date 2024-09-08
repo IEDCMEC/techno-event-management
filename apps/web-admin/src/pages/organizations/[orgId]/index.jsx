@@ -11,7 +11,6 @@ import { useAlert } from '@/hooks/useAlert';
 export default function OrganizationById() {
   const router = useRouter();
   const { orgId } = router.query;
-  console.log(orgId);
 
   const showAlert = useAlert();
 

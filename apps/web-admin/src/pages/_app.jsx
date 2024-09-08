@@ -22,13 +22,13 @@ export default function App({ Component, pageProps }) {
       useRefreshTokens={true}
       cacheLocation="localstorage"
     >
-      <ProtectedRoute>
-        <MyContext>
+      <MyContext>
+        <ProtectedRoute>
           <ChakraProvider theme={theme}>
             <Component {...pageProps} />
           </ChakraProvider>
-        </MyContext>
-      </ProtectedRoute>
+        </ProtectedRoute>
+      </MyContext>
     </Auth0Provider>
   );
 }

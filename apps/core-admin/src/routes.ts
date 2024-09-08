@@ -27,7 +27,7 @@ import {
   getAttributeById,
   getAttributeParticipants,
 } from './controllers/attributes';
-import { fetchAccountDetails, updateAccountDetails } from './controllers/users';
+import { fetchAccountDetails, myCredential, updateAccountDetails } from './controllers/users';
 import { validateOrganizationUser, validateOrganizationAdmin } from './middlewares/authorization';
 import { addNewExtra, checkInExtra, getAllExtras, getExtraById } from './controllers/extras';
 import { validateUUID } from './middlewares/validateParams';
@@ -47,6 +47,8 @@ router.get('/', (req: any, res: any) => {
     return res.status(500);
   }
 });
+
+router.get('/users/mycreds', myCredential);
 
 router.get('/users/me', fetchAccountDetails);
 router.put('/users/me', updateAccountDetails);
