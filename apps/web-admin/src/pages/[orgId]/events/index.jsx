@@ -10,6 +10,8 @@ import { useAlert } from '@/hooks/useAlert';
 
 import DataDisplay from '@/components/DataDisplay';
 
+import { CSVLink } from 'react-csv';
+
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
   { field: 'numberOfParticipants', headerName: 'No of Participants', width: 200 },
@@ -48,6 +50,32 @@ export default function Events() {
     fetchEvents();
   }, []);
 
+  const exportToCsv = () => {
+    const csvData = events.map((event) => ({
+      Name: event.name,
+      NumParticipants: event.numberOfParticipants,
+      NumParticipantsCheckedIn: event.numberOfParticipantsCheckedIn,
+      NoOfAttributes: event.numberOfAttributes,
+      NoOfExtras: event.numberOfExtras,
+      CreatedAt: event.createdAt,
+    }));
+
+    return (
+      <CSVLink
+        data={csvData}
+        filename={`event-${orgId}.csv`}
+        style={{ textDecoration: 'none' }} // Remove underline for link
+      >
+        <Button
+          color="white" // color from other buttons
+        >
+          {' '}
+          Export to CSV
+        </Button>
+      </CSVLink>
+    );
+  };
+
   return (
     <DashboardLayout
       pageTitle="Event"
@@ -62,6 +90,7 @@ export default function Events() {
           >
             New Event
           </Button>
+          {exportToCsv()}
         </>
       }
       debugInfo={events}

@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react';
 import { Button } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
-
 import DataDisplay from '@/components/DataDisplay';
 
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import { EditIcon, ViewIcon } from '@chakra-ui/icons';
+
+import { CSVLink } from 'react-csv';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200, editable: true },
@@ -97,6 +98,36 @@ export default function Participants() {
     fetchParticipants();
   }, [orgId, eventId]);
 
+  const exportToCsv = () => {
+    const csvData = participants.map((participant) => ({
+      firstName: participant.firstName,
+      lastName: participant.lastName,
+      email: participant.email,
+      phone: participant.phone,
+      checkInKey: participant.checkInKey,
+      checkedIn: participant.checkedIn,
+      numberOfAttributesAssigned: participant.numberOfAttributesAssigned,
+      numberOfExtrasAssigned: participant.numberOfExtrasAssigned,
+      addedAt: participant.addedAt,
+    }));
+
+    return (
+      <CSVLink
+        data={csvData}
+        filename={`participants-${eventId}.csv`}
+        style={{ textDecoration: 'none' }} // Remove underline for link
+      >
+        <Button
+          colorScheme="teal" // color from other buttons
+          variant="solid"
+        >
+          {' '}
+          Export to CSV
+        </Button>
+      </CSVLink>
+    );
+  };
+
   return (
     <DashboardLayout
       pageTitle="Participants"
@@ -119,6 +150,7 @@ export default function Participants() {
           >
             Upload CSV
           </Button>
+          {exportToCsv()}
         </>
       }
       debugInfo={participants}

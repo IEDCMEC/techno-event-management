@@ -8,6 +8,25 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 
+//validation schema
+import { z } from 'zod';
+
+const participantSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  email: z.string().email('Invalid email address').min(1, 'Email is required'),
+  phone: z.string().optional(),
+  checkInKey: z.string().optional(),
+  attributes: z
+    .array(
+      z.object({
+        id: z.string(),
+        value: z.string().optional(),
+      }),
+    )
+    .optional(),
+});
+
 export default function NewParticipant() {
   const { loading, post, get } = useFetch();
   const showAlert = useAlert();
@@ -38,29 +57,49 @@ export default function NewParticipant() {
       }
     });
 
-    const { data, status } = await post(
-      `/core/organizations/${orgId}/events/${eventId}/participants`,
-      {},
-      {
-        firstName,
-        lastName,
-        email,
-        phone,
-        checkInKey,
-        attributes: attributeValues,
-      },
-    );
-    if (status === 200) {
-      showAlert({
-        title: 'Success',
-        description: 'Participant has been added successfully.',
-        status: 'success',
-      });
-      router.push(`/${orgId}/events/${eventId}/participants`);
-    } else {
+    const participantData = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      checkInKey,
+      attributes: attributeValues,
+    };
+
+    try {
+      const result = participantSchema.parse(participantData);
+      const { data, status } = await post(
+        `/core/organizations/${orgId}/events/${eventId}/participants`,
+        {},
+        /*{
+              firstName,
+              lastName,
+              email,
+              phone,
+              checkInKey,
+              attributes: attributeValues,
+            }*/
+        result,
+      );
+      if (status === 200) {
+        showAlert({
+          title: 'Success',
+          description: 'Participant has been added successfully.',
+          status: 'success',
+        });
+        router.push(`/${orgId}/events/${eventId}/participants`);
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
+    } catch (error) {
+      //incase validation fails
       showAlert({
         title: 'Error',
-        description: data.error,
+        description: error.message,
         status: 'error',
       });
     }
