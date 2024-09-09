@@ -24,11 +24,12 @@ export const ProtectedRoute = ({ children }) => {
   useMemo(() => {
     // console.log(accountDetails);
     if (accountDetails.orgId) {
+      // console.log('route')
       router.replace(`/${accountDetails.orgId}`);
       // console.log('trigger');
       // console.log(accountDetails);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, accountDetails.orgId]);
   async function postOrg() {
     const id = user.sub.substring(6);
     const name = user.nickname;
@@ -75,7 +76,7 @@ export const ProtectedRoute = ({ children }) => {
     if (!isAuthenticated && router.pathname !== '/auth') router.replace('/');
     else if (isAuthenticated && !user.email_verified) {
       router.replace('/onboarding/verify-email');
-      console.log('reroute');
+      // console.log('reroute');
       return children;
     }
     return children;

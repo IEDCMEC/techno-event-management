@@ -13,7 +13,7 @@ const MyContext = ({ children }) => {
       if (isAuthenticated) {
         const { data, status } = await get('/core/users/me');
         const response = await get('/core/users/mycreds');
-        console.log(response, data);
+        // console.log(response, data);
         setAccountDetails((preValue) => ({ ...preValue, ...(data.accountDetails || {}) }));
       }
     };

@@ -23,12 +23,13 @@ export default function OrganizationById() {
   const { accountDetails, setAccountDetails } = useContext(account);
   // console.log(accountDetails.orgId);
   // console.log(orgId);
+  // console.log(
+  //   orgId !== undefined , orgId !== accountDetails?.orgId , accountDetails?.orgId === undefined,
+  // );
+  // console.log(orgId, accountDetails.orgId);
   useMemo(async () => {
     // const fetchOrganizationStats = async () => {
-    if (
-      orgId !== undefined &&
-      (orgId !== accountDetails?.orgId || accountDetails?.orgId === undefined)
-    ) {
+    if (orgId !== undefined && accountDetails?.name === undefined) {
       const { data, status } = await get(`/core/organizations/${orgId}`);
       // console.log(data);
       // console.log('hihihi')

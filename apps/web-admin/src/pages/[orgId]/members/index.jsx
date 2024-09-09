@@ -21,7 +21,7 @@ export default function OrganizationMembers() {
   const router = useRouter();
   const { orgId } = router.query;
   const showAlert = useAlert();
-  console.log(orgId);
+  // console.log(orgId);
   const { loading, get } = useFetch();
 
   const [members, setMembers] = useState([]);

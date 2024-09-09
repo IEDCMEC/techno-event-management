@@ -14,6 +14,7 @@ export default function NewMember() {
 
   const router = useRouter();
   const { orgId } = router.query;
+  console.log(orgId);
 
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('USER');
