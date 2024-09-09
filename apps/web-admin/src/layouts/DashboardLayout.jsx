@@ -7,14 +7,18 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 
 import Sidebar from '@/components/Sidebar';
 import { useAuth0 } from '@auth0/auth0-react';
-
-export default function DashboardLayout({ previousPage, pageTitle, headerButton, children }) {
+import Image from 'next/image';
+import { useContext } from 'react';
+import { account } from '@/contexts/MyContext';
+export default function DashboardLayout({ headerButton, children }) {
   const router = useRouter();
+  // console.log(accountDetails?.orgId, 'hi');
+  const { accountDetails, setAccountDetails } = useContext(account);
 
   const [isMobile] = useMediaQuery('(max-width: 768px)');
   const [isSidebarOpen, setSidebarOpen] = useState(isMobile);
   const { user, isAuthenticated, isLoading } = useAuth0();
-
+  // router.
   if (isAuthenticated) {
     return (
       <Flex height="100vh" flexDirection="column">
@@ -28,7 +32,7 @@ export default function DashboardLayout({ previousPage, pageTitle, headerButton,
               alignItems="center"
             >
               <Text fontSize="4xl" fontWeight="bold">
-                {pageTitle}
+                {accountDetails?.name}
               </Text>
               <Flex
                 height={10}
@@ -61,14 +65,24 @@ export default function DashboardLayout({ previousPage, pageTitle, headerButton,
             >
               {!isMobile && (
                 <Flex width="100%" alignItems="center" gap={10}>
-                  <IoMdArrowRoundBack
+                  {/* <IoMdArrowRoundBack
                     size={30}
                     onClick={() => {
-                      router.push(previousPage);
+                      router.push(accountDetails?.orgId);
+                    }}
+                  /> */}
+                  <Image
+                    src={user.picture}
+                    alt="logo"
+                    height={50}
+                    width={50}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      router.push(`/${accountDetails?.orgId}`);
                     }}
                   />
                   <Text fontSize="4xl" fontWeight="bold">
-                    {pageTitle}
+                    {accountDetails?.name}
                   </Text>
                 </Flex>
               )}

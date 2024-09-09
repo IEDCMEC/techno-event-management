@@ -13,11 +13,12 @@ const MyContext = ({ children }) => {
       if (isAuthenticated) {
         const { data, status } = await get('/core/users/me');
         const response = await get('/core/users/mycreds');
-        console.log(response);
-        setAccountDetails(data.accountDetails || {});
+        console.log(response, data);
+        setAccountDetails((preValue) => ({ ...preValue, ...(data.accountDetails || {}) }));
       }
     };
     fetchAccountDetails();
+    console.log('trigger');
   }, [isAuthenticated]);
 
   const updateAccountDetails = async () => {

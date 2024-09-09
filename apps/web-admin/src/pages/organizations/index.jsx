@@ -64,7 +64,7 @@ export default function Organizations() {
         columns={columns}
         rows={organizations}
         onRowClick={(row) => {
-          router.push(`/organizations/${row.id}`);
+          router.push(`/${row.id}`);
         }}
       />
     </DashboardLayout>

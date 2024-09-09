@@ -5,6 +5,7 @@ import { Spinner, VStack, AbsoluteCenter } from '@chakra-ui/react';
 import { useFetch } from '@/hooks/useFetch';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
+import { useMemo } from 'react';
 
 export const ProtectedRoute = ({ children }) => {
   const router = useRouter();
@@ -19,10 +20,15 @@ export const ProtectedRoute = ({ children }) => {
     });
   };
   const { loading, get, post } = useFetch();
-  useEffect(() => {
-    console.log(accountDetails);
-    accountDetails.orgId && router.replace(`/organizations/${accountDetails.orgId}`);
-  }, [accountDetails]);
+  // useEffect();
+  useMemo(() => {
+    // console.log(accountDetails);
+    if (accountDetails.orgId) {
+      router.replace(`/${accountDetails.orgId}`);
+      console.log('trigger');
+      console.log(accountDetails);
+    }
+  }, [isAuthenticated]);
   async function postOrg() {
     const id = user.sub.substring(6);
     const name = user.nickname;
@@ -37,7 +43,7 @@ export const ProtectedRoute = ({ children }) => {
   }
   async function checkOrg() {
     const response = await get('/core/users/mycreds');
-    // console.log(response.data.data);
+    console.log(response.data.data);
     if (response.status === 200) {
       setAccountDetails((preValue) => {
         return {
@@ -51,12 +57,18 @@ export const ProtectedRoute = ({ children }) => {
     }
   }
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace('/');
-    } else {
+  // useEffect();
+  useMemo(() => {
+    // if (!isAuthenticated) {
+    //   router.replace('/');
+    //   console.log('not check')
+    // } else {
+    //   checkOrg();
+    //   // console.log(user.sub.substring(6));
+    // }
+    if (isAuthenticated) {
       checkOrg();
-      // console.log(user.sub.substring(6));
+      console.log('trigger');
     }
   }, [isAuthenticated]);
   if (!isLoading) {
