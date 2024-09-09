@@ -1,47 +1,22 @@
 import { useRouter } from 'next/router';
-
-import { useState } from 'react';
-
-import { useFetch } from '@/hooks/useFetch';
-import { useAlert } from '@/hooks/useAlert';
+import { useContext } from 'react';
+import { account } from '@/contexts/MyContext';
 
 import { Box, Flex, Text, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
-
+import { useState, useEffect } from 'react';
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { useEffect } from 'react';
 
 export default function Settings() {
-  const { loading, get, put } = useFetch();
-  const showAlert = useAlert();
-
-  const [accountDetails, setAccountDetails] = useState({});
-
+  //const { loading, get, put } = useFetch();
+  //const showAlert = useAlert();
+  const { accountDetails, setAccountDetails, updateAccountDetails } = useContext(account);
+  const [formData, setFormData] = useState({
+    firstName: accountDetails.firstName || '',
+    lastName: accountDetails.lastName || '',
+  });
   useEffect(() => {
-    const fetchAccountDetails = async () => {
-      const { data, status } = await get('/core/users/me');
-      setAccountDetails(data.accountDetails || {});
-    };
-    fetchAccountDetails();
-  }, []);
-
-  const updateAccountDetails = async () => {
-    const { data, status } = await put('/core/users/me', {}, accountDetails);
-    if (status === 200) {
-      showAlert({
-        title: 'Success',
-        description: 'Account details updated successfully.',
-        status: 'success',
-      });
-      setAccountDetails(data.accountDetails || {});
-    } else {
-      showAlert({
-        title: 'Error',
-        description: data.error,
-        status: 'error',
-      });
-    }
-  };
-
+    console.log(formData, accountDetails);
+  }, [formData, accountDetails]);
   return (
     <DashboardLayout pageTitle="Settings" previousPage={`/`} debugInfo={accountDetails}>
       <Box width="100%" height="100%">
@@ -64,9 +39,14 @@ export default function Settings() {
             <Input
               type="text"
               name="firstName"
-              value={accountDetails.firstName || ''}
+              value={formData.firstName || ''}
               onChange={(e) => {
-                setAccountDetails({ ...accountDetails, firstName: e.target.value });
+                setFormData((preValue) => {
+                  return {
+                    ...preValue,
+                    firstName: e.target.value,
+                  };
+                });
               }}
             />
           </FormControl>
@@ -85,14 +65,31 @@ export default function Settings() {
             <Input
               type="text"
               name="lastName"
-              value={accountDetails.lastName || ''}
+              value={formData.lastName || ''}
               onChange={(e) => {
-                setAccountDetails({ ...accountDetails, lastName: e.target.value });
+                setFormData((preValue) => {
+                  return {
+                    ...preValue,
+                    lastName: e.target.value,
+                  };
+                });
               }}
             />
           </FormControl>
         </Box>
-        <Button onClick={updateAccountDetails}>Save</Button>
+        <Button
+          onClick={() => {
+            setAccountDetails((preValue) => {
+              return {
+                ...preValue,
+                ...formData,
+              };
+            });
+            updateAccountDetails();
+          }}
+        >
+          Save
+        </Button>
       </Box>
     </DashboardLayout>
   );

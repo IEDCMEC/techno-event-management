@@ -1,4 +1,3 @@
-'use-client';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -13,27 +12,33 @@ import DataDisplay from '@/components/DataDisplay';
 
 import { CSVLink } from 'react-csv';
 
-import { useAuth0 } from '@auth0/auth0-react';
-
 const columns = [
-  { field: 'id', headerName: 'ID', width: 200 },
   { field: 'name', headerName: 'Name', width: 200 },
-  { field: 'numberOfEvents', headerName: 'No of Events', width: 200 },
+  { field: 'numberOfParticipants', headerName: 'No of Participants', width: 200 },
+  {
+    field: 'numberOfParticipantsCheckedIn',
+    headerName: 'No of Participants Checked In',
+    width: 200,
+  },
+  { field: 'numberOfAttributes', headerName: 'No of Attributes', width: 200 },
+  { field: 'numberOfExtras', headerName: 'No of Extras', width: 200 },
+  { field: 'createdAt', headerName: 'Created At', width: 200 },
 ];
 
-export default function Organizations() {
+export default function Events() {
   const router = useRouter();
+  const { orgId } = router.query;
   const showAlert = useAlert();
-  const { user, isAuthenticated } = useAuth0();
+
   const { loading, get } = useFetch();
 
-  const [organizations, setOrganizations] = useState([]);
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    const fetchOrganizations = async () => {
-      const { data, status } = await get('/core/organizations');
+    const fetchEvents = async () => {
+      const { data, status } = await get(`/core/organizations/${orgId}/events`);
       if (status === 200) {
-        setOrganizations(data.organizations || []);
+        setEvents(data.events || []);
       } else {
         showAlert({
           title: 'Error',
@@ -42,20 +47,23 @@ export default function Organizations() {
         });
       }
     };
-    fetchOrganizations();
+    fetchEvents();
   }, []);
 
   const exportToCsv = () => {
-    const csvData = organizations.map((org) => ({
-      ID: org.id,
-      Name: org.name,
-      NumOfEvent: org.numberOfEvents,
+    const csvData = events.map((event) => ({
+      Name: event.name,
+      NumParticipants: event.numberOfParticipants,
+      NumParticipantsCheckedIn: event.numberOfParticipantsCheckedIn,
+      NoOfAttributes: event.numberOfAttributes,
+      NoOfExtras: event.numberOfExtras,
+      CreatedAt: event.createdAt,
     }));
 
     return (
       <CSVLink
         data={csvData}
-        filename={`orgs.csv`}
+        filename={`event-${orgId}.csv`}
         style={{ textDecoration: 'none' }} // Remove underline for link
       >
         <Button
@@ -67,31 +75,32 @@ export default function Organizations() {
       </CSVLink>
     );
   };
+
   return (
     <DashboardLayout
-      pageTitle="Organizations"
-      previousPage={`/organizations`}
+      pageTitle="Event"
+      previousPage={`${orgId}`}
       headerButton={
         <>
           <Button
             onClick={() => {
-              router.push(`/organizations/new`);
+              router.push(`/${orgId}/events/new`);
             }}
             isLoading={loading}
           >
-            Create Organization
+            New Event
           </Button>
           {exportToCsv()}
         </>
       }
-      debugInfo={organizations}
+      debugInfo={events}
     >
       <DataDisplay
         loading={loading}
         columns={columns}
-        rows={organizations}
+        rows={events}
         onRowClick={(row) => {
-          router.push(`/${row.id}`);
+          router.push(`/${orgId}/events/${row.id}`);
         }}
       />
     </DashboardLayout>

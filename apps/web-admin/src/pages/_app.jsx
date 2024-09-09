@@ -1,5 +1,5 @@
 import React from 'react';
-
+import MyContext from '@/contexts/MyContext';
 import { extendTheme, ChakraProvider, withDefaultColorScheme } from '@chakra-ui/react';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
@@ -22,11 +22,13 @@ export default function App({ Component, pageProps }) {
       useRefreshTokens={true}
       cacheLocation="localstorage"
     >
-      <ProtectedRoute>
-        <ChakraProvider theme={theme}>
-          <Component {...pageProps} />
-        </ChakraProvider>
-      </ProtectedRoute>
+      <MyContext>
+        <ProtectedRoute>
+          <ChakraProvider theme={theme}>
+            <Component {...pageProps} />
+          </ChakraProvider>
+        </ProtectedRoute>
+      </MyContext>
     </Auth0Provider>
   );
 }
