@@ -22,10 +22,16 @@ export default function OrganizationById() {
   const { loading, get } = useFetch();
   const { accountDetails, setAccountDetails } = useContext(account);
   // console.log(accountDetails.orgId);
+  // console.log(orgId);
   useMemo(async () => {
     // const fetchOrganizationStats = async () => {
-    if (orgId !== undefined && orgId !== accountDetails?.orgId) {
+    if (
+      orgId !== undefined &&
+      (orgId !== accountDetails?.orgId || accountDetails?.orgId === undefined)
+    ) {
       const { data, status } = await get(`/core/organizations/${orgId}`);
+      // console.log(data);
+      // console.log('hihihi')
       if (status === 200) {
         setAccountDetails((preValue) => ({
           ...preValue,
@@ -43,7 +49,7 @@ export default function OrganizationById() {
     }
     // };
     // fetchOrganizationStats();
-  }, [isAuthenticated]);
+  }, [orgId]);
   // console.log(accountDetails?.orgId);
   return (
     <DashboardLayout

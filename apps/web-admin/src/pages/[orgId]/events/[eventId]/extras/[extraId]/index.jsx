@@ -73,7 +73,7 @@ export default function ExtraById() {
         <>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/extras/${extraId}/check-in`);
+              router.push(`/${orgId}/events/${eventId}/extras/${extraId}/check-in`);
             }}
             isLoading={loading}
             disabled="true"
@@ -93,7 +93,7 @@ export default function ExtraById() {
           </Button>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/extras/${extraId}/settings`);
+              router.push(`/${orgId}/events/${eventId}/extras/${extraId}/settings`);
             }}
             isLoading={loading}
             disabled="true"
@@ -109,7 +109,7 @@ export default function ExtraById() {
         columns={columns}
         rows={extraDetails}
         onRowClick={(row) => {
-          router.push(`/organizations/${orgId}/events/${eventId}/participants/${row.id}`);
+          router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
         }}
       />
     </DashboardLayout>

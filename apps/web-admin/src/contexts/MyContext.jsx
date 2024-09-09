@@ -18,7 +18,7 @@ const MyContext = ({ children }) => {
       }
     };
     fetchAccountDetails();
-    console.log('trigger');
+    // console.log('trigger');
   }, [isAuthenticated]);
 
   const updateAccountDetails = async () => {
@@ -30,7 +30,13 @@ const MyContext = ({ children }) => {
         description: 'Account details updated successfully.',
         status: 'success',
       });
-      setAccountDetails(data.accountDetails || {});
+      console.log(data);
+      setAccountDetails((prev) => {
+        return {
+          ...prev,
+          ...(data.accountDetails || {}),
+        };
+      });
     } else {
       showAlert({
         title: 'Error',

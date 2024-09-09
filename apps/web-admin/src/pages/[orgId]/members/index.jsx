@@ -21,7 +21,7 @@ export default function OrganizationMembers() {
   const router = useRouter();
   const { orgId } = router.query;
   const showAlert = useAlert();
-
+  console.log(orgId);
   const { loading, get } = useFetch();
 
   const [members, setMembers] = useState([]);
@@ -50,7 +50,7 @@ export default function OrganizationMembers() {
         <>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/members/new`);
+              router.push(`/${orgId}/members/new`);
             }}
             isLoading={loading}
           >

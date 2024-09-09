@@ -25,8 +25,8 @@ export const ProtectedRoute = ({ children }) => {
     // console.log(accountDetails);
     if (accountDetails.orgId) {
       router.replace(`/${accountDetails.orgId}`);
-      console.log('trigger');
-      console.log(accountDetails);
+      // console.log('trigger');
+      // console.log(accountDetails);
     }
   }, [isAuthenticated]);
   async function postOrg() {
@@ -43,7 +43,7 @@ export const ProtectedRoute = ({ children }) => {
   }
   async function checkOrg() {
     const response = await get('/core/users/mycreds');
-    console.log(response.data.data);
+    // console.log(response.data.data);
     if (response.status === 200) {
       setAccountDetails((preValue) => {
         return {
@@ -68,7 +68,7 @@ export const ProtectedRoute = ({ children }) => {
     // }
     if (isAuthenticated) {
       checkOrg();
-      console.log('trigger');
+      // console.log('trigger');
     }
   }, [isAuthenticated]);
   if (!isLoading) {

@@ -41,7 +41,7 @@ export default function NewOrganization() {
       },
     );
     if (status === 200) {
-      router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+      router.push(`/${orgId}/events/${eventId}/participants`);
     } else {
       alert(data.error);
     }

@@ -51,12 +51,12 @@ export default function Events() {
   return (
     <DashboardLayout
       pageTitle="Event"
-      previousPage={`/organizations/${orgId}`}
+      previousPage={`${orgId}`}
       headerButton={
         <>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/new`);
+              router.push(`/${orgId}/events/new`);
             }}
             isLoading={loading}
           >
@@ -71,7 +71,7 @@ export default function Events() {
         columns={columns}
         rows={events}
         onRowClick={(row) => {
-          router.push(`/organizations/${orgId}/events/${row.id}`);
+          router.push(`/${orgId}/events/${row.id}`);
         }}
       />
     </DashboardLayout>

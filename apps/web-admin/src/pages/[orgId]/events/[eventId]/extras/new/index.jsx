@@ -32,7 +32,7 @@ export default function NewExtra() {
         description: 'Extra has been added successfully.',
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/events/${eventId}/extras`);
+      router.push(`/${orgId}/events/${eventId}/extras`);
     } else {
       showAlert({
         title: 'Error',

@@ -65,12 +65,15 @@ export default function DashboardLayout({ headerButton, children }) {
             >
               {!isMobile && (
                 <Flex width="100%" alignItems="center" gap={10}>
-                  {/* <IoMdArrowRoundBack
+                  <IoMdArrowRoundBack
                     size={30}
-                    onClick={() => {
-                      router.push(accountDetails?.orgId);
+                    style={{
+                      cursor: 'pointer',
                     }}
-                  /> */}
+                    onClick={() => {
+                      router.back();
+                    }}
+                  />
                   <Image
                     src={user.picture}
                     alt="logo"

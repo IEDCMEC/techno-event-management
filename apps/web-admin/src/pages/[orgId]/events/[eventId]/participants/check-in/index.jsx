@@ -67,7 +67,7 @@ export default function ParticipantsCheckIn() {
           <Flex flexDirection="column" gap={4}>
             <Button
               onClick={() => {
-                router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in/in/`);
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`);
               }}
               isLoading={loading}
             >
@@ -87,7 +87,7 @@ export default function ParticipantsCheckIn() {
           <Flex flexDirection="column" gap={4}>
             <Button
               onClick={() => {
-                router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in/out/`);
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`);
               }}
               isLoading={loading}
             >
@@ -113,7 +113,7 @@ export default function ParticipantsCheckIn() {
         rows={participantsCheckIn}
         columns={columns}
         onRowClick={(row) => {
-          router.push(`/organizations/${orgId}/events/${eventId}/participants/${row.id}`);
+          router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
         }}
       />
     </DashboardLayout>

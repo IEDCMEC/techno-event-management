@@ -3,14 +3,20 @@ import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
 
 import { Box, Flex, Text, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
-
+import { useState, useEffect } from 'react';
 import DashboardLayout from '@/layouts/DashboardLayout';
 
 export default function Settings() {
   //const { loading, get, put } = useFetch();
   //const showAlert = useAlert();
   const { accountDetails, setAccountDetails, updateAccountDetails } = useContext(account);
-
+  const [formData, setFormData] = useState({
+    firstName: accountDetails.firstName || '',
+    lastName: accountDetails.lastName || '',
+  });
+  useEffect(() => {
+    console.log(formData, accountDetails);
+  }, [formData, accountDetails]);
   return (
     <DashboardLayout pageTitle="Settings" previousPage={`/`} debugInfo={accountDetails}>
       <Box width="100%" height="100%">
@@ -33,9 +39,14 @@ export default function Settings() {
             <Input
               type="text"
               name="firstName"
-              value={accountDetails.firstName || ''}
+              value={formData.firstName || ''}
               onChange={(e) => {
-                setAccountDetails({ ...accountDetails, firstName: e.target.value });
+                setFormData((preValue) => {
+                  return {
+                    ...preValue,
+                    firstName: e.target.value,
+                  };
+                });
               }}
             />
           </FormControl>
@@ -54,14 +65,31 @@ export default function Settings() {
             <Input
               type="text"
               name="lastName"
-              value={accountDetails.lastName || ''}
+              value={formData.lastName || ''}
               onChange={(e) => {
-                setAccountDetails({ ...accountDetails, lastName: e.target.value });
+                setFormData((preValue) => {
+                  return {
+                    ...preValue,
+                    lastName: e.target.value,
+                  };
+                });
               }}
             />
           </FormControl>
         </Box>
-        <Button onClick={updateAccountDetails}>Save</Button>
+        <Button
+          onClick={() => {
+            setAccountDetails((preValue) => {
+              return {
+                ...preValue,
+                ...formData,
+              };
+            });
+            updateAccountDetails();
+          }}
+        >
+          Save
+        </Button>
       </Box>
     </DashboardLayout>
   );

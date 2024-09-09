@@ -175,7 +175,7 @@ export default function NewParticipantByCSVUpload() {
         description: data.message,
         status: 'success',
       });
-      if (data.success) router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+      if (data.success) router.push(`/${orgId}/events/${eventId}/participants`);
       else console.error(data.participantsNotAdded);
     } else {
       showAlert({

@@ -75,7 +75,7 @@ export default function AttributeById() {
         columns={columns}
         rows={attributeDetails}
         onRowClick={(row) => {
-          router.push(`/organizations/${orgId}/events/${eventId}/participants/${row.id}`);
+          router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
         }}
       />
     </DashboardLayout>

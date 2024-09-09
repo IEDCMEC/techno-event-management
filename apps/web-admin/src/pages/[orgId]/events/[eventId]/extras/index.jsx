@@ -57,7 +57,7 @@ export default function Extras() {
         <>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/extras/new`);
+              router.push(`/${orgId}/events/${eventId}/extras/new`);
             }}
             isLoading={loading}
           >
@@ -72,7 +72,7 @@ export default function Extras() {
         columns={columns}
         rows={extras}
         onRowClick={(row) => {
-          router.push(`/organizations/${orgId}/events/${eventId}/extras/${row.id}`);
+          router.push(`/${orgId}/events/${eventId}/extras/${row.id}`);
         }}
       />
     </DashboardLayout>

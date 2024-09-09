@@ -34,7 +34,7 @@ export default function NewMember() {
         description: 'Member added successfully',
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/members`);
+      router.push(`/${orgId}/members`);
     } else {
       showAlert({
         title: 'Error',

@@ -56,7 +56,7 @@ export default function NewParticipant() {
         description: 'Participant has been added successfully.',
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+      router.push(`/${orgId}/events/${eventId}/participants`);
     } else {
       showAlert({
         title: 'Error',

@@ -42,7 +42,7 @@ export default function EditParticipant() {
         description: 'Participant has been updated successfully.',
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+      router.push(`/${orgId}/events/${eventId}/participants`);
     } else {
       showAlert({
         title: 'Error',

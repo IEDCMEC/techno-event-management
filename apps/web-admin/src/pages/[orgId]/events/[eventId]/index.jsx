@@ -36,12 +36,12 @@ export default function EventById() {
   return (
     <DashboardLayout
       pageTitle={event?.name}
-      previousPage={`/organizations/${orgId}/events`}
+      previousPage={`/${orgId}/events`}
       headerButton={
         <>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/settings`);
+              router.push(`/${orgId}/events/${eventId}/settings`);
             }}
             isLoading={loading}
             disabled="true"
@@ -56,7 +56,7 @@ export default function EventById() {
         <Flex gap={4}>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/participants`);
+              router.push(`/${orgId}/events/${eventId}/participants`);
             }}
             isLoading={loading}
           >
@@ -64,7 +64,7 @@ export default function EventById() {
           </Button>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in`);
+              router.push(`/${orgId}/events/${eventId}/participants/check-in`);
             }}
             isLoading={loading}
           >
@@ -72,7 +72,7 @@ export default function EventById() {
           </Button>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/attributes`);
+              router.push(`/${orgId}/events/${eventId}/attributes`);
             }}
             isLoading={loading}
           >
@@ -80,7 +80,7 @@ export default function EventById() {
           </Button>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/extras`);
+              router.push(`/${orgId}/events/${eventId}/extras`);
             }}
             isLoading={loading}
           >

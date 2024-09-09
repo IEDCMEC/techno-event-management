@@ -35,7 +35,7 @@ export default function CheckInExtra() {
         description: 'Extra for participant has been checked in  successfully.',
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/events/${eventId}/extras/${extraId}`);
+      router.push(`/${orgId}/events/${eventId}/extras/${extraId}`);
     } else {
       showAlert({
         title: 'Error',

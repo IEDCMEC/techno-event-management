@@ -32,7 +32,7 @@ export default function NewEvent() {
         description: 'Event has been created successfully.',
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/events`);
+      router.push(`/${orgId}/events`);
     } else {
       showAlert({
         title: 'Error',

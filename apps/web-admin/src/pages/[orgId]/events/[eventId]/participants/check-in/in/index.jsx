@@ -35,7 +35,7 @@ export default function CheckInParticipant() {
         description: 'Participant has been checked in  successfully.',
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/events/${eventId}/participants/check-in`);
+      router.push(`/${orgId}/events/${eventId}/participants/check-in`);
     } else {
       showAlert({
         title: 'Error',

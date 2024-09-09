@@ -32,7 +32,7 @@ export default function NewAttribute() {
         description: 'Attribute has been added successfully.',
         status: 'success',
       });
-      router.push(`/organizations/${orgId}/events/${eventId}/attributes`);
+      router.push(`/${orgId}/events/${eventId}/attributes`);
     } else {
       showAlert({
         title: 'Error',

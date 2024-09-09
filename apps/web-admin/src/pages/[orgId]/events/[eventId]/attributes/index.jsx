@@ -55,7 +55,7 @@ export default function Attributes() {
         <>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/attributes/new`);
+              router.push(`/${orgId}/events/${eventId}/attributes/new`);
             }}
             isLoading={loading}
           >
@@ -70,7 +70,7 @@ export default function Attributes() {
         columns={columns}
         rows={attributes}
         onRowClick={(row) => {
-          router.push(`/organizations/${orgId}/events/${eventId}/attributes/${row.id}`);
+          router.push(`/${orgId}/events/${eventId}/attributes/${row.id}`);
         }}
       />
     </DashboardLayout>

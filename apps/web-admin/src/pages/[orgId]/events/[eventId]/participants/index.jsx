@@ -56,7 +56,7 @@ export default function Participants() {
           variant="contained"
           color="primary"
           onClick={() => {
-            router.push(`/organizations/${orgId}/events/${eventId}/participants/${params.row.id}`);
+            router.push(`/${orgId}/events/${eventId}/participants/${params.row.id}`);
           }}
         >
           <ViewIcon />
@@ -105,7 +105,7 @@ export default function Participants() {
         <>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/participants/new/`);
+              router.push(`/${orgId}/events/${eventId}/participants/new/`);
             }}
             isLoading={loading}
           >
@@ -113,7 +113,7 @@ export default function Participants() {
           </Button>
           <Button
             onClick={() => {
-              router.push(`/organizations/${orgId}/events/${eventId}/participants/new/upload-csv`);
+              router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`);
             }}
             isLoading={loading}
           >
