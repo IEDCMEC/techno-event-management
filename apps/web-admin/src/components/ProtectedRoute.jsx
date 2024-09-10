@@ -73,8 +73,9 @@ export const ProtectedRoute = ({ children }) => {
     }
   }, [isAuthenticated]);
   if (!isLoading) {
-    if (!isAuthenticated && router.pathname !== '/auth') router.replace('/');
-    else if (isAuthenticated && !user.email_verified) {
+    if (!isAuthenticated && router.pathname !== '/auth' && router.pathname !== '/') {
+      router.replace('/');
+    } else if (isAuthenticated && !user.email_verified) {
       router.replace('/onboarding/verify-email');
       // console.log('reroute');
       return children;
