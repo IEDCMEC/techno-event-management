@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   Box,
@@ -14,7 +14,13 @@ import {
   useMediaQuery,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { MdOutlineEvent } from 'react-icons/md';
+import { PiCertificate } from 'react-icons/pi';
+import { MdOutlineEmail } from 'react-icons/md';
+import { MdOutlineSettings } from 'react-icons/md';
 import { Router, useRouter } from 'next/router';
+import EventsDisplay from './EventsDisplay';
+import { account } from '../contexts/MyContext';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -34,14 +40,23 @@ const Sidebar = ({ isOpen, onClose }) => {
   return (
     <>
       {!isMobile ? (
-        <Box padding={4} height="100%" minWidth={50} width={80}>
+        <Box
+          padding={4}
+          height="100%"
+          minWidth={50}
+          width={80}
+          display="flex"
+          flexDirection="column"
+        >
           <Box paddingY={4}>
             <Text fontSize="4xl" fontWeight="bold">
               Event Sync
             </Text>
           </Box>
-          <SidebarContents />
 
+          <EventsDisplay />
+          <SidebarContents />
+          <Box flex="1"></Box>
           <Box paddingY={4}>
             <Button
               onClick={handleLogout}
@@ -65,6 +80,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   </Text>
                 </DrawerHeader>
                 <DrawerBody>
+                  <EventsDisplay />
                   <SidebarContents />
 
                   <Box paddingY={4}>
@@ -88,15 +104,22 @@ const Sidebar = ({ isOpen, onClose }) => {
 };
 
 const SidebarContents = () => {
-  const sidebarItems = [
-    { label: 'Organizations', path: '/organizations' },
-    { label: 'Settings', path: '/settings' },
-  ];
   const router = useRouter();
+  const { orgId } = router.query;
+
+  const { accountDetails } = useContext(account);
+  const isUser = accountDetails.role === 'USER';
+
+  const sidebarItems = [
+    // { label: 'Events', path: `/${orgId}/events`, icon: <MdOutlineEvent /> },
+    { label: 'My Certificates', path: `/${orgId}/mycertificates`, icon: <PiCertificate /> },
+    { label: 'Email Settings', path: `/${orgId}/emailsettings`, icon: <MdOutlineEmail /> },
+    ...(isUser ? [{ label: 'Settings', path: `/settings`, icon: <MdOutlineSettings /> }] : []),
+  ];
 
   return (
     <>
-      <Box paddingY={4}>
+      <Box>
         {/* Map over the sidebarItems array to generate sidebar items */}
         {sidebarItems.map((item, index) => (
           <Box
@@ -108,7 +131,11 @@ const SidebarContents = () => {
             transition="outline 0.2s"
             borderRadius="md"
             padding="2"
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
           >
+            <Box mr={2}>{item.icon}</Box>
             <Text fontSize="lg">{item.label}</Text>
           </Box>
         ))}
