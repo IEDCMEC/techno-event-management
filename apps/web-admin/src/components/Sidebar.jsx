@@ -27,6 +27,9 @@ const Sidebar = ({ isOpen, onClose }) => {
   const { logout } = useAuth0();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
 
+  const router = useRouter();
+  const { orgId } = router.query;
+
   const handleLogout = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -56,7 +59,17 @@ const Sidebar = ({ isOpen, onClose }) => {
 
           <EventsDisplay />
           <SidebarContents />
+
           <Box flex="1"></Box>
+          <Button
+            onClick={() => {
+              router.push(`/${orgId}/settings`);
+            }}
+            isLoading={loading}
+            width="100%"
+          >
+            Organization Settings
+          </Button>
           <Box paddingY={4}>
             <Button
               onClick={handleLogout}
@@ -83,6 +96,16 @@ const Sidebar = ({ isOpen, onClose }) => {
                   <EventsDisplay />
                   <SidebarContents />
 
+                  <Box flex="1"></Box>
+                  <Button
+                    onClick={() => {
+                      router.push(`/${orgId}/settings`);
+                    }}
+                    isLoading={loading}
+                    width="100%"
+                  >
+                    Organization Settings
+                  </Button>
                   <Box paddingY={4}>
                     <Button
                       onClick={handleLogout}

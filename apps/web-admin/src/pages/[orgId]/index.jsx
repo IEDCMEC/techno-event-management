@@ -56,18 +56,6 @@ export default function OrganizationById() {
     <DashboardLayout
       pageTitle={accountDetails?.name}
       currentPage={`${accountDetails?.orgId}`}
-      headerButton={
-        <>
-          <Button
-            onClick={() => {
-              router.push(`/${orgId}/settings`);
-            }}
-            isLoading={loading}
-          >
-            Organization Settings
-          </Button>
-        </>
-      }
       debugInfo={accountDetails}
     >
       <Flex gap={4}>
