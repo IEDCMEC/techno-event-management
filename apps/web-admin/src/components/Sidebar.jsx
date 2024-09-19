@@ -13,8 +13,7 @@ import {
   DrawerCloseButton,
   useMediaQuery,
 } from '@chakra-ui/react';
-import Link from 'next/link';
-import { MdOutlineEvent } from 'react-icons/md';
+import SidebarCalendar from './SidebarCalendar';
 import { PiCertificate } from 'react-icons/pi';
 import { MdOutlineEmail } from 'react-icons/md';
 import { MdOutlineSettings } from 'react-icons/md';
@@ -59,6 +58,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
           <EventsDisplay />
           <SidebarContents />
+          <SidebarCalendar />
 
           <Box flex="1"></Box>
           <Button
@@ -67,19 +67,13 @@ const Sidebar = ({ isOpen, onClose }) => {
             }}
             isLoading={loading}
             width="100%"
+            marginBottom="10px"
           >
             Organization Settings
           </Button>
-          <Box paddingY={4}>
-            <Button
-              onClick={handleLogout}
-              isLoading={loading}
-              loadingText="Please Wait"
-              width="100%"
-            >
-              Logout
-            </Button>
-          </Box>
+          <Button onClick={handleLogout} isLoading={loading} loadingText="Please Wait" width="100%">
+            Logout
+          </Button>
         </Box>
       ) : (
         <>
@@ -95,27 +89,27 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <DrawerBody>
                   <EventsDisplay />
                   <SidebarContents />
+                  <SidebarCalendar scale={1.1} />
 
-                  <Box flex="1"></Box>
                   <Button
                     onClick={() => {
                       router.push(`/${orgId}/settings`);
                     }}
                     isLoading={loading}
                     width="100%"
+                    marginTop="25px"
                   >
                     Organization Settings
                   </Button>
-                  <Box paddingY={4}>
-                    <Button
-                      onClick={handleLogout}
-                      isLoading={loading}
-                      loadingText="Please Wait"
-                      width="100%"
-                    >
-                      Logout
-                    </Button>
-                  </Box>
+                  <Button
+                    onClick={handleLogout}
+                    isLoading={loading}
+                    loadingText="Please Wait"
+                    width="100%"
+                    marginTop="10px"
+                  >
+                    Logout
+                  </Button>
                 </DrawerBody>
               </DrawerContent>
             </DrawerOverlay>
