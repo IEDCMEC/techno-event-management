@@ -58,16 +58,16 @@ const Sidebar = ({ isOpen, onClose }) => {
 
           <EventsDisplay />
           <SidebarContents />
-          <SidebarCalendar />
 
           <Box flex="1"></Box>
+          <SidebarCalendar scale={1.05} />
           <Button
             onClick={() => {
               router.push(`/${orgId}/settings`);
             }}
             isLoading={loading}
             width="100%"
-            marginBottom="10px"
+            margin="20px 0px 10px 0px"
           >
             Organization Settings
           </Button>
@@ -87,29 +87,38 @@ const Sidebar = ({ isOpen, onClose }) => {
                   </Text>
                 </DrawerHeader>
                 <DrawerBody>
-                  <EventsDisplay />
-                  <SidebarContents />
-                  <SidebarCalendar scale={1.1} />
-
-                  <Button
-                    onClick={() => {
-                      router.push(`/${orgId}/settings`);
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      height: '100%',
+                      justifyContent: 'center',
                     }}
-                    isLoading={loading}
-                    width="100%"
-                    marginTop="25px"
                   >
-                    Organization Settings
-                  </Button>
-                  <Button
-                    onClick={handleLogout}
-                    isLoading={loading}
-                    loadingText="Please Wait"
-                    width="100%"
-                    marginTop="10px"
-                  >
-                    Logout
-                  </Button>
+                    <EventsDisplay />
+                    <SidebarContents />
+                    <Box flex="1"></Box>
+                    <SidebarCalendar scale={1.1} />
+
+                    <Button
+                      onClick={() => {
+                        router.push(`/${orgId}/settings`);
+                      }}
+                      isLoading={loading}
+                      width="100%"
+                      margin="20px 0px 10px 0px"
+                    >
+                      Organization Settings
+                    </Button>
+                    <Button
+                      onClick={handleLogout}
+                      isLoading={loading}
+                      loadingText="Please Wait"
+                      width="100%"
+                    >
+                      Logout
+                    </Button>
+                  </div>
                 </DrawerBody>
               </DrawerContent>
             </DrawerOverlay>
