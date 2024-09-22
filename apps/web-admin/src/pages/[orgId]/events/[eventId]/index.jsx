@@ -1,7 +1,22 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  FormControl,
+  FormLabel,
+  Input,
+} from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
@@ -9,6 +24,10 @@ import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 
 export default function EventById() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
+
   const router = useRouter();
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
@@ -86,12 +105,7 @@ export default function EventById() {
           >
             Extras
           </Button>
-          <Button
-            onClick={() => {
-              router.push(`/${orgId}/events/${eventId}/extras`);
-            }}
-            isLoading={loading}
-          >
+          <Button onClick={onOpen} isLoading={loading}>
             Viewe Form
           </Button>
         </Flex>
@@ -116,6 +130,36 @@ export default function EventById() {
           </Text>
         </Flex>
       </Flex>
+      <Modal
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Create your account</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>First name</FormLabel>
+              <Input ref={initialRef} placeholder="First name" />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Last name</FormLabel>
+              <Input placeholder="Last name" />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3}>
+              Save
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </DashboardLayout>
   );
 }
