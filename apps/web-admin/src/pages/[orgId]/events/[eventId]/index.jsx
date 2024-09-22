@@ -86,6 +86,14 @@ export default function EventById() {
           >
             Extras
           </Button>
+          <Button
+            onClick={() => {
+              router.push(`/${orgId}/events/${eventId}/extras`);
+            }}
+            isLoading={loading}
+          >
+            Viewe Form
+          </Button>
         </Flex>
         <Flex
           height="100%"
