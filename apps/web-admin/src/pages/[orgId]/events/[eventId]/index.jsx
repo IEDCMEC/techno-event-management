@@ -35,6 +35,7 @@ export default function EventById() {
   const { loading, get } = useFetch();
 
   const [event, setEvent] = useState([]);
+  const [attributes, setAttributes] = useState([]);
 
   useEffect(() => {
     const fetchEventStats = async () => {
@@ -49,7 +50,23 @@ export default function EventById() {
         });
       }
     };
+
+    const fetchEventAttributes = async () => {
+      const { data, status } = await get(
+        `/core/organizations/${orgId}/events/${eventId}/attributes`,
+      );
+      if (status === 200) {
+        setAttributes(data.attributes || []);
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
+    };
     fetchEventStats();
+    fetchEventAttributes();
   }, []);
 
   return (
@@ -69,7 +86,7 @@ export default function EventById() {
           </Button>
         </>
       }
-      debugInfo={JSON.stringify(event)}
+      debugInfo={JSON.stringify({ event, attributes })}
     >
       <Flex flexDirection="column" height="100%">
         <Flex gap={4}>
@@ -106,7 +123,7 @@ export default function EventById() {
             Extras
           </Button>
           <Button onClick={onOpen} isLoading={loading}>
-            Viewe Form
+            Preview Form
           </Button>
         </Flex>
         <Flex
@@ -138,26 +155,18 @@ export default function EventById() {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
+          <ModalHeader>Registration Form</ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>First name</FormLabel>
-              <Input ref={initialRef} placeholder="First name" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Last name</FormLabel>
-              <Input placeholder="Last name" />
-            </FormControl>
+          <ModalBody pb={10}>
+            {attributes.map((attr, index) => {
+              return (
+                <FormControl mb={5} key={index}>
+                  <FormLabel>{attr.name}</FormLabel>
+                  <Input ref={initialRef} placeholder={`${attr.name}`} />
+                </FormControl>
+              );
+            })}
           </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
-              Save
-            </Button>
-            <Button onClick={onClose}>Cancel</Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </DashboardLayout>

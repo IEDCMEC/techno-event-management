@@ -99,4 +99,4 @@ For major changes, please open an issue first to discuss what you would like to 
 
 # License
 
-Released under the [AGPL v3 license](LICENSE)
+Released under the [AGPL v3 license](LICENSE).
