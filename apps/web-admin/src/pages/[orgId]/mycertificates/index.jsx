@@ -1,13 +1,15 @@
-import React from 'react';
+'use client';
 import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
-import ComingSoon from '@/components/ComingSoon';
-import CertifcateUploadBox from '@/components/CertificateUploadBox';
+// import CertifcateUploadBox from '@/components/CertificateUploadBox';
+// import ComingSoon from '@/components/ComingSoon';
+const CertifcateUploadBox = dynamic(() => import('@/components/CertificateUploadBox'), {
+  ssr: false,
+});
 
 export default function MyCertificates() {
   const router = useRouter();
   const { orgId } = router.query;
-  console.log(orgId);
   return (
     <DashboardLayout pageTitle="My Certificates" previousPage={`/${orgId}`}>
       {/* <ComingSoon /> */}

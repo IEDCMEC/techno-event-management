@@ -18,7 +18,14 @@ import {
   Select,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Stage, Layer, Image as KonvaImage, Text as KonvaText } from 'react-konva';
+// import { Stage, Layer, Image as KonvaImage, Text as KonvaText } from 'react-konva';
+import dynamic from 'next/dynamic';
+// import { useEffect } from 'react';
+
+const Stage = dynamic(() => import('react-konva').then((mod) => mod.Stage), { ssr: false });
+const Layer = dynamic(() => import('react-konva').then((mod) => mod.Layer), { ssr: false });
+const KonvaImage = dynamic(() => import('react-konva').then((mod) => mod.Image), { ssr: false });
+const KonvaText = dynamic(() => import('react-konva').then((mod) => mod.Text), { ssr: false });
 
 function CertifcateUploadBox() {
   const [imageSrc, setImageSrc] = useState(null);
@@ -255,6 +262,7 @@ function CertifcateUploadBox() {
         </ModalContent>
       </Modal>
     </Box>
+    // <Box></Box>
   );
 }
 
