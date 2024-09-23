@@ -1,4 +1,3 @@
-
 <div align="center">
   <h1 align="center">Techno Event Management</h1>
   <h3>A powerful event management suite.</h3>
