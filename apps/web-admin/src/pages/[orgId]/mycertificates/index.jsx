@@ -4,15 +4,16 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import ComingSoon from '@/components/ComingSoon';
 import CertifcateUploadBox from '@/components/CertificateUploadBox';
 
-const MyCertificates = () => {
+export default function MyCertificates() {
   const router = useRouter();
   const { orgId } = router.query;
+  console.log(orgId);
   return (
-    <DashboardLayout pageTitle="My Certificates" previousPage={`${orgId}`}>
+    <DashboardLayout pageTitle="My Certificates" previousPage={`/${orgId}`}>
       {/* <ComingSoon /> */}
       <CertifcateUploadBox />
     </DashboardLayout>
   );
-};
+}
 
-export default MyCertificates;
+// export default MyCertificates;

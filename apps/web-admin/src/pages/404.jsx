@@ -1,7 +1,7 @@
 // pages/404.tsx
 import { Box, Heading, Text, Button } from '@chakra-ui/react';
 import Link from 'next/link';
-import { GetServerSideProps } from 'next';
+// import { GetServerSideProps } from 'next';
 
 const Custom404 = () => {
   return (
