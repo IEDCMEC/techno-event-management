@@ -1,17 +1,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-
 import { Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
-
-import DashboardLayout from '@/layouts/DashboardLayout';
-
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 
-export default function NewAttribute() {
+export default function NewAttributeForm({ onClose }) {
   const { loading, post } = useFetch();
   const showAlert = useAlert();
-
   const router = useRouter();
   const { orgId, eventId } = router.query;
 
@@ -22,9 +17,7 @@ export default function NewAttribute() {
     const { data, status } = await post(
       `/core/organizations/${orgId}/events/${eventId}/attributes`,
       {},
-      {
-        name,
-      },
+      { name },
     );
     if (status === 200) {
       showAlert({
@@ -32,6 +25,7 @@ export default function NewAttribute() {
         description: 'Attribute has been added successfully.',
         status: 'success',
       });
+      onClose();
       router.push(`/${orgId}/events/${eventId}/attributes`);
     } else {
       showAlert({
@@ -43,26 +37,22 @@ export default function NewAttribute() {
   };
 
   return (
-    <DashboardLayout
-      pageTitle="Add Attribute"
-      previousPage={`/organizations/${orgId}/events/${eventId}/attributes`}
-    >
-      <form onSubmit={handleSubmit}>
-        <FormControl isRequired my={4}>
-          <FormLabel>Name</FormLabel>
-          <Input
-            type="text"
-            name="name"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
-        </FormControl>
-        <Button type="submit" width="100%" my="4" isLoading={loading} loadingText="Please Wait">
-          Add
-        </Button>
-      </form>
-    </DashboardLayout>
+    <form onSubmit={handleSubmit}>
+      <FormControl isRequired my={4}>
+        <FormLabel>Name</FormLabel>
+        <Input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
+      </FormControl>
+
+      <Button
+        type="submit"
+        width="100%"
+        my="4"
+        isLoading={loading}
+        loadingText="Please Wait"
+        colorScheme="teal"
+      >
+        Add
+      </Button>
+    </form>
   );
 }
