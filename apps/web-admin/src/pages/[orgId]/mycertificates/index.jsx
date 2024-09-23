@@ -7,6 +7,7 @@ import CertifcateUploadBox from '@/components/CertificateUploadBox';
 const MyCertificates = () => {
   const router = useRouter();
   const { orgId } = router.query;
+  console.log(orgId);
   return (
     <DashboardLayout pageTitle="My Certificates" previousPage={`/${orgId}`}>
       {/* <ComingSoon /> */}
