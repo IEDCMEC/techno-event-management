@@ -52,7 +52,7 @@ export default function OrganizationMembers() {
   return (
     <DashboardLayout
       pageTitle="Members"
-      previousPage={`/organizations/${orgId}`}
+      previousPage={`/${orgId}`}
       headerButton={
         <>
           <Button onClick={onOpen} isLoading={loading}>

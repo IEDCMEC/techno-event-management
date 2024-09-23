@@ -8,7 +8,7 @@ const MyCertificates = () => {
   const router = useRouter();
   const { orgId } = router.query;
   return (
-    <DashboardLayout pageTitle="My Certificates" previousPage={`${orgId}`}>
+    <DashboardLayout pageTitle="My Certificates" previousPage={`/${orgId}`}>
       {/* <ComingSoon /> */}
       <CertifcateUploadBox />
     </DashboardLayout>
