@@ -1,14 +1,20 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-import { Button } from '@chakra-ui/react';
-
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
-
 import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
-
 import DataDisplay from '@/components/DataDisplay';
+import NewAttributeForm from './new';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
@@ -23,10 +29,9 @@ export default function Attributes() {
   const router = useRouter();
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { loading, get } = useFetch();
 
-  const [event, setEvent] = useState([]);
   const [attributes, setAttributes] = useState([]);
 
   useEffect(() => {
@@ -53,12 +58,7 @@ export default function Attributes() {
       previousPage={`/organizations/${orgId}/events/${eventId}`}
       headerButton={
         <>
-          <Button
-            onClick={() => {
-              router.push(`/${orgId}/events/${eventId}/attributes/new`);
-            }}
-            isLoading={loading}
-          >
+          <Button onClick={onOpen} isLoading={loading}>
             Add Attribute
           </Button>
         </>
@@ -73,6 +73,17 @@ export default function Attributes() {
           router.push(`/${orgId}/events/${eventId}/attributes/${row.id}`);
         }}
       />
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add Attribute</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <NewAttributeForm onClose={onClose} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </DashboardLayout>
   );
 }

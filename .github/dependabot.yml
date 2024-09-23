@@ -1,18 +1,18 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/apps/core-admin"
+  - package-ecosystem: 'npm'
+    directory: '/apps/core-admin'
     schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm"
-    directory: "/apps/core-auth0-actions"
+      interval: 'weekly'
+  - package-ecosystem: 'npm'
+    directory: '/apps/core-auth0-actions'
     schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm"
-    directory: "/apps/web-admin"
+      interval: 'weekly'
+  - package-ecosystem: 'npm'
+    directory: '/apps/web-admin'
     schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm"
-    directory: "/"
+      interval: 'weekly'
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
