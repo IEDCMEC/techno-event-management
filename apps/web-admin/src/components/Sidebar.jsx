@@ -26,7 +26,6 @@ const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
-
   const router = useRouter();
   const { orgId } = router.query;
 
@@ -61,7 +60,9 @@ const Sidebar = ({ isOpen, onClose }) => {
           <SidebarContents />
 
           <Box flex="1"></Box>
-          <Button
+
+          {/* Commenting out the old Organization Settings button */}
+          {/* <Button
             onClick={() => {
               router.push(`/${orgId}/settings`);
             }}
@@ -69,7 +70,8 @@ const Sidebar = ({ isOpen, onClose }) => {
             width="100%"
           >
             Organization Settings
-          </Button>
+          </Button> */}
+
           <Box paddingY={4}>
             <Button
               onClick={handleLogout}
@@ -97,7 +99,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                   <SidebarContents />
 
                   <Box flex="1"></Box>
-                  <Button
+
+                  {/* Commenting out the old Organization Settings button */}
+                  {/* <Button
                     onClick={() => {
                       router.push(`/${orgId}/settings`);
                     }}
@@ -105,7 +109,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                     width="100%"
                   >
                     Organization Settings
-                  </Button>
+                  </Button> */}
+
                   <Box paddingY={4}>
                     <Button
                       onClick={handleLogout}
