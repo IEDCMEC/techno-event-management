@@ -1,13 +1,20 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-import { Button } from '@chakra-ui/react';
-
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
-
 import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
+import NewMemberForm from './new';
 
 const columns = [
   { field: 'role', headerName: 'Role', width: 200 },
@@ -21,7 +28,7 @@ export default function OrganizationMembers() {
   const router = useRouter();
   const { orgId } = router.query;
   const showAlert = useAlert();
-  // console.log(orgId);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { loading, get } = useFetch();
 
   const [members, setMembers] = useState([]);
@@ -45,15 +52,10 @@ export default function OrganizationMembers() {
   return (
     <DashboardLayout
       pageTitle="Members"
-      previousPage={`/organizations/${orgId}`}
+      previousPage={`/${orgId}`}
       headerButton={
         <>
-          <Button
-            onClick={() => {
-              router.push(`/${orgId}/members/new`);
-            }}
-            isLoading={loading}
-          >
+          <Button onClick={onOpen} isLoading={loading}>
             Add Member
           </Button>
         </>
@@ -61,6 +63,17 @@ export default function OrganizationMembers() {
       debugInfo={members}
     >
       <DataDisplay loading={loading} columns={columns} rows={members} />
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add New Member</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <NewMemberForm onClose={onClose} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </DashboardLayout>
   );
 }

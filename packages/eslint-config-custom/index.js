@@ -3,15 +3,15 @@ module.exports = {
     browser: true,
     commonjs: true,
     es6: true,
-    node: true
-},
-parser: "@typescript-eslint/parser",
+    node: true,
+  },
+  parser: '@typescript-eslint/parser',
   settings: {
     react: {
-        version: "detect"
-    }
-},
-  plugins: ["react", "@typescript-eslint", "prettier"],
+      version: 'detect',
+    },
+  },
+  plugins: ['react', '@typescript-eslint', 'prettier'],
   extends: ['plugin:react/recommended', 'prettier'],
   rules: {
     'react/jsx-props-no-spreading': 'off',

@@ -1,20 +1,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-
 import { Button, FormControl, FormLabel, Input, Select } from '@chakra-ui/react';
-
-import DashboardLayout from '@/layouts/DashboardLayout';
-
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 
-export default function NewMember() {
+export default function NewMemberForm({ onClose }) {
   const { loading, post } = useFetch();
   const showAlert = useAlert();
-
   const router = useRouter();
   const { orgId } = router.query;
-  console.log(orgId);
 
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('USER');
@@ -35,6 +29,7 @@ export default function NewMember() {
         description: 'Member added successfully',
         status: 'success',
       });
+      onClose();
       router.push(`/${orgId}/members`);
     } else {
       showAlert({
@@ -46,35 +41,28 @@ export default function NewMember() {
   };
 
   return (
-    <DashboardLayout pageTitle="Add Member" previousPage={`/organizations/${orgId}/members`}>
-      <form onSubmit={handleSubmit}>
-        <FormControl isRequired my={4}>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            name="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
+    <form onSubmit={handleSubmit}>
+      <FormControl isRequired my={4}>
+        <FormLabel>Email</FormLabel>
+        <Input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
-          <FormLabel>Role</FormLabel>
-          <Select
-            name="role"
-            value={role}
-            onChange={(e) => {
-              setRole(e.target.value);
-            }}
-          >
-            <option value="ADMIN">Admin</option>
-            <option value="USER">User</option>
-          </Select>
-        </FormControl>
-        <Button type="submit" width="100%" my="4" isLoading={loading} loadingText="Please Wait">
-          Add
-        </Button>
-      </form>
-    </DashboardLayout>
+        <FormLabel>Role</FormLabel>
+        <Select name="role" value={role} onChange={(e) => setRole(e.target.value)}>
+          <option value="ADMIN">Admin</option>
+          <option value="USER">User</option>
+        </Select>
+      </FormControl>
+
+      <Button
+        type="submit"
+        width="100%"
+        my="4"
+        isLoading={loading}
+        loadingText="Please Wait"
+        colorScheme="teal"
+      >
+        Add
+      </Button>
+    </form>
   );
 }

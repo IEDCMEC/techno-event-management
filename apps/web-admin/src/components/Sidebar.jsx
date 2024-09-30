@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   Box,
@@ -25,9 +25,11 @@ const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
+  const { accountDetails } = useContext(account);
+  const isAdmin = accountDetails.role === 'ADMIN';
+  // const isUser = accountDetails.role === 'USER';
 
   const router = useRouter();
-  const { accountDetails } = useContext(account);
   const orgId = accountDetails.orgId;
 
   const handleLogout = (e) => {
@@ -62,19 +64,28 @@ const Sidebar = ({ isOpen, onClose }) => {
 
           <Box flex="1"></Box>
           <SidebarCalendar scale={1.05} />
-          <Button
-            onClick={() => {
-              router.push(`/${orgId}/settings`);
-            }}
-            isLoading={loading}
-            width="100%"
-            margin="20px 0px 10px 0px"
-          >
-            Organization Settings
-          </Button>
-          <Button onClick={handleLogout} isLoading={loading} loadingText="Please Wait" width="100%">
-            Logout
-          </Button>
+          {isAdmin && (
+            <Button
+              onClick={() => {
+                router.push(`/${orgId}/settings`);
+              }}
+              isLoading={loading}
+              width="100%"
+            >
+              Organization Settings
+            </Button>
+          )}
+
+          <Box paddingY={4}>
+            <Button
+              onClick={handleLogout}
+              isLoading={loading}
+              loadingText="Please Wait"
+              width="100%"
+            >
+              Logout
+            </Button>
+          </Box>
         </Box>
       ) : (
         <>
@@ -100,17 +111,19 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <SidebarContents />
                     <Box flex="1"></Box>
                     <SidebarCalendar scale={1.1} />
+                    {isAdmin && (
+                      <Button
+                        onClick={() => {
+                          router.push(`/${orgId}/settings`);
+                        }}
+                        isLoading={loading}
+                        width="100%"
+                        margin="20px 0px 10px 0px"
+                      >
+                        Organization Settings
+                      </Button>
+                    )}
 
-                    <Button
-                      onClick={() => {
-                        router.push(`/${orgId}/settings`);
-                      }}
-                      isLoading={loading}
-                      width="100%"
-                      margin="20px 0px 10px 0px"
-                    >
-                      Organization Settings
-                    </Button>
                     <Button
                       onClick={handleLogout}
                       isLoading={loading}
@@ -142,6 +155,7 @@ const SidebarContents = () => {
     { label: 'My Certificates', path: `/${orgId}/mycertificates`, icon: <PiCertificate /> },
     { label: 'Email Settings', path: `/${orgId}/emailsettings`, icon: <MdOutlineEmail /> },
     ...(isUser ? [{ label: 'Settings', path: `/settings`, icon: <MdOutlineSettings /> }] : []),
+    // ...(isAdmin ? [{label:'Organizaion Settings',path:'/${orgId}/settings',icon}]: []),
   ];
 
   return (
