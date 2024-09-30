@@ -27,7 +27,8 @@ const Sidebar = ({ isOpen, onClose }) => {
   const [isMobile] = useMediaQuery('(max-width: 768px)');
 
   const router = useRouter();
-  const { orgId } = router.query;
+  const { accountDetails } = useContext(account);
+  const orgId = accountDetails.orgId;
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -131,10 +132,10 @@ const Sidebar = ({ isOpen, onClose }) => {
 
 const SidebarContents = () => {
   const router = useRouter();
-  const { orgId } = router.query;
 
   const { accountDetails } = useContext(account);
   const isUser = accountDetails.role === 'USER';
+  const orgId = accountDetails.orgId;
 
   const sidebarItems = [
     // { label: 'Events', path: `/${orgId}/events`, icon: <MdOutlineEvent /> },
