@@ -157,11 +157,6 @@ function CertifcateUploadBox() {
     setTexts((prevTexts) => prevTexts.filter((text) => text.id !== textId));
   };
 
-  const handleDeleteClick = (textId) => {
-    // Filter out the text with the matching id
-    setTexts((prevTexts) => prevTexts.filter((text) => text.id !== textId));
-  };
-
   const handleModalSubmit = () => {
     // Update the text object
     //console.log(selectedText)
