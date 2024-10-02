@@ -384,23 +384,6 @@ function CertifcateUploadBox() {
                   </Box>
                 </>
               )}
-              <Input
-                value={selectedText?.text || ''}
-                onChange={(e) => {
-                  setSelectedText({ ...selectedText, text: e.target.value });
-                }}
-                placeholder="Edit text"
-                mb={4}
-              />
-              <Input
-                type="number"
-                value={selectedText?.fontSize || 24}
-                onChange={(e) =>
-                  setSelectedText({ ...selectedText, fontSize: parseInt(e.target.value) })
-                }
-                placeholder="Font size"
-                mb={4}
-              />
               {/* You can add font and color selectors here */}
             </ModalBody>
             <ModalFooter>
