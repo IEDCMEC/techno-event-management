@@ -321,81 +321,78 @@ function CertifcateUploadBox() {
       )}
 
       {/* Modal for editing text properties */}
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Edit Text Properties</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              {selectedText && (
-                <>
-                  <Input
-                    type="text"
-                    value={selectedText.text}
-                    onChange={(e) => setSelectedText({ ...selectedText, text: e.target.value })}
-                    placeholder="Edit Text"
-                    mb={3}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Text Properties</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {selectedText && (
+              <>
+                <Input
+                  type="text"
+                  value={selectedText.text}
+                  onChange={(e) => setSelectedText({ ...selectedText, text: e.target.value })}
+                  placeholder="Edit Text"
+                  mb={3}
+                />
+                <Select
+                  value={selectedText.fontFamily}
+                  onChange={(e) => setSelectedText({ ...selectedText, fontFamily: e.target.value })}
+                >
+                  <option value="Arial">Arial</option>
+                  <option value="Roboto">Roboto</option>
+                  <option value="Montserrat">Montserrat</option>
+                  <option value="Poppins">Poppins</option>
+                  <option value="Courier New">Courier New</option>
+                  <option value="Times New Roman">Times New Roman</option>
+                </Select>
+
+                <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
+                  <IconButton
+                    icon={<MdFormatBold />}
+                    colorScheme={selectedText.isBold ? 'teal' : 'gray'}
+                    onClick={() => handleFontStyleToggle('bold')}
                   />
-                  <Select
-                    value={selectedText.fontFamily}
-                    onChange={(e) =>
-                      setSelectedText({ ...selectedText, fontFamily: e.target.value })
-                    }
-                  >
-                    <option value="Arial">Arial</option>
-                    <option value="Roboto">Roboto</option>
-                    <option value="Montserrat">Montserrat</option>
-                    <option value="Poppins">Poppins</option>
-                    <option value="Courier New">Courier New</option>
-                    <option value="Times New Roman">Times New Roman</option>
-                  </Select>
+                  <IconButton
+                    icon={<MdFormatItalic />}
+                    colorScheme={selectedText.isItalic ? 'teal' : 'gray'}
+                    onClick={() => handleFontStyleToggle('italic')}
+                  />
+                  <IconButton
+                    icon={<MdFormatUnderlined />}
+                    colorScheme={selectedText.isUnderline ? 'teal' : 'gray'}
+                    onClick={() => handleFontStyleToggle('underline')}
+                  />
+                </Box>
 
-                  <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
-                    <IconButton
-                      icon={<MdFormatBold />}
-                      colorScheme={selectedText.isBold ? 'teal' : 'gray'}
-                      onClick={() => handleFontStyleToggle('bold')}
-                    />
-                    <IconButton
-                      icon={<MdFormatItalic />}
-                      colorScheme={selectedText.isItalic ? 'teal' : 'gray'}
-                      onClick={() => handleFontStyleToggle('italic')}
-                    />
-                    <IconButton
-                      icon={<MdFormatUnderlined />}
-                      colorScheme={selectedText.isUnderline ? 'teal' : 'gray'}
-                      onClick={() => handleFontStyleToggle('underline')}
-                    />
-                  </Box>
-
-                  <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
-                    <IconButton
-                      icon={<MdAdd />}
-                      colorScheme="teal"
-                      onClick={() => handleFontSizeChange('increase')}
-                    />
-                    <Text>{selectedText.fontSize}px</Text>
-                    <IconButton
-                      icon={<MdRemove />}
-                      colorScheme="teal"
-                      onClick={() => handleFontSizeChange('decrease')}
-                    />
-                  </Box>
-                </>
-              )}
-              {/* You can add font and color selectors here */}
-            </ModalBody>
-            <ModalFooter>
-              <Button colorScheme="teal" onClick={handleModalSubmit}>
-                Save
-              </Button>
-              <Button variant="ghost" onClick={onClose}>
-                Cancel
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-     
+                <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
+                  <IconButton
+                    icon={<MdAdd />}
+                    colorScheme="teal"
+                    onClick={() => handleFontSizeChange('increase')}
+                  />
+                  <Text>{selectedText.fontSize}px</Text>
+                  <IconButton
+                    icon={<MdRemove />}
+                    colorScheme="teal"
+                    onClick={() => handleFontSizeChange('decrease')}
+                  />
+                </Box>
+              </>
+            )}
+            {/* You can add font and color selectors here */}
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="teal" onClick={handleModalSubmit}>
+              Save
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
