@@ -152,7 +152,6 @@ function CertifcateUploadBox() {
   //   }
   // },[selectedText])
 
-
   const handleDeleteClick = (textId) => {
     // Filter out the text with the matching id
     setTexts((prevTexts) => prevTexts.filter((text) => text.id !== textId));
@@ -329,60 +328,62 @@ function CertifcateUploadBox() {
             <ModalHeader>Edit Text Properties</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-            {selectedText && (
-              <>
-                <Input
-                  type="text"
-                  value={selectedText.text}
-                  onChange={(e) => setSelectedText({ ...selectedText, text: e.target.value })}
-                  placeholder="Edit Text"
-                  mb={3}
-                />
-                <Select
-                  value={selectedText.fontFamily}
-                  onChange={(e) => setSelectedText({ ...selectedText, fontFamily: e.target.value })}
-                >
-                  <option value="Arial">Arial</option>
-                  <option value="Roboto">Roboto</option>
-                  <option value="Montserrat">Montserrat</option>
-                  <option value="Poppins">Poppins</option>
-                  <option value="Courier New">Courier New</option>
-                  <option value="Times New Roman">Times New Roman</option>
-                </Select>
+              {selectedText && (
+                <>
+                  <Input
+                    type="text"
+                    value={selectedText.text}
+                    onChange={(e) => setSelectedText({ ...selectedText, text: e.target.value })}
+                    placeholder="Edit Text"
+                    mb={3}
+                  />
+                  <Select
+                    value={selectedText.fontFamily}
+                    onChange={(e) =>
+                      setSelectedText({ ...selectedText, fontFamily: e.target.value })
+                    }
+                  >
+                    <option value="Arial">Arial</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Montserrat">Montserrat</option>
+                    <option value="Poppins">Poppins</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                  </Select>
 
-                <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
-                  <IconButton
-                    icon={<MdFormatBold />}
-                    colorScheme={selectedText.isBold ? 'teal' : 'gray'}
-                    onClick={() => handleFontStyleToggle('bold')}
-                  />
-                  <IconButton
-                    icon={<MdFormatItalic />}
-                    colorScheme={selectedText.isItalic ? 'teal' : 'gray'}
-                    onClick={() => handleFontStyleToggle('italic')}
-                  />
-                  <IconButton
-                    icon={<MdFormatUnderlined />}
-                    colorScheme={selectedText.isUnderline ? 'teal' : 'gray'}
-                    onClick={() => handleFontStyleToggle('underline')}
-                  />
-                </Box>
+                  <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
+                    <IconButton
+                      icon={<MdFormatBold />}
+                      colorScheme={selectedText.isBold ? 'teal' : 'gray'}
+                      onClick={() => handleFontStyleToggle('bold')}
+                    />
+                    <IconButton
+                      icon={<MdFormatItalic />}
+                      colorScheme={selectedText.isItalic ? 'teal' : 'gray'}
+                      onClick={() => handleFontStyleToggle('italic')}
+                    />
+                    <IconButton
+                      icon={<MdFormatUnderlined />}
+                      colorScheme={selectedText.isUnderline ? 'teal' : 'gray'}
+                      onClick={() => handleFontStyleToggle('underline')}
+                    />
+                  </Box>
 
-                <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
-                  <IconButton
-                    icon={<MdAdd />}
-                    colorScheme="teal"
-                    onClick={() => handleFontSizeChange('increase')}
-                  />
-                  <Text>{selectedText.fontSize}px</Text>
-                  <IconButton
-                    icon={<MdRemove />}
-                    colorScheme="teal"
-                    onClick={() => handleFontSizeChange('decrease')}
-                  />
-                </Box>
-              </>
-            )}
+                  <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
+                    <IconButton
+                      icon={<MdAdd />}
+                      colorScheme="teal"
+                      onClick={() => handleFontSizeChange('increase')}
+                    />
+                    <Text>{selectedText.fontSize}px</Text>
+                    <IconButton
+                      icon={<MdRemove />}
+                      colorScheme="teal"
+                      onClick={() => handleFontSizeChange('decrease')}
+                    />
+                  </Box>
+                </>
+              )}
               <Input
                 value={selectedText?.text || ''}
                 onChange={(e) => {
@@ -413,7 +414,6 @@ function CertifcateUploadBox() {
           </ModalContent>
         </Modal>
       }
-
     </Box>
   );
 }
