@@ -3,6 +3,7 @@ import MyContext from '@/contexts/MyContext';
 import { extendTheme, ChakraProvider, withDefaultColorScheme } from '@chakra-ui/react';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import '../styles/globals.css';
 
 const theme = extendTheme(
   withDefaultColorScheme({
