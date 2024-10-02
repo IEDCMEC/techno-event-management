@@ -157,6 +157,11 @@ function CertifcateUploadBox() {
     setTexts((prevTexts) => prevTexts.filter((text) => text.id !== textId));
   };
 
+  const handleDeleteClick = (textId) => {
+    // Filter out the text with the matching id
+    setTexts((prevTexts) => prevTexts.filter((text) => text.id !== textId));
+  };
+
   const handleModalSubmit = () => {
     // Update the text object
     //console.log(selectedText)
@@ -321,7 +326,6 @@ function CertifcateUploadBox() {
       )}
 
       {/* Modal for editing text properties */}
-      {
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
@@ -396,7 +400,7 @@ function CertifcateUploadBox() {
             </ModalFooter>
           </ModalContent>
         </Modal>
-      }
+     
     </Box>
   );
 }
