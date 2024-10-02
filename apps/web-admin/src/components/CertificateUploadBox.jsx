@@ -16,9 +16,17 @@ import {
   ModalFooter,
   Input,
   Select,
+  IconButton,
   useDisclosure,
 } from '@chakra-ui/react';
-// import { Stage, Layer, Image as KonvaImage, Text as KonvaText } from 'react-konva';
+import {
+  MdFormatBold,
+  MdFormatItalic,
+  MdFormatUnderlined,
+  MdAdd,
+  MdRemove,
+  MdDelete,
+} from 'react-icons/md'; // Import MdDelete icon
 import dynamic from 'next/dynamic';
 // import { useEffect } from 'react';
 import { KonvaEventObject } from 'konva/lib/Node'; // Import for event types
@@ -39,7 +47,6 @@ function CertifcateUploadBox() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedText, setSelectedText] = useState(null);
-
   const [texts, setTexts] = useState([]); // Store texts on canvas
 
   useEffect(() => {
@@ -117,6 +124,11 @@ function CertifcateUploadBox() {
         y: position.y,
         text: 'Double-clicked Text',
         fontSize: 24,
+        fontFamily: 'Arial',
+        color: 'black',
+        isBold: false,
+        isItalic: false,
+        isUnderline: false,
         draggable: true,
         //color:'white'
       },
@@ -139,6 +151,13 @@ function CertifcateUploadBox() {
   //     onOpen();
   //   }
   // },[selectedText])
+
+
+  const handleDeleteClick = (textId) => {
+    // Filter out the text with the matching id
+    setTexts((prevTexts) => prevTexts.filter((text) => text.id !== textId));
+  };
+
   const handleModalSubmit = () => {
     // Update the text object
     //console.log(selectedText)
@@ -156,6 +175,27 @@ function CertifcateUploadBox() {
     //console.log(selectedText.id);
     //console.log()
     onClose(); // Close modal
+  };
+
+  const handleFontStyleToggle = (style) => {
+    if (style === 'bold') {
+      setSelectedText({ ...selectedText, isBold: !selectedText.isBold });
+    } else if (style === 'italic') {
+      setSelectedText({ ...selectedText, isItalic: !selectedText.isItalic });
+    } else if (style === 'underline') {
+      setSelectedText({ ...selectedText, isUnderline: !selectedText.isUnderline });
+    }
+  };
+
+  const handleFontSizeChange = (action) => {
+    if (action === 'increase') {
+      setSelectedText({ ...selectedText, fontSize: selectedText.fontSize + 2 });
+    } else if (action === 'decrease') {
+      setSelectedText({
+        ...selectedText,
+        fontSize: selectedText.fontSize > 2 ? selectedText.fontSize - 2 : 2,
+      });
+    }
   };
 
   return (
@@ -207,6 +247,12 @@ function CertifcateUploadBox() {
                         y={textObj.y}
                         text={textObj.text}
                         fontSize={textObj.fontSize}
+                        fontFamily={textObj.fontFamily}
+                        fill={textObj.color}
+                        fontStyle={`${textObj.isBold ? 'bold' : ''} ${
+                          textObj.isItalic ? 'italic' : ''
+                        }`}
+                        textDecoration={textObj.isUnderline ? 'underline' : ''}
                         draggable={textObj.draggable}
                         onDragMove={(e) => {
                           textObj.x = e.target.position().x;
@@ -251,16 +297,23 @@ function CertifcateUploadBox() {
           {/*texts.length > 0 && (
             <VStack width="100%">
               {texts.map((textObj) => (
-                <Box width="100%" key={textObj.id}>
+                <Box width="100%" key={textObj.id} display="flex" justifyContent="space-between">
                   <Button
                     id="edit-button"
                     colorScheme="teal"
                     size="sm"
-                    width="100%"
+                    width="80%"
                     onClick={() => handleEditClick(textObj)}
                   >
-                    {textObj.id}
+                    Edit {textObj.id}
                   </Button>
+                  <IconButton
+                    icon={<MdDelete />}
+                    colorScheme="red"
+                    size="sm"
+                    aria-label="Delete Text"
+                    onClick={() => handleDeleteClick(textObj.id)} // Delete button logic
+                  />
                 </Box>
               ))}
             </VStack>
@@ -276,6 +329,60 @@ function CertifcateUploadBox() {
             <ModalHeader>Edit Text Properties</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
+            {selectedText && (
+              <>
+                <Input
+                  type="text"
+                  value={selectedText.text}
+                  onChange={(e) => setSelectedText({ ...selectedText, text: e.target.value })}
+                  placeholder="Edit Text"
+                  mb={3}
+                />
+                <Select
+                  value={selectedText.fontFamily}
+                  onChange={(e) => setSelectedText({ ...selectedText, fontFamily: e.target.value })}
+                >
+                  <option value="Arial">Arial</option>
+                  <option value="Roboto">Roboto</option>
+                  <option value="Montserrat">Montserrat</option>
+                  <option value="Poppins">Poppins</option>
+                  <option value="Courier New">Courier New</option>
+                  <option value="Times New Roman">Times New Roman</option>
+                </Select>
+
+                <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
+                  <IconButton
+                    icon={<MdFormatBold />}
+                    colorScheme={selectedText.isBold ? 'teal' : 'gray'}
+                    onClick={() => handleFontStyleToggle('bold')}
+                  />
+                  <IconButton
+                    icon={<MdFormatItalic />}
+                    colorScheme={selectedText.isItalic ? 'teal' : 'gray'}
+                    onClick={() => handleFontStyleToggle('italic')}
+                  />
+                  <IconButton
+                    icon={<MdFormatUnderlined />}
+                    colorScheme={selectedText.isUnderline ? 'teal' : 'gray'}
+                    onClick={() => handleFontStyleToggle('underline')}
+                  />
+                </Box>
+
+                <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
+                  <IconButton
+                    icon={<MdAdd />}
+                    colorScheme="teal"
+                    onClick={() => handleFontSizeChange('increase')}
+                  />
+                  <Text>{selectedText.fontSize}px</Text>
+                  <IconButton
+                    icon={<MdRemove />}
+                    colorScheme="teal"
+                    onClick={() => handleFontSizeChange('decrease')}
+                  />
+                </Box>
+              </>
+            )}
               <Input
                 value={selectedText?.text || ''}
                 onChange={(e) => {
@@ -306,8 +413,8 @@ function CertifcateUploadBox() {
           </ModalContent>
         </Modal>
       }
+
     </Box>
-    // <Box></Box>
   );
 }
 
