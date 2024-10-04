@@ -1,7 +1,22 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  FormControl,
+  FormLabel,
+  Input,
+} from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
@@ -9,6 +24,10 @@ import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 
 export default function EventById() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
+
   const router = useRouter();
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
@@ -16,6 +35,7 @@ export default function EventById() {
   const { loading, get } = useFetch();
 
   const [event, setEvent] = useState([]);
+  const [attributes, setAttributes] = useState([]);
 
   useEffect(() => {
     const fetchEventStats = async () => {
@@ -30,7 +50,23 @@ export default function EventById() {
         });
       }
     };
+
+    const fetchEventAttributes = async () => {
+      const { data, status } = await get(
+        `/core/organizations/${orgId}/events/${eventId}/attributes`,
+      );
+      if (status === 200) {
+        setAttributes(data.attributes || []);
+      } else {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      }
+    };
     fetchEventStats();
+    fetchEventAttributes();
   }, []);
 
   return (
@@ -50,7 +86,7 @@ export default function EventById() {
           </Button>
         </>
       }
-      debugInfo={JSON.stringify(event)}
+      debugInfo={JSON.stringify({ event, attributes })}
     >
       <Flex flexDirection="column" height="100%">
         <Flex gap={4}>
@@ -86,6 +122,9 @@ export default function EventById() {
           >
             Extras
           </Button>
+          <Button onClick={onOpen} isLoading={loading}>
+            Preview Form
+          </Button>
         </Flex>
         <Flex
           height="100%"
@@ -108,6 +147,28 @@ export default function EventById() {
           </Text>
         </Flex>
       </Flex>
+      <Modal
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Registration Form</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={10}>
+            {attributes.map((attr, index) => {
+              return (
+                <FormControl mb={5} key={index}>
+                  <FormLabel>{attr.name}</FormLabel>
+                  <Input ref={initialRef} placeholder={`${attr.name}`} />
+                </FormControl>
+              );
+            })}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </DashboardLayout>
   );
 }
