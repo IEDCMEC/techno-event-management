@@ -75,9 +75,7 @@ export default function ParticipantsCheckIn() {
             </Button>
             <Button
               onClick={() => {
-                router.push(
-                  `/${orgId}/events/${eventId}/participants/check-in/in/scanner`,
-                );
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`);
               }}
               isLoading={loading}
             >
@@ -95,9 +93,7 @@ export default function ParticipantsCheckIn() {
             </Button>
             <Button
               onClick={() => {
-                router.push(
-                  `/${orgId}/events/${eventId}/participants/check-in/out/scanner`,
-                );
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`);
               }}
               isLoading={loading}
             >
