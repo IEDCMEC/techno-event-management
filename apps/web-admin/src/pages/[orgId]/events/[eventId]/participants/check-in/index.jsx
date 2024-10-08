@@ -61,7 +61,7 @@ export default function ParticipantsCheckIn() {
   return (
     <DashboardLayout
       pageTitle="Participants Check-In"
-      previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
+      previousPage={`/${orgId}/events/${eventId}/participants`}
       headerButton={
         <>
           <Flex flexDirection="column" gap={4}>
@@ -76,7 +76,7 @@ export default function ParticipantsCheckIn() {
             <Button
               onClick={() => {
                 router.push(
-                  `/organizations/${orgId}/events/${eventId}/participants/check-in/in/scanner`,
+                  `/${orgId}/events/${eventId}/participants/check-in/in/scanner`,
                 );
               }}
               isLoading={loading}
@@ -96,7 +96,7 @@ export default function ParticipantsCheckIn() {
             <Button
               onClick={() => {
                 router.push(
-                  `/organizations/${orgId}/events/${eventId}/participants/check-in/out/scanner`,
+                  `/${orgId}/events/${eventId}/participants/check-in/out/scanner`,
                 );
               }}
               isLoading={loading}
