@@ -48,7 +48,6 @@ export default function Participants() {
   const { orgId, eventId } = router.query;
   const { loading, get } = useFetch();
 
-
   useEffect(() => {
     const fetchParticipants = async () => {
       const { data, status } = await get(
