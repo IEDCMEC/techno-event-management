@@ -21,7 +21,7 @@ export default function DashboardLayout({ headerButton, children }) {
   if (isAuthenticated) {
     return (
       <Flex height="100vh" flexDirection="column">
-        <Flex height="100%" overflow="hidden" flexDirection={isMobile ? 'column' : 'row'}>
+        <Flex height="100%" flexDirection={isMobile ? 'column' : 'row'}>
           {isMobile && (
             <Flex
               height={24}
@@ -50,7 +50,7 @@ export default function DashboardLayout({ headerButton, children }) {
           <Flex
             height="100%"
             width="100%"
-            overflowY="hidden"
+            // overflowY="hidden"
             flexDirection="column"
             transition="margin 0.3s ease"
           >
@@ -97,7 +97,7 @@ export default function DashboardLayout({ headerButton, children }) {
                 <Button onClick={onOpen}>Organization Settings</Button> {/* Button to open modal */}
               </Flex>
             </Flex>
-            <Box height="100%" overflowY="hidden" p={4}>
+            <Box height="100%" p={4}>
               {children}
             </Box>
           </Flex>
