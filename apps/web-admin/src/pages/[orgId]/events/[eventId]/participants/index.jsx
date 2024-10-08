@@ -48,16 +48,20 @@ export default function Participants() {
   const { orgId, eventId } = router.query;
   const { loading, get } = useFetch();
 
-  const fetchParticipants = async () => {
-    const { data, status } = await get(
-      `/core/organizations/${orgId}/events/${eventId}/participants`,
-    );
-    if (status === 200) {
-      setParticipants(data.participants || []);
-    } else {
-      showAlert({ title: 'Error', description: data.error, status: 'error' });
-    }
-  };
+
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      const { data, status } = await get(
+        `/core/organizations/${orgId}/events/${eventId}/participants`,
+      );
+      if (status === 200) {
+        setParticipants(data.participants || []);
+      } else {
+        showAlert({ title: 'Error', description: data.error, status: 'error' });
+      }
+    };
+    fetchParticipants();
+  }, [orgId, eventId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
