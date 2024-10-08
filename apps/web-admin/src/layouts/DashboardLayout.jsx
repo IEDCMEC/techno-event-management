@@ -97,7 +97,7 @@ export default function DashboardLayout({ headerButton, children }) {
                 <Button onClick={onOpen}>Organization Settings</Button> {/* Button to open modal */}
               </Flex>
             </Flex>
-            <Box height="100%" overflowY="hidden" p={4}>
+            <Box height="100%" overflowY="auto" overflowX={'auto'} p={4}>
               {children}
             </Box>
           </Flex>
