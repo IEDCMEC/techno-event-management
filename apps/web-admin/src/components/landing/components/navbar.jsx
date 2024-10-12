@@ -392,6 +392,8 @@ const NAV_ITEMS = [
 ];
 
 const SomeButtons = () => {
+  const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+
   const handleLogin = async () => {
     loginWithRedirect({
       authorizationParams: {
@@ -399,6 +401,7 @@ const SomeButtons = () => {
       },
     });
   };
+
   const logoSrc = useBreakpointValue({
     base: logo,
     md: logo_text,

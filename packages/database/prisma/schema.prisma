@@ -38,6 +38,7 @@ model Organization {
   ParticipantCheckin ParticipantCheckIn[]
   Attributes         Attributes[]
   Extras             Extras[]
+  Registrant         Registrant[]
 }
 
 model OrganizationUser {
@@ -63,6 +64,21 @@ model Event {
   ParticipantCheckin ParticipantCheckIn[]
   attributes         Attributes[]
   extras             Extras[]
+  registrant         Registrant[]
+}
+
+model Registrant {
+  id                   String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName            String
+  lastName             String?
+  email                String
+  phone                String?
+  eventId              String                 @db.Uuid
+  event                Event                  @relation(fields: [eventId], references: [id])
+  organizationId       String
+  organization         Organization           @relation(fields: [organizationId], references: [id])
+  registrantAttributes RegistrantAttributes[]
+  registrantExtras     RegistrantExtras[]
 }
 
 model Participant {
@@ -109,6 +125,18 @@ model Attributes {
   eventId               String                  @db.Uuid
   event                 Event                   @relation(fields: [eventId], references: [id])
   participantAttributes ParticipantAttributes[]
+  registrantAttributes  RegistrantAttributes[]
+}
+
+model RegistrantAttributes {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  value        String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  registrantId String     @db.Uuid
+  registrant   Registrant @relation(fields: [registrantId], references: [id])
+  attributeId  String     @db.Uuid
+  attribute    Attributes @relation(fields: [attributeId], references: [id])
 }
 
 model ParticipantAttributes {
@@ -133,6 +161,17 @@ model Extras {
   event                    Event                      @relation(fields: [eventId], references: [id])
   participantExtras        ParticipantExtras[]
   participantExtrasCheckIn ParticipantExtrasCheckIn[]
+  registrantExtras         RegistrantExtras[]
+}
+
+model RegistrantExtras {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  registrantId String     @db.Uuid
+  registrant   Registrant @relation(fields: [registrantId], references: [id])
+  extraId      String     @db.Uuid
+  extra        Extras     @relation(fields: [extraId], references: [id])
 }
 
 model ParticipantExtras {

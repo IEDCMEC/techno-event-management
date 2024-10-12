@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   Box,
@@ -13,8 +13,7 @@ import {
   DrawerCloseButton,
   useMediaQuery,
 } from '@chakra-ui/react';
-import Link from 'next/link';
-import { MdOutlineEvent } from 'react-icons/md';
+import SidebarCalendar from './SidebarCalendar';
 import { PiCertificate } from 'react-icons/pi';
 import { MdOutlineEmail } from 'react-icons/md';
 import { MdOutlineSettings } from 'react-icons/md';
@@ -26,9 +25,12 @@ const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
+  const { accountDetails } = useContext(account);
+  const isAdmin = accountDetails.role === 'ADMIN';
+  // const isUser = accountDetails.role === 'USER';
 
   const router = useRouter();
-  const { orgId } = router.query;
+  const orgId = accountDetails.orgId;
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -61,15 +63,19 @@ const Sidebar = ({ isOpen, onClose }) => {
           <SidebarContents />
 
           <Box flex="1"></Box>
-          <Button
-            onClick={() => {
-              router.push(`/${orgId}/settings`);
-            }}
-            isLoading={loading}
-            width="100%"
-          >
-            Organization Settings
-          </Button>
+          <SidebarCalendar scale={1.05} />
+          {isAdmin && (
+            <Button
+              onClick={() => {
+                router.push(`/${orgId}/settings`);
+              }}
+              isLoading={loading}
+              width="100%"
+            >
+              Organization Settings
+            </Button>
+          )}
+
           <Box paddingY={4}>
             <Button
               onClick={handleLogout}
@@ -93,20 +99,31 @@ const Sidebar = ({ isOpen, onClose }) => {
                   </Text>
                 </DrawerHeader>
                 <DrawerBody>
-                  <EventsDisplay />
-                  <SidebarContents />
-
-                  <Box flex="1"></Box>
-                  <Button
-                    onClick={() => {
-                      router.push(`/${orgId}/settings`);
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      height: '100%',
+                      justifyContent: 'center',
                     }}
-                    isLoading={loading}
-                    width="100%"
                   >
-                    Organization Settings
-                  </Button>
-                  <Box paddingY={4}>
+                    <EventsDisplay />
+                    <SidebarContents />
+                    <Box flex="1"></Box>
+                    <SidebarCalendar scale={1.1} />
+                    {isAdmin && (
+                      <Button
+                        onClick={() => {
+                          router.push(`/${orgId}/settings`);
+                        }}
+                        isLoading={loading}
+                        width="100%"
+                        margin="20px 0px 10px 0px"
+                      >
+                        Organization Settings
+                      </Button>
+                    )}
+
                     <Button
                       onClick={handleLogout}
                       isLoading={loading}
@@ -115,7 +132,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     >
                       Logout
                     </Button>
-                  </Box>
+                  </div>
                 </DrawerBody>
               </DrawerContent>
             </DrawerOverlay>
@@ -128,16 +145,17 @@ const Sidebar = ({ isOpen, onClose }) => {
 
 const SidebarContents = () => {
   const router = useRouter();
-  const { orgId } = router.query;
 
   const { accountDetails } = useContext(account);
   const isUser = accountDetails.role === 'USER';
+  const orgId = accountDetails.orgId;
 
   const sidebarItems = [
     // { label: 'Events', path: `/${orgId}/events`, icon: <MdOutlineEvent /> },
     { label: 'My Certificates', path: `/${orgId}/mycertificates`, icon: <PiCertificate /> },
     { label: 'Email Settings', path: `/${orgId}/emailsettings`, icon: <MdOutlineEmail /> },
     ...(isUser ? [{ label: 'Settings', path: `/settings`, icon: <MdOutlineSettings /> }] : []),
+    // ...(isAdmin ? [{label:'Organizaion Settings',path:'/${orgId}/settings',icon}]: []),
   ];
 
   return (

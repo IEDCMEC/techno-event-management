@@ -34,6 +34,7 @@ export const ProtectedRoute = ({ children }) => {
     const id = user.sub.substring(6);
     const name = user.nickname;
     const { data, mystatus } = await post(`/core/organizations`, {}, { id, name });
+    console.log('created');
     if (mystatus === 200) {
       showAlert({
         title: 'Success',
