@@ -38,6 +38,7 @@ model Organization {
   ParticipantCheckin ParticipantCheckIn[]
   Attributes         Attributes[]
   Extras             Extras[]
+  Registrant         Registrant[]
 }
 
 model OrganizationUser {
@@ -63,6 +64,19 @@ model Event {
   ParticipantCheckin ParticipantCheckIn[]
   attributes         Attributes[]
   extras             Extras[]
+  registrant         Registrant[]
+}
+
+model Registrant {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName      String
+  lastName       String?
+  email          String
+  phone          String?
+  eventId        String       @db.Uuid
+  event          Event        @relation(fields: [eventId], references: [id])
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
 }
 
 model Participant {
