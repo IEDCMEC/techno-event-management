@@ -28,7 +28,30 @@ jobs:
         run: |
           curl -X GET ${{ secrets.DEV_CORE_ADMIN_DEPLOY_HOOK }}
           curl -X GET ${{ secrets.PROD_CORE_ADMIN_DEPLOY_HOOK }}
-          
+
+  build-and-push-core-mailer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          docker build -t techno-event-core-mailer -f apps/core-mailer/Dockerfile .
+
+      - run: |
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: |
+          docker tag techno-event-core-mailer ${{ secrets.DOCKER_USER }}/techno-event-core-mailer:latest
+          docker push ${{ secrets.DOCKER_USER }}/techno-event-core-mailer:latest
+
+  redeploy-core-mailer:
+    needs: build-and-push-core-mailer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call deploy hook
+        run: |
+          curl -X GET ${{ secrets.DEV_CORE_MAILER_DEPLOY_HOOK }}
+          curl -X GET ${{ secrets.PROD_CORE_MAILER_DEPLOY_HOOK }}
+  
   build-and-push-core-auth0-actions:
     runs-on: ubuntu-latest
 
