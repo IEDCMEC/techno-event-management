@@ -1,19 +1,27 @@
-/*import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-
-import { Button } from '@chakra-ui/react';
-
+import { useState, useEffect } from 'react';
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  FormControl,
+  FormLabel,
+  Input,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
-
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
-import { EditIcon, ViewIcon } from '@chakra-ui/icons';
-
 import { CSVLink } from 'react-csv';
 
 const columns = [
-  { field: 'firstName', headerName: 'First Name', width: 200, editable: true },
+  { field: 'firstName', headerName: 'First Name', width: 200 },
   { field: 'lastName', headerName: 'Last Name', width: 200 },
   { field: 'email', headerName: 'Email', width: 200 },
   { field: 'phone', headerName: 'Phone', width: 200 },
@@ -25,60 +33,20 @@ const columns = [
 ];
 
 export default function Participants() {
-  const columns = [
-    { field: 'firstName', headerName: 'First Name', width: 125 },
-    { field: 'lastName', headerName: 'Last Name', width: 125 },
-    {
-      field: 'edit',
-      headerName: '',
-      sortable: false,
-      width: 50,
-      renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            router.push(
-              `/organizations/${orgId}/events/${eventId}/participants/${params.row.id}/edit`,
-            );
-          }}
-        >
-          <EditIcon />
-        </Button>
-      ),
-    },
-    {
-      field: 'view',
-      headerName: '',
-      sortable: false,
-      width: 50,
-      renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            router.push(`/${orgId}/events/${eventId}/participants/${params.row.id}`);
-          }}
-        >
-          <ViewIcon />
-        </Button>
-      ),
-    },
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'phone', headerName: 'Phone', width: 125 },
-    { field: 'checkInKey', headerName: 'Check In Key', width: 125 },
-    { field: 'checkedIn', headerName: 'CheckedIn', width: 125 },
-    { field: 'numberOfAttributesAssigned', headerName: 'Attributes Assigned', width: 125 },
-    { field: 'numnerOfExtrasAssigned', headerName: 'Extras Assigned', width: 125 },
-    { field: 'addedAt', headerName: 'Added At', width: 125 },
-  ];
+  const [participants, setParticipants] = useState([]);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    checkInKey: '',
+  });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const showAlert = useAlert();
-
   const { orgId, eventId } = router.query;
   const { loading, get } = useFetch();
-
-  const [participants, setParticipants] = useState([]);
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -88,15 +56,21 @@ export default function Participants() {
       if (status === 200) {
         setParticipants(data.participants || []);
       } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
+        showAlert({ title: 'Error', description: data.error, status: 'error' });
       }
     };
     fetchParticipants();
   }, [orgId, eventId]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
+    console.log(formData);
+    onClose();
+  };
 
   const exportToCsv = () => {
     const csvData = participants.map((participant) => ({
@@ -115,13 +89,9 @@ export default function Participants() {
       <CSVLink
         data={csvData}
         filename={`participants-${eventId}.csv`}
-        style={{ textDecoration: 'none' }} // Remove underline for link
+        style={{ textDecoration: 'none' }}
       >
-        <Button
-          colorScheme="teal" // color from other buttons
-          variant="solid"
-        >
-          {' '}
+        <Button colorScheme="teal" variant="solid">
           Export to CSV
         </Button>
       </CSVLink>
@@ -134,18 +104,11 @@ export default function Participants() {
       previousPage={`/organizations/${orgId}/events/${eventId}`}
       headerButton={
         <>
-          <Button
-            onClick={() => {
-              router.push(`/${orgId}/events/${eventId}/participants/new/`);
-            }}
-            isLoading={loading}
-          >
+          <Button onClick={onOpen} isLoading={loading}>
             Add Participant
           </Button>
           <Button
-            onClick={() => {
-              router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`);
-            }}
+            onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
             isLoading={loading}
           >
             Upload CSV
@@ -156,6 +119,69 @@ export default function Participants() {
       debugInfo={participants}
     >
       <DataDisplay loading={loading} rows={participants} columns={columns} />
+
+      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <ModalOverlay />
+        <ModalContent maxW="700px" h="585px">
+          <ModalHeader>Add Participant</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl mb={4}>
+              <FormLabel>First Name</FormLabel>
+              <Input
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                placeholder="First Name"
+              />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Last Name</FormLabel>
+              <Input
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                placeholder="Last Name"
+              />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Email</FormLabel>
+              <Input
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Email"
+              />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Phone</FormLabel>
+              <Input
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="Phone"
+              />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Check In Key</FormLabel>
+              <Input
+                name="checkInKey"
+                value={formData.checkInKey}
+                onChange={handleInputChange}
+                placeholder="Check In Key"
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter justifyContent="flex-end">
+            <Button colorScheme="blue" onClick={handleSubmit}>
+              Submit
+            </Button>
+            <Button onClick={onClose} ml={3}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </DashboardLayout>
   );
 }

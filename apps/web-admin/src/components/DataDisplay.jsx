@@ -40,7 +40,7 @@ export default function DataDisplay({ loading, rows, columns, onRowClick }) {
           <Spinner size="xl" color="primary.500" />
         ) : (
           <TableContainer>
-            <Table variant="simple">
+            <Table variant="simple" overflowY={'auto'}>
               <Thead>
                 <Tr>
                   <Th>
