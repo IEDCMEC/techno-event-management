@@ -1,13 +1,12 @@
-// import React from 'react'
-import {ChakraProvider} from "@chakra-ui/react"
-import Form from "./Form"
+import { ChakraProvider } from '@chakra-ui/react';
+import Form from './Form';
 
 const App = () => {
   return (
     <ChakraProvider>
-      <Form/>
+      <Form />
     </ChakraProvider>
-  )
-}
+  );
+};
 
-export default App
+export default App;
