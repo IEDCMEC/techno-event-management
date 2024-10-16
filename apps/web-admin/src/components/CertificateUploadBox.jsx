@@ -28,8 +28,6 @@ import {
   MdDelete,
 } from 'react-icons/md'; // Import MdDelete icon
 import dynamic from 'next/dynamic';
-// import { useEffect } from 'react';
-import { KonvaEventObject } from 'konva/lib/Node'; // Import for event types
 const Stage = dynamic(() => import('react-konva').then((mod) => mod.Stage), { ssr: false });
 const Layer = dynamic(() => import('react-konva').then((mod) => mod.Layer), { ssr: false });
 const KonvaImage = dynamic(() => import('react-konva').then((mod) => mod.Image), { ssr: false });
@@ -48,6 +46,7 @@ function CertifcateUploadBox() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedText, setSelectedText] = useState(null);
   const [texts, setTexts] = useState([]); // Store texts on canvas
+  const [variables, setVariables] = useState({}); // Store variables for each text
 
   useEffect(() => {
     if (parentRef.current) {
@@ -70,11 +69,6 @@ function CertifcateUploadBox() {
       fileInputRef.current.click();
     }
   };
-  /*const handleDrag = (e) => {
-    const newX = e.clientX - 50; // Adjust for mouse offset
-    const newY = e.clientY - 20; // Adjust for mouse offset
-    setPosition({ x: newX, y: newY });
-  };*/
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -109,13 +103,10 @@ function CertifcateUploadBox() {
     setImageSrc(null);
     setKonvaImage(null);
     setTexts([]);
+    setVariables({});
   };
 
   const handleDoubleClick = (e) => {
-    //const stage = e.target.getStage();
-    //const pointerPosition = stage.getPointerPosition();
-    //setPosition(pointerPosition);
-    //setState(true);
     setTexts((prevTexts) => [
       ...prevTexts,
       {
@@ -130,49 +121,47 @@ function CertifcateUploadBox() {
         isItalic: false,
         isUnderline: false,
         draggable: true,
-        //color:'white'
       },
     ]);
   };
 
   const handleEditClick = (textObj) => {
     setSelectedText(textObj); // Set selected text to edit
-    //console.log(textObj);
-    //  setState(true);
-    //const stage = e.target.getStage();
-    //const pointerPosition = stage.getPointerPosition();
     onOpen(); // Open modal
   };
-  // useEffect(()=>{
-  //   console.log(selectedText)
-  //   if(selectedText){
-  //     console.log('hello world');
-  //     // console.log(selectedText.text)
-  //     onOpen();
-  //   }
-  // },[selectedText])
 
   const handleDeleteClick = (textId) => {
-    // Filter out the text with the matching id
     setTexts((prevTexts) => prevTexts.filter((text) => text.id !== textId));
+    setVariables((prevVars) => {
+      const newVars = { ...prevVars };
+      delete newVars[textId]; // Remove variables for the deleted text
+      return newVars;
+    });
+  };
+
+  // Function to detect variables in the text
+  const checkVariable = (text) => {
+    const regex = /{{\s*([a-zA-Z_$][a-zA-Z_$0-9]*)\s*}}/g;
+    const matches = text.match(regex);
+    if (matches) {
+      return matches.map((match) => match.replace(/{{\s*|\s*}}/g, ""));
+    }
+    return [];
   };
 
   const handleModalSubmit = () => {
     // Update the text object
-    //console.log(selectedText)
     setTexts((prevTexts) =>
       prevTexts.map((text) => (text.id === selectedText.id ? { ...text, ...selectedText } : text)),
     );
-    {
-      texts.map((text) => {
-        console.log(text);
-      });
-    }
-    console.log(selectedText);
 
-    //console.log(selectedText.currentTarget.id);
-    //console.log(selectedText.id);
-    //console.log()
+    // Check and update variables for this text
+    const newVariables = checkVariable(selectedText.text);
+    setVariables((prevVars) => ({
+      ...prevVars,
+      [selectedText.id]: newVariables,
+    }));
+
     onClose(); // Close modal
   };
 
@@ -198,15 +187,8 @@ function CertifcateUploadBox() {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      gap="10px"
-      alignItems="top"
-      height="100vh"
-      id="outer-box"
-    >
-      <AspectRatio ratio={16 / 9} width="70%" height="70%" maxW="100%" id="aspect-box">
+    <Box display="flex" justifyContent="center" gap="10px" alignItems="top" height="100vh">
+      <AspectRatio ratio={16 / 9} width="70%" height="70%" maxW="100%">
         <Box
           borderWidth="2px"
           borderStyle="dashed"
@@ -222,60 +204,44 @@ function CertifcateUploadBox() {
           ref={parentRef}
         >
           {imageSrc ? (
-            <>
-              <Box width="100%" height="100%" position="absolute" top={0} left={0}>
-                <Stage
-                  width={parentSize.width}
-                  height={parentSize.height}
-                  onDblClick={handleDoubleClick}
-                >
-                  <Layer>
-                    {konvaImage && (
-                      <KonvaImage
-                        image={konvaImage}
-                        width={parentSize.width || 500}
-                        height={parentSize.height || 500}
-                        x={0}
-                        y={0}
-                      />
-                    )}
-                    {texts.map((textObj) => (
-                      <KonvaText
-                        key={textObj.id}
-                        x={textObj.x}
-                        y={textObj.y}
-                        text={textObj.text}
-                        fontSize={textObj.fontSize}
-                        fontFamily={textObj.fontFamily}
-                        fill={textObj.color}
-                        fontStyle={`${textObj.isBold ? 'bold' : ''} ${
-                          textObj.isItalic ? 'italic' : ''
-                        }`}
-                        textDecoration={textObj.isUnderline ? 'underline' : ''}
-                        draggable={textObj.draggable}
-                        onDragMove={(e) => {
-                          textObj.x = e.target.position().x;
-                          textObj.y = e.target.position().y;
-                          //console.log(textObj.id,e.target.position().x,e.target.position().y)
-                        }}
-                        onClick={() => {
-                          handleEditClick(textObj);
-                        }}
-                      />
-                    ))}
-                  </Layer>
-                </Stage>
-              </Box>
-            </>
+            <Box width="100%" height="100%" position="absolute" top={0} left={0}>
+              <Stage width={parentSize.width} height={parentSize.height} onDblClick={handleDoubleClick}>
+                <Layer>
+                  {konvaImage && (
+                    <KonvaImage
+                      image={konvaImage}
+                      width={parentSize.width || 500}
+                      height={parentSize.height || 500}
+                      x={0}
+                      y={0}
+                    />
+                  )}
+                  {texts.map((textObj) => (
+                    <KonvaText
+                      key={textObj.id}
+                      x={textObj.x}
+                      y={textObj.y}
+                      text={textObj.text}
+                      fontSize={textObj.fontSize}
+                      fontFamily={textObj.fontFamily}
+                      fill={textObj.color}
+                      fontStyle={`${textObj.isBold ? 'bold' : ''} ${textObj.isItalic ? 'italic' : ''}`}
+                      textDecoration={textObj.isUnderline ? 'underline' : ''}
+                      draggable={textObj.draggable}
+                      onDragMove={(e) => {
+                        textObj.x = e.target.position().x;
+                        textObj.y = e.target.position().y;
+                      }}
+                      onClick={() => handleEditClick(textObj)}
+                    />
+                  ))}
+                </Layer>
+              </Stage>
+            </Box>
           ) : (
-            <>
-              <div>
-                {/* SVG */}
-                <Text fontSize="lg" color="gray.500">
-                  Upload an Image
-                </Text>
-              </div>
-            </>
+            <Text fontSize="lg" color="gray.500">
+              Upload an Image
+            </Text>
           )}
           <input
             type="file"
@@ -289,106 +255,55 @@ function CertifcateUploadBox() {
 
       {konvaImage && (
         <VStack>
-          <Button colorScheme="red" size="sm" marginTop={10} onClick={handleResetBackground}>
-            Reset Canvas
+          <Button colorScheme="red" size="sm" onClick={handleResetBackground}>
+            Reset Background
           </Button>
-          {imageSrc ? <Button onClick={handleDoubleClick}>Add Text</Button> : null}
-          {/*texts.length > 0 && (
-            <VStack width="100%">
-              {texts.map((textObj) => (
-                <Box width="100%" key={textObj.id} display="flex" justifyContent="space-between">
-                  <Button
-                    id="edit-button"
-                    colorScheme="teal"
-                    size="sm"
-                    width="80%"
-                    onClick={() => handleEditClick(textObj)}
-                  >
-                    Edit {textObj.id}
-                  </Button>
-                  <IconButton
-                    icon={<MdDelete />}
-                    colorScheme="red"
-                    size="sm"
-                    aria-label="Delete Text"
-                    onClick={() => handleDeleteClick(textObj.id)} // Delete button logic
-                  />
-                </Box>
-              ))}
-            </VStack>
-          )*/}
+          <Text> Text Controls </Text>
+          <IconButton
+            icon={<MdAdd />}
+            aria-label="Increase font size"
+            onClick={() => handleFontSizeChange('increase')}
+          />
+          <IconButton
+            icon={<MdRemove />}
+            aria-label="Decrease font size"
+            onClick={() => handleFontSizeChange('decrease')}
+          />
+          <IconButton
+            icon={<MdFormatBold />}
+            aria-label="Toggle bold"
+            onClick={() => handleFontStyleToggle('bold')}
+          />
+          <IconButton
+            icon={<MdFormatItalic />}
+            aria-label="Toggle italic"
+            onClick={() => handleFontStyleToggle('italic')}
+          />
+          <IconButton
+            icon={<MdFormatUnderlined />}
+            aria-label="Toggle underline"
+            onClick={() => handleFontStyleToggle('underline')}
+          />
         </VStack>
       )}
 
-      {/* Modal for editing text properties */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit Text Properties</ModalHeader>
+          <ModalHeader>Edit Text</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {selectedText && (
-              <>
-                <Input
-                  type="text"
-                  value={selectedText.text}
-                  onChange={(e) => setSelectedText({ ...selectedText, text: e.target.value })}
-                  placeholder="Edit Text"
-                  mb={3}
-                />
-                <Select
-                  value={selectedText.fontFamily}
-                  onChange={(e) => setSelectedText({ ...selectedText, fontFamily: e.target.value })}
-                >
-                  <option value="Arial">Arial</option>
-                  <option value="Roboto">Roboto</option>
-                  <option value="Montserrat">Montserrat</option>
-                  <option value="Poppins">Poppins</option>
-                  <option value="Courier New">Courier New</option>
-                  <option value="Times New Roman">Times New Roman</option>
-                </Select>
-
-                <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
-                  <IconButton
-                    icon={<MdFormatBold />}
-                    colorScheme={selectedText.isBold ? 'teal' : 'gray'}
-                    onClick={() => handleFontStyleToggle('bold')}
-                  />
-                  <IconButton
-                    icon={<MdFormatItalic />}
-                    colorScheme={selectedText.isItalic ? 'teal' : 'gray'}
-                    onClick={() => handleFontStyleToggle('italic')}
-                  />
-                  <IconButton
-                    icon={<MdFormatUnderlined />}
-                    colorScheme={selectedText.isUnderline ? 'teal' : 'gray'}
-                    onClick={() => handleFontStyleToggle('underline')}
-                  />
-                </Box>
-
-                <Box display="flex" justifyContent="space-around" alignItems="center" mt={4}>
-                  <IconButton
-                    icon={<MdAdd />}
-                    colorScheme="teal"
-                    onClick={() => handleFontSizeChange('increase')}
-                  />
-                  <Text>{selectedText.fontSize}px</Text>
-                  <IconButton
-                    icon={<MdRemove />}
-                    colorScheme="teal"
-                    onClick={() => handleFontSizeChange('decrease')}
-                  />
-                </Box>
-              </>
-            )}
-            {/* You can add font and color selectors here */}
+            <Input
+              value={selectedText?.text || ''}
+              onChange={(e) => setSelectedText({ ...selectedText, text: e.target.value })}
+            />
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="teal" onClick={handleModalSubmit}>
+            <Button colorScheme="blue" mr={3} onClick={handleModalSubmit}>
               Save
             </Button>
             <Button variant="ghost" onClick={onClose}>
-              Cancel
+              Close
             </Button>
           </ModalFooter>
         </ModalContent>
