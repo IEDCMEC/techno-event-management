@@ -39,10 +39,10 @@ export const getFormAttributes = async (req: Request, res: Response) => {
     });
 
     const defaultAttributes = [
-      { name: 'First Name', colName: 'firstName', to: 'participant' },
-      { name: 'Last Name', colName: 'lastName', to: 'participant' },
-      { name: 'Email', colName: 'email', to: 'participant' },
-      { name: 'Phone Number', colName: 'phone', to: 'participant' },
+      { name: 'First Name', colName: 'firstName', to: 'participant', value:"" },
+      { name: 'Last Name', colName: 'lastName', to: 'participant', value:"" },
+      { name: 'Email', colName: 'email', to: 'participant', value:"" },
+      { name: 'Phone Number', colName: 'phone', to: 'participant', value:"" },
     ];
 
     ExtraAttributes = ExtraAttributes.map((attribute: any) => {
@@ -50,6 +50,7 @@ export const getFormAttributes = async (req: Request, res: Response) => {
         name: attribute.name,
         id: attribute.id,
         to: 'participantAttributes',
+        value:""
       };
     });
 

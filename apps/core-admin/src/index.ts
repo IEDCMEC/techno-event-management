@@ -52,10 +52,14 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 app.param('eventId', validateUUID);
-app.use(jwtCheck);
 
 import router from './routes';
+import clientRouter from'./unprotectedRoutes'
 import { decodeUserInfo } from './middlewares/auth0';
+
+app.use('/participant', clientRouter);
+
+app.use(jwtCheck);
 
 app.use('/core', decodeUserInfo, router);
 

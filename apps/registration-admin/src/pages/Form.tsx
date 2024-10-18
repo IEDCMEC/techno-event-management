@@ -6,7 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 const Form = () => {
   const [attributes, setAttributes] = useState<any[]>([]);
-  const [formData, setFormData] = useState<{ [key: string]: string }>({});
+  const [formData, setFormData] = useState<[{ [key: string]: string }]>([{}]);
   const { eventID, orgID } = useParams<{ eventID: string; orgID: string }>();
   const { get, post } = useFetch();
   const showAlert = useAlert();
@@ -14,11 +14,12 @@ const Form = () => {
 
   useEffect(() => {
     const fetchEventAttributes = async () => {
-      const checkResponse = await get(`/core/participant/${orgID}/event/${eventID}/verify`);
+      const checkResponse = await get(`/participant/${orgID}/event/${eventID}/verify`);
       if (checkResponse?.status === 200) {
-        const response = await get(`/core/participant/${orgID}/event/${eventID}/attributes`);
+        const response = await get(`/participant/${orgID}/event/${eventID}/attributes`);
         if (response?.status === 200) {
           setAttributes(response?.data.attributes || []);
+          setFormData(response?.data.attributes || []);
         } else {
           showAlert({
             title: 'Error',
@@ -27,21 +28,29 @@ const Form = () => {
           });
         }
       } else {
-        navigate("/");
+        navigate('/');
       }
     };
     fetchEventAttributes();
   }, [get, orgID, eventID, navigate, showAlert]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
+    const { name, value, id } = event.target;
+    console.log(event.target);
+    setFormData((prevData) => {
+      prevData[Number(id)].value = value;
+      return prevData;
+    });
+    console.log(formData);
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault(); 
+    event.preventDefault();
 
-    const allFieldsFilled = attributes.every(attr => formData[attr.name]);
+    const allFieldsFilled = formData.every((attr) => {
+      console.log(attr)
+      return true;
+    });
     if (!allFieldsFilled) {
       showAlert({
         title: 'Error',
@@ -51,7 +60,7 @@ const Form = () => {
       return;
     }
 
-    const response = await post(`/core/participant/${orgID}/event/${eventID}/submit`, formData);
+    const response = await post(`/participant/${orgID}/event/${eventID}/submit`, {formData});
     if (response?.status === 200) {
       showAlert({
         title: 'Success',
@@ -74,6 +83,7 @@ const Form = () => {
         <FormControl mb={5} key={index} isRequired>
           <FormLabel>{attr.name}</FormLabel>
           <Input
+            id={index.toString()}
             name={attr.name} // Use the attribute name as the input name
             placeholder={`${attr.name}`}
             onChange={handleInputChange} // Handle input change
@@ -81,7 +91,9 @@ const Form = () => {
           />
         </FormControl>
       ))}
-      <Button type="submit" colorScheme="blue">Submit</Button>
+      <Button type="submit" colorScheme="blue">
+        Submit
+      </Button>
     </form>
   );
 };

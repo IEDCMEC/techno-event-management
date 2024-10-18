@@ -27,7 +27,6 @@ import {
   getAttributeById,
   getAttributeParticipants,
 } from './controllers/attributes';
-import { orgAndEventVerification, getFormAttributes } from './controllers/registration';
 import { fetchAccountDetails, myCredential, updateAccountDetails } from './controllers/users';
 import { validateOrganizationUser, validateOrganizationAdmin } from './middlewares/authorization';
 import { addNewExtra, checkInExtra, getAllExtras, getExtraById } from './controllers/extras';
@@ -64,11 +63,6 @@ router.post('/organizations/:orgId/members', validateOrganizationAdmin, addOrgan
 router.get('/organizations/:orgId/events', getEvents);
 router.get('/organizations/:orgId/events/:eventId', getEventStats);
 router.post('/organizations/:orgId/events', createNewEvent);
-
-router.get('/participant/:orgId/event/:eventId/verify', orgAndEventVerification);
-router.get('/participant/:orgId/event/:eventId/attributes', getFormAttributes);
-
-
 
 router.get('/organizations/:orgId/events/:eventId/participants', getAllParticipants);
 router.post('/organizations/:orgId/events/:eventId/participants', addNewParticipant);
