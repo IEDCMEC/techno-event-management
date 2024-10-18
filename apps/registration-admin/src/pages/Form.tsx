@@ -6,7 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 const Form = () => {
   const [attributes, setAttributes] = useState<any[]>([]);
-  const [formData, setFormData] = useState<[{ [key: string]: string }]>([{}]);
+  const [formData, setFormData] = useState<{ [key: string]: string }>({});
   const { eventID, orgID } = useParams<{ eventID: string; orgID: string }>();
   const { get, post } = useFetch();
   const showAlert = useAlert();
@@ -14,12 +14,11 @@ const Form = () => {
 
   useEffect(() => {
     const fetchEventAttributes = async () => {
-      const checkResponse = await get(`/participant/${orgID}/event/${eventID}/verify`);
+      const checkResponse = await get(`/core/participant/${orgID}/event/${eventID}/verify`);
       if (checkResponse?.status === 200) {
-        const response = await get(`/participant/${orgID}/event/${eventID}/attributes`);
+        const response = await get(`/core/participant/${orgID}/event/${eventID}/attributes`);
         if (response?.status === 200) {
           setAttributes(response?.data.attributes || []);
-          setFormData(response?.data.attributes || []);
         } else {
           showAlert({
             title: 'Error',
@@ -32,19 +31,27 @@ const Form = () => {
       }
     };
     fetchEventAttributes();
-  }, []);
+  }, [get, orgID, eventID, navigate, showAlert]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, id } = event.target;
-    setFormData((prevData) => {
-      prevData[Number(id)].value = value;
-      return prevData;
-    });
+    const { id, value } = event.target;
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const response = await post(`/participant/${orgID}/event/${eventID}/submit`, {"data":JSON.stringify(formData)});
+
+    const allFieldsFilled = attributes.every((attr) => formData[attr.name]);
+    if (!allFieldsFilled) {
+      showAlert({
+        title: 'Error',
+        description: 'Please fill out all fields.',
+        status: 'error',
+      });
+      return;
+    }
+
+    const response = await post(`/core/participant/${orgID}/event/${eventID}/submit`, formData);
     if (response?.status === 200) {
       showAlert({
         title: 'Success',
@@ -67,7 +74,7 @@ const Form = () => {
         <FormControl mb={5} key={index} isRequired>
           <FormLabel>{attr.name}</FormLabel>
           <Input
-            id={index.toString()}
+            id={attr.id}
             name={attr.name} // Use the attribute name as the input name
             placeholder={`${attr.name}`}
             onChange={handleInputChange} // Handle input change
@@ -83,3 +90,5 @@ const Form = () => {
 };
 
 export default Form;
+
+// i am building the backend, so i need to know how the response will be in order to make the necessary functions. i am unable to run the application or use services such as postman

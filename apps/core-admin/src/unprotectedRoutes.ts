@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { orgAndEventVerification, getFormAttributes } from './controllers/registration';
+import { orgAndEventVerification, getFormAttributes, addFormResponse } from './controllers/registration';
 
 
 const router: Router = express.Router();
@@ -15,5 +15,6 @@ router.get('/', (req: any, res: any) => {
 
 router.get('/:orgId/event/:eventId/verify', orgAndEventVerification);
 router.get('/:orgId/event/:eventId/attributes', getFormAttributes);
+router.post('/core/participant/:orgID/event/:eventID/submit', addFormResponse);
 
 export default router;
