@@ -32,35 +32,19 @@ const Form = () => {
       }
     };
     fetchEventAttributes();
-  }, [get, orgID, eventID, navigate, showAlert]);
+  }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, id } = event.target;
-    console.log(event.target);
+    const { value, id } = event.target;
     setFormData((prevData) => {
       prevData[Number(id)].value = value;
       return prevData;
     });
-    console.log(formData);
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
-    const allFieldsFilled = formData.every((attr) => {
-      console.log(attr)
-      return true;
-    });
-    if (!allFieldsFilled) {
-      showAlert({
-        title: 'Error',
-        description: 'Please fill out all fields.',
-        status: 'error',
-      });
-      return;
-    }
-
-    const response = await post(`/participant/${orgID}/event/${eventID}/submit`, {formData});
+    const response = await post(`/participant/${orgID}/event/${eventID}/submit`, {"data":JSON.stringify(formData)});
     if (response?.status === 200) {
       showAlert({
         title: 'Success',
