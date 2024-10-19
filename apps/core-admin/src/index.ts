@@ -57,7 +57,7 @@ import router from './routes';
 import clientRouter from'./unprotectedRoutes'
 import { decodeUserInfo } from './middlewares/auth0';
 
-app.use('/participant', clientRouter);
+app.use('/registration', clientRouter);
 
 app.use(jwtCheck);
 

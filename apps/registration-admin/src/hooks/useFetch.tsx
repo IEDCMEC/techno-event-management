@@ -6,20 +6,11 @@ export const useFetch = () => {
 
   const get = async (
     endpoint: string = '',
-    headers: Record<string, string> = {}
   ): Promise<{ data: any; status: number } | null> => {
     setLoading(true);
     try {
       const { data, status }: AxiosResponse = await axios.get(
-        `${import.meta.env.VITE_API_URL}${endpoint}`,
-        {
-          headers: {
-            ...headers,
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_BEARER}`,
-          },
-          validateStatus: () => true,
-        }
+        `${import.meta.env.VITE_API_URL}${endpoint}`
       );
 
       setLoading(false);
@@ -33,24 +24,14 @@ export const useFetch = () => {
 
   const post = async (
     endpoint: string = '',
-    headers: Record<string, string> = {},
     body: Record<string, any> = {}
   ): Promise<{ data: any; status: number } | null> => {
     setLoading(true);
     try {
       const { data, status }: AxiosResponse = await axios.post(
         `${import.meta.env.VITE_API_URL}${endpoint}`,
-        body,
-        {
-          headers: {
-            ...headers,
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_BEARER}`,
-          },
-          validateStatus: () => true,
-        }
+        body
       );
-
       setLoading(false);
       return { data, status };
     } catch (err) {

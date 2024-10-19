@@ -15,6 +15,6 @@ router.get('/', (req: any, res: any) => {
 
 router.get('/:orgId/event/:eventId/verify', orgAndEventVerification);
 router.get('/:orgId/event/:eventId/attributes', getFormAttributes);
-router.post('/core/participant/:orgID/event/:eventID/submit', addFormResponse);
+router.post('/:orgId/event/:eventId/submit', addFormResponse);
 
 export default router;

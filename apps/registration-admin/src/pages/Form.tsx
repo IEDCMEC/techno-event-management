@@ -14,9 +14,9 @@ const Form = () => {
 
   useEffect(() => {
     const fetchEventAttributes = async () => {
-      const checkResponse = await get(`/core/participant/${orgID}/event/${eventID}/verify`);
+      const checkResponse = await get(`/registration/${orgID}/event/${eventID}/verify`);
       if (checkResponse?.status === 200) {
-        const response = await get(`/core/participant/${orgID}/event/${eventID}/attributes`);
+        const response = await get(`/registration/${orgID}/event/${eventID}/attributes`);
         if (response?.status === 200) {
           setAttributes(response?.data.attributes || []);
         } else {
@@ -31,7 +31,7 @@ const Form = () => {
       }
     };
     fetchEventAttributes();
-  }, [get, orgID, eventID, navigate, showAlert]);
+  }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
@@ -40,18 +40,8 @@ const Form = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
-    const allFieldsFilled = attributes.every((attr) => formData[attr.name]);
-    if (!allFieldsFilled) {
-      showAlert({
-        title: 'Error',
-        description: 'Please fill out all fields.',
-        status: 'error',
-      });
-      return;
-    }
-
-    const response = await post(`/core/participant/${orgID}/event/${eventID}/submit`, formData);
+    console.log(formData);
+    const response = await post(`/registration/${orgID}/event/${eventID}/submit`, formData);
     if (response?.status === 200) {
       showAlert({
         title: 'Success',
@@ -90,5 +80,3 @@ const Form = () => {
 };
 
 export default Form;
-
-// i am building the backend, so i need to know how the response will be in order to make the necessary functions. i am unable to run the application or use services such as postman

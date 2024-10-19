@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 
 import prisma from '../utils/database';
-import { create } from 'domain';
 
 export const orgAndEventVerification = async (req: Request, res: Response) => {
   try {
@@ -25,14 +24,14 @@ export const orgAndEventVerification = async (req: Request, res: Response) => {
   }
 };
 
-export const addFormResponse = async (req:Request, res: Response) => {
+export const addFormResponse = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId } = req?.params;
-    const  data  = req?.body;
+    const data = req?.body;
 
-    const defaultKeys = ["firstName", "lastName", "email", "phone"];
-    const defaultData : {[key: string]: string} = {};
-    const attrData : { attributeId: string; value: string }[] = [];
+    const defaultKeys = ['firstName', 'lastName', 'email', 'phone'];
+    const defaultData: { [key: string]: string } = {};
+    const attrData: { attributeId: string; value: string }[] = [];
 
     for (const key in data) {
       if (defaultKeys.includes(key)) {
@@ -41,30 +40,30 @@ export const addFormResponse = async (req:Request, res: Response) => {
         attrData.push({
           attributeId: key,
           value: data[key],
-        })
+        });
       }
     }
 
-    const newRegistrant = await prisma.create({
+    const newRegistrant = await prisma.registrant.create({
       data: {
-        firstName: defaultData["firstName"],
-        lastName: defaultData["lastName"] || null,
-        email: defaultData["email"],
-        phone: defaultData["phone"] || null,
+        firstName: defaultData['firstName'],
+        lastName: defaultData['lastName'] || null,
+        email: defaultData['email'],
+        phone: defaultData['phone'] || null,
         eventId: eventId,
         organizationId: orgId,
         registrantAttributes: {
-          create: attrData
-        }
-      }
-    })
-    
-    return res.status(200).json({ newRegistrant})
+          create: attrData,
+        },
+      },
+    });
+
+    return res.status(200).json({ newRegistrant });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });
   }
-}
+};
 
 export const getFormAttributes = async (req: Request, res: Response) => {
   try {
@@ -81,10 +80,10 @@ export const getFormAttributes = async (req: Request, res: Response) => {
     });
 
     const defaultAttributes = [
-      { name: 'First Name', id: 'firstName'},
-      { name: 'Last Name', id: 'lastName'},
-      { name: 'Email', id: 'email'},
-      { name: 'Phone Number', id: 'phone'},
+      { name: 'First Name', id: 'firstName' },
+      { name: 'Last Name', id: 'lastName' },
+      { name: 'Email', id: 'email' },
+      { name: 'Phone Number', id: 'phone' },
     ];
 
     ExtraAttributes = ExtraAttributes.map((attribute: any) => {
@@ -94,7 +93,7 @@ export const getFormAttributes = async (req: Request, res: Response) => {
       };
     });
 
-    const attributes = defaultAttributes.concat(ExtraAttributes)
+    const attributes = defaultAttributes.concat(ExtraAttributes);
 
     if (!attributes) {
       return res.status(404).json({ error: 'No attributes found' });
