@@ -10,7 +10,7 @@ const App = () => {
       <ChakraProvider>
         <Routes>
           <Route path="/event/:eventID/:orgID" element={<Form />} />
-          <Route path="/pathNeeSetCheytho" element={<Registered />} />
+          <Route path="/already-registered" element={<Registered />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </ChakraProvider>

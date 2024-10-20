@@ -30,6 +30,10 @@ const Form = () => {
         navigate('/');
       }
     };
+
+    const hasRegistered = document.cookie.includes(`registered_${eventID}=true`);
+    if (hasRegistered) navigate('/already-registered');
+
     fetchEventAttributes();
   }, []);
 
@@ -43,6 +47,7 @@ const Form = () => {
     console.log(formData);
     const response = await post(`/registration/${orgID}/event/${eventID}/submit`, formData);
     if (response?.status === 200) {
+      document.cookie = `registered_${eventID}=true; path=/; max-age=${60 * 60 * 24 * 30};`;
       showAlert({
         title: 'Success',
         description: 'Form submitted successfully!',
