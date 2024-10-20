@@ -1,6 +1,9 @@
 import express, { Router } from 'express';
-import { orgAndEventVerification, getFormAttributes, addFormResponse } from './controllers/registration';
-
+import {
+  orgAndEventVerification,
+  getFormAttributes,
+  addFormResponse,
+} from './controllers/registration';
 
 const router: Router = express.Router();
 

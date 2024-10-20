@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Heading, Text, Center } from '@chakra-ui/react';
 
 const Registered: React.FC = () => {
-
   return (
     <Center height="100vh" flexDirection="column" bg="gray.100">
       <Box textAlign="center" p={6} borderRadius="md" boxShadow="lg" bg="white">
@@ -10,7 +9,7 @@ const Registered: React.FC = () => {
           Sucessfully Registered
         </Heading>
         <Text fontSize="lg" mb={4}>
-         Your registration have been completed
+          Your registration have been completed
         </Text>
       </Box>
     </Center>

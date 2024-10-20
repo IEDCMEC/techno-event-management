@@ -51,7 +51,7 @@ jobs:
         run: |
           curl -X GET ${{ secrets.DEV_CORE_MAILER_DEPLOY_HOOK }}
           curl -X GET ${{ secrets.PROD_CORE_MAILER_DEPLOY_HOOK }}
-  
+
   build-and-push-core-auth0-actions:
     runs-on: ubuntu-latest
 

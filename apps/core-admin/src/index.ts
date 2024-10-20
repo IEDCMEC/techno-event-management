@@ -54,7 +54,7 @@ app.get('/health', (req: Request, res: Response) => {
 app.param('eventId', validateUUID);
 
 import router from './routes';
-import clientRouter from'./unprotectedRoutes'
+import clientRouter from './unprotectedRoutes';
 import { decodeUserInfo } from './middlewares/auth0';
 
 app.use('/registration', clientRouter);

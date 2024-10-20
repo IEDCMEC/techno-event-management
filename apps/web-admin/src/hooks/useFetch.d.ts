@@ -6,12 +6,12 @@ export interface UseFetchReturnType {
   post: (
     endpoint?: string,
     headers?: Record<string, string>,
-    body?: Record<string, any>
+    body?: Record<string, any>,
   ) => Promise<AxiosResponse | null>;
   put: (
     endpoint?: string,
     headers?: Record<string, string>,
-    body?: Record<string, any>
+    body?: Record<string, any>,
   ) => Promise<AxiosResponse | null>;
   del: (endpoint?: string, headers?: Record<string, string>) => Promise<AxiosResponse | null>;
 }
