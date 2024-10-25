@@ -56,6 +56,7 @@ export const ProtectedRoute = ({ children }) => {
       });
     } else {
       postOrg();
+      // router.replace('/404');
     }
   }
 

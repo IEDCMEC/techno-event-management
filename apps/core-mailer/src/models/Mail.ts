@@ -41,6 +41,7 @@ export class Mail {
 }
 
 export function parseMail(str: string): Mail {
+  console.log(str)
   const parsed = JSON.parse(str.replace(/(\w+):/g, '"$1":'));
   return new Mail(
     parsed.from,
