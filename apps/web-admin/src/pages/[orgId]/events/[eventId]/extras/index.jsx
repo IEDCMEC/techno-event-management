@@ -77,14 +77,14 @@ export default function Extras() {
         }}
       />
 
-      {/* Modal for creating a new extra */}
+      
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add Extra</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {/* Render the form from new/index.js */}
+            
             <NewExtraForm onClose={onClose} />
           </ModalBody>
         </ModalContent>
