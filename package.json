@@ -11,14 +11,14 @@
     "setup": "turbo run setup"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.1",
-    "@turbo/gen": "^1.9.9",
-    "eslint": "^8.56.0",
+    "@changesets/cli": "^2.27.9",
+    "@turbo/gen": "^1.13.4",
+    "eslint": "^8.57.1",
     "eslint-config-custom": "workspace:*",
-    "husky": "^9.0.10",
-    "lint-staged": "^15.0.2",
-    "prettier": "^3.0.3",
-    "turbo": "^2.0.6"
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "turbo": "^2.2.3"
   },
   "packageManager": "pnpm@7.15.0",
   "name": "techno-event-management",
