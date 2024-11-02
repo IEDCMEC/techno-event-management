@@ -29,19 +29,20 @@ export class Mail {
 
   toString(): string {
     return `{
-            jobId: "${this.jobId}",
-            from: "${this.from}",
-            name: "${this.name}",
-            to: "${this.to}",
-            subject: "${this.subject}",
-            text: "${this.text}",
-            html: "${this.html}"
+            "jobId": "${this.jobId}",
+            "from": "${this.from}",
+            "name": "${this.name}",
+            "to": "${this.to}",
+            "subject": "${this.subject}",
+            "text": "${this.text}",
+            "html": "${this.html}"
         }`;
   }
 }
 
 export function parseMail(str: string): Mail {
-  const parsed = JSON.parse(str.replace(/(\w+):/g, '"$1":'));
+  console.log(str);
+  const parsed = JSON.parse(str);
   return new Mail(
     parsed.from,
     parsed.name,
