@@ -35,7 +35,7 @@ export default function EventById() {
   const { loading, get } = useFetch();
 
   const [event, setEvent] = useState([]);
-  const [attributes, setAttributes] = useState([]);
+  const [attributes, setAttributes] = useState(['firstName', 'lastName', 'email', 'phone']);
 
   useEffect(() => {
     const fetchEventStats = async () => {
@@ -56,7 +56,9 @@ export default function EventById() {
         `/core/organizations/${orgId}/events/${eventId}/attributes`,
       );
       if (status === 200) {
-        setAttributes(data.attributes || []);
+        setAttributes((preValue) => {
+          return [...preValue, ...(data.attributes || [])];
+        });
       } else {
         showAlert({
           title: 'Error',
