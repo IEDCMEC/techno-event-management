@@ -67,6 +67,24 @@ export type Database = {
         }
         Relationships: []
       }
+      Otp: {
+        Row: {
+          code: number
+          email: string
+          id: string
+        }
+        Insert: {
+          code: number
+          email: string
+          id?: string
+        }
+        Update: {
+          code?: number
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
       Projects: {
         Row: {
           description: string | null
