@@ -251,11 +251,13 @@ const generateOTP = () => {
 export const sendOTP = async (req: Request, res: Response) => {
   try {
     const { email, name, html } = req.body;
+    console.log(req.body)
     if (!email || !name || !html) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
     if (supabase) {
       const response = await supabase.from('Otp').select('*').eq('email', email);
+      console.log(response)
       if (response && response.data && response.status == 200) {
         if (response.data.length > 0) {
           const otp = generateOTP();

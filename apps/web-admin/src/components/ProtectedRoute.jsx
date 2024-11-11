@@ -6,6 +6,7 @@ import { useFetch } from '@/hooks/useFetch';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
 import { useMemo } from 'react';
+import axios from 'axios';
 
 export const ProtectedRoute = ({ children }) => {
   const router = useRouter();
@@ -30,6 +31,7 @@ export const ProtectedRoute = ({ children }) => {
       // console.log(accountDetails);
     }
   }, [isAuthenticated, accountDetails.orgId]);
+
   async function postOrg() {
     const id = user.sub.substring(6);
     const name = user.nickname;
@@ -61,7 +63,7 @@ export const ProtectedRoute = ({ children }) => {
   }
 
   // useEffect();
-  useMemo(() => {
+  useMemo(async () => {
     // if (!isAuthenticated) {
     //   router.replace('/');
     //   console.log('not check')
@@ -73,7 +75,33 @@ export const ProtectedRoute = ({ children }) => {
       checkOrg();
       // console.log('trigger');
     }
-  }, [isAuthenticated]);
+    if (accountDetails.orgId) {
+      console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
+      console.log(
+        `${process.env.NEXT_PUBLIC_API_URL}/organizations/${accountDetails.orgId}/newEmailProject`,
+      );
+      // const response = await post(
+      //   `${process.env.NEXT_PUBLIC_API_URL}/organizations/${accountDetails.orgId}/newEmailProject`,
+      //   {},
+      //   {
+      //     name: 'Startup Deep Dive',
+      //     desc: 'Trial run for EventSync emailer integration',
+      //   },
+      // );
+      // console.log(response);
+      console.log(`${process.env.NEXT_PUBLIC_API_URL}/core/organizations/sendOTP`);
+      const response = await post(
+        `${process.env.NEXT_PUBLIC_API_URL}/core/organizations/sendOTP`,
+        {},
+        {
+          email: 'subramanie.mec@gmail.com',
+          name: 'Subramani E',
+          html: '<h1>Your otp is: ((otp))</h1>',
+        }
+      );
+      console.log(response);
+    }
+  }, [isAuthenticated, accountDetails.orgId]);
   if (!isLoading) {
     if (!isAuthenticated && router.pathname !== '/auth' && router.pathname !== '/') {
       router.replace('/');
