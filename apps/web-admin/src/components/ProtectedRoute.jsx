@@ -97,7 +97,7 @@ export const ProtectedRoute = ({ children }) => {
           email: 'subramanie.mec@gmail.com',
           name: 'Subramani E',
           html: '<h1>Your otp is: ((otp))</h1>',
-        }
+        },
       );
       console.log(response);
     }
