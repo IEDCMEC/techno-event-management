@@ -37,13 +37,13 @@ export const useFetch = () => {
     }
   };
 
-  const post = async (endpoint = '', headers = {}, body = {}) => {
+  const post = async (endpoint = '', headers = {}, body = {}, contentType = 'application/json') => {
     setLoading(true);
     try {
       const { data, status } = await axios.post(process.env.NEXT_PUBLIC_API_URL + endpoint, body, {
         headers: {
           ...headers,
-          contentType: 'application/json',
+          contentType: contentType,
           Authorization:
             'Bearer ' +
             (await getAccessTokenSilently({

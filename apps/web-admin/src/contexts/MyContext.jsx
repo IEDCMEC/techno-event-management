@@ -20,7 +20,7 @@ const MyContext = ({ children }) => {
     fetchAccountDetails();
     // console.log('trigger');
   }, [isAuthenticated]);
-
+  // console.log(accountDetails);
   const updateAccountDetails = async () => {
     const { data, status } = await put('/core/users/me', {}, accountDetails);
     // console.log(data);
