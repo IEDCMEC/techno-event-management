@@ -194,3 +194,37 @@ model ParticipantExtrasCheckIn {
   extra           Extras?     @relation(fields: [extraId], references: [id])
   extraId         String?     @db.Uuid
 }
+
+model Projects {
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  orgId       String?
+  recipients  Recipients[]
+}
+
+model Otp {
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                    String                     @unique
+  code                     Int                        @unique
+}
+
+model Recipients {
+  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                   String
+  email                  String
+  payload                String
+  projectId              String   @db.Uuid
+  projects               Projects @relation(fields: [projectId], references: [id])
+  createdAt              DateTime @default(now())
+  postProcessingComplete Boolean  @default(false)
+
+  emailSent              Boolean   @default(false)
+  emailContent           String?
+  emailSentAt            DateTime?
+  emailSentFrom          String?
+  jobId                  String?
+  @@unique([projectId, email])
+  @@unique([projectId, payload])
+}
+

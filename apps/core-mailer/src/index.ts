@@ -50,7 +50,7 @@ app.post('/mail', authorize, async (req: Request, res: Response) => {
 
       // Process fields and files as needed
       const { name, to, subject, text, html } = fields;
-      console.log(html);
+      console.log(name, to, subject, text, html);
       if (!name || !to || !subject || !text || !html) {
         return res.status(400).send({ message: 'Missing required fields' });
       }
