@@ -6,8 +6,9 @@ import express, { Express, Request, Response } from 'express';
 import { fetchEmailJobStatus, sendEmailController } from './controllers/MailController';
 import { MailService } from './services/MailService';
 import { authorize } from './middlewares/auth';
+import formidable from 'formidable';
 
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const cors = require('cors');
 
 dotenv.config();
@@ -18,7 +19,7 @@ const app: Express = express();
 
 app.use(cors({ origin: '*' }));
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 app.get('/health', (req: Request, res: Response) => {
   const healthcheck: any = {
@@ -39,16 +40,38 @@ app.get('/health', (req: Request, res: Response) => {
 // Add email to queue
 app.post('/mail', authorize, async (req: Request, res: Response) => {
   try {
-    const { name, to, subject, text, html } = req.body;
+    // const { name, to, subject, text, html } = req.body;
+    const form = formidable({ multiples: true });
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        console.error('Form parsing error:', err);
+        return res.status(500).send({ message: 'Error parsing form data' });
+      }
 
-    if (!name || !to || !subject || !text || !html)
-      return res.status(400).send({ message: 'Missing required fields' });
+      // Process fields and files as needed
+      const { name, to, subject, text, html } = fields;
+      console.log(name, to, subject, text, html);
+      if (!name || !to || !subject || !text || !html) {
+        return res.status(400).send({ message: 'Missing required fields' });
+      }
 
-    const jobId: UUID = await sendEmailController(name, to, subject, text, html);
+      const jobId: UUID = await sendEmailController(name, to, subject, text, html);
 
-    return res.status(200).send({
-      jobId: jobId,
+      return res.status(200).send({
+        jobId: jobId,
+      });
     });
+    // if (!name || !to || !subject || !text || !html) {
+    //   console.log(req.body);
+
+    //   return res.status(400).send({ message: 'Missing required fields' });
+    // }
+
+    // const jobId: UUID = await sendEmailController(name, to, subject, text, html);
+
+    // return res.status(200).send({
+    //   jobId: jobId,
+    // });
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal Server Error' });

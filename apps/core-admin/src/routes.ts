@@ -31,6 +31,15 @@ import { fetchAccountDetails, myCredential, updateAccountDetails } from './contr
 import { validateOrganizationUser, validateOrganizationAdmin } from './middlewares/authorization';
 import { addNewExtra, checkInExtra, getAllExtras, getExtraById } from './controllers/extras';
 import { validateUUID } from './middlewares/validateParams';
+import {
+  addNewRecipient,
+  getMailProjects,
+  getMailStatus,
+  newMailProject,
+  sendMailWithQR,
+  sendOTP,
+  verifyOTP,
+} from './controllers/mail';
 
 const router: Router = express.Router();
 
@@ -109,4 +118,14 @@ router.get('/organizations/:orgId/events/:eventId/extras/:extraId', getExtraById
 router.post('/organizations/:orgId/events/:eventId/extras/:extraId/check-in', checkInExtra);
 router.post('/organizations/:orgId/events/:eventId/extras', addNewExtra);
 
+//mailer routes
+router.post('/organizations/:orgId/newEmailProject', newMailProject);
+router.get('/organizations/:orgId/getEmailProjects', getMailProjects);
+router.get('/organizations/:orgId/getMailStatus', getMailStatus);
+router.post('/organizations/:orgId/addNewRecipient', addNewRecipient);
+router.post('/organizations/:orgId/events/:eventId/mailQR', sendMailWithQR);
+
+// OTP routes
+router.post('/organizations/sendOTP', sendOTP);
+router.post('/organizations/verifyOTP', verifyOTP);
 export default router;
