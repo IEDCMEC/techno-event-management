@@ -7,6 +7,8 @@ const MyContext = ({ children }) => {
   const [accountDetails, setAccountDetails] = useState({});
   const [emailProjects, setEmailProjects] = useState([]);
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const [participants, setParticipants] = useState([]);
+
   const { loading, get, put } = useFetch();
   const showAlert = useAlert();
   useEffect(() => {
@@ -55,6 +57,8 @@ const MyContext = ({ children }) => {
           setEmailProjects,
           setAccountDetails,
           updateAccountDetails,
+          participants,
+          setParticipants,
         }}
       >
         {children}

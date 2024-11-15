@@ -1,19 +1,5 @@
 import { useState, useEffect } from 'react';
-import Cookies from 'react-cookies';
-import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  FormControl,
-  FormLabel,
-  Input,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Button, useDisclosure } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
@@ -22,8 +8,8 @@ import { useFetch } from '@/hooks/useFetch';
 import { CSVLink } from 'react-csv';
 import AddParticipant from '@/components/AddParticipant';
 import MultiStepModal from '@/components/MultiFormEmail';
-// import { useContext } from 'react';
-// import { account } from '@/contexts/MyContext';
+import { useContext } from 'react';
+import { account } from '@/contexts/MyContext';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -38,7 +24,7 @@ const columns = [
 ];
 
 export default function Participants() {
-  const [participants, setParticipants] = useState([]);
+  const { participants, setParticipants } = useContext(account);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',

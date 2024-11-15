@@ -48,6 +48,10 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
             let emailText: string = html;
             emailText = emailText.replace('{{payload}}', recipient.payload);
             emailText = emailText.replace('{{name}}', recipient.name);
+            emailText = emailText.replace('{{payload}}', recipient.payload);
+            emailText = emailText.replace(/\n/g, '');
+            emailText = emailText.replace(/"/g, "'");
+
             form.append('html', emailText);
             form.append('subject', subject);
             form.append('text', subject);
@@ -323,11 +327,12 @@ type mytype = {
 export const addNewRecipients = async (req: Request, res: Response) => {
   try {
     const { data, projectId } = req.body;
+    console.log(data.length);
     const arrayOfElements = data as mytype[];
-    // const { projectId, name, email, payload } = req.body;
     let nonProcessed = [];
     let processed = [];
     if (!arrayOfElements || !projectId) {
+      console.log(arrayOfElements, projectId);
       return res.status(400).send({ message: 'Missing required fields' });
     } else if (Array.isArray(arrayOfElements)) {
       for (const element of arrayOfElements) {
@@ -343,7 +348,6 @@ export const addNewRecipients = async (req: Request, res: Response) => {
 
           if (recipientExists) {
             processed.push(element);
-            // return res.status(200).json({ message: 'User already exists, add another user' });
           } else {
             // Insert new Recipients if they don't exist
             const response = await prisma.Recipients.create({
@@ -354,7 +358,11 @@ export const addNewRecipients = async (req: Request, res: Response) => {
                 projectId: projectId,
               },
             });
-            processed.push(element);
+            if (response) {
+              processed.push(element);
+            } else {
+              nonProcessed.push(element);
+            }
             // console.log('Insert:', response);
             // return res.status(200).json({ message: 'User successfully Added' });
           }
