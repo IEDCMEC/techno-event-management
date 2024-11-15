@@ -200,6 +200,7 @@ model Projects {
   name        String
   description String?
   orgId       String?
+  html_template String?
   recipients  Recipients[]
 }
 

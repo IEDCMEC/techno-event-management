@@ -12,7 +12,7 @@ export const useFetch = () => {
   const get = async (endpoint = '', headers = {}) => {
     setLoading(true);
     try {
-      const { data, status } = await axios.get(process.env.NEXT_PUBLIC_API_URL + endpoint, {
+      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL + endpoint, {
         headers: {
           ...headers,
           contentType: 'application/json',
@@ -29,7 +29,7 @@ export const useFetch = () => {
 
       setLoading(false);
 
-      return { data, status };
+      return response;
     } catch (err) {
       console.error(err);
       setLoading(false);

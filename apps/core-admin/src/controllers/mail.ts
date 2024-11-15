@@ -11,7 +11,7 @@ import FormData from 'form-data';
 const MAILER_URL = process.env.MAILER_URL;
 const MAILER_DATABASE_URL = process.env.MAILER_DATABASE_URL;
 const AUTHORIZATION_TOKEN = process.env.AUTHORIZATION_TOKEN;
-console.log(AUTHORIZATION_TOKEN);
+// console.log(AUTHORIZATION_TOKEN);
 export const sendMailWithQR = async (req: Request, res: Response) => {
   try {
     const { subject, html, projectId } = req.body;
@@ -151,6 +151,38 @@ export const getMailStatus = async (req: Request, res: Response) => {
   }
 };
 
+export const updateMailProject = async (req: Request, res: Response) => {
+  try {
+    const { projectId, html_template } = req.body;
+    const { orgId } = req?.params;
+    if (!projectId || !orgId) {
+      return res.status(400).send({ message: 'Missing required fields!' });
+    }
+    console.log(projectId);
+
+    // console.log(html_template);
+    const response = await prisma.Projects.update({
+      where: { id: projectId },
+      data: { html_template: html_template },
+    });
+    console.log(response);
+
+    if (response) {
+      return res.status(200).json({
+        message: 'html_template updated',
+        data: response,
+      });
+    } else {
+      return res.status(400).send({
+        message: 'Error updating html_template',
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(400).send({ message: e });
+  }
+};
+
 export const newMailProject = async (req: Request, res: Response) => {
   try {
     const { name, desc } = req.body;
@@ -216,7 +248,7 @@ export const newMailProject = async (req: Request, res: Response) => {
 export const getMailProjects = async (req: Request, res: Response) => {
   try {
     const { orgId } = req?.params;
-    // console.log(orgId)
+    console.log(orgId);
     if (!orgId) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
@@ -279,6 +311,64 @@ export const addNewRecipient = async (req: Request, res: Response) => {
     }
   } catch (e: any) {
     console.error(e);
+    return res.status(400).send({ message: e.message || 'Something went wrong' });
+  }
+};
+type mytype = {
+  // projectId: string | undefined;
+  name: string | undefined;
+  email: string | undefined;
+  payload: string | undefined;
+};
+export const addNewRecipients = async (req: Request, res: Response) => {
+  try {
+    const { data, projectId } = req.body;
+    const arrayOfElements = data as mytype[];
+    // const { projectId, name, email, payload } = req.body;
+    let nonProcessed = [];
+    let processed = [];
+    if (!arrayOfElements || !projectId) {
+      return res.status(400).send({ message: 'Missing required fields' });
+    } else if (Array.isArray(arrayOfElements)) {
+      for (const element of arrayOfElements) {
+        if (!element.email || !element.name || !element.payload) {
+          nonProcessed.push(element);
+        } else {
+          const recipientExists = await prisma.Recipients.findFirst({
+            where: {
+              projectId: projectId,
+              email: element.email,
+            },
+          });
+
+          if (recipientExists) {
+            processed.push(element);
+            // return res.status(200).json({ message: 'User already exists, add another user' });
+          } else {
+            // Insert new Recipients if they don't exist
+            const response = await prisma.Recipients.create({
+              data: {
+                name: element.name,
+                email: element.email,
+                payload: element.payload,
+                projectId: projectId,
+              },
+            });
+            processed.push(element);
+            // console.log('Insert:', response);
+            // return res.status(200).json({ message: 'User successfully Added' });
+          }
+        }
+      }
+      return res.status(200).json({
+        success: processed.length,
+        failure: nonProcessed.length,
+      });
+    } else {
+      return res.status(400).send({ message: 'Element not an array' });
+    }
+  } catch (e: any) {
+    console.log(e);
     return res.status(400).send({ message: e.message || 'Something went wrong' });
   }
 };
