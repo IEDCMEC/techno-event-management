@@ -25,7 +25,7 @@ export const ProtectedRoute = ({ children }) => {
   const { loading, get, post } = useFetch();
   // useEffect();
   useMemo(() => {
-    // console.log(accountDetails);
+    console.log(accountDetails);
     if (accountDetails.orgId) {
       // console.log('route')
       router.replace(`/${accountDetails.orgId}`);
@@ -88,33 +88,7 @@ export const ProtectedRoute = ({ children }) => {
       checkOrg();
       // console.log('trigger');
     }
-    if (accountDetails.orgId) {
-      console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
-      console.log(
-        `${process.env.NEXT_PUBLIC_API_URL}/organizations/${accountDetails.orgId}/newEmailProject`,
-      );
-      // const response = await post(
-      //   `${process.env.NEXT_PUBLIC_API_URL}/organizations/${accountDetails.orgId}/newEmailProject`,
-      //   {},
-      //   {
-      //     name: 'Startup Deep Dive',
-      //     desc: 'Trial run for EventSync emailer integration',
-      //   },
-      // );
-      // console.log(response);
-      console.log(`${process.env.NEXT_PUBLIC_API_URL}/core/organizations/sendOTP`);
-      const response = await post(
-        `${process.env.NEXT_PUBLIC_API_URL}/core/organizations/sendOTP`,
-        {},
-        {
-          email: 'subramanie.mec@gmail.com',
-          name: 'Subramani E',
-          html: '<h1>Your otp is: ((otp))</h1>',
-        },
-      );
-      console.log(response);
-    }
-  }, [isAuthenticated, accountDetails.orgId]);
+  }, [isAuthenticated]);
   if (!isLoading) {
     if (!isAuthenticated && router.pathname !== '/auth' && router.pathname !== '/') {
       router.replace('/');

@@ -5,7 +5,10 @@ import { useAuth0 } from '@auth0/auth0-react';
 export const account = createContext();
 const MyContext = ({ children }) => {
   const [accountDetails, setAccountDetails] = useState({});
+  const [emailProjects, setEmailProjects] = useState([]);
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const [participants, setParticipants] = useState([]);
+
   const { loading, get, put } = useFetch();
   const showAlert = useAlert();
   useEffect(() => {
@@ -47,7 +50,17 @@ const MyContext = ({ children }) => {
   };
   return (
     <div>
-      <account.Provider value={{ accountDetails, setAccountDetails, updateAccountDetails }}>
+      <account.Provider
+        value={{
+          accountDetails,
+          emailProjects,
+          setEmailProjects,
+          setAccountDetails,
+          updateAccountDetails,
+          participants,
+          setParticipants,
+        }}
+      >
         {children}
       </account.Provider>
     </div>

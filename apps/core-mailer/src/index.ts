@@ -47,7 +47,6 @@ app.post('/mail', authorize, async (req: Request, res: Response) => {
         console.error('Form parsing error:', err);
         return res.status(500).send({ message: 'Error parsing form data' });
       }
-
       // Process fields and files as needed
       const { name, to, subject, text, html } = fields;
       console.log(name, to, subject, text, html);
