@@ -6,7 +6,9 @@ import { useFetch } from '@/hooks/useFetch';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
 import { useMemo } from 'react';
+import { useAlert } from '@/hooks/useAlert';
 import axios from 'axios';
+import { title } from 'process';
 
 export const ProtectedRoute = ({ children }) => {
   const router = useRouter();
@@ -35,20 +37,31 @@ export const ProtectedRoute = ({ children }) => {
   async function postOrg() {
     const id = user.sub.substring(6);
     const name = user.nickname;
-    const { data, mystatus } = await post(`/core/organizations`, {}, { id, name });
-    console.log('created');
-    if (mystatus === 200) {
-      showAlert({
-        title: 'Success',
-        description: 'Organization has been created successfully.',
-        status: 'success',
-      });
+    const response = await post(`/core/organizations`, {}, { id, name });
+    if(response){
+      const { data, mystatus } = response; 
+      console.log('created');
+      if (mystatus === 200) {
+        showAlert({
+          title: 'Success',
+          description: 'Organization has been created successfully.',
+          status: 'success',
+        });
+      }
     }
+    else{
+      showAlert({
+        title:"Authentication Error",
+        description:"Log out and then sign in again!!"
+      })
+    }
+
+    
   }
   async function checkOrg() {
     const response = await get('/core/users/mycreds');
     // console.log(response.data.data);
-    if (response.status === 200) {
+    if (response && response.status === 200) {
       setAccountDetails((preValue) => {
         return {
           ...preValue,
