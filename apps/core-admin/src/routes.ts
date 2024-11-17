@@ -33,11 +33,13 @@ import { addNewExtra, checkInExtra, getAllExtras, getExtraById } from './control
 import { validateUUID } from './middlewares/validateParams';
 import {
   addNewRecipient,
+  addNewRecipients,
   getMailProjects,
   getMailStatus,
   newMailProject,
   sendMailWithQR,
   sendOTP,
+  updateMailProject,
   verifyOTP,
 } from './controllers/mail';
 
@@ -120,9 +122,11 @@ router.post('/organizations/:orgId/events/:eventId/extras', addNewExtra);
 
 //mailer routes
 router.post('/organizations/:orgId/newEmailProject', newMailProject);
+router.post('/organizations/:orgId/updateEmailProject', updateMailProject);
 router.get('/organizations/:orgId/getEmailProjects', getMailProjects);
 router.get('/organizations/:orgId/getMailStatus', getMailStatus);
 router.post('/organizations/:orgId/addNewRecipient', addNewRecipient);
+router.post('/organizations/:orgId/addNewRecipients', addNewRecipients);
 router.post('/organizations/:orgId/events/:eventId/mailQR', sendMailWithQR);
 
 // OTP routes

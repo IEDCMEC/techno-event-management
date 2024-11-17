@@ -1,24 +1,15 @@
 import { useState, useEffect } from 'react';
-import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  FormControl,
-  FormLabel,
-  Input,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Button, useDisclosure } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import { CSVLink } from 'react-csv';
+import AddParticipant from '@/components/AddParticipant';
+import MultiStepModal from '@/components/MultiFormEmail';
+import { useContext } from 'react';
+import { account } from '@/contexts/MyContext';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -33,7 +24,7 @@ const columns = [
 ];
 
 export default function Participants() {
-  const [participants, setParticipants] = useState([]);
+  const { participants, setParticipants } = useContext(account);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -47,7 +38,7 @@ export default function Participants() {
   const showAlert = useAlert();
   const { orgId, eventId } = router.query;
   const { loading, get } = useFetch();
-
+  // const { accountDetails } = useContext(account);
   useEffect(() => {
     const fetchParticipants = async () => {
       const { data, status } = await get(
@@ -60,17 +51,18 @@ export default function Participants() {
       }
     };
     fetchParticipants();
+    return () => fetchParticipants();
   }, [orgId, eventId]);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-
+  const [emailContent, setEmailContent] = useState('');
   const handleSubmit = async () => {
     console.log(formData);
     onClose();
   };
+  const { isOpen: qrIsOpen, onOpen: qROnOpen, onClose: qROnClose } = useDisclosure();
 
   const exportToCsv = () => {
     const csvData = participants.map((participant) => ({
@@ -114,74 +106,25 @@ export default function Participants() {
             Upload CSV
           </Button>
           {exportToCsv()}
+          <Button onClick={qROnOpen}>Send Emails with QR</Button>
         </>
       }
       debugInfo={participants}
     >
       <DataDisplay loading={loading} rows={participants} columns={columns} />
-
-      <Modal isOpen={isOpen} onClose={onClose} size="lg">
-        <ModalOverlay />
-        <ModalContent maxW="700px" h="585px">
-          <ModalHeader>Add Participant</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl mb={4}>
-              <FormLabel>First Name</FormLabel>
-              <Input
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                placeholder="First Name"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Last Name</FormLabel>
-              <Input
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                placeholder="Last Name"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Email"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Phone</FormLabel>
-              <Input
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="Phone"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Check In Key</FormLabel>
-              <Input
-                name="checkInKey"
-                value={formData.checkInKey}
-                onChange={handleInputChange}
-                placeholder="Check In Key"
-              />
-            </FormControl>
-          </ModalBody>
-          <ModalFooter justifyContent="flex-end">
-            <Button colorScheme="blue" onClick={handleSubmit}>
-              Submit
-            </Button>
-            <Button onClick={onClose} ml={3}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <MultiStepModal
+        isOpen={qrIsOpen}
+        onClose={qROnClose}
+        emailContent={emailContent}
+        setEmailContent={setEmailContent}
+      />
+      <AddParticipant
+        isOpen={isOpen}
+        onClose={onClose}
+        formData={formData}
+        handleSubmit={handleSubmit}
+        handleInputChange={handleInputChange}
+      />
     </DashboardLayout>
   );
 }
