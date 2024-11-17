@@ -202,12 +202,13 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             subject: subject,
           },
         );
-        if (response) {
+        if (response.status === 200) {
           showAlert({
             title: `Emails sent to ${response.data.nSuccess} people`,
             description: `Success: ${response.data.nSuccess} \nFailure: ${response.data}`,
             status: 'success',
           });
+          nextStep();
         } else {
           console.log(response.data, response.status, response);
         }
@@ -466,6 +467,11 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                     dangerouslySetInnerHTML={{ __html: renderHtml(emailContent) }}
                   />
                 </Box>
+              </Box>
+            )}
+            {step === 5 && (
+              <Box>
+                
               </Box>
             )}
           </ModalBody>

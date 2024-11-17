@@ -3,13 +3,14 @@ import { Button, useDisclosure } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
-import { useAlert } from '@/hooks/useAlert';
+import {useAlert}  from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import { CSVLink } from 'react-csv';
 import AddParticipant from '@/components/AddParticipant';
 import MultiStepModal from '@/components/MultiFormEmail';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
+
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -37,7 +38,7 @@ export default function Participants() {
   const router = useRouter();
   const showAlert = useAlert();
   const { orgId, eventId } = router.query;
-  const { loading, get } = useFetch();
+  const { loading, get,post } = useFetch();
   // const { accountDetails } = useContext(account);
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -58,8 +59,68 @@ export default function Participants() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
   const [emailContent, setEmailContent] = useState('');
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     console.log(formData);
+    const response = await post(`/core/organizations/${orgId}/events/${eventId}/participants`,{},
+      {
+        firstName:formData.firstName,
+        lastName:formData.lastName,
+        attributes:[],
+        phone:formData.phone, 
+        email:formData.email,
+        checkInKey:formData.checkInKey
+      }
+    );
+    console.log(response)
+    console.log(response !== null || response !== undefined)
+    if(response !== null || response !== undefined){
+      const { data, status } = response;
+      console.log('Hello world')
+      console.log(data);
+      console.log(participants)
+      if (status === 200) {
+        console.log('super!')
+        const value = {
+          addedAt:data.newParticipant.createdAt,
+          id:data.newParticipant.id,
+          checkInKey:data.newParticipant.checkInKey,
+          email:data.newParticipant.email,
+          firstName:data.newParticipant.firstName,
+          lastName:data.newParticipant.lastName,
+          numberOfAttributesAssigned:0,
+          numnerOfExtrasAssigned:0,
+          phone:data.newParticipant.phone,
+        }
+        setParticipants((prevValue)=>([...prevValue,value]));
+        // showAlert({
+        //   title: 'Success',
+        //   description: 'participant has been added successfully.',
+        //   status: 'success',
+        // });
+      }
+    else{
+      console.log('fuck u')
+        // showAlert({
+        //   title: 'Failure',
+        //   description: 'participant has not been added successfully.',
+        //   status: 'Failure',
+        // });
+      }
+    setFormData(
+      {
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        checkInKey: '',
+      }
+    )
+    console.log(participants);
+    }else{
+      console.log(response)
+      console.log('Hihihi')
+    }
     onClose();
   };
   const { isOpen: qrIsOpen, onOpen: qROnOpen, onClose: qROnClose } = useDisclosure();
