@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQueryClient } from 'react-query';
+// import { useQueryClient } from 'react-query';
 import axios from 'axios';
 
 import { useAuth0 } from '@auth0/auth0-react';
@@ -10,7 +10,6 @@ export const useRequests = () => {
   const [loading, setLoading] = useState(false);
 
   const get = async (endpoint = '', headers = {}) => {
-    const queryClient = useQueryClient(); // React Query client instance
     setLoading(true);
     try {
       const response = await axios.get(process.env.NEXT_PUBLIC_API_URL + endpoint, {
@@ -29,7 +28,7 @@ export const useRequests = () => {
       });
 
       // Update React Query cache
-      queryClient.setQueryData(endpoint, response.data);
+      // queryClient.setQueryData(endpoint, response.data);
 
       setLoading(false);
 
@@ -42,7 +41,7 @@ export const useRequests = () => {
   };
 
   const post = async (endpoint = '', headers = {}, body = {}, contentType = 'application/json') => {
-    const queryClient = useQueryClient(); // React Query client instance
+    // const queryClient = useQueryClient(); // React Query client instance
     setLoading(true);
     try {
       const { data, status } = await axios.post(process.env.NEXT_PUBLIC_API_URL + endpoint, body, {
@@ -61,7 +60,7 @@ export const useRequests = () => {
       });
 
       // Invalidate queries to refetch updated data
-      queryClient.invalidateQueries(endpoint);
+      // queryClient.invalidateQueries(endpoint);
 
       setLoading(false);
 
@@ -74,7 +73,7 @@ export const useRequests = () => {
   };
 
   const put = async (endpoint = '', headers = {}, body = {}) => {
-    const queryClient = useQueryClient(); // React Query client instance
+    // const queryClient = useQueryClient(); // React Query client instance
     setLoading(true);
     try {
       const { data, status } = await axios.put(process.env.NEXT_PUBLIC_API_URL + endpoint, body, {
@@ -93,7 +92,6 @@ export const useRequests = () => {
       });
 
       // Invalidate queries to refetch updated data
-      queryClient.invalidateQueries(endpoint);
 
       setLoading(false);
 
@@ -106,7 +104,7 @@ export const useRequests = () => {
   };
 
   const del = async (endpoint = '', headers = {}) => {
-    const queryClient = useQueryClient(); // React Query client instance
+    // const queryClient = useQueryClient(); // React Query client instance
     setLoading(true);
     try {
       const { data, status } = await axios.delete(process.env.NEXT_PUBLIC_API_URL + endpoint, {
@@ -125,7 +123,7 @@ export const useRequests = () => {
       });
 
       // Invalidate queries to refetch updated data
-      queryClient.invalidateQueries(endpoint);
+      // queryClient.invalidateQueries(endpoint);
 
       setLoading(false);
 

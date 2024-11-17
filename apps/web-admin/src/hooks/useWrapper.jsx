@@ -3,18 +3,27 @@ import { useQuery } from 'react-query';
 import { useRequests } from './useRequests';
 import { useMutation, useQueryClient } from 'react-query';
 const useWrapper = () => {
-  const useGetQuery = (key, endpoint, headers = {}, options = {}) => {
+  const queryClient = useQueryClient(); // React Query client instance
+  const useGetQuery = (key, endpoint, headers = {}, options = {}, setState = (value)=>{}) => {
     const { get } = useRequests();
     // console.log(key);
     return useQuery(
       key, // Unique query key
       () => get(endpoint, headers), // Function to fetch data
-      options, // React Query options like staleTime, refetchOnWindowFocus, etc.
+      // options, // React Query options like staleTime, refetchOnWindowFocus, etc.
+      {
+        ...options,
+        onSuccess: (response) => {
+          console.log(response);
+          setState(response);
+          queryClient.setQueryData(response.data);
+        },
+      },
     );
   };
 
   const useMutationWrapper = (method, endpoint, headers = {}, options = {}) => {
-    const queryClient = useQueryClient();
+    // const queryClient = useQueryClient();
     const { post, put, del } = useRequests();
 
     const mutationFn = {

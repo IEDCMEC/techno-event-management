@@ -8,6 +8,7 @@ import { account } from '@/contexts/MyContext';
 import { useMemo } from 'react';
 import axios from 'axios';
 import useWrapper from '@/hooks/useWrapper';
+import { useCallback } from 'react';
 
 export const ProtectedRoute = ({ children }) => {
   const router = useRouter();
@@ -28,11 +29,11 @@ export const ProtectedRoute = ({ children }) => {
     if (accountDetails.orgId) {
       // console.log('route')
       router.replace(`/${accountDetails.orgId}`);
-      // console.log('trigger');
-      // console.log(accountDetails);
     }
   }, [isAuthenticated, accountDetails.orgId]);
-
+  useEffect(() => {
+    console.log(accountDetails);
+  }, [accountDetails]);
   async function postOrg() {
     const id = user.sub.substring(6);
     const name = user.nickname;
@@ -51,7 +52,13 @@ export const ProtectedRoute = ({ children }) => {
     data: userCredsData,
     status: userCredsStatus,
     error: credsError,
-  } = useGetQuery('/core/users/mycreds', '/core/users/mycreds', {});
+  } = useGetQuery('/core/users/mycreds', '/core/users/mycreds', {}, {}, (response) => {
+    setAccountDetails((preValue) => ({
+      ...preValue,
+      role: response.data.data.role,
+      orgId: response.data.data.organizationId,
+    }));
+  });
   // const { mutate: postOrg } = usePostMutation('/core/organizations', {
   //   onSuccess: () => {
   //     showAlert({
@@ -70,12 +77,8 @@ export const ProtectedRoute = ({ children }) => {
     if (isAuthenticated) {
       console.log(userCredsData, userCredsStatus);
       if (userCredsStatus === 'success' && userCredsData) {
-        setAccountDetails((prevValue) => ({
-          ...prevValue,
-          role: userCredsData.data.role,
-          orgId: userCredsData.data.organizationId,
-        }));
-      } else if (userCredsStatus !== 'loading') {
+        console.log(userCredsData);
+      } else if (userCredsStatus !== 'loading' && userCredsStatus !== 'error') {
         const id = user.sub.substring(6);
         const name = user.nickname;
         postOrg({ id, name }); // Triggering the POST request using usePostMutation
