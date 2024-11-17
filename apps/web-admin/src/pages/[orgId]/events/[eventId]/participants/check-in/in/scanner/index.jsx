@@ -8,6 +8,7 @@ import Scanner from '@/components/Scanner';
 
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function CheckInParticipantWithScanner() {
   const { loading, post, get } = useFetch();
@@ -15,6 +16,8 @@ export default function CheckInParticipantWithScanner() {
 
   const router = useRouter();
   const { orgId, eventId } = router.query;
+
+  const {useGetQuery} = useWrapper();
 
   const [previousCheckInKey, setPreviousCheckInKey] = useState(null);
   const [checkInKey, setCheckInKey] = useState(null);
@@ -51,29 +54,28 @@ export default function CheckInParticipantWithScanner() {
     }
   };
 
-  useEffect(() => {
-    const getParticipantByCheckInKey = async () => {
-      if (checkInKey && previousCheckInKey !== checkInKey) {
-        const { data, status } = await get(
-          `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${checkInKey}`,
-        );
-
-        if (status === 200) {
-          setParticipant(data.participant);
-        } else {
-          showAlert({
-            title: 'Error',
-            description: data.error,
-            status: 'error',
-          });
-          setCheckInKey(null);
-        }
+  const {data, status, error} = useGetQuery(
+    ['/organizations/:orgId/events/:eventId/participants/check-in/:checkInKey', orgId, eventId, checkInKey],
+    `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${checkInKey}`,
+    {},
+    {
+      enabled: !!checkInKey && previousCheckInKey !== checkInKey && !fastMode,
+      onSuccess: (data) => {
+        setParticipant(data.participant);
+      },
+      onError: () => {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+        setCheckInKey(null);
       }
-    };
+    },
+  )
 
-    if (!fastMode && checkInKey && previousCheckInKey !== checkInKey) {
-      getParticipantByCheckInKey();
-    } else if (checkInKey && previousCheckInKey !== checkInKey) {
+  useEffect(() => {
+    if (checkInKey && previousCheckInKey !== checkInKey && fastMode) {
       handleSubmit();
     }
   }, [checkInKey]);

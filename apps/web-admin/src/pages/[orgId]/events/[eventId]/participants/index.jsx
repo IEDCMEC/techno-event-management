@@ -10,6 +10,7 @@ import AddParticipant from '@/components/AddParticipant';
 import MultiStepModal from '@/components/MultiFormEmail';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
+import useWrapper from '@/hooks/useWrapper'
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -38,21 +39,29 @@ export default function Participants() {
   const showAlert = useAlert();
   const { orgId, eventId } = router.query;
   const { loading, get } = useFetch();
+  const {useGetQuery} = useWrapper();
+
   // const { accountDetails } = useContext(account);
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/participants`,
-      );
-      if (status === 200) {
+
+  const {data, status, error} = useGetQuery(
+    ['/organizations/:orgId/events/:eventId/participants', orgId, eventId],
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    {},
+    {
+      enabled: !!orgId && !!orgId,
+      onSuccess: () => {
         setParticipants(data.participants || []);
-      } else {
-        showAlert({ title: 'Error', description: data.error, status: 'error' });
+      },
+      onError: () => {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
       }
-    };
-    fetchParticipants();
-    return () => fetchParticipants();
-  }, [orgId, eventId]);
+    }
+  )
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));

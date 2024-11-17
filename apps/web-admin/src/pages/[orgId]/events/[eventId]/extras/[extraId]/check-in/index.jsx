@@ -7,6 +7,7 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function CheckInExtra() {
   const { loading, post, get } = useFetch();
@@ -14,6 +15,8 @@ export default function CheckInExtra() {
 
   const router = useRouter();
   const { orgId, eventId, extraId } = router.query;
+
+  const {useGetQuery} = useWrapper();
 
   const [participantId, setParticipantId] = useState(null);
   const [participants, setParticipants] = useState([]);
@@ -45,23 +48,15 @@ export default function CheckInExtra() {
     }
   };
 
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/participants`,
-      );
-      if (status === 200) {
-        setParticipants(data.participants);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-    fetchParticipants();
-  }, [orgId, eventId]);
+  const {data, status, error} = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    {},
+    {},
+    (data) => {
+      setParticipants(data.participants);
+    }
+  )
 
   return (
     <DashboardLayout

@@ -72,23 +72,23 @@ router.get('/organizations/:orgId/members', validateOrganizationUser, getOrganiz
 router.post('/organizations/:orgId/members', validateOrganizationAdmin, addOrganizationMember);
 
 router.get('/organizations/:orgId/events', getEvents); //aaron done
-router.get('/organizations/:orgId/events/:eventId', getEventStats); //midhun
-router.post('/organizations/:orgId/events', createNewEvent); //midhun
+router.get('/organizations/:orgId/events/:eventId', getEventStats); //midhun - done
+router.post('/organizations/:orgId/events', createNewEvent);
 
-router.get('/organizations/:orgId/events/:eventId/participants', getAllParticipants); //midhun
+router.get('/organizations/:orgId/events/:eventId/participants', getAllParticipants); //midhun - done
 router.post('/organizations/:orgId/events/:eventId/participants', addNewParticipant);
 router.put('/organizations/:orgId/events/:eventId/participants/:participantId', editParticipant);
 
 router.get(
   '/organizations/:orgId/events/:eventId/participants/check-in',
   getAllParticipantsCheckInDetails,
-); //midhun
-router.get('/organizations/:orgId/events/:eventId/participants/:participantId', getParticipantById); //midhun
+); //midhun - done
+router.get('/organizations/:orgId/events/:eventId/participants/:participantId', getParticipantById); //midhun - done
 
 router.get(
   '/organizations/:orgId/events/:eventId/participants/check-in/:checkInKey',
   getParticipantBycheckInKey,
-); //midhun
+); //midhun - done
 
 router.post('/organizations/:orgId/events/:eventId/participants/check-in', checkInParticipant);
 router.post('/organizations/:orgId/events/:eventId/participants/check-out', checkOutParticipant);

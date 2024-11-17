@@ -8,6 +8,7 @@ import Scanner from '@/components/Scanner';
 
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper'
 
 export default function CheckInParticipantWithScanner() {
   const { loading, post, get } = useFetch();
@@ -15,6 +16,8 @@ export default function CheckInParticipantWithScanner() {
 
   const router = useRouter();
   const { orgId, eventId, extraId } = router.query;
+
+  const {useGetQuery} = useWrapper();
 
   const [previousPartiicpantId, setPreviousParticipantId] = useState(null);
   const [participantId, setParticipantId] = useState(null);
@@ -64,23 +67,15 @@ export default function CheckInParticipantWithScanner() {
     return () => clearInterval(intervalId);
   }, [previousPartiicpantId]);
 
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/participants`,
-      );
-      if (status === 200) {
-        setParticipants(data.participants);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-    fetchParticipants();
-  }, [orgId, eventId]);
+  const {data, status, error} = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    {},
+    {},
+    (data) => {
+      setParticipants(data.participants);
+    }
+  )
 
   return (
     <DashboardLayout
