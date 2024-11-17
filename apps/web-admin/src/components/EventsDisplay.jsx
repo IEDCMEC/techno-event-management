@@ -22,15 +22,13 @@ import { useRouter } from 'next/router';
 
 const EventsDisplay = () => {
   const [events, setEvents] = useState([]);
-  const { useGetQuery} = useWrapper()
+  const { useGetQuery } = useWrapper();
 
   const router = useRouter();
   const { orgId } = router.query;
 
   const showAlert = useAlert();
   const { loading, get } = useFetch();
-
-
 
   const { data, status, error } = useGetQuery(
     `/core/organizations/${orgId}/events`,

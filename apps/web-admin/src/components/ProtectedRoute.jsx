@@ -13,11 +13,11 @@ import { useCallback } from 'react';
 
 import { title } from 'process';
 
-
 export const ProtectedRoute = ({ children }) => {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const { accountDetails, setAccountDetails, updateAccountDetails } = useContext(account);
+  const showAlert = useAlert();
   const { useGetQuery, usePostMutation } = useWrapper();
   const handleLogin = async () => {
     loginWithRedirect({
@@ -42,8 +42,8 @@ export const ProtectedRoute = ({ children }) => {
     const id = user.sub.substring(6);
     const name = user.nickname;
     const response = await post(`/core/organizations`, {}, { id, name });
-    if(response){
-      const { data, mystatus } = response; 
+    if (response) {
+      const { data, mystatus } = response;
       console.log('created');
       if (mystatus === 200) {
         showAlert({
@@ -52,15 +52,12 @@ export const ProtectedRoute = ({ children }) => {
           status: 'success',
         });
       }
-    }
-    else{
+    } else {
       showAlert({
-        title:"Authentication Error",
-        description:"Log out and then sign in again!!"
-      })
+        title: 'Authentication Error',
+        description: 'Log out and then sign in again!!',
+      });
     }
-
-    
   }
 
   const {

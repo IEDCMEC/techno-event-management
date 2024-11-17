@@ -29,22 +29,21 @@ export default function OrganizationById() {
   //   orgId !== undefined , orgId !== accountDetails?.orgId , accountDetails?.orgId === undefined,
   // );
   // console.log(orgId, accountDetails.orgId);
-  
 
-    const { data, status, error } = useGetQuery(
-      `/core/organizations/${orgId}`,
-      `/core/organizations/${orgId}`,
-      {}, // headers
-      {}, // options
-      (data)=>{
-        setAccountDetails((prev) => ({
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}`,
+    `/core/organizations/${orgId}`,
+    {}, // headers
+    {}, // options
+    (data) => {
+      setAccountDetails((prev) => ({
         ...prev,
         name: data.data.organization.name || '',
         nEvents: data.data.organization.numberOfEvents || 0,
         nMembers: data.data.organization.numberOfMembers || 0,
-      }));}
-    );
-  
+      }));
+    },
+  );
 
   // Use useEffect to respond to the result of the hook
   // Only trigger when data, status, or error changes

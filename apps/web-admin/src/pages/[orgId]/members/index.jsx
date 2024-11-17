@@ -40,8 +40,9 @@ export default function OrganizationMembers() {
     `/core/organizations/${orgId}/members`,
     {}, // headers
     {}, // options
-    (data)=>{
-      setMembers(data.data.organizationUsers || []);}
+    (data) => {
+      setMembers(data.data.organizationUsers || []);
+    },
   );
 
   return (
