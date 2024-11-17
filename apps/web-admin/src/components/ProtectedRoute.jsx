@@ -7,12 +7,13 @@ import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
 import { useMemo } from 'react';
 import axios from 'axios';
+import useWrapper from '@/hooks/useWrapper';
 
 export const ProtectedRoute = ({ children }) => {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const { accountDetails, setAccountDetails, updateAccountDetails } = useContext(account);
-
+  const { useGetQuery, usePostMutation } = useWrapper();
   const handleLogin = async () => {
     loginWithRedirect({
       authorizationParams: {
@@ -45,37 +46,45 @@ export const ProtectedRoute = ({ children }) => {
       });
     }
   }
-  async function checkOrg() {
-    const response = await get('/core/users/mycreds');
-    // console.log(response.data.data);
-    if (response.status === 200) {
-      setAccountDetails((preValue) => {
-        return {
-          ...preValue,
-          role: `${response.data.data.role}`,
-          orgId: `${response.data.data.organizationId}`,
-        };
-      });
-    } else {
-      postOrg();
-      // router.replace('/404');
-    }
-  }
 
-  // useEffect();
-  useMemo(async () => {
-    // if (!isAuthenticated) {
-    //   router.replace('/');
-    //   console.log('not check')
-    // } else {
-    //   checkOrg();
-    //   // console.log(user.sub.substring(6));
-    // }
+  const {
+    data: userCredsData,
+    status: userCredsStatus,
+    error: credsError,
+  } = useGetQuery('/core/users/mycreds', '/core/users/mycreds', {});
+  // const { mutate: postOrg } = usePostMutation('/core/organizations', {
+  //   onSuccess: () => {
+  //     showAlert({
+  //       title: 'Success',
+  //       description: 'Organization has been created successfully.',
+  //       status: 'success',
+  //     });
+  //   },
+  //   onError: (error) => {
+  //     console.error('Error creating organization:', error);
+  //   },
+  // });
+
+  // Replace the `useMemo` with the updated `checkOrg` logic
+  useMemo(() => {
     if (isAuthenticated) {
-      checkOrg();
-      // console.log('trigger');
+      console.log(userCredsData, userCredsStatus);
+      if (userCredsStatus === 'success' && userCredsData) {
+        setAccountDetails((prevValue) => ({
+          ...prevValue,
+          role: userCredsData.data.role,
+          orgId: userCredsData.data.organizationId,
+        }));
+      } else if (userCredsStatus !== 'loading') {
+        const id = user.sub.substring(6);
+        const name = user.nickname;
+        postOrg({ id, name }); // Triggering the POST request using usePostMutation
+        // router.replace('/404'); // Uncomment if you want to navigate to a 404 page
+      }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, userCredsStatus, userCredsData]);
+
+  // }
   if (!isLoading) {
     if (!isAuthenticated && router.pathname !== '/auth' && router.pathname !== '/') {
       router.replace('/');
