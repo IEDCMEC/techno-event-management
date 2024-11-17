@@ -11,11 +11,13 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
 import { useMemo } from 'react';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function OrganizationById() {
   const router = useRouter();
   const { orgId } = router.query;
   const { user, isAuthenticated } = useAuth0();
+  const { useGetQuery } = useWrapper();
   // console.log(user);
   const showAlert = useAlert();
 
@@ -27,30 +29,25 @@ export default function OrganizationById() {
   //   orgId !== undefined , orgId !== accountDetails?.orgId , accountDetails?.orgId === undefined,
   // );
   // console.log(orgId, accountDetails.orgId);
-  useMemo(async () => {
-    // const fetchOrganizationStats = async () => {
-    if (orgId !== undefined && accountDetails?.name === undefined) {
-      const { data, status } = await get(`/core/organizations/${orgId}`);
-      // console.log(data);
-      // console.log('hihihi')
-      if (status === 200) {
-        setAccountDetails((preValue) => ({
-          ...preValue,
-          name: data.organization.name || '',
-          nEvents: data.organization.numberOfEvents || 0,
-          nMembers: data.organization.numberOfMembers || 0,
-        }));
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    }
-    // };
-    // fetchOrganizationStats();
-  }, [orgId]);
+  
+
+    const { data, status, error } = useGetQuery(
+      `/core/organizations/${orgId}`,
+      `/core/organizations/${orgId}`,
+      {}, // headers
+      {}, // options
+      (data)=>{
+        setAccountDetails((prev) => ({
+        ...prev,
+        name: data.data.organization.name || '',
+        nEvents: data.data.organization.numberOfEvents || 0,
+        nMembers: data.data.organization.numberOfMembers || 0,
+      }));}
+    );
+  
+
+  // Use useEffect to respond to the result of the hook
+  // Only trigger when data, status, or error changes
   // console.log(accountDetails?.orgId);
   return (
     <DashboardLayout

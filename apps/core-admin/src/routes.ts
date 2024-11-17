@@ -61,17 +61,17 @@ router.get('/', (req: any, res: any) => {
 
 router.get('/users/mycreds', myCredential); //done
 
-router.get('/users/me', fetchAccountDetails); //aaron
-router.put('/users/me', updateAccountDetails); //aaron
+router.get('/users/me', fetchAccountDetails); //aaron not used
+router.put('/users/me', updateAccountDetails); //aaron put request
 
-router.get('/organizations', getUsersOrganizations); //aaron
-router.get('/organizations/:orgId', getOrganizationStats); //aaron
+router.get('/organizations', getUsersOrganizations); //aaron not used
+router.get('/organizations/:orgId', getOrganizationStats); //aaron done
 router.post('/organizations', createNewOrganization);
 
-router.get('/organizations/:orgId/members', validateOrganizationUser, getOrganizationMembers); // aaron
+router.get('/organizations/:orgId/members', validateOrganizationUser, getOrganizationMembers); // aaron done
 router.post('/organizations/:orgId/members', validateOrganizationAdmin, addOrganizationMember);
 
-router.get('/organizations/:orgId/events', getEvents); //aaron
+router.get('/organizations/:orgId/events', getEvents); //aaron done
 router.get('/organizations/:orgId/events/:eventId', getEventStats); //midhun
 router.post('/organizations/:orgId/events', createNewEvent); //midhun
 
