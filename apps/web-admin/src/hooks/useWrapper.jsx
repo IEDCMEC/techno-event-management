@@ -16,7 +16,7 @@ const useWrapper = () => {
         onSuccess: (response) => {
           console.log(response);
           setState(response);
-          queryClient.setQueryData(response.data);
+          queryClient.setQueryData(key,response.data);
         },
       },
     );
