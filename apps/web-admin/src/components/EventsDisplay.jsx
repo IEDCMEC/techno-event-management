@@ -14,6 +14,7 @@ import {
   AccordionIcon,
   SkeletonText,
 } from '@chakra-ui/react';
+import useWrapper from '@/hooks/useWrapper';
 
 import NextLink from 'next/link';
 import { MdOutlineEvent } from 'react-icons/md';
@@ -21,6 +22,7 @@ import { useRouter } from 'next/router';
 
 const EventsDisplay = () => {
   const [events, setEvents] = useState([]);
+  const { useGetQuery} = useWrapper()
 
   const router = useRouter();
   const { orgId } = router.query;
@@ -28,23 +30,18 @@ const EventsDisplay = () => {
   const showAlert = useAlert();
   const { loading, get } = useFetch();
 
-  useEffect(() => {
-    if (orgId) {
-      const fetchEvents = async () => {
-        const { data, status } = await get(`/core/organizations/${orgId}/events`);
-        if (status === 200) {
-          setEvents(data.events || []);
-        } else {
-          showAlert({
-            title: 'Error',
-            description: data.error,
-            status: 'error',
-          });
-        }
-      };
-      fetchEvents();
-    }
-  }, [orgId]);
+
+
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events`,
+    `/core/organizations/${orgId}/events`,
+    {}, // headers
+    {}, // options
+    (data) => {
+      console.log(data);
+      setEvents(data.data.events || []);
+    },
+  );
 
   if (!orgId || loading) {
     return (

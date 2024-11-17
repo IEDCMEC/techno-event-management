@@ -6,7 +6,6 @@ const useWrapper = () => {
   const queryClient = useQueryClient(); // React Query client instance
   const useGetQuery = (key, endpoint, headers = {}, options = {}, setState = (value)=>{}) => {
     const { get } = useRequests();
-    // console.log(key);
     return useQuery(
       key, // Unique query key
       () => get(endpoint, headers), // Function to fetch data
@@ -14,9 +13,10 @@ const useWrapper = () => {
       {
         ...options,
         onSuccess: (response) => {
-          console.log(response);
-          setState(response);
-          queryClient.setQueryData(endpoint,response);
+          if (response.status == 200) {
+            setState(response);
+            queryClient.setQueryData(endpoint, response);
+          }
         },
       },
     );
