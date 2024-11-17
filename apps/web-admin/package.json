@@ -20,6 +20,7 @@
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.9",
     "@mui/x-data-grid": "^6.19.3",
+    "@next/bundle-analyzer": "^15.0.3",
     "@next/font": "^14.2.13",
     "@radix-ui/react-slot": "^1.1.0",
     "@uiw/react-markdown-preview": "^5.1.3",
