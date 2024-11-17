@@ -121,13 +121,13 @@ router.post('/organizations/:orgId/events/:eventId/extras/:extraId/check-in', ch
 router.post('/organizations/:orgId/events/:eventId/extras', addNewExtra);
 
 //mailer routes
-router.post('/organizations/:orgId/newEmailProject', newMailProject);
-router.post('/organizations/:orgId/updateEmailProject', updateMailProject);
-router.get('/organizations/:orgId/getEmailProjects', getMailProjects); //subru
+router.post('/organizations/:orgId/newEmailProject', newMailProject); //done
+router.post('/organizations/:orgId/updateEmailProject', updateMailProject); //done
+router.get('/organizations/:orgId/getEmailProjects', getMailProjects); // done
 router.get('/organizations/:orgId/getMailStatus', getMailStatus); //subru
-router.post('/organizations/:orgId/addNewRecipient', addNewRecipient);
-router.post('/organizations/:orgId/addNewRecipients', addNewRecipients);
-router.post('/organizations/:orgId/events/:eventId/mailQR', sendMailWithQR);
+router.post('/organizations/:orgId/addNewRecipient', addNewRecipient); //done
+router.post('/organizations/:orgId/addNewRecipients', addNewRecipients); //done
+router.post('/organizations/:orgId/events/:eventId/mailQR', sendMailWithQR); // done
 
 // OTP routes
 router.post('/organizations/sendOTP', sendOTP);

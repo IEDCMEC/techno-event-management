@@ -4,7 +4,7 @@ import { useRequests } from './useRequests';
 import { useMutation, useQueryClient } from 'react-query';
 const useWrapper = () => {
   const queryClient = useQueryClient(); // React Query client instance
-  const useGetQuery = (key, endpoint, headers = {}, options = {}, setState = (value)=>{}) => {
+  const useGetQuery = (key, endpoint, headers = {}, options = {}, setState = (value) => {}) => {
     const { get } = useRequests();
     return useQuery(
       key, // Unique query key
@@ -13,7 +13,7 @@ const useWrapper = () => {
       {
         ...options,
         onSuccess: (response) => {
-          if (response.status == 200) {
+          if (response && response.status == 200) {
             setState(response);
             queryClient.setQueryData(endpoint, response);
           }
@@ -22,7 +22,13 @@ const useWrapper = () => {
     );
   };
 
-  const useMutationWrapper = (method, endpoint, headers = {}, options = {}) => {
+  const useMutationWrapper = (
+    method,
+    endpoint,
+    headers = {},
+    options = {},
+    myFunction = (value) => {},
+  ) => {
     // const queryClient = useQueryClient();
     const { post, put, del } = useRequests();
 
@@ -31,10 +37,13 @@ const useWrapper = () => {
       put,
       delete: del,
     }[method];
+    console.log(options?.invalidateKeys);
+    console.log(method);
 
-    return useMutation((body) => mutationFn(endpoint, headers, body), {
+    return useMutation((body = {}) => mutationFn(endpoint, headers, body), {
       ...options,
       onSuccess: (data, variables, context) => {
+        myFunction({ data, variables, context });
         const keysToInvalidate = options?.invalidateKeys || [];
 
         if (options?.invalidateDelay) {
@@ -52,16 +61,16 @@ const useWrapper = () => {
     });
   };
 
-  const usePostMutation = (endpoint, headers = {}, options = {}) => {
-    return useMutationWrapper('post', endpoint, headers, options);
+  const usePostMutation = (endpoint, headers = {}, options = {}, myFunction = (value) => {}) => {
+    return useMutationWrapper('post', endpoint, headers, options, myFunction);
   };
 
-  const usePutMutation = (endpoint, headers = {}, options = {}) => {
-    return useMutationWrapper('put', endpoint, headers, options);
+  const usePutMutation = (endpoint, headers = {}, options = {}, myFunction = (value) => {}) => {
+    return useMutationWrapper('put', endpoint, headers, options, myFunction);
   };
 
-  const useDeleteMutation = (endpoint, headers = {}, options = {}) => {
-    return useMutationWrapper('delete', endpoint, headers, options);
+  const useDeleteMutation = (endpoint, headers = {}, options = {}, myFunction = (value) => {}) => {
+    return useMutationWrapper('delete', endpoint, headers, options, myFunction);
   };
 
   return { useGetQuery, usePostMutation, usePutMutation, useDeleteMutation };
