@@ -7,10 +7,11 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import Scanner from '@/components/Scanner';
 
 import { useAlert } from '@/hooks/useAlert';
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function CheckInParticipantWithScanner() {
-  const { loading, post, get } = useFetch();
+  // const { loading, post, get } = useFetch();
   const showAlert = useAlert();
 
   const router = useRouter();
@@ -19,33 +20,53 @@ export default function CheckInParticipantWithScanner() {
   const [previousPartiicpantId, setPreviousParticipantId] = useState(null);
   const [participantId, setParticipantId] = useState(null);
   const [participants, setParticipants] = useState([]);
-
-  const handleSubmit = async () => {
-    const { data, status } = await post(
-      `/core/organizations/${orgId}/events/${eventId}/extras/${extraId}/check-in`,
-      {},
-      {
-        participantId,
-        checkedInAt: new Date().toISOString(),
+  const { useGetQuery, usePostMutation } = useWrapper();
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    {},
+    {
+      onSuccess: (response) => {
+        setParticipants(response.data.participants);
       },
-    );
-    if (status === 200) {
-      showAlert({
-        title: 'Success',
-        description: data.message,
-        status: 'success',
-      });
-      setPreviousParticipantId(participantId);
-      setParticipantId(null);
-    } else {
-      showAlert({
-        title: 'Error',
-        description: data.error,
-        status: 'error',
-      });
-      setParticipantId(null);
-      setPreviousParticipantId(null);
-    }
+      onError: (error) => {
+        showAlert({
+          title: 'Error',
+          description: error,
+          status: 'error',
+        });
+      },
+    },
+  );
+  const { mutation: handleCheckInMutation } = usePostMutation(
+    `/core/organizations/${orgId}/events/${eventId}/extras/${extraId}/check-in`,
+    {},
+    {
+      onSuccess: (response) => {
+        showAlert({
+          title: 'Success',
+          description: response.data.message,
+          status: 'success',
+        });
+        setPreviousParticipantId(participantId);
+        setParticipantId(null);
+      },
+      onError: (error) => {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+        setParticipantId(null);
+        setPreviousParticipantId(null);
+      },
+    },
+  );
+  const handleSubmit = async () => {
+    handleCheckInMutation({
+      participantId,
+      checkedInAt: new Date().toISOString(),
+    });
   };
 
   useEffect(() => {
@@ -64,23 +85,23 @@ export default function CheckInParticipantWithScanner() {
     return () => clearInterval(intervalId);
   }, [previousPartiicpantId]);
 
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/participants`,
-      );
-      if (status === 200) {
-        setParticipants(data.participants);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-    fetchParticipants();
-  }, [orgId, eventId]);
+  // useEffect(() => {
+  //   const fetchParticipants = async () => {
+  //     const { data, status } = await get(
+  //       `/core/organizations/${orgId}/events/${eventId}/participants`,
+  //     );
+  //     if (status === 200) {
+  //       setParticipants(data.participants);
+  //     } else {
+  //       showAlert({
+  //         title: 'Error',
+  //         description: data.error,
+  //         status: 'error',
+  //       });
+  //     }
+  //   };
+  //   fetchParticipants();
+  // }, [orgId, eventId]);
 
   return (
     <DashboardLayout

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import {
   Box,
@@ -28,20 +28,23 @@ const EventsDisplay = () => {
   const { orgId } = router.query;
 
   const showAlert = useAlert();
-  const { loading, get } = useFetch();
 
-  const { data, status, error } = useGetQuery(
+  const {
+    data,
+    status,
+    error,
+    isLoading: loading,
+  } = useGetQuery(
     `/core/organizations/${orgId}/events`,
     `/core/organizations/${orgId}/events`,
     {}, // headers
     {}, // options
     (data) => {
-      console.log(data);
       setEvents(data.data.events || []);
     },
   );
-
-  if (!orgId || loading) {
+  // console.log(loading);
+  if (!orgId || loading || events.length === 0) {
     return (
       <div>
         <SkeletonText m={[4, 2, 4, 2]} noOfLines={2} spacing="4" skeletonHeight="2" />

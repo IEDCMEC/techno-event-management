@@ -106,19 +106,19 @@ router.put(
   updateParticipantAttribute,
 );
 
-router.get('/organizations/:orgId/events/:eventId/attributes', getAllAttributes); //subru
-router.get('/organizations/:orgId/events/:eventId/attributes/:attributeId', getAttributeById); //subru
+router.get('/organizations/:orgId/events/:eventId/attributes', getAllAttributes); // done
+router.get('/organizations/:orgId/events/:eventId/attributes/:attributeId', getAttributeById); //done
 router.get(
   '/organizations/:orgId/events/:eventId/attributes/:attributeId/participants',
   getAttributeParticipants,
-); //subru
-router.put('/organizations/:orgId/events/:eventId/attributes/:attributeId', editAttribute);
-router.post('/organizations/:orgId/events/:eventId/attributes', addNewAttribute);
+); //not found
+router.put('/organizations/:orgId/events/:eventId/attributes/:attributeId', editAttribute); //not found
+router.post('/organizations/:orgId/events/:eventId/attributes', addNewAttribute); //done
 
-router.get('/organizations/:orgId/events/:eventId/extras', getAllExtras); //subru
-router.get('/organizations/:orgId/events/:eventId/extras/:extraId', getExtraById); //subru
-router.post('/organizations/:orgId/events/:eventId/extras/:extraId/check-in', checkInExtra);
-router.post('/organizations/:orgId/events/:eventId/extras', addNewExtra);
+router.get('/organizations/:orgId/events/:eventId/extras', getAllExtras); //done
+router.get('/organizations/:orgId/events/:eventId/extras/:extraId', getExtraById); //done
+router.post('/organizations/:orgId/events/:eventId/extras/:extraId/check-in', checkInExtra); //done
+router.post('/organizations/:orgId/events/:eventId/extras', addNewExtra); //done
 
 //mailer routes
 router.post('/organizations/:orgId/newEmailProject', newMailProject); //done

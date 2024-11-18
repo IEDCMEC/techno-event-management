@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import DataDisplay from '@/components/DataDisplay';
 import { CSVLink } from 'react-csv';
@@ -36,12 +36,17 @@ export default function Events() {
   const { orgId } = router.query;
   const showAlert = useAlert();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
   const { useGetQuery } = useWrapper();
 
   const [events, setEvents] = useState([]);
 
-  const { data, status, error } = useGetQuery(
+  const {
+    data,
+    status,
+    error,
+    isLoading: loading,
+  } = useGetQuery(
     `/core/organizations/${orgId}/events`,
     `/core/organizations/${orgId}/events`,
     {}, // headers
