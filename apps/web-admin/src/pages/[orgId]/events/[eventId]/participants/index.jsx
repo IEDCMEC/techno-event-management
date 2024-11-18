@@ -61,7 +61,7 @@ export default function Participants() {
   const [emailContent, setEmailContent] = useState('');
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    //console.log(formData);
     const response = await post(`/core/organizations/${orgId}/events/${eventId}/participants`,{},
       {
         firstName:formData.firstName,
@@ -72,15 +72,15 @@ export default function Participants() {
         checkInKey:formData.checkInKey
       }
     );
-    console.log(response)
-    console.log(response !== null || response !== undefined)
+    //console.log(response)
+    //console.log(response !== null || response !== undefined)
     if(response !== null || response !== undefined){
       const { data, status } = response;
-      console.log('Hello world')
-      console.log(data);
-      console.log(participants)
+      //console.log('Hello world')
+      //console.log(data);
+      //console.log(participants)
       if (status === 200) {
-        console.log('super!')
+        //console.log('super!')
         const value = {
           addedAt:data.newParticipant.createdAt,
           id:data.newParticipant.id,
@@ -116,10 +116,10 @@ export default function Participants() {
         checkInKey: '',
       }
     )
-    console.log(participants);
+    //console.log(participants);
     }else{
-      console.log(response)
-      console.log('Hihihi')
+      //console.log(response)
+      //console.log('Hihihi')
     }
     onClose();
   };
