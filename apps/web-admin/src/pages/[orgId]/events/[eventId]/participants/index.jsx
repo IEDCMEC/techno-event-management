@@ -100,7 +100,7 @@ export default function Participants() {
         // });
       }
     else{
-      console.log('fuck u')
+      //console.log('fuck u')
         // showAlert({
         //   title: 'Failure',
         //   description: 'participant has not been added successfully.',

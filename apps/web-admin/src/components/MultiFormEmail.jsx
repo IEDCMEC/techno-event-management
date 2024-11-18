@@ -37,8 +37,10 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor').then((mod) => mod.
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
 import DataDisplay from './DataDisplay';
+import DataDisplayNew from './DataDisplayNew';
 import { useRouter } from 'next/router';
 import useWrapper from '@/hooks/useWrapper';
+import { ReceiptCent } from 'lucide-react';
 
 // const EditerMarkdown = dynamic(
 //   () =>
@@ -129,7 +131,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         setSelectedProject((preValue) => {
           return {
             ...preValue,
-            html_template: response.data.data.html_template,
+            html_template: response.data.html_template,
           };
         });
         showAlert({
@@ -185,7 +187,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       addNewRecipients();
     }
     console.log(step);
-    setStep((prev) => Math.min(prev + 1, 4));
+    setStep((prev) => Math.min(prev + 1, 5));
   };
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
@@ -199,8 +201,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
           description: `Success: ${response.data.nSuccess} \nFailure: ${response.data.nFailure}`,
           status: 'success',
         });
-        setStep(1);
-        onClose();
+        nextStep();
+        //setStep(1);
+        //onClose();
       },
       onError: (error) => {
         console.log(error);
@@ -217,6 +220,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         html: template,
         subject: subject,
       });
+     
     }
   };
 
@@ -251,6 +255,10 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       console.log(data);
     },
   );
+  const handleSubmit = () => {
+    setStep(1);
+    onClose();
+  }
   const handleEmailProjectSubmit = async (e) => {
     e.preventDefault();
     // console.log('Hekki')
@@ -478,9 +486,42 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
               </Box>
             )}
             {step === 5 && (
-              <Box>
+              <FormControl mb={2}>
+                <FormLabel
+
+                >Emails sent to</FormLabel>
+                <DataDisplayNew
+                  columns={[
+                    { field: 'checkInKey', headerName: 'QR Code' },
+                    { field: 'firstName', headerName: 'Name' },
+                    { field: 'email', headerName: 'Email' },
+                  ]}
+                  rows = {recipients}
+                  min-height="300px"
+                  overflowY="visible"
                 
-              </Box>
+                >
+                  
+                </DataDisplayNew>
+                <FormLabel
+                  mt="50px"
+                >Email not sent to</FormLabel>
+                <DataDisplayNew
+                   columns={[
+                    { field: 'checkInKey', headerName: 'QR Code' },
+                    { field: 'firstName', headerName: 'Name' },
+                    { field: 'email', headerName: 'Email' },
+                  ]}
+                  rows = {participants.filter(
+                    participant => !recipients.includes(participant)
+                  )}
+                  min-height="300px"
+                  overflowY="visible"
+                >
+                  
+                </DataDisplayNew>   
+              </FormControl>
+             
             )}
           </ModalBody>
 
@@ -488,16 +529,16 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: step > 1 ? 'space-between' : 'center',
+              justifyContent: step ===1 ? 'center' : step<5?'space-between':'flex-end',
               padding: '20px',
             }}
           >
-            {step > 1 && (
+            {step > 1 && step!==5 && (
               <Button onClick={prevStep} mr={3}>
                 Previous
               </Button>
             )}
-            {step < 4 ? (
+            {step < 4 &&(
               <Button
                 onClick={() => {
                   nextStep();
@@ -506,11 +547,25 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
               >
                 Next
               </Button>
-            ) : (
+            )}
+            {step===4 &&(
               <Button colorScheme="blue" onClick={sendEmails}>
                 Send Emails
               </Button>
             )}
+            {step===5?
+              <Button
+                
+                onClick={() => {
+                  handleSubmit();
+                  //   console.log(step);
+                }}
+                >
+                Close
+              </Button>
+            :
+              <></>
+            }
           </ModalFooter>
         </ModalContent>
       </Modal>
