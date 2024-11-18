@@ -288,7 +288,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             height: { base: '600px', md: '750px' },
           }}
         >
-          <ModalHeader>Send QR Tickets</ModalHeader>
+          <ModalHeader
+            fontSize="28px"
+          >Send QR Tickets</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {step === 1 && (
@@ -488,8 +490,8 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             {step === 5 && (
               <FormControl mb={2}>
                 <FormLabel
-
-                >Emails sent to</FormLabel>
+                  fontWeight="bold"
+                >Emails sent:</FormLabel>
                 <DataDisplayNew
                   columns={[
                     { field: 'checkInKey', headerName: 'QR Code' },
@@ -504,8 +506,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   
                 </DataDisplayNew>
                 <FormLabel
+                  fontWeight="bold"
                   mt="50px"
-                >Email not sent to</FormLabel>
+                >Email not sent:</FormLabel>
                 <DataDisplayNew
                    columns={[
                     { field: 'checkInKey', headerName: 'QR Code' },
