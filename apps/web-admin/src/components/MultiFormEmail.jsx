@@ -168,6 +168,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     data: emailContentData,
     status: emailContentStatus,
     error: emailContentError,
+    isLoading: loading,
   } = useGetQuery(
     `/core/organizations/${accountDetails.orgId}/getEmailProjects`,
     `/core/organizations/${accountDetails.orgId}/getEmailProjects`,

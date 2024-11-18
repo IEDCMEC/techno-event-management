@@ -18,7 +18,7 @@ export const ProtectedRoute = ({ children }) => {
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const { accountDetails, setAccountDetails, updateAccountDetails } = useContext(account);
   const showAlert = useAlert();
-  const { useGetQuery, usePostMutation } = useWrapper();
+  const { useGetQuery } = useWrapper();
   const handleLogin = async () => {
     loginWithRedirect({
       authorizationParams: {
@@ -26,7 +26,7 @@ export const ProtectedRoute = ({ children }) => {
       },
     });
   };
-  const { loading, get, post } = useFetch();
+  const { post } = useFetch();
   // useEffect();
   useMemo(() => {
     console.log(accountDetails);
@@ -64,6 +64,7 @@ export const ProtectedRoute = ({ children }) => {
     data: userCredsData,
     status: userCredsStatus,
     error: credsError,
+    isLoading: loading,
   } = useGetQuery('/core/users/mycreds', '/core/users/mycreds', {}, {}, (response) => {
     setAccountDetails((preValue) => ({
       ...preValue,

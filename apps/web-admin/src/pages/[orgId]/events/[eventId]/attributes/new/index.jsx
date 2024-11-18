@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function NewAttributeForm({ onClose }) {
   const { loading, post } = useFetch();
@@ -11,29 +12,33 @@ export default function NewAttributeForm({ onClose }) {
   const { orgId, eventId } = router.query;
 
   const [name, setName] = useState('');
-
+  const { usePostMutation } = useWrapper();
+  const { mutate: handleAttributeMutation } = usePostMutation(
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    {},
+    {
+      onSuccess: () => {
+        showAlert({
+          title: 'Success',
+          description: 'Attribute has been added successfully.',
+          status: 'success',
+        });
+        onClose();
+        router.push(`/${orgId}/events/${eventId}/attributes`);
+      },
+      onError: (error) => {
+        showAlert({
+          title: 'Error',
+          description: error,
+          status: 'error',
+        });
+      },
+      invalidateKeys: [`/core/organizations/${orgId}/events/${eventId}/attributes`],
+    },
+  );
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data, status } = await post(
-      `/core/organizations/${orgId}/events/${eventId}/attributes`,
-      {},
-      { name },
-    );
-    if (status === 200) {
-      showAlert({
-        title: 'Success',
-        description: 'Attribute has been added successfully.',
-        status: 'success',
-      });
-      onClose();
-      router.push(`/${orgId}/events/${eventId}/attributes`);
-    } else {
-      showAlert({
-        title: 'Error',
-        description: data.error,
-        status: 'error',
-      });
-    }
+    handleAttributeMutation({ name });
   };
 
   return (

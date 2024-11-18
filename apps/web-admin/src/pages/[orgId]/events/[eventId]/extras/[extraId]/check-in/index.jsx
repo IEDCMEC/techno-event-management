@@ -6,57 +6,62 @@ import { Button, FormControl, FormLabel, Select } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
 
 import { useAlert } from '@/hooks/useAlert';
-import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 
 export default function CheckInExtra() {
-  const { loading, post, get } = useFetch();
   const showAlert = useAlert();
 
   const router = useRouter();
   const { orgId, eventId, extraId } = router.query;
 
-  const {useGetQuery} = useWrapper();
-
   const [participantId, setParticipantId] = useState(null);
   const [participants, setParticipants] = useState([]);
-
+  const { usePostMutation, useGetQuery } = useWrapper();
+  const { mutate: handleCheckInMutation } = usePostMutation(
+    `/core/organizations/${orgId}/events/${eventId}/extras/${extraId}/check-in`,
+    {},
+    {
+      onSuccess: (response) => {
+        showAlert({
+          title: 'Success',
+          description: 'Extra for participant has been checked in  successfully.',
+          status: 'success',
+        });
+        router.push(`/${orgId}/events/${eventId}/extras/${extraId}`);
+      },
+      onError: (error) => {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      },
+    },
+  );
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    {},
+    {
+      onError: (error) => {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
+      },
+    },
+    (response) => {
+      setParticipants(response.data.participants);
+    },
+  );
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const { data, status } = await post(
-      `/core/organizations/${orgId}/events/${eventId}/extras/${extraId}/check-in`,
-      {},
-      {
-        participantId,
-        checkedInAt: new Date().toISOString(),
-      },
-    );
-    if (status === 200) {
-      showAlert({
-        title: 'Success',
-        description: 'Extra for participant has been checked in  successfully.',
-        status: 'success',
-      });
-      router.push(`/${orgId}/events/${eventId}/extras/${extraId}`);
-    } else {
-      showAlert({
-        title: 'Error',
-        description: data.error,
-        status: 'error',
-      });
-    }
+    handleCheckInMutation({
+      participantId,
+      checkedInAt: new Date().toISOString(),
+    });
   };
-
-  const {data, status, error} = useGetQuery(
-    `/core/organizations/${orgId}/events/${eventId}/participants`,
-    `/core/organizations/${orgId}/events/${eventId}/participants`,
-    {},
-    {},
-    (data) => {
-      setParticipants(data.data.participants);
-    }
-  )
 
   return (
     <DashboardLayout

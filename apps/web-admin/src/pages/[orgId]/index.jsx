@@ -5,7 +5,7 @@ import { Button, Flex } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useContext } from 'react';
@@ -21,7 +21,7 @@ export default function OrganizationById() {
   // console.log(user);
   const showAlert = useAlert();
 
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
   const { accountDetails, setAccountDetails } = useContext(account);
   // console.log(accountDetails.orgId);
   // console.log(orgId);
@@ -30,7 +30,12 @@ export default function OrganizationById() {
   // );
   // console.log(orgId, accountDetails.orgId);
 
-  const { data, status, error } = useGetQuery(
+  const {
+    data,
+    status,
+    error,
+    isLoading: loading,
+  } = useGetQuery(
     `/core/organizations/${orgId}`,
     `/core/organizations/${orgId}`,
     {}, // headers
