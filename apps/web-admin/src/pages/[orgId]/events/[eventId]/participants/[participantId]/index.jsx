@@ -46,34 +46,25 @@ export default function ParticipantById() {
 
   const { loading, get } = useFetch();
 
-  const {useGetQuery} = useWrapper();
+  const { useGetQuery } = useWrapper();
 
   const [participant, setParticipant] = useState([]);
   const [participantAttributes, setParticipantAttributes] = useState([]);
   const [participantExtras, setParticipantExtras] = useState([]);
   const [participantCheckIn, setParticipantCheckIn] = useState({});
 
-  const {data, status, error} = useGetQuery(
-    ['/organizations/:orgId/events/:eventId/participants/:participantId', orgId, eventId, participantId],
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
     `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
     {},
-    {
-      enabled: !!orgId && !!eventId && !!participantId,
-      onSuccess: (data) => {
-        setParticipant(data.participant || []);
-        setParticipantAttributes(data.participant.attributes || []);
-        setParticipantExtras(data.participant.extras || []);
-        setParticipantCheckIn(data.participant.checkIn || {});
-      },
-      onError: () => {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
+    {},
+    (data) => {
+      setParticipant(data.data.participant || []);
+      setParticipantAttributes(data.data.participant.attributes || []);
+      setParticipantExtras(data.data.participant.extras || []);
+      setParticipantCheckIn(data.data.participant.checkIn || {});
     },
-  )
+  );
 
   return (
     <DashboardLayout

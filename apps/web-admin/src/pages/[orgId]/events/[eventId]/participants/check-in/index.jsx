@@ -39,28 +39,19 @@ export default function ParticipantsCheckIn() {
   const { orgId, eventId } = router.query;
   const { loading, get } = useFetch();
 
-  const {useGetQuery} = useWrapper();
+  const { useGetQuery } = useWrapper();
 
   const [participantsCheckIn, setParticipantsCheckIn] = useState([]);
 
-  const {data, status, error} = useGetQuery(
-    ['/organizations/:orgId/events/:eventId/participants/check-in', orgId, eventId],
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
     `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
     {},
-    {
-      enabled: !!orgId && !!eventId,
-      onSuccess: () => {
-        setParticipantsCheckIn(data.participantsCheckIn || []);
-      },
-      onError: () => {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    }
-  )
+    {},
+    (data) => {
+      setParticipantsCheckIn(data.data.participantsCheckIn || []);
+    },
+  );
 
   return (
     <DashboardLayout

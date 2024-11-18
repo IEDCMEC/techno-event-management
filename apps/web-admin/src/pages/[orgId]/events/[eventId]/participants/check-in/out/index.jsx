@@ -9,7 +9,6 @@ import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 
-
 export default function CheckOutParticipant() {
   const { loading, post, get } = useFetch();
   const showAlert = useAlert();
@@ -17,7 +16,7 @@ export default function CheckOutParticipant() {
   const router = useRouter();
   const { orgId, eventId } = router.query;
 
-  const {useGetQuery} = useWrapper();
+  const { useGetQuery } = useWrapper();
 
   const [checkInKey, setcheckInKey] = useState(null);
   const [participants, setParticipants] = useState([]);
@@ -49,24 +48,15 @@ export default function CheckOutParticipant() {
     }
   };
 
-  const {data, status, error} = useGetQuery(
-    ['/organizations/:orgId/events/:eventId/participants', orgId, eventId],
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     {},
-    {
-      enabled: !!orgId && !!orgId,
-      onSuccess: () => {
-        setParticipants(data.participants);
-      },
-      onError: () => {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    }
-  )
+    {},
+    (data) => {
+      setParticipants(data.data.participants);
+    },
+  );
 
   useEffect(() => {
     console.log('checkInKey', checkInKey);

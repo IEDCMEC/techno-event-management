@@ -54,7 +54,7 @@ export default function CheckInExtra() {
     {},
     {},
     (data) => {
-      setParticipants(data.participants);
+      setParticipants(data.data.participants);
     }
   )
 

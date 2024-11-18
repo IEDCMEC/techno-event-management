@@ -49,21 +49,12 @@ export default function CheckInParticipant() {
   };
 
   const {data, status, error} = useGetQuery(
-    ['/organizations/:orgId/events/:eventId/participants', orgId, eventId],
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     {},
-    {
-      enabled: !!orgId && !!orgId,
-      onSuccess: () => {
-        setParticipants(data.participants);
-      },
-      onError: () => {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
+    {},
+    (data) => {
+      setParticipants(data.data.participants);
     }
   )
 

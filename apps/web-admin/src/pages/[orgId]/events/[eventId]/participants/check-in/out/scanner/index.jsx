@@ -55,27 +55,12 @@ export default function CheckOutParticipantWithScanner() {
   };
 
   const { data, status, error } = useGetQuery(
-    [
-      '/organizations/:orgId/events/:eventId/participants/check-in/:checkInKey',
-      orgId,
-      eventId,
-      checkInKey,
-    ],
+    `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${checkInKey}`,
     `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${checkInKey}`,
     {},
-    {
-      enabled: !!checkInKey && previousCheckInKey !== checkInKey && !fastMode,
-      onSuccess: (data) => {
-        setParticipant(data.participant);
-      },
-      onError: () => {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-        setCheckInKey(null);
-      },
+    {},
+    (data) => {
+      setParticipant(data.data.participant);
     },
   );
 

@@ -56,20 +56,13 @@ export default function EditParticipant() {
   };
 
   const { data, status, error } = useGetQuery(
-    [
-      '/organizations/:orgId/events/:eventId/participants/:participantId',
-      orgId,
-      eventId,
-      participantId,
-    ],
+    `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
     `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
     {},
-    {
-      enabled: !!orgId && !!eventId && !!participantId,
-      onSuccess: (data) => {
-        setParticipant(data.participant);
-        setAttributeValues(data.participant.attributes);
-      },
+    {},
+    (data) => {
+      setParticipant(data.data.participant);
+      setAttributeValues(data.data.participant.attributes);
     },
   );
 

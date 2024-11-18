@@ -41,23 +41,11 @@ export default function EventById() {
   const [attributes, setAttributes] = useState(['firstName', 'lastName', 'email', 'phone']);
 
   const { data, status, error } = useGetQuery(
-    ['/core/organizations/:orgId/events/:eventId', orgId, eventId],
+    `/core/organizations/${orgId}/events/${eventId}`,
     `/core/organizations/${orgId}/events/${eventId}`,
     {},
-    {
-      enabled: !!orgId && !!eventId,
-      onSuccess: (data) => {
-        setEvent(data.event || []);
-      },
-      onError: () => {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      },
-    },
-    (data) => {},
+    {},
+    (data) => {setEvent(data.data.event || []);},
   );
 
   useEffect(() => {

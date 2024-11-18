@@ -17,7 +17,7 @@ export default function CheckInParticipantWithScanner() {
   const router = useRouter();
   const { orgId, eventId } = router.query;
 
-  const {useGetQuery} = useWrapper();
+  const { useGetQuery } = useWrapper();
 
   const [previousCheckInKey, setPreviousCheckInKey] = useState(null);
   const [checkInKey, setCheckInKey] = useState(null);
@@ -54,25 +54,15 @@ export default function CheckInParticipantWithScanner() {
     }
   };
 
-  const {data, status, error} = useGetQuery(
-    ['/organizations/:orgId/events/:eventId/participants/check-in/:checkInKey', orgId, eventId, checkInKey],
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${checkInKey}`,
     `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${checkInKey}`,
     {},
-    {
-      enabled: !!checkInKey && previousCheckInKey !== checkInKey && !fastMode,
-      onSuccess: (data) => {
-        setParticipant(data.participant);
-      },
-      onError: () => {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-        setCheckInKey(null);
-      }
+    {},
+    (data) => {
+      setParticipant(data.data.participant);
     },
-  )
+  );
 
   useEffect(() => {
     if (checkInKey && previousCheckInKey !== checkInKey && fastMode) {
