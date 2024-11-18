@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const removeImports = require('next-remove-imports')();
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const nextConfig = {
   reactStrictMode: true,
   experimental: { esmExternals: 'loose' },
@@ -8,4 +12,4 @@ const nextConfig = {
   },
 };
 
-module.exports = removeImports(nextConfig);
+module.exports = withBundleAnalyzer(removeImports(nextConfig));

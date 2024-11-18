@@ -11,18 +11,18 @@ const MyContext = ({ children }) => {
 
   const { loading, get, put } = useFetch();
   const showAlert = useAlert();
-  useEffect(() => {
-    const fetchAccountDetails = async () => {
-      if (isAuthenticated) {
-        const { data, status } = await get('/core/users/me');
-        const response = await get('/core/users/mycreds');
-        // console.log(response, data);
-        setAccountDetails((preValue) => ({ ...preValue, ...(data.accountDetails || {}) }));
-      }
-    };
-    fetchAccountDetails();
-    // console.log('trigger');
-  }, [isAuthenticated]);
+  // useEffect(() => {
+  //   const fetchAccountDetails = async () => {
+  //     if (isAuthenticated) {
+  //       const { data, status } = await get('/core/users/me');
+  //       const response = await get('/core/users/mycreds');
+  //       // console.log(response, data);
+  //       setAccountDetails((preValue) => ({ ...preValue, ...(data.accountDetails || {}) }));
+  //     }
+  //   };
+  //   fetchAccountDetails();
+  //   // console.log('trigger');
+  // }, [isAuthenticated]);
   // console.log(accountDetails);
   const updateAccountDetails = async () => {
     const { data, status } = await put('/core/users/me', {}, accountDetails);

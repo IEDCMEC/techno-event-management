@@ -7,6 +7,7 @@ dotenv.config();
 // import chalk from 'chalk';
 import supabase from '../utils/supabase';
 import FormData from 'form-data';
+import { marked } from 'marked';
 
 const MAILER_URL = process.env.MAILER_URL;
 const MAILER_DATABASE_URL = process.env.MAILER_DATABASE_URL;
@@ -387,14 +388,22 @@ const generateOTP = () => {
 
 export const sendOTP = async (req: Request, res: Response) => {
   try {
-    const { email, name, html } = req.body;
+    const { email, name, projectId } = req.body;
     console.log(req.body);
 
     // Check for required fields
-    if (!email || !name || !html) {
+    if (!email || !name || !projectId) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
 
+    const markdown = await prisma.Projects.findFirst({
+      where: {
+        id: projectId,
+      },
+      select: {
+        html_template: true,
+      },
+    });
     // Check if the OTP already exists for the email
     const otpRecord = await prisma.Otp.findFirst({
       where: {
@@ -417,8 +426,12 @@ export const sendOTP = async (req: Request, res: Response) => {
         form.append('name', name);
         form.append('to', email);
         form.append('subject', 'Confirm your OTP');
-        let emailText: string = html;
+        let emailText: string = await marked(markdown.html_template);
         emailText = emailText.replace('((otp))', otp.toString());
+        emailText = emailText.replace('{{name}}', name);
+        console.log(emailText);
+        emailText = emailText.replace(/\n/g, '');
+        emailText = emailText.replace(/"/g, "'");
         form.append('html', emailText);
         form.append('text', 'Confirm your OTP');
         console.log(`${MAILER_URL}/mail`);
@@ -462,8 +475,12 @@ export const sendOTP = async (req: Request, res: Response) => {
         form.append('name', name);
         form.append('to', email);
         form.append('subject', 'Confirm your OTP');
-        let emailText: string = html;
+        let emailText: string = await marked(markdown.html_template);
         emailText = emailText.replace('((otp))', otp.toString());
+        emailText = emailText.replace('{{name}}', name);
+        console.log(emailText);
+        emailText = emailText.replace(/\n/g, '');
+        emailText = emailText.replace(/"/g, "'");
         form.append('html', emailText);
         form.append('text', 'Confirm your OTP');
 

@@ -11,11 +11,12 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import DataDisplay from '@/components/DataDisplay';
 import { CSVLink } from 'react-csv';
 import NewEventForm from './new';
+import useWrapper from '@/hooks/useWrapper';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
@@ -35,25 +36,25 @@ export default function Events() {
   const { orgId } = router.query;
   const showAlert = useAlert();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
+  const { useGetQuery } = useWrapper();
 
   const [events, setEvents] = useState([]);
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      const { data, status } = await get(`/core/organizations/${orgId}/events`);
-      if (status === 200) {
-        setEvents(data.events || []);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-    fetchEvents();
-  }, []);
+  const {
+    data,
+    status,
+    error,
+    isLoading: loading,
+  } = useGetQuery(
+    `/core/organizations/${orgId}/events`,
+    `/core/organizations/${orgId}/events`,
+    {}, // headers
+    {}, // options
+    (data) => {
+      setEvents(data.data.events || []);
+    },
+  );
 
   const exportToCsv = () => {
     const csvData = events.map((event) => ({
