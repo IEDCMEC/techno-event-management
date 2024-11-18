@@ -6,8 +6,9 @@ import { Button, Flex } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
 
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
+import useWrapper from '@/hooks/useWrapper';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -41,29 +42,28 @@ export default function ExtraById() {
   const { orgId, eventId, extraId } = router.query;
   const showAlert = useAlert();
 
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
 
   const [extra, setExtra] = useState({});
   const [extraDetails, setExtraDetails] = useState([]);
-
-  useEffect(() => {
-    const fetchExtra = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/extras/${extraId}`,
-      );
-      if (status === 200) {
-        setExtra(data.extra || {});
-        setExtraDetails(data.extra?.participantExtraDetails || []);
-      } else {
+  const { useGetQuery } = useWrapper();
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/extras/${extraId}`,
+    `/core/organizations/${orgId}/events/${eventId}/extras/${extraId}`,
+    {},
+    {
+      onError: (error) => {
         showAlert({
           title: 'Error',
-          description: data.error,
+          description: error,
           status: 'error',
         });
-      }
-    };
-    fetchExtra();
-  }, []);
+      },
+    },
+    (response) => {
+      setExtraDetails(response.data.extra?.participantExtraDetails || []);
+    },
+  );
 
   return (
     <DashboardLayout

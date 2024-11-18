@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import {
   Box,
@@ -14,6 +14,7 @@ import {
   AccordionIcon,
   SkeletonText,
 } from '@chakra-ui/react';
+import useWrapper from '@/hooks/useWrapper';
 
 import NextLink from 'next/link';
 import { MdOutlineEvent } from 'react-icons/md';
@@ -21,32 +22,29 @@ import { useRouter } from 'next/router';
 
 const EventsDisplay = () => {
   const [events, setEvents] = useState([]);
+  const { useGetQuery } = useWrapper();
 
   const router = useRouter();
   const { orgId } = router.query;
 
   const showAlert = useAlert();
-  const { loading, get } = useFetch();
 
-  useEffect(() => {
-    if (orgId) {
-      const fetchEvents = async () => {
-        const { data, status } = await get(`/core/organizations/${orgId}/events`);
-        if (status === 200) {
-          setEvents(data.events || []);
-        } else {
-          showAlert({
-            title: 'Error',
-            description: data.error,
-            status: 'error',
-          });
-        }
-      };
-      fetchEvents();
-    }
-  }, [orgId]);
-
-  if (!orgId || loading) {
+  const {
+    data,
+    status,
+    error,
+    isLoading: loading,
+  } = useGetQuery(
+    `/core/organizations/${orgId}/events`,
+    `/core/organizations/${orgId}/events`,
+    {}, // headers
+    {}, // options
+    (data) => {
+      setEvents(data.data.events || []);
+    },
+  );
+  // console.log(loading);
+  if (!orgId || loading || events.length === 0) {
     return (
       <div>
         <SkeletonText m={[4, 2, 4, 2]} noOfLines={2} spacing="4" skeletonHeight="2" />
