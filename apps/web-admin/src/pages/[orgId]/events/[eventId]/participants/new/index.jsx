@@ -47,7 +47,7 @@ export default function NewParticipant() {
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     {},
     {
-      onSuccess: (response)=>{
+      onSuccess: (response) => {
         showAlert({
           title: 'Success',
           description: 'Participant has been added successfully.',
@@ -55,16 +55,15 @@ export default function NewParticipant() {
         });
         router.push(`/${orgId}/events/${eventId}/participants`);
       },
-      onError: (error)=>{
+      onError: (error) => {
         showAlert({
           title: 'Error',
           description: error,
           status: 'error',
         });
       },
-      invalidateKeys: [`/core/organizations/${orgId}/events/${eventId}/participants`]
+      invalidateKeys: [`/core/organizations/${orgId}/events/${eventId}/participants`],
     },
-    
   );
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,8 +104,8 @@ export default function NewParticipant() {
       //   result,
       // );
       addParticipantsMutation({
-        result
-      })
+        result,
+      });
       // if (status === 200) {
       //   showAlert({
       //     title: 'Success',

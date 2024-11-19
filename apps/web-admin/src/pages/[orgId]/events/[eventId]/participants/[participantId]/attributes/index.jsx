@@ -35,18 +35,18 @@ export default function Events() {
     `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
     {},
     {
-      onSuccess: (response)=>{
+      onSuccess: (response) => {
         setParticipantAttributes(response.data.participantAttributes || []);
         console.log(data);
       },
-      onError: (error)=>{
+      onError: (error) => {
         showAlert({
           title: 'Error',
           description: error,
           status: 'error',
         });
-      }
-    }
+      },
+    },
   );
   // useEffect(() => {
   //   const fetchParticipantAttributes = async () => {

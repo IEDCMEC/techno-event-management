@@ -3740,7 +3740,10 @@ packages:
       }
 
   bundle-analyzer@0.0.6:
-    resolution: {integrity: sha512-MXRDG8uFjrz1h716wbahzhoaS3ImVQFBs1F2XNuDjmjKReMkSNO7XaxwUe0jtKoWO6Pt98E2rlgyebGlEA4NnA==}
+    resolution:
+      {
+        integrity: sha512-MXRDG8uFjrz1h716wbahzhoaS3ImVQFBs1F2XNuDjmjKReMkSNO7XaxwUe0jtKoWO6Pt98E2rlgyebGlEA4NnA==,
+      }
     hasBin: true
 
   busboy@1.6.0:
@@ -6679,8 +6682,11 @@ packages:
     engines: { node: '>=0.10.0' }
 
   is-wsl@1.1.0:
-    resolution: {integrity: sha512-gfygJYZ2gLTDlmbWMI0CE2MwnFzSN/2SZfkMlItC4K/JBlsWVDB0bO6XhqcY13YXE7iMcAJnzTCJjPiTeJJ0Mw==}
-    engines: {node: '>=4'}
+    resolution:
+      {
+        integrity: sha512-gfygJYZ2gLTDlmbWMI0CE2MwnFzSN/2SZfkMlItC4K/JBlsWVDB0bO6XhqcY13YXE7iMcAJnzTCJjPiTeJJ0Mw==,
+      }
+    engines: { node: '>=4' }
 
   isarray@0.0.1:
     resolution:
@@ -8071,8 +8077,11 @@ packages:
       }
 
   opn@5.5.0:
-    resolution: {integrity: sha512-PqHpggC9bLV0VeWcdKhkpxY+3JTzetLSqTCWL/z/tFIbI6G8JCjondXklT1JinczLz2Xib62sSp0T/gKT4KksA==}
-    engines: {node: '>=4'}
+    resolution:
+      {
+        integrity: sha512-PqHpggC9bLV0VeWcdKhkpxY+3JTzetLSqTCWL/z/tFIbI6G8JCjondXklT1JinczLz2Xib62sSp0T/gKT4KksA==,
+      }
+    engines: { node: '>=4' }
 
   optionator@0.9.4:
     resolution:

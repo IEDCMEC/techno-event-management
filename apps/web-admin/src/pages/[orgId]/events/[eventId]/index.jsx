@@ -54,19 +54,19 @@ export default function EventById() {
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     {},
     {
-      onSuccess: (response)=>{
+      onSuccess: (response) => {
         setAttributes((preValue) => {
-          return [...response.data.attributes || []];
+          return [...(response.data.attributes || [])];
         });
       },
-      onError: (error)=>{
+      onError: (error) => {
         showAlert({
           title: 'Error',
           description: error,
           status: 'error',
         });
-      }
-    }
+      },
+    },
   );
   // useEffect(() => {
   //   const fetchEventAttributes = async () => {

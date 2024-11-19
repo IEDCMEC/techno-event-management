@@ -16,7 +16,7 @@ export default function CheckInParticipant() {
   const router = useRouter();
   const { orgId, eventId } = router.query;
 
-  const {useGetQuery} = useWrapper();
+  const { useGetQuery } = useWrapper();
 
   const [checkInKey, setcheckInKey] = useState(null);
   const [participants, setParticipants] = useState([]);
@@ -48,15 +48,15 @@ export default function CheckInParticipant() {
     }
   };
 
-  const {data, status, error} = useGetQuery(
+  const { data, status, error } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     {},
     {},
     (data) => {
       setParticipants(data.data.participants);
-    }
-  )
+    },
+  );
 
   useEffect(() => {
     console.log('checkInKey', checkInKey);

@@ -39,7 +39,9 @@ export default function NewOrganization() {
       onError: (error) => {
         alert(data.error);
       },
-      invalidateKeys: [`/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`]
+      invalidateKeys: [
+        `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
+      ],
     },
   );
   const handleSubmit = async (e) => {
