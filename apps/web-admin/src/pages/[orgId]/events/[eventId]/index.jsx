@@ -22,6 +22,7 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 
 import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function EventById() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,23 +35,20 @@ export default function EventById() {
 
   const { loading, get } = useFetch();
 
+  const { useGetQuery } = useWrapper();
+
   const [event, setEvent] = useState([]);
   const [attributes, setAttributes] = useState(['firstName', 'lastName', 'email', 'phone']);
 
-  useEffect(() => {
-    const fetchEventStats = async () => {
-      const { data, status } = await get(`/core/organizations/${orgId}/events/${eventId}`);
-      if (status === 200) {
-        setEvent(data.event || []);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}`,
+    `/core/organizations/${orgId}/events/${eventId}`,
+    {},
+    {},
+    (data) => {setEvent(data.data.event || []);},
+  );
 
+  useEffect(() => {
     const fetchEventAttributes = async () => {
       const { data, status } = await get(
         `/core/organizations/${orgId}/events/${eventId}/attributes`,
@@ -67,7 +65,6 @@ export default function EventById() {
         });
       }
     };
-    fetchEventStats();
     fetchEventAttributes();
   }, []);
 

@@ -473,6 +473,9 @@ importers:
       axios:
         specifier: ^1.5.1
         version: 1.7.7
+      bundle-analyzer:
+        specifier: ^0.0.6
+        version: 0.0.6
       canvas:
         specifier: ^2.11.2
         version: 2.11.2
@@ -3736,6 +3739,10 @@ packages:
         integrity: sha512-SW9lzGTLvWTP1AY8xeAMZimqDrIaSdLQUcVr9DMef51niJ022Ri87SwRRKYm4A6iHfkPaiVUu/Duw2Wc4J7kKg==,
       }
 
+  bundle-analyzer@0.0.6:
+    resolution: {integrity: sha512-MXRDG8uFjrz1h716wbahzhoaS3ImVQFBs1F2XNuDjmjKReMkSNO7XaxwUe0jtKoWO6Pt98E2rlgyebGlEA4NnA==}
+    hasBin: true
+
   busboy@1.6.0:
     resolution:
       {
@@ -6671,6 +6678,10 @@ packages:
       }
     engines: { node: '>=0.10.0' }
 
+  is-wsl@1.1.0:
+    resolution: {integrity: sha512-gfygJYZ2gLTDlmbWMI0CE2MwnFzSN/2SZfkMlItC4K/JBlsWVDB0bO6XhqcY13YXE7iMcAJnzTCJjPiTeJJ0Mw==}
+    engines: {node: '>=4'}
+
   isarray@0.0.1:
     resolution:
       {
@@ -8058,6 +8069,10 @@ packages:
       {
         integrity: sha512-4GCCGZt1i2kTHpwvaC/sCpTpQqDnBzDzuJcJMbH+y1Q5qI8U8RBvoSh28svarXszZHR5BAMXbJPX1PGPRE3VOA==,
       }
+
+  opn@5.5.0:
+    resolution: {integrity: sha512-PqHpggC9bLV0VeWcdKhkpxY+3JTzetLSqTCWL/z/tFIbI6G8JCjondXklT1JinczLz2Xib62sSp0T/gKT4KksA==}
+    engines: {node: '>=4'}
 
   optionator@0.9.4:
     resolution:
@@ -13329,6 +13344,14 @@ snapshots:
     dependencies:
       semver: 7.6.3
 
+  bundle-analyzer@0.0.6:
+    dependencies:
+      express: 4.21.1
+      opn: 5.5.0
+      source-map: 0.7.4
+    transitivePeerDependencies:
+      - supports-color
+
   busboy@1.6.0:
     dependencies:
       streamsearch: 1.1.0
@@ -15535,6 +15558,8 @@ snapshots:
 
   is-windows@1.0.2: {}
 
+  is-wsl@1.1.0: {}
+
   isarray@0.0.1: {}
 
   isarray@1.0.0: {}
@@ -16519,6 +16544,10 @@ snapshots:
       lru-cache: 6.0.0
       object-hash: 2.2.0
       oidc-token-hash: 5.0.3
+
+  opn@5.5.0:
+    dependencies:
+      is-wsl: 1.1.0
 
   optionator@0.9.4:
     dependencies:
