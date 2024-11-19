@@ -36,6 +36,8 @@ import {
   addNewRecipients,
   getMailProjects,
   getMailStatus,
+  getRecipients,
+  getStatusOfEmails,
   newMailProject,
   sendMailWithQR,
   sendOTP,
@@ -125,11 +127,14 @@ router.post('/organizations/:orgId/newEmailProject', newMailProject); //done
 router.post('/organizations/:orgId/updateEmailProject', updateMailProject); //done
 router.get('/organizations/:orgId/getEmailProjects', getMailProjects); // done
 router.get('/organizations/:orgId/getMailStatus', getMailStatus); //subru
+router.get('/organizations/:orgId/getRecipients/:projectId', getRecipients);
 router.post('/organizations/:orgId/addNewRecipient', addNewRecipient); //done
 router.post('/organizations/:orgId/addNewRecipients', addNewRecipients); //done
 router.post('/organizations/:orgId/events/:eventId/mailQR', sendMailWithQR); // done
+router.post('/organizations/:orgId/getStatusOfEmails', getStatusOfEmails); //done
 
 // OTP routes
 router.post('/organizations/sendOTP', sendOTP);
 router.post('/organizations/verifyOTP', verifyOTP);
+
 export default router;

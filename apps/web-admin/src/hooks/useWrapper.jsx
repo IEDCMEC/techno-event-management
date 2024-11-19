@@ -12,6 +12,7 @@ const useWrapper = () => {
       // options, // React Query options like staleTime, refetchOnWindowFocus, etc.
       {
         ...options,
+        // staleTime: 2 * 60 * 1000, // fresh for 2 minutes unless manually invalidated
         onSuccess: (response) => {
           if (response && response.status == 200) {
             setState(response);
@@ -37,8 +38,8 @@ const useWrapper = () => {
       put,
       delete: del,
     }[method];
-    console.log(options?.invalidateKeys);
-    console.log(method);
+    // console.log(options?.invalidateKeys);
+    // console.log(method);
 
     return useMutation((body = {}) => mutationFn(endpoint, headers, body), {
       ...options,

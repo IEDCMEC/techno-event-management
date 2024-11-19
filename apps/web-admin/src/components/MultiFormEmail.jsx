@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAlert } from '@/hooks/useAlert';
 import { useQueryClient } from 'react-query';
 import { marked } from 'marked';
@@ -56,7 +56,7 @@ import { ReceiptCent } from 'lucide-react';
 const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   const router = useRouter();
   const { eventId } = router.query;
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const showAlert = useAlert();
   const [newEmailProject, setNewEmailProject] = useState({
     name: '',
@@ -65,6 +65,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   const [step, setStep] = useState(1);
   const [selectedProject, setSelectedProject] = useState({});
   const [recipients, setRecipients] = useState([]);
+  const [mailStatus, setMailStatus] = useState(null);
   const { accountDetails, emailProjects, setEmailProjects, participants, setParticipants } =
     useContext(account);
 
@@ -101,8 +102,12 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
           status: 'error',
         });
       },
+      invalidateKeys: [
+        `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`,
+      ],
     },
   );
+  // const {data, isLoading: loading} = useGetQuery(`/core/organizations/${accountDetails.orgId}/`)
   const addNewRecipients = () => {
     if (accountDetails.orgId) {
       const myData = recipients.map((value) => ({
@@ -119,6 +124,28 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       });
     }
   };
+  useEffect(() => {
+    console.log(recipients);
+  }, [recipients]);
+  // console.log(`/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`);
+  useGetQuery(
+    `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id ? selectedProject.id : ''}`,
+    `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id ? selectedProject.id : ''}`,
+    {},
+    {
+      onError: (error) => {
+        console.log(error);
+      },
+    },
+    (response) => {
+      // console.log(response.data.recipients);
+      setMailStatus(response.data.recipients);
+      setRecipients(() => {
+        const myParts = response.data.recipients.map((value) => value.email);
+        return participants.filter((value) => myParts.includes(value.email));
+      });
+    },
+  );
   const { mutate: updateEmailMutation } = usePostMutation(
     `/core/organizations/${accountDetails.orgId}/updateEmailProject`,
     {},
@@ -148,7 +175,10 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
           status: 'failure',
         });
       },
-      invalidateKeys: [`/core/organizations/${accountDetails.orgId}/getEmailProjects`],
+      invalidateKeys: [
+        `/core/organizations/${accountDetails.orgId}/getEmailProjects`,
+        `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`,
+      ],
     },
     ({ data, variables, context }) => {
       console.log(data);
@@ -181,14 +211,6 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     },
   );
 
-  const nextStep = async () => {
-    if (step == 3) {
-      console.log('hi');
-      addNewRecipients();
-    }
-    console.log(step);
-    setStep((prev) => Math.min(prev + 1, 5));
-  };
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   const { mutate: sendEmailMutation } = usePostMutation(
@@ -201,8 +223,8 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
           description: `Success: ${response.data.nSuccess} \nFailure: ${response.data.nFailure}`,
           status: 'success',
         });
-        setStep(1);
-        onClose();
+        setStep(5);
+        // onClose();
       },
       onError: (error) => {
         console.log(error);
@@ -214,11 +236,19 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     e.preventDefault();
     if (accountDetails.orgId && eventId) {
       const template = renderHtml(selectedProject.html_template);
-      sendEmailMutation({
-        projectId: selectedProject.id,
-        html: template,
-        subject: subject,
-      });
+      sendEmailMutation(
+        {
+          projectId: selectedProject.id,
+          html: template,
+          subject: subject,
+        },
+        {
+          onSuccess: (response) => {
+            console.log(response.data);
+            // setMailStatus(response.data);
+          },
+        },
+      );
     }
   };
 
@@ -247,7 +277,10 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
           status: 'error',
         });
       },
-      invalidateKeys: [`core/organizations/${accountDetails.orgId}/getEmailProjects`],
+      invalidateKeys: [
+        `core/organizations/${accountDetails.orgId}/getEmailProjects`,
+        `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`,
+      ],
     },
     ({ data, variables, context }) => {
       console.log(data);
@@ -269,6 +302,34 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         desc: newEmailProject.desc,
       });
     }
+  };
+  const {
+    isLoading,
+    isSuccess,
+    data: mailStatusData,
+    mutate: checkMailStatusMutation,
+  } = usePostMutation(
+    `/core/organizations/${accountDetails.orgId}/getStatusOfEmails`,
+    {},
+    {
+      onSuccess: (response) => {
+        console.log(response.data);
+        setMailStatus(response.data);
+      },
+    },
+  );
+  const nextStep = async () => {
+    if (step == 3) {
+      console.log('hi');
+      addNewRecipients();
+    }
+    console.log(step);
+    setStep((prev) => Math.min(prev + 1, 5));
+    // if(step == 4){
+    //   checkMailStatusMutation({
+    //     emailArray: recipients.map((value)=> value.email)
+    //   })
+    // }
   };
   return (
     <>
@@ -425,7 +486,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   onRowClick={(value) => {
                     console.log(value);
                   }}
-                  state={recipients.map((value) => value.id)}
+                  state={recipients.map((value) => value.email)}
                   // state={recipients}
                   setState={(selectedValue) => {
                     //console.log(selectedValue);
@@ -440,9 +501,10 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                     } else {
                       //console.log('trigger')
                       setRecipients((prevSelectedRows) => {
-                        const myIds = prevSelectedRows.map((value) => value.id);
-                        return myIds.includes(selectedValue.id)
-                          ? prevSelectedRows.filter((value) => value.id !== selectedValue.id)
+                        console.log(prevSelectedRows);
+                        const myIds = prevSelectedRows.map((value) => value.email);
+                        return myIds.includes(selectedValue.email)
+                          ? prevSelectedRows.filter((value) => value.email !== selectedValue.email)
                           : [...prevSelectedRows, selectedValue];
                       });
                     }
@@ -469,7 +531,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                     // p={'20px'}
                     style={{
                       border: '1px solid #ccc',
-                      maxHeight: '450px',
+                      height: '450px',
                       overflowY: 'auto',
                       padding: '20px',
                       marginTop: '10px',
@@ -480,32 +542,47 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
               </Box>
             )}
             {step === 5 && (
-              <FormControl mb={2}>
-                <FormLabel fontWeight="bold">Emails sent:</FormLabel>
-                <DataDisplayNew
-                  columns={[
-                    { field: 'checkInKey', headerName: 'QR Code' },
-                    { field: 'firstName', headerName: 'Name' },
-                    { field: 'email', headerName: 'Email' },
-                  ]}
-                  rows={recipients}
-                  min-height="300px"
-                  overflowY="visible"
-                ></DataDisplayNew>
-                <FormLabel fontWeight="bold" mt="50px">
-                  Email not sent:
-                </FormLabel>
-                <DataDisplayNew
-                  columns={[
-                    { field: 'checkInKey', headerName: 'QR Code' },
-                    { field: 'firstName', headerName: 'Name' },
-                    { field: 'email', headerName: 'Email' },
-                  ]}
-                  rows={participants.filter((participant) => !recipients.includes(participant))}
-                  min-height="300px"
-                  overflowY="visible"
-                ></DataDisplayNew>
-              </FormControl>
+              <Box
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-evenly',
+                  flexDirection: 'column',
+                  width: '100%',
+                }}
+              >
+                <Box width={'100%'}>
+                  <Text fontWeight="bold" mb={2}>
+                    Emails sent:
+                  </Text>
+                  <DataDisplayNew
+                    columns={[
+                      { field: 'checkInKey', headerName: 'QR Code' },
+                      { field: 'firstName', headerName: 'Name' },
+                      { field: 'email', headerName: 'Email' },
+                    ]}
+                    height="250px"
+                    rows={recipients}
+                    overflowY="visible"
+                  ></DataDisplayNew>
+                </Box>
+                <Box width={'100%'}>
+                  <Text fontWeight="bold" mb={2}>
+                    Email not sent:
+                  </Text>
+                  <DataDisplayNew
+                    columns={[
+                      { field: 'checkInKey', headerName: 'QR Code' },
+                      { field: 'firstName', headerName: 'Name' },
+                      { field: 'email', headerName: 'Email' },
+                    ]}
+                    rows={participants.filter((participant) => !recipients.includes(participant))}
+                    height="250px"
+                    overflowY="visible"
+                  ></DataDisplayNew>
+                </Box>
+              </Box>
             )}
           </ModalBody>
 
@@ -537,17 +614,16 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 Send Emails
               </Button>
             )}
-            {step === 5 ? (
+            {step === 5 && (
               <Button
                 onClick={() => {
-                  handleSubmit();
+                  onClose();
+                  setStep(1);
                   //   console.log(step);
                 }}
               >
                 Close
               </Button>
-            ) : (
-              <></>
             )}
           </ModalFooter>
         </ModalContent>

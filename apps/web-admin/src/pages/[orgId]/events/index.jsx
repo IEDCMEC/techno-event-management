@@ -40,7 +40,7 @@ export default function Events() {
   const { useGetQuery } = useWrapper();
 
   const [events, setEvents] = useState([]);
-
+  console.log(orgId);
   const {
     data,
     status,
@@ -52,6 +52,7 @@ export default function Events() {
     {}, // headers
     {}, // options
     (data) => {
+      console.log(data.data.events);
       setEvents(data.data.events || []);
     },
   );

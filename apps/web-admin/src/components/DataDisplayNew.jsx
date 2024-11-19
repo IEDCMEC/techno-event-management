@@ -13,7 +13,10 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { extendTheme } from '@chakra-ui/react';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
+// import useWrapper from '@/hooks/useWrapper';
+// import { useContext } from 'react';
+// import { account } from '@/contexts/MyContext';
 const chakraTheme = extendTheme({
   colors: {
     primary: {
@@ -31,6 +34,9 @@ export default function DataDisplayNew({
   state = null,
   setState = null,
 }) {
+  // const {useGetQuery, usePostMutation} = useWrapper();
+  // const {accountDetails} = useContext(account);
+
   //const [selectedRows, setSelectedRows] = useState([]);
   // console.log(state);
 
@@ -45,7 +51,7 @@ export default function DataDisplayNew({
         {loading ? (
           <Spinner size="xl" color="primary.500" />
         ) : (
-          <TableContainer height={height} overflowY={overflowY} sx={{}}>
+          <TableContainer maxHeight={height} overflowY={overflowY} sx={{}}>
             <Table variant="simple" overflowY={overflowY}>
               <Thead>
                 <Tr>

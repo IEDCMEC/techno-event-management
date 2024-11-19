@@ -28,7 +28,7 @@ const EventsDisplay = () => {
   const { orgId } = router.query;
 
   const showAlert = useAlert();
-
+  // const [orgId, setOrgId] = useState(null)
   const {
     data,
     status,
@@ -40,21 +40,15 @@ const EventsDisplay = () => {
     {}, // headers
     {}, // options
     (data) => {
-      setEvents(data.data.events || []);
+      if (data.data.events.lenth !== events.length) {
+        setEvents(data.data.events || []);
+      }
     },
   );
-  // console.log(loading);
-  if (!orgId || loading || events.length === 0) {
-    return (
-      <div>
-        <SkeletonText m={[4, 2, 4, 2]} noOfLines={2} spacing="4" skeletonHeight="2" />
-      </div>
-    );
-  }
 
-  if (events.length === 0) {
-    return <div>No events found for this organization.</div>;
-  }
+  // if (events.length === 0) {
+  //   return <div>No events found for this organization.</div>;
+  // }
 
   return (
     <Accordion allowToggle>
@@ -76,13 +70,22 @@ const EventsDisplay = () => {
         </AccordionButton>
         <AccordionPanel pb={4}>
           <UnorderedList>
-            {events.map((event) => (
-              <ListItem key={event.id}>
-                <Link as={NextLink} href={`/${orgId}/events/${event.id}`} passHref>
-                  {event.name}
-                </Link>
-              </ListItem>
-            ))}
+            {(!orgId || loading || events.length === 0) && (
+              <div>
+                <SkeletonText m={[4, 2, 4, 2]} noOfLines={2} spacing="4" skeletonHeight="2" />
+              </div>
+            )}
+            {events.length !== 0 ? (
+              events.map((event) => (
+                <ListItem key={event.id}>
+                  <Link as={NextLink} href={`/${orgId}/events/${event.id}`} passHref>
+                    {event.name}
+                  </Link>
+                </ListItem>
+              ))
+            ) : (
+              <div>No events found for this organization.</div>
+            )}
           </UnorderedList>
         </AccordionPanel>
       </AccordionItem>

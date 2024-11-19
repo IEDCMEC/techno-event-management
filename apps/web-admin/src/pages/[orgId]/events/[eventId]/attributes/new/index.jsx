@@ -10,6 +10,17 @@ export default function NewAttributeForm({ onClose }) {
   const showAlert = useAlert();
   const router = useRouter();
   const { orgId, eventId } = router.query;
+  // const [orgId, setOrgId] = useState(null);
+  // const [eventId, setEventId] = useState(null);
+  // // const [attributeId, setAtrributeId] = useState(null);
+
+  // useEffect(() => {
+  //   if (router.isReady) {
+  //     setOrgId(router.query.orgId);
+  //     setEventId(router.query.eventId);
+  //     // setAtrributeId(router.query.attributeId);
+  //   }
+  // }, [router.isReady, router.query]);
 
   const [name, setName] = useState('');
   const { usePostMutation } = useWrapper();

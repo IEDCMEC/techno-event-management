@@ -32,12 +32,14 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
         let numberOfRecipientsMailed = 0;
         let RecipientsMailed = [];
         let numberOfRecipientsAlreadyMailed = 0;
+        let recipientAlreadyMailed = [];
         let numberOfRecipientsFailed = 0;
         let RecipientsNotMailed = [];
 
         for (const recipient of recipients) {
           if (recipient.emailSent) {
             numberOfRecipientsAlreadyMailed++;
+            recipientAlreadyMailed.push(recipient);
             console.log(`Project: ${projectId} - Mail already sent to ${recipient.email}`);
           } else {
             console.log(`Project: ${projectId} - Sending mail to ${recipient.email}`);
@@ -78,7 +80,10 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
               });
 
               numberOfRecipientsMailed++;
-              RecipientsMailed.push(recipient.email);
+              RecipientsMailed.push({
+                email: recipient.email,
+                jobId: response.data.jobId,
+              });
             } else {
               try {
                 console.log(response.data);
@@ -86,16 +91,20 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
                 console.log('error', e);
               }
               numberOfRecipientsFailed++;
-              RecipientsNotMailed.push(recipient.email);
+              RecipientsNotMailed.push({
+                email: recipient.email,
+                jobId: null,
+              });
             }
           }
         }
-
         return res.status(200).json({
           success: RecipientsMailed,
           failure: RecipientsNotMailed,
           nSuccess: RecipientsMailed.length,
           nFailure: RecipientsNotMailed.length,
+          alreadyMailed: recipientAlreadyMailed,
+          nAlreadyMailed: recipientAlreadyMailed.length,
         });
       } else {
         return res.status(400).send({ message: 'Invalid Project ID / project ID not found' });
@@ -111,7 +120,33 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
 function sleepAsync(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
+export const getRecipients = async (req: Request, res: Response) => {
+  try {
+    const { projectId, orgId } = req?.params;
+    // console.log('Hello')
+    if (!projectId || !orgId) {
+      return res.status(400).send({ message: 'Missing required fields' });
+    }
+    const recipients = await prisma.Recipients.findMany({
+      where: {
+        projectId: projectId,
+      },
+    });
+    if (recipients) {
+      return res.status(200).json({
+        recipients: recipients,
+      });
+    } else {
+      return res.status(400).send({
+        message: 'Unknown prisma error',
+      });
+    }
+  } catch (e: any) {
+    console.error(e);
+    return res.status(400).send({ message: e.message || 'Something went wrong' });
+  }
+  // return res.send('Route works!');
+};
 export const getMailStatus = async (req: Request, res: Response) => {
   try {
     const { email } = req?.params;
@@ -150,6 +185,76 @@ export const getMailStatus = async (req: Request, res: Response) => {
     } else {
       return res.status(400).send({ message: 'Email Job not found, send email again' });
     }
+  } catch (e: any) {
+    console.error(e);
+    return res.status(400).send({ message: e.message || 'Something went wrong' });
+  }
+};
+
+export const getStatusOfEmails = async (req: Request, res: Response) => {
+  try {
+    const { emailArray } = req.body;
+    const { orgId } = req?.params;
+    if (!emailArray || !orgId) {
+      return res.status(400).send({ message: 'Missing required fields' });
+    }
+
+    if (!Array.isArray(emailArray)) {
+      return res.status(400).send({ message: 'Element not a valid array' });
+    }
+    const data: string[] = emailArray;
+    // Fetch the jobId associated with the email from the Recipients table
+    let invalidEmails = [];
+    let successEmails = [];
+    for (const email of data) {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (emailRegex.test(email)) {
+        const recipient = await prisma.Recipients.findUnique({
+          where: { email: email },
+          select: { jobId: true },
+        });
+
+        if (recipient) {
+          const jobId = recipient.jobId;
+
+          if (jobId) {
+            // Call external mail service to get the status of the email job
+            const emailStatus = await axios.get(`${MAILER_URL}/mail?jobId=${jobId}`, {
+              headers: {
+                authorization: AUTHORIZATION_TOKEN,
+              },
+            });
+            console.log(emailStatus);
+
+            if (
+              emailStatus &&
+              emailStatus.status === 200 &&
+              emailStatus.data.status.status == 'SENT'
+            ) {
+              console.log({ ...emailStatus.data.status });
+              // return res.status(200).json({
+              //   ...emailStatus.data.status,
+              // });
+              successEmails.push(email);
+            } else {
+              // return res.status(400).send({ message: 'JobId not found', error: emailStatus.data });
+              invalidEmails.push(email);
+            }
+          } else {
+            // return res.status(400).send({ message: 'Email Job ID not found, send email again' });
+            invalidEmails.push(email);
+          }
+        } else {
+          invalidEmails.push(email);
+        }
+      } else {
+        invalidEmails.push(email);
+      }
+    }
+    return res.status(200).json({
+      invalidEmails: invalidEmails,
+      successEmails: successEmails,
+    });
   } catch (e: any) {
     console.error(e);
     return res.status(400).send({ message: e.message || 'Something went wrong' });
@@ -336,39 +441,34 @@ export const addNewRecipients = async (req: Request, res: Response) => {
       console.log(arrayOfElements, projectId);
       return res.status(400).send({ message: 'Missing required fields' });
     } else if (Array.isArray(arrayOfElements)) {
+      await prisma.Recipients.deleteMany({
+        where: {
+          projectId: projectId,
+        },
+      });
       for (const element of arrayOfElements) {
         if (!element.email || !element.name || !element.payload) {
           nonProcessed.push(element);
         } else {
-          const recipientExists = await prisma.Recipients.findFirst({
-            where: {
-              projectId: projectId,
+          // Insert new Recipients if they don't exist
+          const response = await prisma.Recipients.create({
+            data: {
+              name: element.name,
               email: element.email,
+              payload: element.payload,
+              projectId: projectId,
             },
           });
-
-          if (recipientExists) {
+          if (response) {
             processed.push(element);
           } else {
-            // Insert new Recipients if they don't exist
-            const response = await prisma.Recipients.create({
-              data: {
-                name: element.name,
-                email: element.email,
-                payload: element.payload,
-                projectId: projectId,
-              },
-            });
-            if (response) {
-              processed.push(element);
-            } else {
-              nonProcessed.push(element);
-            }
-            // console.log('Insert:', response);
-            // return res.status(200).json({ message: 'User successfully Added' });
+            nonProcessed.push(element);
           }
+          // console.log('Insert:', response);
+          // return res.status(200).json({ message: 'User successfully Added' });
         }
       }
+
       return res.status(200).json({
         success: processed.length,
         failure: nonProcessed.length,

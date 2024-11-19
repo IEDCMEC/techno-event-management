@@ -29,14 +29,14 @@ export const ProtectedRoute = ({ children }) => {
   const { post } = useFetch();
   // useEffect();
   useMemo(() => {
-    console.log(accountDetails);
+    // console.log(accountDetails);
     if (accountDetails.orgId) {
-      // console.log('route')
+      // // console.log('route')
       router.replace(`/${accountDetails.orgId}`);
     }
   }, [isAuthenticated, accountDetails.orgId]);
   useEffect(() => {
-    console.log(accountDetails);
+    // console.log(accountDetails);
   }, [accountDetails]);
   async function postOrg() {
     const id = user.sub.substring(6);
@@ -44,7 +44,7 @@ export const ProtectedRoute = ({ children }) => {
     const response = await post(`/core/organizations`, {}, { id, name });
     if (response) {
       const { data, mystatus } = response;
-      console.log('created');
+      // console.log('created');
       if (mystatus === 200) {
         showAlert({
           title: 'Success',
@@ -88,9 +88,9 @@ export const ProtectedRoute = ({ children }) => {
   // Replace the `useMemo` with the updated `checkOrg` logic
   useMemo(() => {
     if (isAuthenticated) {
-      console.log(userCredsData, userCredsStatus);
+      // console.log(userCredsData, userCredsStatus);
       if (userCredsStatus === 'success' && userCredsData) {
-        console.log(userCredsData);
+        // console.log(userCredsData);
       } else if (userCredsStatus !== 'loading' && userCredsStatus !== 'error') {
         const id = user.sub.substring(6);
         const name = user.nickname;
@@ -106,7 +106,7 @@ export const ProtectedRoute = ({ children }) => {
       router.replace('/');
     } else if (isAuthenticated && !user.email_verified) {
       router.replace('/onboarding/verify-email');
-      // console.log('reroute');
+      // // console.log('reroute');
       return children;
     }
     return children;
