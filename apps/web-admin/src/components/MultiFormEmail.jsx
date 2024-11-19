@@ -220,7 +220,6 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         html: template,
         subject: subject,
       });
-     
     }
   };
 
@@ -258,7 +257,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   const handleSubmit = () => {
     setStep(1);
     onClose();
-  }
+  };
   const handleEmailProjectSubmit = async (e) => {
     e.preventDefault();
     // console.log('Hekki')
@@ -288,9 +287,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             height: { base: '600px', md: '750px' },
           }}
         >
-          <ModalHeader
-            fontSize="28px"
-          >Send QR Tickets</ModalHeader>
+          <ModalHeader fontSize="28px">Send QR Tickets</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {step === 1 && (
@@ -489,42 +486,31 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             )}
             {step === 5 && (
               <FormControl mb={2}>
-                <FormLabel
-                  fontWeight="bold"
-                >Emails sent:</FormLabel>
+                <FormLabel fontWeight="bold">Emails sent:</FormLabel>
                 <DataDisplayNew
                   columns={[
                     { field: 'checkInKey', headerName: 'QR Code' },
                     { field: 'firstName', headerName: 'Name' },
                     { field: 'email', headerName: 'Email' },
                   ]}
-                  rows = {recipients}
+                  rows={recipients}
                   min-height="300px"
                   overflowY="visible"
-                
-                >
-                  
-                </DataDisplayNew>
-                <FormLabel
-                  fontWeight="bold"
-                  mt="50px"
-                >Email not sent:</FormLabel>
+                ></DataDisplayNew>
+                <FormLabel fontWeight="bold" mt="50px">
+                  Email not sent:
+                </FormLabel>
                 <DataDisplayNew
-                   columns={[
+                  columns={[
                     { field: 'checkInKey', headerName: 'QR Code' },
                     { field: 'firstName', headerName: 'Name' },
                     { field: 'email', headerName: 'Email' },
                   ]}
-                  rows = {participants.filter(
-                    participant => !recipients.includes(participant)
-                  )}
+                  rows={participants.filter((participant) => !recipients.includes(participant))}
                   min-height="300px"
                   overflowY="visible"
-                >
-                  
-                </DataDisplayNew>   
+                ></DataDisplayNew>
               </FormControl>
-             
             )}
           </ModalBody>
 
@@ -532,16 +518,16 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: step ===1 ? 'center' : step<5?'space-between':'flex-end',
+              justifyContent: step === 1 ? 'center' : step < 5 ? 'space-between' : 'flex-end',
               padding: '20px',
             }}
           >
-            {step > 1 && step!==5 && (
+            {step > 1 && step !== 5 && (
               <Button onClick={prevStep} mr={3}>
                 Previous
               </Button>
             )}
-            {step < 4 &&(
+            {step < 4 && (
               <Button
                 onClick={() => {
                   nextStep();
@@ -551,24 +537,23 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 Next
               </Button>
             )}
-            {step===4 &&(
+            {step === 4 && (
               <Button colorScheme="blue" onClick={sendEmails}>
                 Send Emails
               </Button>
             )}
-            {step===5?
+            {step === 5 ? (
               <Button
-                
                 onClick={() => {
                   handleSubmit();
                   //   console.log(step);
                 }}
-                >
+              >
                 Close
               </Button>
-            :
+            ) : (
               <></>
-            }
+            )}
           </ModalFooter>
         </ModalContent>
       </Modal>

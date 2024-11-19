@@ -79,7 +79,6 @@ router.get('/organizations/:orgId/events/:eventId/participants', getAllParticipa
 router.post('/organizations/:orgId/events/:eventId/participants', addNewParticipant);
 router.put('/organizations/:orgId/events/:eventId/participants/:participantId', editParticipant);
 
-
 router.get(
   '/organizations/:orgId/events/:eventId/participants/check-in',
   getAllParticipantsCheckInDetails,
