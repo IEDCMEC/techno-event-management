@@ -129,8 +129,12 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   }, [recipients]);
   // console.log(`/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`);
   useGetQuery(
-    `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id ? selectedProject.id : ''}`,
-    `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id ? selectedProject.id : ''}`,
+    `/core/organizations/${accountDetails.orgId}/getRecipients/${
+      selectedProject.id ? selectedProject.id : ''
+    }`,
+    `/core/organizations/${accountDetails.orgId}/getRecipients/${
+      selectedProject.id ? selectedProject.id : ''
+    }`,
     {},
     {
       onError: (error) => {
