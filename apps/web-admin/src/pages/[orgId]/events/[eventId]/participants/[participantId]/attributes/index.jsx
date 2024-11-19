@@ -15,8 +15,8 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-import { useFetch } from '@/hooks/useFetch';
-
+// import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
 
@@ -25,20 +25,39 @@ export default function Events() {
 
   const { orgId, eventId, participantId } = router.query;
 
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
 
   const [participantAttributes, setParticipantAttributes] = useState([]);
+  const { useGetQuery } = useWrapper();
 
-  useEffect(() => {
-    const fetchParticipantAttributes = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
-      );
-      setParticipantAttributes(data.participantAttributes || []);
-      console.log(data);
-    };
-    fetchParticipantAttributes();
-  }, [orgId, eventId, participantId]);
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
+    `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
+    {},
+    {
+      onSuccess: (response)=>{
+        setParticipantAttributes(response.data.participantAttributes || []);
+        console.log(data);
+      },
+      onError: (error)=>{
+        showAlert({
+          title: 'Error',
+          description: error,
+          status: 'error',
+        });
+      }
+    }
+  );
+  // useEffect(() => {
+  //   const fetchParticipantAttributes = async () => {
+  //     const { data, status } = await get(
+  //       `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
+  //     );
+  //     setParticipantAttributes(data.participantAttributes || []);
+  //     console.log(data);
+  //   };
+  //   fetchParticipantAttributes();
+  // }, [orgId, eventId, participantId]);
 
   return (
     <DashboardLayout>

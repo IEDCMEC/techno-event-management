@@ -6,10 +6,11 @@ import { Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
 
 import { useAlert } from '@/hooks/useAlert';
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 
 //validation schema
 import { z } from 'zod';
+import useWrapper from '@/hooks/useWrapper';
 
 const participantSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -28,7 +29,7 @@ const participantSchema = z.object({
 });
 
 export default function NewParticipant() {
-  const { loading, post, get } = useFetch();
+  // const { loading, post, get } = useFetch();
   const showAlert = useAlert();
 
   const router = useRouter();
@@ -41,10 +42,32 @@ export default function NewParticipant() {
   const [phone, setPhone] = useState('');
   const [checkInKey, setCheckInKey] = useState('');
   const [attributeValues, setAttributeValues] = useState([]);
-
+  const { useGetQuery, usePostMutation } = useWrapper();
+  const { mutate: addParticipantsMutation } = usePostMutation(
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    {},
+    {
+      onSuccess: (response)=>{
+        showAlert({
+          title: 'Success',
+          description: 'Participant has been added successfully.',
+          status: 'success',
+        });
+        router.push(`/${orgId}/events/${eventId}/participants`);
+      },
+      onError: (error)=>{
+        showAlert({
+          title: 'Error',
+          description: error,
+          status: 'error',
+        });
+      },
+      invalidateKeys: [`/core/organizations/${orgId}/events/${eventId}/participants`]
+    },
+    
+  );
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     attributeValues.forEach((attribute) => {
       if (!attribute.value) {
         setAttributeValues((prev) => {
@@ -68,33 +91,36 @@ export default function NewParticipant() {
 
     try {
       const result = participantSchema.parse(participantData);
-      const { data, status } = await post(
-        `/core/organizations/${orgId}/events/${eventId}/participants`,
-        {},
-        /*{
-              firstName,
-              lastName,
-              email,
-              phone,
-              checkInKey,
-              attributes: attributeValues,
-            }*/
-        result,
-      );
-      if (status === 200) {
-        showAlert({
-          title: 'Success',
-          description: 'Participant has been added successfully.',
-          status: 'success',
-        });
-        router.push(`/${orgId}/events/${eventId}/participants`);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
+      // const { data, status } = await post(
+      //   `/core/organizations/${orgId}/events/${eventId}/participants`,
+      //   {},
+      //   /*{
+      //         firstName,
+      //         lastName,
+      //         email,
+      //         phone,
+      //         checkInKey,
+      //         attributes: attributeValues,
+      //       }*/
+      //   result,
+      // );
+      addParticipantsMutation({
+        result
+      })
+      // if (status === 200) {
+      //   showAlert({
+      //     title: 'Success',
+      //     description: 'Participant has been added successfully.',
+      //     status: 'success',
+      //   });
+      //   router.push(`/${orgId}/events/${eventId}/participants`);
+      // } else {
+      //   showAlert({
+      //     title: 'Error',
+      //     description: data.error,
+      //     status: 'error',
+      //   });
+      // }
     } catch (error) {
       //incase validation fails
       showAlert({
@@ -104,19 +130,32 @@ export default function NewParticipant() {
       });
     }
   };
-
-  useEffect(() => {
-    const fetchAttributes = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/attributes`,
-      );
-      if (status === 200) {
-        setAttributes(data.attributes);
-        setAttributeValues(data.attributes.map((attribute) => ({ id: attribute.id })));
-      }
-    };
-    fetchAttributes();
-  }, [orgId, eventId]);
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    {},
+    {
+      onError: (error) => {
+        console.log(error);
+      },
+    },
+    (response) => {
+      setAttributes(response.data.attributes);
+      setAttributeValues(response.data.attributes.map((attribute) => ({ id: attribute.id })));
+    },
+  );
+  // useEffect(() => {
+  //   const fetchAttributes = async () => {
+  //     const { data, status } = await get(
+  //       `/core/organizations/${orgId}/events/${eventId}/attributes`,
+  //     );
+  //     if (status === 200) {
+  //       setAttributes(data.attributes);
+  //       setAttributeValues(data.attributes.map((attribute) => ({ id: attribute.id })));
+  //     }
+  //   };
+  //   fetchAttributes();
+  // }, [orgId, eventId]);
 
   return (
     <DashboardLayout

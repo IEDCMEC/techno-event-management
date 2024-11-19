@@ -20,7 +20,7 @@ import {
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import useWrapper from '@/hooks/useWrapper';
 
@@ -33,7 +33,7 @@ export default function EventById() {
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
 
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
 
   const { useGetQuery } = useWrapper();
 
@@ -45,28 +45,48 @@ export default function EventById() {
     `/core/organizations/${orgId}/events/${eventId}`,
     {},
     {},
-    (data) => {setEvent(data.data.event || []);},
+    (data) => {
+      setEvent(data.data.event || []);
+    },
   );
-
-  useEffect(() => {
-    const fetchEventAttributes = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/attributes`,
-      );
-      if (status === 200) {
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    {},
+    {
+      onSuccess: (response)=>{
         setAttributes((preValue) => {
-          return [...preValue, ...(data.attributes || [])];
+          return [...response.data.attributes || []];
         });
-      } else {
+      },
+      onError: (error)=>{
         showAlert({
           title: 'Error',
-          description: data.error,
+          description: error,
           status: 'error',
         });
       }
-    };
-    fetchEventAttributes();
-  }, []);
+    }
+  );
+  // useEffect(() => {
+  //   const fetchEventAttributes = async () => {
+  //     const { data, status } = await get(
+  //       `/core/organizations/${orgId}/events/${eventId}/attributes`,
+  //     );
+  //     if (status === 200) {
+  //       setAttributes((preValue) => {
+  //         return [...preValue, ...(data.attributes || [])];
+  //       });
+  //     } else {
+  //       showAlert({
+  //         title: 'Error',
+  //         description: data.error,
+  //         status: 'error',
+  //       });
+  //     }
+  //   };
+  //   fetchEventAttributes();
+  // }, []);
 
   return (
     <DashboardLayout
