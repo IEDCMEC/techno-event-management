@@ -139,7 +139,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     },
     (response) => {
       // console.log(response.data.recipients);
-      setMailStatus(response.data.recipients);
+      // setMailStatus(response.data.recipients);
       setRecipients(() => {
         const myParts = response.data.recipients.map((value) => value.email);
         return participants.filter((value) => myParts.includes(value.email));
