@@ -131,7 +131,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         setSelectedProject((preValue) => {
           return {
             ...preValue,
-            html_template: response.data.html_template,
+            html_template: response.data.data.html_template,
           };
         });
         showAlert({
@@ -201,9 +201,8 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
           description: `Success: ${response.data.nSuccess} \nFailure: ${response.data.nFailure}`,
           status: 'success',
         });
-        nextStep();
-        //setStep(1);
-        //onClose();
+        setStep(1);
+        onClose();
       },
       onError: (error) => {
         console.log(error);
@@ -254,10 +253,6 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       console.log(data);
     },
   );
-  const handleSubmit = () => {
-    setStep(1);
-    onClose();
-  };
   const handleEmailProjectSubmit = async (e) => {
     e.preventDefault();
     // console.log('Hekki')

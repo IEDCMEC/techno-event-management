@@ -7,6 +7,7 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 
 import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
+import useWrapper from '@/hooks/useWrapper';
 
 import DataDisplay from '@/components/DataDisplay';
 
@@ -45,31 +46,25 @@ export default function ParticipantById() {
 
   const { loading, get } = useFetch();
 
+  const { useGetQuery } = useWrapper();
+
   const [participant, setParticipant] = useState([]);
   const [participantAttributes, setParticipantAttributes] = useState([]);
   const [participantExtras, setParticipantExtras] = useState([]);
   const [participantCheckIn, setParticipantCheckIn] = useState({});
 
-  useEffect(() => {
-    const fetchParticipant = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
-      );
-      if (status === 200) {
-        setParticipant(data.participant || []);
-        setParticipantAttributes(data.participant.attributes || []);
-        setParticipantExtras(data.participant.extras || []);
-        setParticipantCheckIn(data.participant.checkIn || {});
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-    fetchParticipant();
-  }, []);
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
+    `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
+    {},
+    {},
+    (data) => {
+      setParticipant(data.data.participant || []);
+      setParticipantAttributes(data.data.participant.attributes || []);
+      setParticipantExtras(data.data.participant.extras || []);
+      setParticipantCheckIn(data.data.participant.checkIn || {});
+    },
+  );
 
   return (
     <DashboardLayout

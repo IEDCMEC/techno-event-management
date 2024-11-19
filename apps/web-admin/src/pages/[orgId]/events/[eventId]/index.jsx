@@ -20,8 +20,9 @@ import {
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function EventById() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,44 +33,60 @@ export default function EventById() {
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
 
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
+
+  const { useGetQuery } = useWrapper();
 
   const [event, setEvent] = useState([]);
   const [attributes, setAttributes] = useState(['firstName', 'lastName', 'email', 'phone']);
 
-  useEffect(() => {
-    const fetchEventStats = async () => {
-      const { data, status } = await get(`/core/organizations/${orgId}/events/${eventId}`);
-      if (status === 200) {
-        setEvent(data.event || []);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-
-    const fetchEventAttributes = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/attributes`,
-      );
-      if (status === 200) {
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}`,
+    `/core/organizations/${orgId}/events/${eventId}`,
+    {},
+    {},
+    (data) => {
+      setEvent(data.data.event || []);
+    },
+  );
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    {},
+    {
+      onSuccess: (response) => {
         setAttributes((preValue) => {
-          return [...preValue, ...(data.attributes || [])];
+          return [...(response.data.attributes || [])];
         });
-      } else {
+      },
+      onError: (error) => {
         showAlert({
           title: 'Error',
-          description: data.error,
+          description: error,
           status: 'error',
         });
-      }
-    };
-    fetchEventStats();
-    fetchEventAttributes();
-  }, []);
+      },
+    },
+  );
+  // useEffect(() => {
+  //   const fetchEventAttributes = async () => {
+  //     const { data, status } = await get(
+  //       `/core/organizations/${orgId}/events/${eventId}/attributes`,
+  //     );
+  //     if (status === 200) {
+  //       setAttributes((preValue) => {
+  //         return [...preValue, ...(data.attributes || [])];
+  //       });
+  //     } else {
+  //       showAlert({
+  //         title: 'Error',
+  //         description: data.error,
+  //         status: 'error',
+  //       });
+  //     }
+  //   };
+  //   fetchEventAttributes();
+  // }, []);
 
   return (
     <DashboardLayout
