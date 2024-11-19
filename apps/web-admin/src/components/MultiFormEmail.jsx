@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAlert } from '@/hooks/useAlert';
-import { useQueryClient } from 'react-query';
 import { marked } from 'marked';
 import {
   Button,
@@ -25,7 +24,6 @@ import {
   Select,
   Input,
 } from '@chakra-ui/react';
-// import { TextareaAutosize } from '@mui/material';
 import dynamic from 'next/dynamic';
 import DOMPurify from 'dompurify';
 import '@uiw/react-md-editor/markdown-editor.css';
@@ -40,7 +38,6 @@ import DataDisplay from './DataDisplay';
 import DataDisplayNew from './DataDisplayNew';
 import { useRouter } from 'next/router';
 import useWrapper from '@/hooks/useWrapper';
-import { ReceiptCent } from 'lucide-react';
 
 // const EditerMarkdown = dynamic(
 //   () =>
