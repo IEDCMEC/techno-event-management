@@ -42,8 +42,8 @@ export const ProtectedRoute = ({ children }) => {
     const id = user.sub.substring(6);
     const name = user.nickname;
     const response = await post(`/core/organizations`, {}, { id, name });
-    if(response){
-      const { data, mystatus } = response; 
+    if (response) {
+      const { data, mystatus } = response;
       console.log('created');
       if (mystatus === 200) {
         showAlert({
@@ -52,15 +52,12 @@ export const ProtectedRoute = ({ children }) => {
           status: 'success',
         });
       }
-    }
-    else{
+    } else {
       showAlert({
-        title:"Authentication Error",
-        description:"Log out and then sign in again!!"
-      })
+        title: 'Authentication Error',
+        description: 'Log out and then sign in again!!',
+      });
     }
-
-    
   }
   async function checkOrg() {
     const response = await get('/core/users/mycreds');

@@ -34,9 +34,8 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor').then((mod) => mod.
 // import { bold, italic } from '@uiw/react-md-editor/lib/commands';
 import { useContext } from 'react';
 import DataDisplayNew from './DataDisplayNew';
-import { useRouter } from 'next/router';
 import useWrapper from '@/hooks/useWrapper';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { account } from '@/contexts/MyContext';
 import DataDisplay from './DataDisplay';
 import { useRouter } from 'next/router';
