@@ -21,7 +21,7 @@ ENV PYTHON=/usr/bin/python3
 
 RUN pnpm install
 
-RUN pnpm turbo run build --filter=web-admin... 
+RUN pnpm run build --filter=techno-event-web-admin 
 
 EXPOSE 3000
 CMD ["pnpm", "run", "dev"]
