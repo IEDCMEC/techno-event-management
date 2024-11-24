@@ -123,15 +123,13 @@ router.post('/organizations/:orgId/events/:eventId/extras/:extraId/check-in', ch
 router.post('/organizations/:orgId/events/:eventId/extras', addNewExtra); //done
 
 //mailer routes
-router.post('/organizations/:orgId/newEmailProject', newMailProject); //done
-router.post('/organizations/:orgId/updateEmailProject', updateMailProject); //done
-router.get('/organizations/:orgId/getEmailProjects', getMailProjects); // done
-router.get('/organizations/:orgId/getMailStatus', getMailStatus); //subru
-router.get('/organizations/:orgId/getRecipients/:projectId', getRecipients);
-router.post('/organizations/:orgId/addNewRecipient', addNewRecipient); //done
-router.post('/organizations/:orgId/addNewRecipients', addNewRecipients); //done
-router.post('/organizations/:orgId/events/:eventId/mailQR', sendMailWithQR); // done
-router.post('/organizations/:orgId/getStatusOfEmails', getStatusOfEmails); //done
+router.post('/organizations/:orgId/newEmailProject', newMailProject);
+router.post('/organizations/:orgId/updateEmailProject', updateMailProject);
+router.get('/organizations/:orgId/getEmailProjects', getMailProjects);
+router.get('/organizations/:orgId/getMailStatus', getMailStatus);
+router.post('/organizations/:orgId/addNewRecipient', addNewRecipient);
+router.post('/organizations/:orgId/addNewRecipients', addNewRecipients);
+router.post('/organizations/:orgId/events/:eventId/mailQR', sendMailWithQR);
 
 // OTP routes
 router.post('/organizations/sendOTP', sendOTP);

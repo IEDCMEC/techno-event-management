@@ -29,7 +29,7 @@ export const ProtectedRoute = ({ children }) => {
   const { post } = useFetch();
   // useEffect();
   useMemo(() => {
-    // console.log(accountDetails);
+    console.log(accountDetails);
     if (accountDetails.orgId) {
       // // console.log('route')
       router.replace(`/${accountDetails.orgId}`);
@@ -42,9 +42,9 @@ export const ProtectedRoute = ({ children }) => {
     const id = user.sub.substring(6);
     const name = user.nickname;
     const response = await post(`/core/organizations`, {}, { id, name });
-    if (response) {
-      const { data, mystatus } = response;
-      // console.log('created');
+    if(response){
+      const { data, mystatus } = response; 
+      console.log('created');
       if (mystatus === 200) {
         showAlert({
           title: 'Success',
@@ -52,6 +52,27 @@ export const ProtectedRoute = ({ children }) => {
           status: 'success',
         });
       }
+    }
+    else{
+      showAlert({
+        title:"Authentication Error",
+        description:"Log out and then sign in again!!"
+      })
+    }
+
+    
+  }
+  async function checkOrg() {
+    const response = await get('/core/users/mycreds');
+    // console.log(response.data.data);
+    if (response && response.status === 200) {
+      setAccountDetails((preValue) => {
+        return {
+          ...preValue,
+          role: `${response.data.data.role}`,
+          orgId: `${response.data.data.organizationId}`,
+        };
+      });
     } else {
       showAlert({
         title: 'Authentication Error',

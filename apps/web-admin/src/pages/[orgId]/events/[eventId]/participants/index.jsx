@@ -57,7 +57,7 @@ export default function Participants() {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  const [emailContent, setEmailContent] = useState('');
+  const [emailContent, setEmailContent] = useState('');  const [emailContent, setEmailContent] = useState('');
   const handleSubmit = async (e) => {
     e.preventDefault();
     //console.log(formData);
