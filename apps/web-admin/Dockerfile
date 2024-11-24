@@ -23,7 +23,5 @@ RUN pnpm install
 
 RUN pnpm run build --filter=web-admin... 
 
-FROM node:18-alpine
-
 EXPOSE 3000
 CMD ["pnpm", "run", "dev"]

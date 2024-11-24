@@ -23,7 +23,13 @@ RUN pnpm install
 
 RUN pnpm run build --filter=registration-admin... 
 
-FROM node:18-alpine
+# FROM node:18-alpine
+
+# COPY --from=builder /app/apps/core-auth0-actions/dist .
+# COPY --from=builder /app/node_modules/.pnpm/@prisma+client*/node_modules/.prisma/client/*.node .
+
+# COPY --from=builder ../apps/registration-admin/dist /app/register-build/
+# RUN pnpm install typescript
 
 EXPOSE 3004
 CMD ["pnpm", "run", "dev"]
