@@ -89,7 +89,7 @@ jobs:
           docker tag registration-admin ${{ secrets.DOCKER_USER }}/registration-admin:latest
           docker push ${{ secrets.DOCKER_USER }}/registration-admin:latest
 
-build-and-push-web-admin:
+  build-and-push-web-admin:
     runs-on: ubuntu-latest
 
     steps:
