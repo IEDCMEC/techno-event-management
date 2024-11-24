@@ -8,6 +8,17 @@ RUN npm install turbo
 
 COPY ../../. .
 
+RUN apk add --no-cache \
+    build-base \
+    cairo-dev \
+    pango-dev \
+    jpeg-dev \
+    giflib-dev \
+    librsvg \
+    python3
+    
+ENV PYTHON=/usr/bin/python3
+
 RUN pnpm install
 
 RUN pnpm run build --filter=core-auth0-actions... 
