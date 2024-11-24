@@ -88,3 +88,17 @@ jobs:
       - run: |
           docker tag registration-admin ${{ secrets.DOCKER_USER }}/registration-admin:latest
           docker push ${{ secrets.DOCKER_USER }}/registration-admin:latest
+
+build-and-push-web-admin:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          docker build -t web-admin -f apps/web-admin/Dockerfile .
+
+      - run: |
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: |
+          docker tag web-admin ${{ secrets.DOCKER_USER }}/web-admin:latest
+          docker push ${{ secrets.DOCKER_USER }}/web-admin:latest
