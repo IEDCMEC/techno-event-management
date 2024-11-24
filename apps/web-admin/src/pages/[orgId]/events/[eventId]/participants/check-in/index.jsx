@@ -9,6 +9,7 @@ import DataDisplay from '@/components/DataDisplay';
 
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -38,25 +39,19 @@ export default function ParticipantsCheckIn() {
   const { orgId, eventId } = router.query;
   const { loading, get } = useFetch();
 
+  const { useGetQuery } = useWrapper();
+
   const [participantsCheckIn, setParticipantsCheckIn] = useState([]);
 
-  useEffect(() => {
-    const fetchParticipantsCheckIn = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
-      );
-      if (status === 200) {
-        setParticipantsCheckIn(data.participantsCheckIn || []);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-    fetchParticipantsCheckIn();
-  }, [orgId, eventId]);
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
+    `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
+    {},
+    {},
+    (data) => {
+      setParticipantsCheckIn(data.data.participantsCheckIn || []);
+    },
+  );
 
   return (
     <DashboardLayout

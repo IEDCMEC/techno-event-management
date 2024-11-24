@@ -7,6 +7,7 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function EditParticipant() {
   const { loading, put, get } = useFetch();
@@ -14,6 +15,8 @@ export default function EditParticipant() {
 
   const router = useRouter();
   const { orgId, eventId, participantId } = router.query;
+
+  const { useGetQuery } = useWrapper();
 
   const [participant, setParticipant] = useState({});
   const [attributes, setAttributes] = useState([]);
@@ -52,19 +55,16 @@ export default function EditParticipant() {
     }
   };
 
-  useEffect(() => {
-    const fetchParticipant = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
-      );
-
-      if (status === 200) {
-        setParticipant(data.participant);
-        setAttributeValues(data.participant.attributes);
-      }
-    };
-    fetchParticipant();
-  }, [orgId, eventId, participantId]);
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
+    `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}`,
+    {},
+    {},
+    (data) => {
+      setParticipant(data.data.participant);
+      setAttributeValues(data.data.participant.attributes);
+    },
+  );
 
   if (!participant) {
     return null;

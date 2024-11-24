@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAlert } from '@/hooks/useAlert';
 import { marked } from 'marked';
 import {
@@ -24,7 +24,6 @@ import {
   Select,
   Input,
 } from '@chakra-ui/react';
-// import { TextareaAutosize } from '@mui/material';
 import dynamic from 'next/dynamic';
 import DOMPurify from 'dompurify';
 import '@uiw/react-md-editor/markdown-editor.css';
@@ -33,9 +32,10 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor').then((mod) => mod.
   ssr: false,
 });
 // import { bold, italic } from '@uiw/react-md-editor/lib/commands';
-import { useEffect } from 'react';
-import { useFetch } from '@/hooks/useFetch';
 import { useContext } from 'react';
+import DataDisplayNew from './DataDisplayNew';
+import useWrapper from '@/hooks/useWrapper';
+// import { useEffect } from 'react';
 import { account } from '@/contexts/MyContext';
 import DataDisplay from './DataDisplay';
 import { useRouter } from 'next/router';
@@ -54,6 +54,7 @@ import { useRouter } from 'next/router';
 const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   const router = useRouter();
   const { eventId } = router.query;
+  // const queryClient = useQueryClient();
   const showAlert = useAlert();
   const [newEmailProject, setNewEmailProject] = useState({
     name: '',
@@ -61,14 +62,14 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   });
   const [step, setStep] = useState(1);
   const [selectedProject, setSelectedProject] = useState({});
-  const { get, post } = useFetch();
   const [recipients, setRecipients] = useState([]);
+  const [mailStatus, setMailStatus] = useState(null);
   const { accountDetails, emailProjects, setEmailProjects, participants, setParticipants } =
     useContext(account);
 
-  useEffect(() => {
-    console.log(participants);
-  }, [participants]);
+  // useEffect(() => {
+  //   console.log(participants);
+  // }, [participants]);
   // useEffect(() => {
   //   async fetchEmailTemplate = ()=>
   //   if(accountDetails.orgId){
@@ -79,146 +80,214 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     const dirtyHtml = marked(markdown); // Convert Markdown to HTML
     return DOMPurify.sanitize(dirtyHtml); // Sanitize the HTML
   };
-  const addNewRecipients = async () => {
-    try {
-      if (accountDetails.orgId) {
-        const myData = recipients.map((value) => {
-          return {
-            name: value.firstName,
-            email: value.email,
-            payload: value.checkInKey,
-          };
+  const { useGetQuery, usePostMutation } = useWrapper();
+  const { mutate: addRecipientsMutation } = usePostMutation(
+    `/core/organizations/${accountDetails.orgId}/addNewRecipients`,
+    {},
+    {
+      onSuccess: (response) => {
+        showAlert({
+          title: 'Success',
+          description: `Success: ${response.data.success} Failure: ${response.data.failure}`,
+          status: 'success',
         });
-        const response = await post(
-          `/core/organizations/${accountDetails.orgId}/addNewRecipients`,
-          {},
-          {
-            projectId: selectedProject.id,
-            data: myData,
-          },
-        );
-        if (response) {
-          showAlert({
-            title: 'Success',
-            description: `Success: ${response.data.success} Failure: ${response.data.failure}`,
-            status: 'success',
-          });
-        } else {
-          showAlert({
-            title: 'Failure',
-            description: `Error updating recipients`,
-            status: 'failure',
-          });
-        }
-      }
-    } catch (e) {
-      console.log(e);
+      },
+      onError: (error) => {
+        console.error('Error updating recipients:', error);
+        showAlert({
+          title: 'Failure',
+          description: `Error updating recipients`,
+          status: 'error',
+        });
+      },
+      invalidateKeys: [
+        `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`,
+      ],
+    },
+  );
+  // const {data, isLoading: loading} = useGetQuery(`/core/organizations/${accountDetails.orgId}/`)
+  const addNewRecipients = () => {
+    if (accountDetails.orgId) {
+      const myData = recipients.map((value) => ({
+        name: value.firstName,
+        email: value.email,
+        payload: value.checkInKey,
+      }));
+      console.log('Request');
+      console.log(myData, recipients);
+      // Trigger the mutation
+      addRecipientsMutation({
+        projectId: selectedProject.id,
+        data: myData,
+      });
     }
   };
-
+  useEffect(() => {
+    console.log(recipients);
+  }, [recipients]);
+  // console.log(`/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`);
+  useGetQuery(
+    `/core/organizations/${accountDetails.orgId}/getRecipients/${
+      selectedProject.id ? selectedProject.id : ''
+    }`,
+    `/core/organizations/${accountDetails.orgId}/getRecipients/${
+      selectedProject.id ? selectedProject.id : ''
+    }`,
+    {},
+    {
+      onError: (error) => {
+        console.log(error);
+      },
+    },
+    (response) => {
+      // console.log(response.data.recipients);
+      // setMailStatus(response.data.recipients);
+      setRecipients(() => {
+        const myParts = response.data.recipients.map((value) => value.email);
+        return participants.filter((value) => myParts.includes(value.email));
+      });
+    },
+  );
+  const { mutate: updateEmailMutation } = usePostMutation(
+    `/core/organizations/${accountDetails.orgId}/updateEmailProject`,
+    {},
+    {
+      onSuccess: (response) => {
+        setEmailProjects((preValue) => {
+          const temp1 = preValue.filter((value, index) => value.id !== response.data.id);
+          return [...temp1, response.data];
+        });
+        setSelectedProject((preValue) => {
+          return {
+            ...preValue,
+            html_template: response.data.data.html_template,
+          };
+        });
+        showAlert({
+          title: 'Success',
+          description: 'Update Email template',
+          status: 'success',
+        });
+      },
+      onError: (error) => {
+        console.log(error);
+        showAlert({
+          title: 'Failure',
+          description: 'Failed to update email template',
+          status: 'failure',
+        });
+      },
+      invalidateKeys: [
+        `/core/organizations/${accountDetails.orgId}/getEmailProjects`,
+        `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`,
+      ],
+    },
+    ({ data, variables, context }) => {
+      console.log(data);
+    },
+  );
   const updateEmailTemplate = async (e) => {
     e.preventDefault();
     // console.log(renderHtml(emailContent));
-    try {
-      if (accountDetails.orgId) {
-        const response = await post(
-          `/core/organizations/${accountDetails.orgId}/updateEmailProject`,
-          {},
-          {
-            projectId: selectedProject.id,
-            html_template: emailContent,
-          },
-        );
-        if (response) {
-          setEmailProjects((preValue) => {
-            const temp1 = preValue.filter((value, index) => value.id !== response.data.id);
-            return [...temp1, response.data];
-          });
-          setSelectedProject((preValue) => {
-            return {
-              ...preValue,
-              html_template: response.data.data.html_template,
-            };
-          });
-          showAlert({
-            title: 'Success',
-            description: 'Update Email template',
-            status: 'success',
-          });
-        } else {
-          showAlert({
-            title: 'Failure',
-            description: 'Failed to update email template',
-            status: 'failure',
-          });
-        }
-      }
-    } catch (e) {
-      console.log(e);
+    if (accountDetails.orgId) {
+      updateEmailMutation({
+        projectId: selectedProject.id,
+        html_template: emailContent,
+      });
     }
   };
   const [subject, setSubject] = useState('');
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        //   console.log(process.env.NEXT_PUBLIC_API_URL);
-        const response = await get(`/core/organizations/${accountDetails.orgId}/getEmailProjects`);
-        console.log(response);
-        if (response) {
-          setEmailProjects(response.data.data);
-        }
-        console.log(response.data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchData();
-    return () => fetchData();
-  }, []);
 
-  const nextStep = async () => {
-    if (step == 3) {
-      console.log('hi');
-      await addNewRecipients();
-    }
-    console.log(step);
-    setStep((prev) => Math.min(prev + 1, 4));
-  };
+  const {
+    data: emailContentData,
+    status: emailContentStatus,
+    error: emailContentError,
+    isLoading: loading,
+  } = useGetQuery(
+    `/core/organizations/${accountDetails.orgId}/getEmailProjects`,
+    `/core/organizations/${accountDetails.orgId}/getEmailProjects`,
+    {},
+    {},
+    (response) => {
+      setEmailProjects(response.data.data);
+    },
+  );
+
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+
+  const { mutate: sendEmailMutation } = usePostMutation(
+    `/core/organizations/${accountDetails.orgId}/events/${eventId}/mailQR`,
+    {},
+    {
+      onSuccess: (response) => {
+        showAlert({
+          title: `Emails sent to ${response.data.nSuccess} people`,
+          description: `Success: ${response.data.nSuccess} \nFailure: ${response.data.nFailure}`,
+          status: 'success',
+        });
+        setStep(5);
+        // onClose();
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    },
+  );
   const sendEmails = async (e) => {
     // Handle email sending logic here
     e.preventDefault();
-    try {
-      console.log(selectedProject);
-      if (accountDetails.orgId && eventId) {
-        const template = renderHtml(selectedProject.html_template);
-        // console.log(template);
-        const response = await post(
-          `/core/organizations/${accountDetails.orgId}/events/${eventId}/mailQR`,
-          {},
-          {
-            projectId: selectedProject.id,
-            html: template,
-            subject: subject,
+    if (accountDetails.orgId && eventId) {
+      const template = renderHtml(selectedProject.html_template);
+      sendEmailMutation(
+        {
+          projectId: selectedProject.id,
+          html: template,
+          subject: subject,
+        },
+        {
+          onSuccess: (response) => {
+            console.log(response.data);
+            // setMailStatus(response.data);
           },
-        );
-        if (response) {
-          showAlert({
-            title: `Emails sent to ${response.data.nSuccess} people`,
-            description: `Success: ${response.data.nSuccess} \nFailure: ${response.data}`,
-            status: 'success',
-          });
-        } else {
-          console.log(response.data, response.status, response);
-        }
-      }
-      setStep(1);
-    } catch (e) {
-      console.log(e);
+        },
+      );
     }
-    console.log('Emails sent');
-    onClose();
   };
+
+  const { mutate: emailProjectMutation } = usePostMutation(
+    `/core/organizations/${accountDetails.orgId}/newEmailProject`,
+    {},
+    {
+      onSuccess: (response) => {
+        console.log(response);
+        showAlert({
+          title: 'Success',
+          description: 'Email Project Added',
+          status: 'success',
+        });
+        // await fetchData();
+        setNewEmailProject({
+          name: '',
+          desc: '',
+        });
+      },
+      onError: (error) => {
+        console.error('Error adding new project:', error);
+        showAlert({
+          title: 'Failure',
+          description: `Error adding new project`,
+          status: 'error',
+        });
+      },
+      invalidateKeys: [
+        `core/organizations/${accountDetails.orgId}/getEmailProjects`,
+        `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`,
+      ],
+    },
+    ({ data, variables, context }) => {
+      console.log(data);
+    },
+  );
   const handleEmailProjectSubmit = async (e) => {
     e.preventDefault();
     // console.log('Hekki')
@@ -230,35 +299,40 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         status: 'failure',
       });
     } else {
-      try {
-        const response = await post(
-          `/core/organizations/${accountDetails.orgId}/newEmailProject`,
-          {},
-          {
-            name: newEmailProject.name,
-            desc: newEmailProject.desc,
-          },
-        );
-        if (response) {
-          showAlert({
-            title: 'Success',
-            description: 'Email Project Added',
-            status: 'success',
-          });
-          await fetchData();
-          setNewEmailProject({
-            name: '',
-            desc: '',
-          });
-        }
-      } catch (e) {
-        console.log(e);
-      }
+      emailProjectMutation({
+        name: newEmailProject.name,
+        desc: newEmailProject.desc,
+      });
     }
   };
-  useEffect(() => {
-    console.log(recipients);
-  }, [recipients]);
+  const {
+    isLoading,
+    isSuccess,
+    data: mailStatusData,
+    mutate: checkMailStatusMutation,
+  } = usePostMutation(
+    `/core/organizations/${accountDetails.orgId}/getStatusOfEmails`,
+    {},
+    {
+      onSuccess: (response) => {
+        console.log(response.data);
+        setMailStatus(response.data);
+      },
+    },
+  );
+  const nextStep = async () => {
+    if (step == 3) {
+      console.log('hi');
+      addNewRecipients();
+    }
+    console.log(step);
+    setStep((prev) => Math.min(prev + 1, 5));
+    // if(step == 4){
+    //   checkMailStatusMutation({
+    //     emailArray: recipients.map((value)=> value.email)
+    //   })
+    // }
+  };
   return (
     <>
       {/* <Button onClick={onOpen}>Open Modal</Button> */}
@@ -271,7 +345,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             height: { base: '600px', md: '750px' },
           }}
         >
-          <ModalHeader>Send QR Tickets</ModalHeader>
+          <ModalHeader fontSize="28px">Send QR Tickets</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {step === 1 && (
@@ -414,7 +488,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   onRowClick={(value) => {
                     console.log(value);
                   }}
-                  state={recipients.map((value) => value.id)}
+                  state={recipients.map((value) => value.email)}
                   // state={recipients}
                   setState={(selectedValue) => {
                     //console.log(selectedValue);
@@ -429,9 +503,10 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                     } else {
                       //console.log('trigger')
                       setRecipients((prevSelectedRows) => {
-                        const myIds = prevSelectedRows.map((value) => value.id);
-                        return myIds.includes(selectedValue.id)
-                          ? prevSelectedRows.filter((value) => value.id !== selectedValue.id)
+                        console.log(prevSelectedRows);
+                        const myIds = prevSelectedRows.map((value) => value.email);
+                        return myIds.includes(selectedValue.email)
+                          ? prevSelectedRows.filter((value) => value.email !== selectedValue.email)
                           : [...prevSelectedRows, selectedValue];
                       });
                     }
@@ -468,22 +543,65 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 </Box>
               </Box>
             )}
+            {step === 5 && (
+              <Box
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-evenly',
+                  flexDirection: 'column',
+                  width: '100%',
+                }}
+              >
+                <Box width={'100%'}>
+                  <Text fontWeight="bold" mb={2}>
+                    Emails sent:
+                  </Text>
+                  <DataDisplayNew
+                    columns={[
+                      { field: 'checkInKey', headerName: 'QR Code' },
+                      { field: 'firstName', headerName: 'Name' },
+                      { field: 'email', headerName: 'Email' },
+                    ]}
+                    height="250px"
+                    rows={recipients}
+                    overflowY="visible"
+                  ></DataDisplayNew>
+                </Box>
+                <Box width={'100%'}>
+                  <Text fontWeight="bold" mb={2}>
+                    Email not sent:
+                  </Text>
+                  <DataDisplayNew
+                    columns={[
+                      { field: 'checkInKey', headerName: 'QR Code' },
+                      { field: 'firstName', headerName: 'Name' },
+                      { field: 'email', headerName: 'Email' },
+                    ]}
+                    rows={participants.filter((participant) => !recipients.includes(participant))}
+                    height="250px"
+                    overflowY="visible"
+                  ></DataDisplayNew>
+                </Box>
+              </Box>
+            )}
           </ModalBody>
 
           <ModalFooter
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: step > 1 ? 'space-between' : 'center',
+              justifyContent: step === 1 ? 'center' : step < 5 ? 'space-between' : 'flex-end',
               padding: '20px',
             }}
           >
-            {step > 1 && (
+            {step > 1 && step !== 5 && (
               <Button onClick={prevStep} mr={3}>
                 Previous
               </Button>
             )}
-            {step < 4 ? (
+            {step < 4 && (
               <Button
                 onClick={() => {
                   nextStep();
@@ -492,9 +610,21 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
               >
                 Next
               </Button>
-            ) : (
+            )}
+            {step === 4 && (
               <Button colorScheme="blue" onClick={sendEmails}>
                 Send Emails
+              </Button>
+            )}
+            {step === 5 && (
+              <Button
+                onClick={() => {
+                  onClose();
+                  setStep(1);
+                  //   console.log(step);
+                }}
+              >
+                Close
               </Button>
             )}
           </ModalFooter>

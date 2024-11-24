@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function NewEventForm({ onClose }) {
   const { loading, post } = useFetch();
@@ -11,25 +12,33 @@ export default function NewEventForm({ onClose }) {
   const { orgId } = router.query;
 
   const [name, setName] = useState('');
-
+  const { usePostMutation } = useWrapper();
+  const { mutate: addNewEventMutation } = usePostMutation(
+    `/core/organizations/${orgId}/events`,
+    {},
+    {
+      onSuccess: (response) => {
+        showAlert({
+          title: 'Success',
+          description: 'Event has been created successfully.',
+          status: 'success',
+        });
+        onClose();
+        router.push(`/${orgId}/events`);
+      },
+      onError: (error) => {
+        showAlert({
+          title: 'Error',
+          description: error,
+          status: 'error',
+        });
+      },
+      invalidateKeys: [`/core/organizations/${orgId}/events`],
+    },
+  );
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data, status } = await post(`/core/organizations/${orgId}/events`, {}, { name });
-    if (status === 200) {
-      showAlert({
-        title: 'Success',
-        description: 'Event has been created successfully.',
-        status: 'success',
-      });
-      onClose();
-      router.push(`/${orgId}/events`);
-    } else {
-      showAlert({
-        title: 'Error',
-        description: data.error,
-        status: 'error',
-      });
-    }
+    addNewEventMutation({ name });
   };
 
   return (

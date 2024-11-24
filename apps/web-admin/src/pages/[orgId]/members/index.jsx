@@ -12,9 +12,10 @@ import {
 } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import NewMemberForm from './new';
+import useWrapper from '@/hooks/useWrapper';
 
 const columns = [
   { field: 'role', headerName: 'Role', width: 200 },
@@ -29,25 +30,25 @@ export default function OrganizationMembers() {
   const { orgId } = router.query;
   const showAlert = useAlert();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
+  const { useGetQuery } = useWrapper();
 
   const [members, setMembers] = useState([]);
 
-  useEffect(() => {
-    const fetchOrganizationMembers = async () => {
-      const { data, status } = await get(`/core/organizations/${orgId}/members`);
-      if (status === 200) {
-        setMembers(data.organizationUsers || []);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-    fetchOrganizationMembers();
-  }, []);
+  const {
+    data,
+    status,
+    error,
+    isLoading: loading,
+  } = useGetQuery(
+    `/core/organizations/${orgId}/members`,
+    `/core/organizations/${orgId}/members`,
+    {}, // headers
+    {}, // options
+    (data) => {
+      setMembers(data.data.organizationUsers || []);
+    },
+  );
 
   return (
     <DashboardLayout

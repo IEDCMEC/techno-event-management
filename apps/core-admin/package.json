@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
+    "@typescript-eslint/parser": "6.0.0",
     "axios": "^1.5.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
@@ -28,6 +29,7 @@
     "express-oauth2-jwt-bearer": "^1.6.0",
     "form-data": "^4.0.1",
     "jsonwebtoken": "^9.0.0",
+    "marked": "^15.0.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pg": "^8.11.0",
