@@ -24,4 +24,4 @@ RUN pnpm install
 RUN pnpm run build --filter=techno-event-web-admin 
 
 EXPOSE 3000
-CMD ["pnpm", "run", "dev"]
+CMD ["pnpm", "run", "dev", "--filter=techno-event-web-admin"]
