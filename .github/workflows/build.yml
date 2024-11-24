@@ -75,7 +75,7 @@ jobs:
           curl -X GET ${{ secrets.DEV_CORE_AUTH0_ACTIONS_DEPLOY_HOOK }}
           curl -X GET ${{ secrets.PROD_CORE_AUTH0_ACTIONS_DEPLOY_HOOK }}
 
-  build-and-push-core-mailer:
+  build-and-push-registration-admin:
     runs-on: ubuntu-latest
 
     steps:
