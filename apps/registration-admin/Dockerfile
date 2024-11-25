@@ -32,13 +32,5 @@ RUN pnpm run build --filter=registration-admin...
 # RUN pnpm install typescript
 
 # Use a lightweight web server to serve the static files
-FROM nginx:stable-alpine
-
-# Copy the built frontend app to the web server directory
-COPY --from=builder /app/apps/registration-admin/dist /usr/share/nginx/html
-
-# Expose the port the app runs on
 EXPOSE 5173
-
-# Start the web server
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["pnpm", "run", "dev", "--filter=registration-admin"]
