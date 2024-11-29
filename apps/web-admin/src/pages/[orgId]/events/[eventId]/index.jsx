@@ -144,11 +144,8 @@ export default function EventById() {
                 style={tabStyle(activeTab === tab)}
                 onClick={() => {
                   setActiveTab(tab);
-                  router.push(
-                    `/${orgId}/events/${eventId}/
-                    ${tab === 'check-in' ? 'participants/check-in' : tab}
-                    `,
-                  );
+                  const element = tab === 'check-in' ? 'participants/check-in' : tab;
+                  router.push(`/${orgId}/events/${eventId}/${element}`);
                 }}
               >
                 {tab === 'check-in'
@@ -170,10 +167,10 @@ export default function EventById() {
                 style={tabStyle(activeTab === tab)}
                 onClick={() => {
                   setActiveTab(tab);
+                  const element = tab === 'check-in' ? 'participants/check-in' : tab;
                   router.push(
-                    `/${orgId}/events/${eventId}/
-                    ${tab === 'check-in' ? 'participants/check-in' : tab}
-                    `,
+                    `/${orgId}/events/${eventId}/${element}
+                `,
                   );
                 }}
               >
