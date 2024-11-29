@@ -4,6 +4,9 @@ import { extendTheme, ChakraProvider, withDefaultColorScheme } from '@chakra-ui/
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import '../styles/globals.css';
+// import '@uiw/react-md-editor/markdown-editor.css';
+import { QueryClient, QueryClientProvider } from 'react-query';
+const queryClient = new QueryClient();
 
 const theme = extendTheme(
   withDefaultColorScheme({
@@ -23,13 +26,15 @@ export default function App({ Component, pageProps }) {
       useRefreshTokens={true}
       cacheLocation="localstorage"
     >
-      <MyContext>
-        <ProtectedRoute>
-          <ChakraProvider theme={theme}>
-            <Component {...pageProps} />
-          </ChakraProvider>
-        </ProtectedRoute>
-      </MyContext>
+      <QueryClientProvider client={queryClient}>
+        <MyContext>
+          <ProtectedRoute>
+            <ChakraProvider theme={theme}>
+              <Component {...pageProps} />
+            </ChakraProvider>
+          </ProtectedRoute>
+        </MyContext>
+      </QueryClientProvider>
     </Auth0Provider>
   );
 }

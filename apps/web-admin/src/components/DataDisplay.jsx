@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { extendTheme } from '@chakra-ui/react';
+import { useEffect } from 'react';
 const chakraTheme = extendTheme({
   colors: {
     primary: {
@@ -20,36 +21,74 @@ const chakraTheme = extendTheme({
     },
   },
 });
-export default function DataDisplay({ loading, rows, columns, onRowClick }) {
+export default function DataDisplay({
+  loading,
+  rows,
+  columns,
+  onRowClick,
+  overflowY = 'auto',
+  height = 'auto',
+  state = null,
+  setState = null,
+}) {
   const [selectedRows, setSelectedRows] = useState([]);
+  // console.log(state);
   const handleRowClick = (row) => {
-    onRowClick(row);
+    if (onRowClick) {
+      onRowClick(row);
+    } else {
+      // console.log(row);
+    }
   };
-
-  const handleCheckboxChange = (rowId) => {
-    setSelectedRows((prevSelectedRows) =>
-      prevSelectedRows.includes(rowId)
-        ? prevSelectedRows.filter((id) => id !== rowId)
-        : [...prevSelectedRows, rowId],
-    );
+  // //console.log(Object.keys(rows[0]));
+  const handleCheckboxChange = (row) => {
+    //console.log('handle')
+    // //console.log(row);
+    if (!state || !setState) {
+      setSelectedRows((prevSelectedRows) =>
+        prevSelectedRows.includes(row.id)
+          ? prevSelectedRows.filter((id) => id !== row.id)
+          : [...prevSelectedRows, row.id],
+      );
+    } else {
+      // console.log(row);
+      setState(row);
+    }
   };
+  // useEffect(() => {
+  //   //console.log(selectedRows);
+  // }, [selectedRows]);
   return (
     <ChakraProvider theme={chakraTheme}>
       <Box p={4}>
         {loading ? (
           <Spinner size="xl" color="primary.500" />
         ) : (
-          <TableContainer>
-            <Table variant="simple" overflowY={'auto'}>
+          <TableContainer height={height} overflowY={overflowY} sx={{}}>
+            <Table variant="simple" overflowY={overflowY}>
               <Thead>
                 <Tr>
                   <Th>
                     <Checkbox
-                      isChecked={selectedRows.length === rows.length}
-                      isIndeterminate={selectedRows.length > 0 && selectedRows.length < rows.length}
-                      onChange={(e) =>
-                        setSelectedRows(e.target.checked ? rows.map((row) => row.id) : [])
+                      isChecked={
+                        state === null || setState === null
+                          ? selectedRows.length === rows.length
+                          : state.length === rows.length
                       }
+                      isIndeterminate={
+                        state === null || setState === null
+                          ? selectedRows.length > 0 && selectedRows.length < rows.length
+                          : state.length > 0 && state.length < rows.length
+                      }
+                      onChange={(e) => {
+                        if (!state || !setState) {
+                          setSelectedRows(e.target.checked ? rows.map((row) => row.email) : []);
+                        } else {
+                          //console.log(e.target.indeterminate, e.target.checked);
+                          // setState(e.target.checked ? )
+                          setState(e.target.checked ? rows.map((row) => row.id) : []);
+                        }
+                      }}
                     />
                   </Th>
                   {columns.map((column) => (
@@ -61,13 +100,22 @@ export default function DataDisplay({ loading, rows, columns, onRowClick }) {
                 {rows.map((row) => (
                   <Tr
                     key={row.id}
-                    onClick={() => handleRowClick(row)}
+                    onClick={() => {
+                      handleRowClick(row);
+                      handleCheckboxChange(row);
+                    }}
                     _hover={{ bg: 'gray.100', cursor: 'pointer' }}
                   >
                     <Td>
                       <Checkbox
-                        isChecked={selectedRows.includes(row.id)}
-                        onChange={() => handleCheckboxChange(row.id)}
+                        isChecked={
+                          state === null || setState === null
+                            ? selectedRows.includes(row.id)
+                            : state.includes(row.email)
+                        }
+                        onChange={() => {
+                          handleCheckboxChange(row);
+                        }}
                       />
                     </Td>
                     {columns.map((column) => (

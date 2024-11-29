@@ -74,3 +74,31 @@ jobs:
         run: |
           curl -X GET ${{ secrets.DEV_CORE_AUTH0_ACTIONS_DEPLOY_HOOK }}
           curl -X GET ${{ secrets.PROD_CORE_AUTH0_ACTIONS_DEPLOY_HOOK }}
+
+  build-and-push-registration-admin:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          docker build -t registration-admin -f apps/registration-admin/Dockerfile .
+
+      - run: |
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: |
+          docker tag registration-admin ${{ secrets.DOCKER_USER }}/registration-admin:latest
+          docker push ${{ secrets.DOCKER_USER }}/registration-admin:latest
+
+  build-and-push-web-admin:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          docker build -t web-admin -f apps/web-admin/Dockerfile .
+
+      - run: |
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: |
+          docker tag web-admin ${{ secrets.DOCKER_USER }}/web-admin:latest
+          docker push ${{ secrets.DOCKER_USER }}/web-admin:latest

@@ -8,6 +8,7 @@ import Scanner from '@/components/Scanner';
 
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function CheckOutParticipantWithScanner() {
   const { loading, post, get } = useFetch();
@@ -15,6 +16,8 @@ export default function CheckOutParticipantWithScanner() {
 
   const router = useRouter();
   const { orgId, eventId } = router.query;
+
+  const { useGetQuery } = useWrapper();
 
   const [previousCheckInKey, setPreviousCheckInKey] = useState(null);
   const [checkInKey, setCheckInKey] = useState(null);
@@ -51,29 +54,18 @@ export default function CheckOutParticipantWithScanner() {
     }
   };
 
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${checkInKey}`,
+    `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${checkInKey}`,
+    {},
+    {},
+    (data) => {
+      setParticipant(data.data.participant);
+    },
+  );
+
   useEffect(() => {
-    const getParticipantByCheckInKey = async () => {
-      if (checkInKey && previousCheckInKey !== checkInKey) {
-        const { data, status } = await get(
-          `/core/organizations/${orgId}/events/${eventId}/participants/check-in/${checkInKey}`,
-        );
-
-        if (status === 200) {
-          setParticipant(data.participant);
-        } else {
-          showAlert({
-            title: 'Error',
-            description: data.error,
-            status: 'error',
-          });
-          setCheckInKey(null);
-        }
-      }
-    };
-
-    if (!fastMode && checkInKey && previousCheckInKey !== checkInKey) {
-      getParticipantByCheckInKey();
-    } else if (checkInKey && previousCheckInKey !== checkInKey) {
+    if (checkInKey && previousCheckInKey !== checkInKey && fastMode) {
       handleSubmit();
     }
   }, [checkInKey]);

@@ -17,10 +17,11 @@ import {
 
 import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function NewOrganization() {
-  const { loading, get, post } = useFetch();
-
+  // const { loading, get, post } = useFetch();
+  const { useGetQuery, usePostMutation } = useWrapper();
   const router = useRouter();
 
   const { orgId, eventId, participantId } = router.query;
@@ -28,35 +29,71 @@ export default function NewOrganization() {
   const [attributes, setAttributes] = useState([]);
   const [attributeId, setAttributeId] = useState('');
   const [value, setValue] = useState('');
-
+  const { mutate: newParticipantAttributeMutation } = usePostMutation(
+    `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
+    {},
+    {
+      onSuccess: (response) => {
+        router.push(`/${orgId}/events/${eventId}/participants`);
+      },
+      onError: (error) => {
+        alert(data.error);
+      },
+      invalidateKeys: [
+        `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
+      ],
+    },
+  );
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data, status } = await post(
-      `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
-      {},
-      {
-        participantId,
-        attributeId,
-        value,
-      },
-    );
-    if (status === 200) {
-      router.push(`/${orgId}/events/${eventId}/participants`);
-    } else {
-      alert(data.error);
-    }
+    // const { data, status } = await post(
+    //   `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
+    //   {},
+    //   {
+    //     participantId,
+    //     attributeId,
+    //     value,
+    //   },
+    // );
+    newParticipantAttributeMutation({
+      participantId,
+      attributeId,
+      value,
+    });
+    // if (status === 200) {
+    //   router.push(`/${orgId}/events/${eventId}/participants`);
+    // } else {
+    //   alert(data.error);
+    // }
   };
-
-  useEffect(() => {
-    const fetchAttributes = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/attributes`,
-      );
-      setAttributes(data.attributes || []);
-      console.log(data);
-    };
-    fetchAttributes();
-  }, [orgId, eventId, participantId]);
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    {},
+    {
+      onSuccess: (response) => {
+        setAttributes(response.data.attributes || []);
+        console.log(data);
+      },
+      onError: (error) => {
+        showAlert({
+          title: 'Error',
+          description: error,
+          status: 'error',
+        });
+      },
+    },
+  );
+  // useEffect(() => {
+  //   const fetchAttributes = async () => {
+  //     const { data, status } = await get(
+  //       `/core/organizations/${orgId}/events/${eventId}/attributes`,
+  //     );
+  //     setAttributes(data.attributes || []);
+  //     console.log(data);
+  //   };
+  //   fetchAttributes();
+  // }, [orgId, eventId, participantId]);
 
   return (
     <DashboardLayout>

@@ -11,10 +11,11 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import DataDisplay from '@/components/DataDisplay';
 import NewExtraForm from './new'; // Import the form component
+import useWrapper from '@/hooks/useWrapper';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
@@ -35,25 +36,27 @@ export default function Extras() {
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
   const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI hook for modal control
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
 
   const [extras, setExtras] = useState([]);
-
-  useEffect(() => {
-    const fetchExtras = async () => {
-      const { data, status } = await get(`/core/organizations/${orgId}/events/${eventId}/extras`);
-      if (status === 200) {
-        setExtras(data.extras || []);
-      } else {
+  const { useGetQuery } = useWrapper();
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/extras`,
+    `/core/organizations/${orgId}/events/${eventId}/extras`,
+    {},
+    {
+      onError: (error) => {
         showAlert({
           title: 'Error',
-          description: data.error,
+          description: error,
           status: 'error',
         });
-      }
-    };
-    fetchExtras();
-  }, []);
+      },
+    },
+    (response) => {
+      setExtras(response.data.extras || []);
+    },
+  );
 
   return (
     <DashboardLayout
