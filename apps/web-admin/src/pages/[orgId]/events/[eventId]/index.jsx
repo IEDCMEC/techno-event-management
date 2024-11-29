@@ -1,5 +1,3 @@
-
-
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
 import { useDisclosure, Box, VStack } from '@chakra-ui/react';
@@ -39,7 +37,6 @@ export default function EventById() {
   const router = useRouter();
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
-
 
   // const { loading, get } = useFetch();
 
@@ -106,7 +103,7 @@ export default function EventById() {
     cursor: 'pointer',
     fontSize: { base: '14px', md: '17px' },
     fontWeight: '600',
-    width: { base: '100%', md: 'auto' }, 
+    width: { base: '100%', md: 'auto' },
   });
 
   return (
@@ -140,21 +137,23 @@ export default function EventById() {
           borderRadius="8px"
           display={{ base: 'block', md: 'flex' }}
         >
-          <VStack
-            spacing={2}
-            align="stretch"
-            display={{ base: 'flex', md: 'none' }}  
-          >
+          <VStack spacing={2} align="stretch" display={{ base: 'flex', md: 'none' }}>
             {['participants', 'check-in', 'attributes', 'extras'].map((tab) => (
               <Button
                 key={tab}
                 style={tabStyle(activeTab === tab)}
                 onClick={() => {
                   setActiveTab(tab);
-                  router.push(`/${orgId}/events/${eventId}/${tab === 'check-in' ? 'participants/check-in' : tab}`);
+                  router.push(
+                    `/${orgId}/events/${eventId}/
+                    ${tab === 'check-in' ? 'participants/check-in' : tab}
+                    `,
+                  );
                 }}
               >
-                {tab === 'check-in' ? 'Participant Check In' : tab.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+                {tab === 'check-in'
+                  ? 'Participant Check In'
+                  : tab.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
               </Button>
             ))}
           </VStack>
@@ -163,7 +162,7 @@ export default function EventById() {
             justifyContent="space-evenly"
             alignItems="center"
             width="100%"
-            display={{ base: 'none', md: 'flex' }}  // Horizontal layout on desktop
+            display={{ base: 'none', md: 'flex' }} // Horizontal layout on desktop
           >
             {['participants', 'check-in', 'attributes', 'extras'].map((tab) => (
               <Button
@@ -171,22 +170,37 @@ export default function EventById() {
                 style={tabStyle(activeTab === tab)}
                 onClick={() => {
                   setActiveTab(tab);
-                  router.push(`/${orgId}/events/${eventId}/${tab === 'check-in' ? 'participants/check-in' : tab}`);
+                  router.push(
+                    `/${orgId}/events/${eventId}/
+                    ${tab === 'check-in' ? 'participants/check-in' : tab}
+                    `,
+                  );
                 }}
               >
-                {tab === 'check-in' ? 'Participant Check In' : tab.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+                {tab === 'check-in'
+                  ? 'Participant Check In'
+                  : tab.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
               </Button>
             ))}
           </Flex>
         </Box>
 
-        <Flex height="100%" flexDirection="column" justifyContent="center" alignItems="center" gap={4} py={6}>
+        <Flex
+          height="100%"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          gap={4}
+          py={6}
+        >
           <Text fontSize={{ base: 'xl', md: '3xl' }}>
-            Total Participants: <span style={{ fontWeight: 'bold' }}>{event.numberOfParticipants}</span>
+            Total Participants:{' '}
+            <span style={{ fontWeight: 'bold' }}>{event.numberOfParticipants}</span>
           </Text>
 
           <Text fontSize={{ base: 'xl', md: '3xl' }}>
-            Participants checked in: <span style={{ fontWeight: 'bold' }}>{event.numberOfParticipantsCheckedIn}</span>
+            Participants checked in:{' '}
+            <span style={{ fontWeight: 'bold' }}>{event.numberOfParticipantsCheckedIn}</span>
           </Text>
         </Flex>
       </Flex>
@@ -208,7 +222,12 @@ export default function EventById() {
           </DrawerContent>
         </Drawer>
       ) : (
-        <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+        <Modal
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+          isOpen={isOpen}
+          onClose={onClose}
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Registration Form</ModalHeader>
