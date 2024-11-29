@@ -1,24 +1,16 @@
-/*import { useState, useEffect } from 'react';
-import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  FormControl,
-  FormLabel,
-  Input,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { Button, useDisclosure } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import { CSVLink } from 'react-csv';
+import AddParticipant from '@/components/AddParticipant';
+import MultiStepModal from '@/components/MultiFormEmail';
+import { useContext } from 'react';
+import { account } from '@/contexts/MyContext';
+import useWrapper from '@/hooks/useWrapper';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -33,7 +25,7 @@ const columns = [
 ];
 
 export default function Participants() {
-  const [participants, setParticipants] = useState([]);
+  const { participants, setParticipants } = useContext(account);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -46,217 +38,90 @@ export default function Participants() {
   const router = useRouter();
   const showAlert = useAlert();
   const { orgId, eventId } = router.query;
-  const { loading, get } = useFetch();
+  const { loading, get, post } = useFetch();
+  const { useGetQuery } = useWrapper();
 
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/participants`,
-      );
-      if (status === 200) {
-        setParticipants(data.participants || []);
-      } else {
-        showAlert({ title: 'Error', description: data.error, status: 'error' });
-      }
-    };
-    fetchParticipants();
-  }, [orgId, eventId]);
+  // const { accountDetails } = useContext(account);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleSubmit = async () => {
-    console.log(formData);
-    onClose();
-  };
-
-  const exportToCsv = () => {
-    const csvData = participants.map((participant) => ({
-      firstName: participant.firstName,
-      lastName: participant.lastName,
-      email: participant.email,
-      phone: participant.phone,
-      checkInKey: participant.checkInKey,
-      checkedIn: participant.checkedIn,
-      numberOfAttributesAssigned: participant.numberOfAttributesAssigned,
-      numberOfExtrasAssigned: participant.numberOfExtrasAssigned,
-      addedAt: participant.addedAt,
-    }));
-
-    return (
-      <CSVLink
-        data={csvData}
-        filename={`participants-${eventId}.csv`}
-        style={{ textDecoration: 'none' }}
-      >
-        <Button colorScheme="teal" variant="solid">
-          Export to CSV
-        </Button>
-      </CSVLink>
-    );
-  };
-
-  return (
-    <DashboardLayout
-      pageTitle="Participants"
-      previousPage={`/organizations/${orgId}/events/${eventId}`}
-      headerButton={
-        <>
-          <Button onClick={onOpen} isLoading={loading}>
-            Add Participant
-          </Button>
-          <Button
-            onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
-            isLoading={loading}
-          >
-            Upload CSV
-          </Button>
-          {exportToCsv()}
-        </>
-      }
-      debugInfo={participants}
-    >
-      <DataDisplay loading={loading} rows={participants} columns={columns} />
-
-      <Modal isOpen={isOpen} onClose={onClose} size="lg">
-        <ModalOverlay />
-        <ModalContent maxW="700px" h="585px">
-          <ModalHeader>Add Participant</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl mb={4}>
-              <FormLabel>First Name</FormLabel>
-              <Input
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                placeholder="First Name"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Last Name</FormLabel>
-              <Input
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                placeholder="Last Name"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Email"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Phone</FormLabel>
-              <Input
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="Phone"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Check In Key</FormLabel>
-              <Input
-                name="checkInKey"
-                value={formData.checkInKey}
-                onChange={handleInputChange}
-                placeholder="Check In Key"
-              />
-            </FormControl>
-          </ModalBody>
-          <ModalFooter justifyContent="flex-end">
-            <Button colorScheme="blue" onClick={handleSubmit}>
-              Submit
-            </Button>
-            <Button onClick={onClose} ml={3}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </DashboardLayout>
+  const { data, status, error } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    {},
+    {},
+    (data) => {
+      setParticipants(data.data.participants || []);
+    },
   );
-}
-
-*/
-import { useState } from 'react';
-import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  FormControl,
-  FormLabel,
-  Input,
-  useDisclosure,
-} from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import DashboardLayout from '@/layouts/DashboardLayout';
-import DataDisplay from '@/components/DataDisplay';
-import { useAlert } from '@/hooks/useAlert';
-import { useFetch } from '@/hooks/useFetch';
-import { CSVLink } from 'react-csv';
-
-const columns = [
-  { field: 'firstName', headerName: 'First Name', width: 200 },
-  { field: 'lastName', headerName: 'Last Name', width: 200 },
-  { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'phone', headerName: 'Phone', width: 200 },
-  { field: 'checkInKey', headerName: 'Check In Key', width: 200 },
-  { field: 'checkedIn', headerName: 'CheckedIn', width: 200 },
-  { field: 'numberOfAttributesAssigned', headerName: 'Attributes Assigned', width: 200 },
-  { field: 'numnerOfExtrasAssigned', headerName: 'Extras Assigned', width: 200 },
-  { field: 'addedAt', headerName: 'Added At', width: 200 },
-];
-
-export default function Participants() {
-  const [participants, setParticipants] = useState([]);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    checkInKey: '',
-  });
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
-  const showAlert = useAlert();
-  const { orgId, eventId } = router.query;
-  const { loading, get } = useFetch();
-
-  const fetchParticipants = async () => {
-    const { data, status } = await get(
-      `/core/organizations/${orgId}/events/${eventId}/participants`,
-    );
-    if (status === 200) {
-      setParticipants(data.participants || []);
-    } else {
-      showAlert({ title: 'Error', description: data.error, status: 'error' });
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-
-  const handleSubmit = async () => {
-    console.log(formData);
+  const [emailContent, setEmailContent] = useState('');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    //console.log(formData);
+    const response = await post(
+      `/core/organizations/${orgId}/events/${eventId}/participants`,
+      {},
+      {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        attributes: [],
+        phone: formData.phone,
+        email: formData.email,
+        checkInKey: formData.checkInKey,
+      },
+    );
+    //console.log(response)
+    //console.log(response !== null || response !== undefined)
+    if (response !== null || response !== undefined) {
+      const { data, status } = response;
+      //console.log('Hello world')
+      //console.log(data);
+      //console.log(participants)
+      if (status === 200) {
+        //console.log('super!')
+        const value = {
+          addedAt: data.newParticipant.createdAt,
+          id: data.newParticipant.id,
+          checkInKey: data.newParticipant.checkInKey,
+          email: data.newParticipant.email,
+          firstName: data.newParticipant.firstName,
+          lastName: data.newParticipant.lastName,
+          numberOfAttributesAssigned: 0,
+          numnerOfExtrasAssigned: 0,
+          phone: data.newParticipant.phone,
+        };
+        setParticipants((prevValue) => [...prevValue, value]);
+        // showAlert({
+        //   title: 'Success',
+        //   description: 'participant has been added successfully.',
+        //   status: 'success',
+        // });
+      } else {
+        //console.log('fuck u')
+        // showAlert({
+        //   title: 'Failure',
+        //   description: 'participant has not been added successfully.',
+        //   status: 'Failure',
+        // });
+      }
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        checkInKey: '',
+      });
+      //console.log(participants);
+    } else {
+      //console.log(response)
+      //console.log('Hihihi')
+    }
     onClose();
   };
+  const { isOpen: qrIsOpen, onOpen: qROnOpen, onClose: qROnClose } = useDisclosure();
 
   const exportToCsv = () => {
     const csvData = participants.map((participant) => ({
@@ -300,74 +165,25 @@ export default function Participants() {
             Upload CSV
           </Button>
           {exportToCsv()}
+          <Button onClick={qROnOpen}>Send Emails with QR</Button>
         </>
       }
       debugInfo={participants}
     >
       <DataDisplay loading={loading} rows={participants} columns={columns} />
-
-      <Modal isOpen={isOpen} onClose={onClose} size="lg">
-        <ModalOverlay />
-        <ModalContent maxW="700px" h="585px">
-          <ModalHeader>Add Participant</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl mb={4}>
-              <FormLabel>First Name</FormLabel>
-              <Input
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                placeholder="First Name"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Last Name</FormLabel>
-              <Input
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                placeholder="Last Name"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Email"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Phone</FormLabel>
-              <Input
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="Phone"
-              />
-            </FormControl>
-            <FormControl mb={4}>
-              <FormLabel>Check In Key</FormLabel>
-              <Input
-                name="checkInKey"
-                value={formData.checkInKey}
-                onChange={handleInputChange}
-                placeholder="Check In Key"
-              />
-            </FormControl>
-          </ModalBody>
-          <ModalFooter justifyContent="flex-end">
-            <Button colorScheme="blue" onClick={handleSubmit}>
-              Submit
-            </Button>
-            <Button onClick={onClose} ml={3}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <MultiStepModal
+        isOpen={qrIsOpen}
+        onClose={qROnClose}
+        emailContent={emailContent}
+        setEmailContent={setEmailContent}
+      />
+      <AddParticipant
+        isOpen={isOpen}
+        onClose={onClose}
+        formData={formData}
+        handleSubmit={handleSubmit}
+        handleInputChange={handleInputChange}
+      />
     </DashboardLayout>
   );
 }

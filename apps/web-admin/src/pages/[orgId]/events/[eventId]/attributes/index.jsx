@@ -100,10 +100,11 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import DataDisplay from '@/components/DataDisplay';
 import NewAttributeForm from './new';
+import useWrapper from '@/hooks/useWrapper';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
@@ -119,27 +120,27 @@ export default function Attributes() {
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
 
   const [attributes, setAttributes] = useState([]);
-
-  useEffect(() => {
-    const fetchAttributes = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/attributes`,
-      );
-      if (status === 200) {
-        setAttributes(data.attributes || []);
-      } else {
+  const { useGetQuery } = useWrapper();
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    `/core/organizations/${orgId}/events/${eventId}/attributes`,
+    {},
+    {
+      onError: (error) => {
         showAlert({
           title: 'Error',
           description: data.error,
           status: 'error',
         });
-      }
-    };
-    fetchAttributes();
-  }, []);
+      },
+    },
+    (response) => {
+      setAttributes(response.data.attributes || []);
+    },
+  );
 
   return (
     <DashboardLayout

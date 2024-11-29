@@ -30,6 +30,7 @@ import {
 import dynamic from 'next/dynamic';
 // import { useEffect } from 'react';
 import { KonvaEventObject } from 'konva/lib/Node'; // Import for event types
+import { set } from 'date-fns';
 const Stage = dynamic(() => import('react-konva').then((mod) => mod.Stage), { ssr: false });
 const Layer = dynamic(() => import('react-konva').then((mod) => mod.Layer), { ssr: false });
 const KonvaImage = dynamic(() => import('react-konva').then((mod) => mod.Image), { ssr: false });
@@ -195,6 +196,12 @@ function CertifcateUploadBox() {
         fontSize: selectedText.fontSize > 2 ? selectedText.fontSize - 2 : 2,
       });
     }
+  };
+
+  const handleDelete = () => {
+    setTexts((prevTexts) => prevTexts.filter((text) => text.id !== selectedText.id));
+    setSelectedText(null);
+    onClose();
   };
 
   return (
@@ -384,6 +391,9 @@ function CertifcateUploadBox() {
             {/* You can add font and color selectors here */}
           </ModalBody>
           <ModalFooter>
+            <Button marginRight={'9.3em'} colorScheme="red" onClick={handleDelete}>
+              Delete
+            </Button>
             <Button colorScheme="teal" onClick={handleModalSubmit}>
               Save
             </Button>

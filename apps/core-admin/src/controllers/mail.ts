@@ -7,11 +7,81 @@ dotenv.config();
 // import chalk from 'chalk';
 import supabase from '../utils/supabase';
 import FormData from 'form-data';
+import { marked } from 'marked';
 
 const MAILER_URL = process.env.MAILER_URL;
 const MAILER_DATABASE_URL = process.env.MAILER_DATABASE_URL;
 const AUTHORIZATION_TOKEN = process.env.AUTHORIZATION_TOKEN;
-console.log(AUTHORIZATION_TOKEN);
+// console.log(AUTHORIZATION_TOKEN);
+export const getStatusOfEmails = async (req: Request, res: Response) => {
+  try {
+    const { emailArray } = req.body;
+    const { orgId } = req?.params;
+    if (!emailArray || !orgId) {
+      return res.status(400).send({ message: 'Missing required fields' });
+    }
+
+    if (!Array.isArray(emailArray)) {
+      return res.status(400).send({ message: 'Element not a valid array' });
+    }
+    const data: string[] = emailArray;
+    // Fetch the jobId associated with the email from the Recipients table
+    let invalidEmails = [];
+    let successEmails = [];
+    for (const email of data) {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (emailRegex.test(email)) {
+        const recipient = await prisma.Recipients.findUnique({
+          where: { email: email },
+          select: { jobId: true },
+        });
+
+        if (recipient) {
+          const jobId = recipient.jobId;
+
+          if (jobId) {
+            // Call external mail service to get the status of the email job
+            const emailStatus = await axios.get(`${MAILER_URL}/mail?jobId=${jobId}`, {
+              headers: {
+                authorization: AUTHORIZATION_TOKEN,
+              },
+            });
+            console.log(emailStatus);
+
+            if (
+              emailStatus &&
+              emailStatus.status === 200 &&
+              emailStatus.data.status.status == 'SENT'
+            ) {
+              console.log({ ...emailStatus.data.status });
+              // return res.status(200).json({
+              //   ...emailStatus.data.status,
+              // });
+              successEmails.push(email);
+            } else {
+              // return res.status(400).send({ message: 'JobId not found', error: emailStatus.data });
+              invalidEmails.push(email);
+            }
+          } else {
+            // return res.status(400).send({ message: 'Email Job ID not found, send email again' });
+            invalidEmails.push(email);
+          }
+        } else {
+          invalidEmails.push(email);
+        }
+      } else {
+        invalidEmails.push(email);
+      }
+    }
+    return res.status(200).json({
+      invalidEmails: invalidEmails,
+      successEmails: successEmails,
+    });
+  } catch (e: any) {
+    console.error(e);
+    return res.status(400).send({ message: e.message || 'Something went wrong' });
+  }
+};
 export const sendMailWithQR = async (req: Request, res: Response) => {
   try {
     const { subject, html, projectId } = req.body;
@@ -31,12 +101,14 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
         let numberOfRecipientsMailed = 0;
         let RecipientsMailed = [];
         let numberOfRecipientsAlreadyMailed = 0;
+        let recipientAlreadyMailed = [];
         let numberOfRecipientsFailed = 0;
         let RecipientsNotMailed = [];
 
         for (const recipient of recipients) {
           if (recipient.emailSent) {
             numberOfRecipientsAlreadyMailed++;
+            recipientAlreadyMailed.push(recipient);
             console.log(`Project: ${projectId} - Mail already sent to ${recipient.email}`);
           } else {
             console.log(`Project: ${projectId} - Sending mail to ${recipient.email}`);
@@ -48,6 +120,10 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
             let emailText: string = html;
             emailText = emailText.replace('{{payload}}', recipient.payload);
             emailText = emailText.replace('{{name}}', recipient.name);
+            emailText = emailText.replace('{{payload}}', recipient.payload);
+            emailText = emailText.replace(/\n/g, '');
+            emailText = emailText.replace(/"/g, "'");
+
             form.append('html', emailText);
             form.append('subject', subject);
             form.append('text', subject);
@@ -73,7 +149,10 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
               });
 
               numberOfRecipientsMailed++;
-              RecipientsMailed.push(recipient.email);
+              RecipientsMailed.push({
+                email: recipient.email,
+                jobId: response.data.jobId,
+              });
             } else {
               try {
                 console.log(response.data);
@@ -81,16 +160,20 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
                 console.log('error', e);
               }
               numberOfRecipientsFailed++;
-              RecipientsNotMailed.push(recipient.email);
+              RecipientsNotMailed.push({
+                email: recipient.email,
+                jobId: null,
+              });
             }
           }
         }
-
         return res.status(200).json({
           success: RecipientsMailed,
           failure: RecipientsNotMailed,
           nSuccess: RecipientsMailed.length,
           nFailure: RecipientsNotMailed.length,
+          alreadyMailed: recipientAlreadyMailed,
+          nAlreadyMailed: recipientAlreadyMailed.length,
         });
       } else {
         return res.status(400).send({ message: 'Invalid Project ID / project ID not found' });
@@ -106,7 +189,33 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
 function sleepAsync(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
+export const getRecipients = async (req: Request, res: Response) => {
+  try {
+    const { projectId, orgId } = req?.params;
+    // console.log('Hello')
+    if (!projectId || !orgId) {
+      return res.status(400).send({ message: 'Missing required fields' });
+    }
+    const recipients = await prisma.Recipients.findMany({
+      where: {
+        projectId: projectId,
+      },
+    });
+    if (recipients) {
+      return res.status(200).json({
+        recipients: recipients,
+      });
+    } else {
+      return res.status(400).send({
+        message: 'Unknown prisma error',
+      });
+    }
+  } catch (e: any) {
+    console.error(e);
+    return res.status(400).send({ message: e.message || 'Something went wrong' });
+  }
+  // return res.send('Route works!');
+};
 export const getMailStatus = async (req: Request, res: Response) => {
   try {
     const { email } = req?.params;
@@ -148,6 +257,38 @@ export const getMailStatus = async (req: Request, res: Response) => {
   } catch (e: any) {
     console.error(e);
     return res.status(400).send({ message: e.message || 'Something went wrong' });
+  }
+};
+
+export const updateMailProject = async (req: Request, res: Response) => {
+  try {
+    const { projectId, html_template } = req.body;
+    const { orgId } = req?.params;
+    if (!projectId || !orgId) {
+      return res.status(400).send({ message: 'Missing required fields!' });
+    }
+    console.log(projectId);
+
+    // console.log(html_template);
+    const response = await prisma.Projects.update({
+      where: { id: projectId },
+      data: { html_template: html_template },
+    });
+    console.log(response);
+
+    if (response) {
+      return res.status(200).json({
+        message: 'html_template updated',
+        data: response,
+      });
+    } else {
+      return res.status(400).send({
+        message: 'Error updating html_template',
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(400).send({ message: e });
   }
 };
 
@@ -216,7 +357,7 @@ export const newMailProject = async (req: Request, res: Response) => {
 export const getMailProjects = async (req: Request, res: Response) => {
   try {
     const { orgId } = req?.params;
-    // console.log(orgId)
+    console.log(orgId);
     if (!orgId) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
@@ -282,6 +423,68 @@ export const addNewRecipient = async (req: Request, res: Response) => {
     return res.status(400).send({ message: e.message || 'Something went wrong' });
   }
 };
+type mytype = {
+  // projectId: string | undefined;
+  name: string | undefined;
+  email: string | undefined;
+  payload: string | undefined;
+};
+export const addNewRecipients = async (req: Request, res: Response) => {
+  try {
+    const { data, projectId } = req.body;
+    console.log(data.length);
+    const arrayOfElements = data as mytype[];
+    let nonProcessed = [];
+    let processed = [];
+    if (!arrayOfElements || !projectId) {
+      console.log(arrayOfElements, projectId);
+      return res.status(400).send({ message: 'Missing required fields' });
+    } else if (Array.isArray(arrayOfElements)) {
+      for (const element of arrayOfElements) {
+        if (!element.email || !element.name || !element.payload) {
+          nonProcessed.push(element);
+        } else {
+          const recipientExists = await prisma.Recipients.findFirst({
+            where: {
+              projectId: projectId,
+              email: element.email,
+            },
+          });
+
+          if (recipientExists) {
+            processed.push(element);
+          } else {
+            // Insert new Recipients if they don't exist
+            const response = await prisma.Recipients.create({
+              data: {
+                name: element.name,
+                email: element.email,
+                payload: element.payload,
+                projectId: projectId,
+              },
+            });
+            if (response) {
+              processed.push(element);
+            } else {
+              nonProcessed.push(element);
+            }
+            // console.log('Insert:', response);
+            // return res.status(200).json({ message: 'User successfully Added' });
+          }
+        }
+      }
+      return res.status(200).json({
+        success: processed.length,
+        failure: nonProcessed.length,
+      });
+    } else {
+      return res.status(400).send({ message: 'Element not an array' });
+    }
+  } catch (e: any) {
+    console.log(e);
+    return res.status(400).send({ message: e.message || 'Something went wrong' });
+  }
+};
 const generateOTP = () => {
   // Generates a 6-digit random number
   return Math.floor(100000 + Math.random() * 900000);
@@ -289,14 +492,22 @@ const generateOTP = () => {
 
 export const sendOTP = async (req: Request, res: Response) => {
   try {
-    const { email, name, html } = req.body;
+    const { email, name, projectId } = req.body;
     console.log(req.body);
 
     // Check for required fields
-    if (!email || !name || !html) {
+    if (!email || !name || !projectId) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
 
+    const markdown = await prisma.Projects.findFirst({
+      where: {
+        id: projectId,
+      },
+      select: {
+        html_template: true,
+      },
+    });
     // Check if the OTP already exists for the email
     const otpRecord = await prisma.Otp.findFirst({
       where: {
@@ -319,8 +530,12 @@ export const sendOTP = async (req: Request, res: Response) => {
         form.append('name', name);
         form.append('to', email);
         form.append('subject', 'Confirm your OTP');
-        let emailText: string = html;
+        let emailText: string = await marked(markdown.html_template);
         emailText = emailText.replace('((otp))', otp.toString());
+        emailText = emailText.replace('{{name}}', name);
+        console.log(emailText);
+        emailText = emailText.replace(/\n/g, '');
+        emailText = emailText.replace(/"/g, "'");
         form.append('html', emailText);
         form.append('text', 'Confirm your OTP');
         console.log(`${MAILER_URL}/mail`);
@@ -364,8 +579,12 @@ export const sendOTP = async (req: Request, res: Response) => {
         form.append('name', name);
         form.append('to', email);
         form.append('subject', 'Confirm your OTP');
-        let emailText: string = html;
+        let emailText: string = await marked(markdown.html_template);
         emailText = emailText.replace('((otp))', otp.toString());
+        emailText = emailText.replace('{{name}}', name);
+        console.log(emailText);
+        emailText = emailText.replace(/\n/g, '');
+        emailText = emailText.replace(/"/g, "'");
         form.append('html', emailText);
         form.append('text', 'Confirm your OTP');
 
