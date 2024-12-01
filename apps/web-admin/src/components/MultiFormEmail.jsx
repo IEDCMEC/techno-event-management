@@ -64,6 +64,15 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   const [selectedProject, setSelectedProject] = useState({});
   const [recipients, setRecipients] = useState([]);
   const [mailStatus, setMailStatus] = useState(null);
+  useEffect(() => {
+    const fetchText = async () => {
+      const response = await fetch('/QrTemplate.txt');
+      const data = await response.text();
+      setEmailContent(data);
+      console.log(data);
+    };
+    fetchText();
+  }, [selectedProject]);
   const { accountDetails, emailProjects, setEmailProjects, participants, setParticipants } =
     useContext(account);
 
@@ -280,7 +289,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         });
       },
       invalidateKeys: [
-        `core/organizations/${accountDetails.orgId}/getEmailProjects`,
+        `/core/organizations/${accountDetails.orgId}/getEmailProjects`,
         `/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`,
       ],
     },
@@ -302,6 +311,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       emailProjectMutation({
         name: newEmailProject.name,
         desc: newEmailProject.desc,
+        html_template: emailContent,
       });
     }
   };

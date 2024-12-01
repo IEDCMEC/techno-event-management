@@ -1,0 +1,115 @@
+### Greetings {{name}}!
+
+<br/>
+
+Thank you for your interest in participating in **< Event Name >** led by **< Speaker 1>**, < designation >, and **< Speaker 2 >**, < designation >
+<br/><br/>
+
+#### Following are the details of the event:
+
+<br/>
+
+- **Date of Event**: < Date of event >
+- **Time**: < Time >
+- **Venue**: < Venue details >
+
+<br/>
+
+Your **QR Code** for the event is attached with this email. Please use it to confirm your attendance at the registration desk tomorrow before **< Time of registration >**.
+
+<br/>
+
+**Entry to the venue will not be entertained after < Time of entry >**
+
+<br/>
+
+Your QR code is your unique entry pass for the event. Please present it to our volunteers to be scanned and checked in. **Only those checked in with the QR code will receive certificates**. The same QR code can also be used as a **food coupon** to avail of your **lunch and snacks**.
+
+<br/>
+
+#### General Guidelines:
+
+<br/>
+
+- < guideline 1 >
+- < guideline 2 >
+
+<br/>
+
+In case of any questions or inquiries, please contact:  
+**< POC 1 >** - < contact no: >  
+**< POC 2 >** - < contact no: >  
+
+<br/><br/>
+Looking forward to seeing you at the event tomorrow!
+<br/><br/>
+
+Kind regards,  
+< Organization name >
+
+<table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="
+        max-width: 360px;
+        background-color: #ffffff;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        box-shadow: 0 5px 10px rgba(20, 50, 70, 0.2);
+        margin-top: 20px;
+        margin: 0 auto;
+        padding: 68px 10px 130px;
+        min-height: 400px
+      ">
+      <tbody>
+        <tr style="width: 100%">
+          <td>
+            <p style="
+                font-size: 11px;
+                line-height: 16px;
+                margin: 16px 8px 8px 8px;
+                color: #e80a5a;
+                font-weight: 700;
+                font-family: HelveticaNeue, Helvetica, Arial, sans-serif;
+                height: 16px;
+                letter-spacing: 0;
+                text-transform: uppercase;
+                text-align: center;
+              ">
+              Verify Your Identity
+            </p>
+            <h1 style="
+                color: #000;
+                display: inline-block;
+                font-family: HelveticaNeue-Medium, Helvetica, Arial, sans-serif;
+                font-size: 20px;
+                font-weight: 500;
+                line-height: 24px;
+                margin-bottom: 0;
+                margin-top: 0;
+                text-align: center;
+              ">
+              Produce this email to the volunteers at the registration desk
+            </h1>
+            <br/><br/>
+                    <div style="width: 100%; display: flex; align-items: center; justify-content: center;">
+<img src="https://qrcode.myprojects.studio/qrcode?text={{payload}}&amp;size=150&amp;ecLevel=H" alt="Ticker QR">
+</div>
+            <p style="text-align: center; font-size: 20px; font-weight: bold">
+              {{payload}}
+            </p>
+            <p style="
+                font-size: 15px;
+                line-height: 23px;
+                margin: 0;
+                color: #444;
+                font-family: HelveticaNeue, Helvetica, Arial, sans-serif;
+                letter-spacing: 0;
+                padding: 0 40px;
+                text-align: center;
+              ">
+              Contact
+              <a href="mailto:iedcmec@mec.ac.in" style="color: #444; text-decoration: underline" target="_blank">iedcmec@mec.ac.in</a>
+              if you face any issues
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>

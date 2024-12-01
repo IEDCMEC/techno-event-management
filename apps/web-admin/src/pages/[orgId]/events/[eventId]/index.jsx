@@ -45,7 +45,12 @@ export default function EventById() {
   const [event, setEvent] = useState([]);
   const [activeTab, setActiveTab] = useState('participants');
   const isDrawer = useBreakpointValue({ base: true, md: false });
-  const [attributes, setAttributes] = useState(['firstName', 'lastName', 'email', 'phone']);
+  const [attributes, setAttributes] = useState([
+    { key: 'firstName', name: 'First Name: ' },
+    { key: 'lastName', name: 'Last Name: ' },
+    { key: 'email', name: 'Email: ' },
+    { key: 'phone', name: 'Phone No:' },
+  ]);
 
   const { data, status, error } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}`,

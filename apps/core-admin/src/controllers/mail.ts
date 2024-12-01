@@ -294,9 +294,9 @@ export const updateMailProject = async (req: Request, res: Response) => {
 
 export const newMailProject = async (req: Request, res: Response) => {
   try {
-    const { name, desc } = req.body;
+    const { name, desc, html_template } = req.body;
     const { orgId } = req?.params;
-    if (!name || !desc || !orgId) {
+    if (!name || !desc || !orgId || !html_template) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
     console.log(name, desc, orgId);
@@ -321,6 +321,7 @@ export const newMailProject = async (req: Request, res: Response) => {
             name: name,
             description: desc,
             orgId: orgId,
+            html_template: html_template,
           },
         });
         // console.log(response)

@@ -10,6 +10,7 @@ import AddParticipant from '@/components/AddParticipant';
 import MultiStepModal from '@/components/MultiFormEmail';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
+import axios from 'axios';
 import useWrapper from '@/hooks/useWrapper';
 
 const columns = [
@@ -58,6 +59,7 @@ export default function Participants() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
   const [emailContent, setEmailContent] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     //console.log(formData);
