@@ -18,6 +18,7 @@ import { PiCertificate } from 'react-icons/pi';
 import { MdOutlineEmail } from 'react-icons/md';
 import { MdOutlineSettings } from 'react-icons/md';
 import { Router, useRouter } from 'next/router';
+import { RiTeamFill } from 'react-icons/ri';
 import EventsDisplay from './EventsDisplay';
 import { account } from '../contexts/MyContext';
 
@@ -152,6 +153,7 @@ const SidebarContents = () => {
 
   const sidebarItems = [
     // { label: 'Events', path: `/${orgId}/events`, icon: <MdOutlineEvent /> },
+    { label: 'Members', path: `/${orgId}/members`, icon: <RiTeamFill /> },
     { label: 'My Certificates', path: `/${orgId}/mycertificates`, icon: <PiCertificate /> },
     { label: 'Email Settings', path: `/${orgId}/emailsettings`, icon: <MdOutlineEmail /> },
     ...(isUser ? [{ label: 'Settings', path: `/settings`, icon: <MdOutlineSettings /> }] : []),

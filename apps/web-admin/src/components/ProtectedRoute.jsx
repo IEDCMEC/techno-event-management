@@ -32,7 +32,7 @@ export const ProtectedRoute = ({ children }) => {
     console.log(accountDetails);
     if (accountDetails.orgId) {
       // // console.log('route')
-      router.replace(`/${accountDetails.orgId}`);
+      router.replace(`/${accountDetails.orgId}/events`);
     }
   }, [isAuthenticated, accountDetails.orgId]);
   useEffect(() => {
