@@ -118,6 +118,7 @@ model Participant {
   email                    String
   phone                    String?
   checkInKey               String?
+  assignedKey              String?
   eventId                  String                     @db.Uuid
   event                    Event                      @relation(fields: [eventId], references: [id])
   organizationId           String

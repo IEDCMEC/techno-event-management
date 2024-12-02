@@ -5,7 +5,12 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const Form = () => {
-  const [attributes, setAttributes] = useState<any[]>([]);
+  const [attributes, setAttributes] = useState<any[]>([
+    { id: 'firstName', name: 'First Name: ' },
+    { id: 'lastName', name: 'Last Name: ' },
+    { id: 'email', name: 'Email: ' },
+    { id: 'phone', name: 'Phone No:' },
+  ]);
   const [formData, setFormData] = useState<{ [key: string]: string }>({});
   const { eventID, orgID } = useParams<{ eventID: string; orgID: string }>();
   const { get, post } = useFetch();
