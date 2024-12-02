@@ -32,6 +32,17 @@ enum Role {
 model Organization {
   id                 String               @id
   name               String
+  Logo               String?
+  Tagline            String?
+  Description        String?
+  addressId          String?
+  phoneNo            String?
+  email              String?
+  website            String?
+  twitterLink        String?
+  instagramLink      String?
+  linkedInLink       String?
+  Address            Address?             @relation(fields: [addressId], references: [id])
   OrganizationUser   OrganizationUser[]
   Event              Event[]
   Participant        Participant[]
@@ -52,15 +63,16 @@ model OrganizationUser {
   user           User         @relation(fields: [userId], references: [id])
 }
 
-model Venue {
-  id          String  @id @default(uuid())
-  name        String?
-  city        String?
-  state       String?
-  country     String?
-  pinCode     Int?
-  locationUrl String?
-  Event       Event[]
+model Address {
+  id           String         @id @default(uuid())
+  name         String?
+  city         String?
+  state        String?
+  country      String?
+  pinCode      Int?
+  locationUrl  String?
+  Organization Organization[]
+  Event        Event[]
 }
 
 model Event {
@@ -75,7 +87,7 @@ model Event {
   organizationId     String
   venueId            String?
   organization       Organization         @relation(fields: [organizationId], references: [id])
-  venue              Venue?               @relation(fields: [venueId], references: [id])
+  address            Address?             @relation(fields: [venueId], references: [id])
   Participant        Participant[]
   ParticipantCheckin ParticipantCheckIn[]
   attributes         Attributes[]

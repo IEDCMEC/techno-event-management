@@ -88,6 +88,7 @@ export const ProtectedRoute = ({ children }) => {
       ...preValue,
       role: response.data.data.role,
       orgId: response.data.data.organizationId,
+      name: user.nickname,
     }));
   });
   // const { mutate: postOrg } = usePostMutation('/core/organizations', {
