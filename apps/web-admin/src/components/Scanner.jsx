@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { QrReader } from 'react-qr-reader';
 import { Box } from '@chakra-ui/react';
+import { useZxing } from 'react-zxing';
 
 const Scanner = ({ result, setResult }) => {
   const handleScan = (result) => {
@@ -12,15 +12,20 @@ const Scanner = ({ result, setResult }) => {
   const handleError = (err) => {
     console.error(err);
   };
-
+  const { ref } = useZxing({
+    onDecodeResult(result) {
+      setResult(result.getText());
+    },
+  });
   return (
-    <QrReader
-      height="100%"
-      width="100%"
-      constraints={{ facingMode: 'environment' }}
-      onResult={handleScan}
-      onError={handleError}
-    />
+    // <QrReader
+    //   height="100%"
+    //   width="100%"
+    //   constraints={{ facingMode: 'environment' }}
+    //   onResult={handleScan}
+    //   onError={handleError}
+    // />
+    <video ref={ref} style={{ height: '100%', width: '100%' }} onError={handleError} />
   );
 };
 

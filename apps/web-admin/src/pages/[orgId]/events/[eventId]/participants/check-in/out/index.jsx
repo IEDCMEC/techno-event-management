@@ -168,7 +168,7 @@ export default function CheckOutParticipant() {
         </FormControl>
 
         <Button type="submit" width="100%" my="4" isLoading={loading} loadingText="Please Wait">
-          Check In
+          Check Out
         </Button>
       </form>
     </DashboardLayout>
