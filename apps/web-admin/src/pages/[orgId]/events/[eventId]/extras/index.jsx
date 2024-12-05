@@ -111,6 +111,7 @@ import { useAlert } from '@/hooks/useAlert';
 import DataDisplay from '@/components/DataDisplay';
 import NewExtraForm from './new'; // Import the form component
 import useWrapper from '@/hooks/useWrapper';
+import NavigationMenu from '../navigationmenu';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
@@ -166,6 +167,7 @@ export default function Extras() {
       }
       debugInfo={extras}
     >
+      <NavigationMenu orgId={orgId} eventId={eventId} />
       <DataDisplay
         loading={loading}
         columns={columns}
