@@ -32,6 +32,17 @@ enum Role {
 model Organization {
   id                 String               @id
   name               String
+  Logo               String?
+  Tagline            String?
+  Description        String?
+  addressId          String?
+  phoneNo            String?
+  email              String?
+  website            String?
+  twitterLink        String?
+  instagramLink      String?
+  linkedInLink       String?
+  Address            Address?             @relation(fields: [addressId], references: [id])
   OrganizationUser   OrganizationUser[]
   Event              Event[]
   Participant        Participant[]
@@ -52,14 +63,31 @@ model OrganizationUser {
   user           User         @relation(fields: [userId], references: [id])
 }
 
+model Address {
+  id           String         @id @default(uuid())
+  name         String?
+  city         String?
+  state        String?
+  country      String?
+  pinCode      Int?
+  locationUrl  String?
+  Organization Organization[]
+  Event        Event[]
+}
+
 model Event {
   id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name               String
+  startTime          DateTime             @default(now())
+  endTime            DateTime             @default(now())
+  type               String?
   description        String?
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   organizationId     String
+  venueId            String?
   organization       Organization         @relation(fields: [organizationId], references: [id])
+  address            Address?             @relation(fields: [venueId], references: [id])
   Participant        Participant[]
   ParticipantCheckin ParticipantCheckIn[]
   attributes         Attributes[]
@@ -90,6 +118,7 @@ model Participant {
   email                    String
   phone                    String?
   checkInKey               String?
+  assignedKey              String?
   eventId                  String                     @db.Uuid
   event                    Event                      @relation(fields: [eventId], references: [id])
   organizationId           String
@@ -196,18 +225,18 @@ model ParticipantExtrasCheckIn {
 }
 
 model Projects {
-  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String
-  description String?
-  orgId       String?
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  description   String?
+  orgId         String?
   html_template String?
-  recipients  Recipients[]
+  recipients    Recipients[]
 }
 
 model Otp {
-  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email                    String                     @unique
-  code                     Int                        @unique
+  id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email String @unique
+  code  Int    @unique
 }
 
 model Recipients {
@@ -220,12 +249,12 @@ model Recipients {
   createdAt              DateTime @default(now())
   postProcessingComplete Boolean  @default(false)
 
-  emailSent              Boolean   @default(false)
-  emailContent           String?
-  emailSentAt            DateTime?
-  emailSentFrom          String?
-  jobId                  String?
+  emailSent     Boolean   @default(false)
+  emailContent  String?
+  emailSentAt   DateTime?
+  emailSentFrom String?
+  jobId         String?
+
   @@unique([projectId, email])
   @@unique([projectId, payload])
 }
-

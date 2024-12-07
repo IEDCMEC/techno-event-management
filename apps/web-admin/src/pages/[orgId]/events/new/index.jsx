@@ -1,4 +1,4 @@
-import { useState } from 'react';
+/*import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { useAlert } from '@/hooks/useAlert';
@@ -30,6 +30,70 @@ export default function NewEventForm({ onClose }) {
         status: 'error',
       });
     }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <FormControl isRequired my={4}>
+        <FormLabel>Name</FormLabel>
+        <Input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
+      </FormControl>
+
+      <Button
+        type="submit"
+        width="100%"
+        my="4"
+        isLoading={loading}
+        loadingText="Please Wait"
+        colorScheme="teal"
+      >
+        Add
+      </Button>
+    </form>
+  );
+}
+*/
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { useAlert } from '@/hooks/useAlert';
+import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
+
+export default function NewEventForm({ onClose }) {
+  const { loading, post } = useFetch();
+  const showAlert = useAlert();
+  const router = useRouter();
+  const { orgId } = router.query;
+
+  const [name, setName] = useState('');
+  const { usePostMutation } = useWrapper();
+  const { mutate: addNewEventMutation } = usePostMutation(
+    `/core/organizations/${orgId}/events`,
+    {},
+    {
+      onSuccess: (response) => {
+        showAlert({
+          title: 'Success',
+          description: 'Event has been created successfully.',
+          status: 'success',
+        });
+        onClose();
+        router.push(`/${orgId}/events`);
+      },
+      onError: (error) => {
+        showAlert({
+          title: 'Error',
+          description: error,
+          status: 'error',
+        });
+      },
+      invalidateKeys: [`/core/organizations/${orgId}/events`],
+    },
+  );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    addNewEventMutation({ name });
   };
 
   return (

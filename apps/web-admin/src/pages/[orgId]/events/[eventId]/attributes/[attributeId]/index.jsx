@@ -6,9 +6,9 @@ import { Button, Flex } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
 
-import { useFetch } from '@/hooks/useFetch';
+// import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
-
+import useWrapper from '@/hooks/useWrapper';
 const columns = [
   { field: 'id', headerName: 'ID', width: 200 },
   { field: 'value', headerName: 'Value', width: 200 },
@@ -25,29 +25,49 @@ export default function AttributeById() {
   const { orgId, eventId, attributeId } = router.query;
   const showAlert = useAlert();
 
-  const { loading, get } = useFetch();
+  // const { loading, get } = useFetch();
 
   const [attribute, setAttribute] = useState({});
   const [attributeDetails, setAttributeDetails] = useState([]);
-
-  useEffect(() => {
-    const fetchAttribute = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/attributes/${attributeId}`,
-      );
-      if (status === 200) {
-        setAttribute(data.attribute || {});
-        setAttributeDetails(data.attribute?.participantAttributeDetails || []);
-      } else {
+  const { useGetQuery } = useWrapper();
+  const { isLoading: loading } = useGetQuery(
+    `/core/organizations/${orgId}/events/${eventId}/attributes/${attributeId}`,
+    `/core/organizations/${orgId}/events/${eventId}/attributes/${attributeId}`,
+    {},
+    {
+      onError: (error) => {
         showAlert({
           title: 'Error',
           description: data.error,
           status: 'error',
         });
-      }
-    };
-    fetchAttribute();
-  }, []);
+      },
+    },
+    (response) => {
+      // console.log(response.data);
+      setAttribute(response.data.attribute || []);
+      setAttributeDetails(response.data.attribute?.participantAttributeDetails || []);
+    },
+  );
+  // console.log(loading);
+  // useEffect(() => {
+  //   const fetchAttribute = async () => {
+  //     const { data, status } = await get(
+  //       `/core/organizations/${orgId}/events/${eventId}/attributes/${attributeId}`,
+  //     );
+  //     if (status === 200) {
+  //       setAttribute(data.attribute || {});
+  //       setAttributeDetails(data.attribute?.participantAttributeDetails || []);
+  //     } else {
+  //       showAlert({
+  //         title: 'Error',
+  //         description: data.error,
+  //         status: 'error',
+  //       });
+  //     }
+  //   };
+  //   fetchAttribute();
+  // }, []);
 
   return (
     <DashboardLayout

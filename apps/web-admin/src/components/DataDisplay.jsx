@@ -82,7 +82,7 @@ export default function DataDisplay({
                       }
                       onChange={(e) => {
                         if (!state || !setState) {
-                          setSelectedRows(e.target.checked ? rows.map((row) => row.id) : []);
+                          setSelectedRows(e.target.checked ? rows.map((row) => row.email) : []);
                         } else {
                           //console.log(e.target.indeterminate, e.target.checked);
                           // setState(e.target.checked ? )
@@ -111,7 +111,7 @@ export default function DataDisplay({
                         isChecked={
                           state === null || setState === null
                             ? selectedRows.includes(row.id)
-                            : state.includes(row.id)
+                            : state.includes(row.email)
                         }
                         onChange={() => {
                           handleCheckboxChange(row);

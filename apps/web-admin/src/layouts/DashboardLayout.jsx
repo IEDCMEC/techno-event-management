@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Box, useMediaQuery, Flex, Text, Button, useDisclosure } from '@chakra-ui/react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { RxHamburgerMenu } from 'react-icons/rx';
@@ -17,7 +17,9 @@ export default function DashboardLayout({ headerButton, children }) {
   const [isSidebarOpen, setSidebarOpen] = useState(isMobile);
   const { user, isAuthenticated, isLoading } = useAuth0();
   const { isOpen, onOpen, onClose } = useDisclosure(); // useDisclosure hook for modal
-
+  useEffect(() => {
+    console.log(router.asPath);
+  }, [router.asPath]);
   if (isAuthenticated) {
     return (
       <Flex height="100vh" flexDirection="column">
@@ -66,7 +68,11 @@ export default function DashboardLayout({ headerButton, children }) {
                 <Flex width="100%" alignItems="center" gap={10}>
                   <IoMdArrowRoundBack
                     size={30}
-                    style={{ cursor: 'pointer' }}
+                    style={{
+                      cursor: 'pointer',
+                      display:
+                        router.asPath === `/${accountDetails?.orgId}/events` ? 'none' : 'block',
+                    }}
                     onClick={() => {
                       router.back();
                     }}
@@ -78,7 +84,7 @@ export default function DashboardLayout({ headerButton, children }) {
                     width={50}
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
-                      router.push(`/${accountDetails?.orgId}`);
+                      router.push(`/${accountDetails?.orgId}/events`);
                     }}
                   />
                   <Text fontSize="4xl" fontWeight="bold">

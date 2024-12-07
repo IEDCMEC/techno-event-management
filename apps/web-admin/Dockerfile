@@ -21,13 +21,7 @@ ENV PYTHON=/usr/bin/python3
 
 RUN pnpm install
 
-RUN pnpm run build --filter=techno-event-core-admin... 
+RUN pnpm run build --filter=techno-event-web-admin 
 
-FROM node:18-alpine
-
-COPY --from=builder /app/apps/core-admin/dist .
-COPY --from=builder /app/node_modules/.pnpm/@prisma+client*/node_modules/.prisma/client/*.node .
-
-ENV PORT=80
-
-CMD ["app.js"]
+EXPOSE 3000
+CMD ["pnpm", "run", "dev", "--filter=techno-event-web-admin"]
