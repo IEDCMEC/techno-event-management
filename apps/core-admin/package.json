@@ -41,7 +41,7 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.10.5",
     "@types/pg": "^8.10.1",
-    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
     "chai": "^4.3.7",
     "chai-http": "^4.3.0",
     "concurrently": "^8.0.1",
