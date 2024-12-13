@@ -29,7 +29,6 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import { useAlert } from '@/hooks/useAlert';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from './navigationmenu';
-import NavigationMenu from './navigationmenu';
 
 export default function EventById() {
   const { isOpen, onOpen, onClose } = useDisclosure();
