@@ -97,7 +97,7 @@ export default function ParticipantsCheckIn() {
               Open Scanner
             </Button>
           </Flex>
-         {/* <NavigationMenu orgId={orgId} eventId={eventId} />*/} 
+          {/* <NavigationMenu orgId={orgId} eventId={eventId} />*/}
         </>
       }
       debugInfo={participantsCheckIn}

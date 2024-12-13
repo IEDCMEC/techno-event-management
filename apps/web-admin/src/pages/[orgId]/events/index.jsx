@@ -204,7 +204,7 @@ export default function Events() {
         columns={columns}
         rows={events}
         onRowClick={(row) => {
-          router.push(`/${orgId}/events/${row.id}`);
+          router.push(`/${orgId}/events/${row.id}/participants`);
         }}
       />
 

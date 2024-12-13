@@ -150,7 +150,7 @@ export default function Attributes() {
       headerButton={
         <>
           <Button onClick={onOpen} isLoading={loading}>
-             Attribute
+            Attribute
           </Button>
         </>
       }
