@@ -106,6 +106,7 @@ import DataDisplay from '@/components/DataDisplay';
 import NewAttributeForm from './new';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
+import NavigationMenu from '../navigationmenu';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
@@ -150,7 +151,7 @@ export default function Attributes() {
       headerButton={
         <>
           <Button onClick={onOpen} isLoading={loading}>
-             Attribute
+            Add Attribute
           </Button>
         </>
       }

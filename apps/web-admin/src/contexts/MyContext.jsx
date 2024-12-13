@@ -48,6 +48,8 @@ const MyContext = ({ children }) => {
       });
     }
   };
+  const [activeTab, setActiveTab] = useState('Participants');
+
   return (
     <div>
       <account.Provider
@@ -56,6 +58,8 @@ const MyContext = ({ children }) => {
           emailProjects,
           setEmailProjects,
           setAccountDetails,
+          activeTab,
+          setActiveTab,
           updateAccountDetails,
           participants,
           setParticipants,
