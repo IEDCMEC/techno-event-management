@@ -11,6 +11,8 @@ import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 
+import NavigationMenu from '../../navigationmenu';
+
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
   { field: 'lastName', headerName: 'Last Name', width: 200 },
@@ -95,10 +97,12 @@ export default function ParticipantsCheckIn() {
               Open Scanner
             </Button>
           </Flex>
+         {/* <NavigationMenu orgId={orgId} eventId={eventId} />*/} 
         </>
       }
       debugInfo={participantsCheckIn}
     >
+      <NavigationMenu orgId={orgId} eventId={eventId} />
       <DataDisplay
         loading={loading}
         rows={participantsCheckIn}

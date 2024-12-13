@@ -12,6 +12,7 @@ import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
 import axios from 'axios';
 import useWrapper from '@/hooks/useWrapper';
+import NavigationMenu from '../navigationmenu';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -172,6 +173,7 @@ export default function Participants() {
       }
       debugInfo={participants}
     >
+      <NavigationMenu orgId={orgId} eventId={eventId} />
       <DataDisplay loading={loading} rows={participants} columns={columns} />
       <MultiStepModal
         isOpen={qrIsOpen}
