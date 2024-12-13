@@ -98,18 +98,18 @@ export default function AttributeById() {
           router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
         }}
       />
-      { (attributeDetails.length === 0) ? (
-          <div style={{ textAlign: 'center', margin: '20px' }}>
-              <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
-                No participants assigned
-              </Text>
-              <Text color={'gray.500'} mb={3}>
-                 Assign participants to see details
-              </Text>
-          </div>
-        ) : (<></>)
-        
-      }
+      {attributeDetails.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+            No participants assigned
+          </Text>
+          <Text color={'gray.500'} mb={3}>
+            Assign participants to see details
+          </Text>
+        </div>
+      ) : (
+        <></>
+      )}
     </DashboardLayout>
   );
 }

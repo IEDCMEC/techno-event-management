@@ -175,17 +175,18 @@ export default function Participants() {
     >
       <NavigationMenu orgId={orgId} eventId={eventId} />
       <DataDisplay loading={loading} rows={participants} columns={columns} />
-      { (participants.length === 0) ? (
-            <div style={{ textAlign: 'center', margin: '20px' }}>
-                <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
-                  No participants 
-                </Text>
-                <Text color={'gray.500'} mb={3}>
-                   Add participants for the event to see details
-                </Text>
-            </div>
-          ) : (<></>)      
-      }
+      {participants.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+            No participants
+          </Text>
+          <Text color={'gray.500'} mb={3}>
+            Add participants for the event to see details
+          </Text>
+        </div>
+      ) : (
+        <></>
+      )}
       <MultiStepModal
         isOpen={qrIsOpen}
         onClose={qROnClose}

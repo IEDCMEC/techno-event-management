@@ -200,26 +200,27 @@ export default function Events() {
       }
       debugInfo={events}
     >
-        <DataDisplay
-          loading={loading}
-          columns={columns}
-          rows={events}
-          onRowClick={(row) => {
-            router.push(`/${orgId}/events/${row.id}/participants`);
-          }}
-        />
-        { (events.length === 0) ? (
-          <div style={{ textAlign: 'center', margin: '20px' }}>
-              <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
-                No events for this organization
-              </Text>
-              <Text color={'gray.500'} mb={3}>
-                 Add events for this organization to see details
-              </Text>
-          </div>
-          ) : (<></>)     
-        }
-          
+      <DataDisplay
+        loading={loading}
+        columns={columns}
+        rows={events}
+        onRowClick={(row) => {
+          router.push(`/${orgId}/events/${row.id}/participants`);
+        }}
+      />
+      {events.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+            No events for this organization
+          </Text>
+          <Text color={'gray.500'} mb={3}>
+            Add events for this organization to see details
+          </Text>
+        </div>
+      ) : (
+        <></>
+      )}
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

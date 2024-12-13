@@ -177,18 +177,18 @@ export default function Extras() {
           router.push(`/${orgId}/events/${eventId}/extras/${row.id}`);
         }}
       />
-      { (extras.length === 0) ? (
-          <div style={{ textAlign: 'center', margin: '20px' }}>
-             <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
-                No extras created
-              </Text>
-              <Text color={'gray.500'} mb={3}>
-                 Add extras assigned and checked in to see details
-              </Text>
-          </div>
-        ) : (<></>)      
-      }
-    
+      {extras.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+            No extras created
+          </Text>
+          <Text color={'gray.500'} mb={3}>
+            Add extras assigned and checked in to see details
+          </Text>
+        </div>
+      ) : (
+        <></>
+      )}
 
       {/* Modal for creating a new extra */}
       <Modal isOpen={isOpen} onClose={onClose}>

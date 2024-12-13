@@ -144,17 +144,18 @@ export default function OrganizationMembers() {
       debugInfo={members}
     >
       <DataDisplay loading={loading} columns={columns} rows={members} />
-      { (members.length === 0) ? (
-                <div style={{ textAlign: 'center', margin: '20px' }}>
-                    <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
-                      No members for the event
-                    </Text>
-                    <Text color={'gray.500'} mb={3}>
-                      Add members for the event and their details 
-                    </Text>
-                </div>
-              ) : (<></>)       
-      }
+      {members.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+            No members for the event
+          </Text>
+          <Text color={'gray.500'} mb={3}>
+            Add members for the event and their details
+          </Text>
+        </div>
+      ) : (
+        <></>
+      )}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

@@ -112,17 +112,18 @@ export default function ExtraById() {
           router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
         }}
       />
-      { (extraDetails.length === 0) ? (
-            <div style={{ textAlign: 'center', margin: '20px' }}>
-                <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
-                  No participants assigned
-                </Text>
-                <Text color={'gray.500'} mb={3}>
-                   Assign participants for extras to see details
-                </Text>
-            </div>
-          ) : (<></>)        
-        }
+      {extraDetails.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+            No participants assigned
+          </Text>
+          <Text color={'gray.500'} mb={3}>
+            Assign participants for extras to see details
+          </Text>
+        </div>
+      ) : (
+        <></>
+      )}
     </DashboardLayout>
   );
 }
