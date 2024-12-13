@@ -97,6 +97,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
@@ -150,13 +151,14 @@ export default function Attributes() {
       headerButton={
         <>
           <Button onClick={onOpen} isLoading={loading}>
-            Attribute
+            Add Attribute
           </Button>
         </>
       }
       debugInfo={JSON.stringify(attributes)}
     >
       <NavigationMenu orgId={orgId} eventId={eventId} />
+
       <DataDisplay
         loading={loading}
         columns={columns}
@@ -165,6 +167,18 @@ export default function Attributes() {
           router.push(`/${orgId}/events/${eventId}/attributes/${row.id}`);
         }}
       />
+      {attributes.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+            No attributes created
+          </Text>
+          <Text color={'gray.500'} mb={3}>
+            Add attributes and assign participants to see details
+          </Text>
+        </div>
+      ) : (
+        <></>
+      )}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
