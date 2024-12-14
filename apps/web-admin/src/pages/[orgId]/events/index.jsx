@@ -208,7 +208,7 @@ export default function Events() {
           router.push(`/${orgId}/events/${row.id}/participants`);
         }}
       />
-      { (!loading && events.length === 0) ? (
+      {!loading && events.length === 0 ? (
         <div style={{ textAlign: 'center', margin: '20px' }}>
           <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No events for this organization

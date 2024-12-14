@@ -144,7 +144,7 @@ export default function OrganizationMembers() {
       debugInfo={members}
     >
       <DataDisplay loading={loading} columns={columns} rows={members} />
-      {(!loading && members.length === 0 ) ? (
+      {!loading && members.length === 0 ? (
         <div style={{ textAlign: 'center', margin: '20px' }}>
           <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No members for the event

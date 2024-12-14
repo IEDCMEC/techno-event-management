@@ -103,7 +103,7 @@ export default function ParticipantsCheckIn() {
       debugInfo={participantsCheckIn}
     >
       <NavigationMenu orgId={orgId} eventId={eventId} />
-      
+
       <DataDisplay
         loading={loading}
         rows={participantsCheckIn}
@@ -112,8 +112,7 @@ export default function ParticipantsCheckIn() {
           router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
         }}
       />
-      { 
-        (!loading && participantsCheckIn.length === 0 )? (
+      {!loading && participantsCheckIn.length === 0 ? (
         <div style={{ textAlign: 'center', margin: '20px' }}>
           <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No participants checked-in
