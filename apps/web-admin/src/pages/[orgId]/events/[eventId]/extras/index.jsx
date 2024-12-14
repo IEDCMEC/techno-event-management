@@ -137,7 +137,7 @@ export default function Extras() {
 
   const [extras, setExtras] = useState([]);
   const { useGetQuery } = useWrapper();
-  const { isLoading: loading } = useGetQuery(
+  const { isFetching: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/extras`,
     `/core/organizations/${orgId}/events/${eventId}/extras`,
     {},

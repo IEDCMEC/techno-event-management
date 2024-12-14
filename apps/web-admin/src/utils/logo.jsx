@@ -45,4 +45,4 @@ const MyLogo = () => {
   );
 };
 
-export default MyLogo
+export default MyLogo;

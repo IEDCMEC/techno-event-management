@@ -126,7 +126,7 @@ export default function Attributes() {
 
   const [attributes, setAttributes] = useState([]);
   const { useGetQuery } = useWrapper();
-  const { isLoading: loading } = useGetQuery(
+  const { isFetching: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     {},

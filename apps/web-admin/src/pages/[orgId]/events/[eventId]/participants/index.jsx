@@ -40,12 +40,17 @@ export default function Participants() {
   const router = useRouter();
   const showAlert = useAlert();
   const { orgId, eventId } = router.query;
-  const { loading, get, post } = useFetch();
-  const { useGetQuery } = useWrapper();
+  // const { loading, get, post } = useFetch();
+  const { useGetQuery, usePostMutation } = useWrapper();
 
   // const { accountDetails } = useContext(account);
 
-  const { data, status, error } = useGetQuery(
+  const {
+    data,
+    status,
+    error,
+    isFetching: loading,
+  } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     {},
@@ -60,68 +65,50 @@ export default function Participants() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
   const [emailContent, setEmailContent] = useState('');
+  const { mutate: addParticipantsMutation } = usePostMutation(
+    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    {},
+    {
+      onSuccess: (response) => {
+        const value = {
+          addedAt: response.data.newParticipant.createdAt,
+          id: response.data.newParticipant.id,
+          checkInKey: response.data.newParticipant.checkInKey,
+          email: response.data.newParticipant.email,
+          firstName: response.data.newParticipant.firstName,
+          lastName: response.data.newParticipant.lastName,
+          numberOfAttributesAssigned: 0,
+          numnerOfExtrasAssigned: 0,
+          phone: response.data.newParticipant.phone,
+        };
+        setParticipants((prevValue) => [...prevValue, value]);
+        showAlert({
+          title: 'Success',
+          description: 'Added participant!!',
+          status: 'success',
+        });
+      },
+      invalidatelKeys: [`/core/organizations/${orgId}/events/${eventId}/participants`],
+    },
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //console.log(formData);
-    const response = await post(
-      `/core/organizations/${orgId}/events/${eventId}/participants`,
-      {},
-      {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        attributes: [],
-        phone: formData.phone,
-        email: formData.email,
-        checkInKey: formData.checkInKey,
-      },
-    );
-    //console.log(response)
-    //console.log(response !== null || response !== undefined)
-    if (response !== null || response !== undefined) {
-      const { data, status } = response;
-      //console.log('Hello world')
-      //console.log(data);
-      //console.log(participants)
-      if (status === 200) {
-        //console.log('super!')
-        const value = {
-          addedAt: data.newParticipant.createdAt,
-          id: data.newParticipant.id,
-          checkInKey: data.newParticipant.checkInKey,
-          email: data.newParticipant.email,
-          firstName: data.newParticipant.firstName,
-          lastName: data.newParticipant.lastName,
-          numberOfAttributesAssigned: 0,
-          numnerOfExtrasAssigned: 0,
-          phone: data.newParticipant.phone,
-        };
-        setParticipants((prevValue) => [...prevValue, value]);
-        // showAlert({
-        //   title: 'Success',
-        //   description: 'participant has been added successfully.',
-        //   status: 'success',
-        // });
-      } else {
-        //console.log('fuck u')
-        // showAlert({
-        //   title: 'Failure',
-        //   description: 'participant has not been added successfully.',
-        //   status: 'Failure',
-        // });
-      }
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        checkInKey: '',
-      });
-      //console.log(participants);
-    } else {
-      //console.log(response)
-      //console.log('Hihihi')
-    }
+    addParticipantsMutation({
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      attributes: [],
+      phone: formData.phone,
+      email: formData.email,
+      checkInKey: formData.checkInKey,
+    });
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      checkInKey: '',
+    });
     onClose();
   };
   const { isOpen: qrIsOpen, onOpen: qROnOpen, onClose: qROnClose } = useDisclosure();
