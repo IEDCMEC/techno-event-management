@@ -177,7 +177,7 @@ export default function Extras() {
           router.push(`/${orgId}/events/${eventId}/extras/${row.id}`);
         }}
       />
-      {extras.length === 0 ? (
+      {(!loading && extras.length === 0) ? (
         <div style={{ textAlign: 'center', margin: '20px' }}>
           <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No extras created

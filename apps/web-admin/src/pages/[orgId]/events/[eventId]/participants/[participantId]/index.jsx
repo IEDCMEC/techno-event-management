@@ -95,7 +95,7 @@ export default function ParticipantById() {
         <Text>Extras - {participant.numberOfExtrasCheckedIn} checked in</Text>
         <DataDisplay loading={loading} columns={extraColumns} rows={participantExtras} />
       </Flex>
-      {participant.length === 0 ? (
+      {(!loading && participant.length === 0) ? (
         <div style={{ textAlign: 'center', margin: '20px' }}>
           <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No participants created

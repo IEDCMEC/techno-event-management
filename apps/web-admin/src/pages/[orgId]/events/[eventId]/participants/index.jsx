@@ -175,7 +175,7 @@ export default function Participants() {
     >
       <NavigationMenu orgId={orgId} eventId={eventId} />
       <DataDisplay loading={loading} rows={participants} columns={columns} />
-      {participants.length === 0 ? (
+      {(!loading && participants.length === 0 )? (
         <div style={{ textAlign: 'center', margin: '20px' }}>
           <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No participants
