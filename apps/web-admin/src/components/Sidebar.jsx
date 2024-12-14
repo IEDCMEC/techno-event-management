@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import MyLogo from '@/utils/logo';
 import { MdOutlineEvent } from 'react-icons/md';
+import { IoSettingsOutline } from 'react-icons/io5';
 import {
   Box,
   Text,
@@ -28,6 +29,8 @@ import { logo, logo_text } from './landing/assets';
 import { useBreakpointValue } from '@chakra-ui/icons';
 import Image from 'next/image';
 import Rectangle from '@/utils/Rectangle 1.svg';
+import { IoIosInformationCircleOutline } from 'react-icons/io';
+
 const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
@@ -55,7 +58,14 @@ const Sidebar = ({ isOpen, onClose }) => {
     { name: 'Technopreneur `24', status: true },
     { name: 'Excel `24', status: false },
   ];
-
+  const configItems = [
+    { name: 'Settings', icon: <IoSettingsOutline />, path: `/${accountDetails.orgId}/settings` },
+    {
+      name: 'Help',
+      icon: <IoIosInformationCircleOutline />,
+      path: `/${accountDetails.orgId}/profile`,
+    },
+  ];
   return (
     <>
       {!isMobile ? (
@@ -112,10 +122,58 @@ const Sidebar = ({ isOpen, onClose }) => {
 
             <SidebarContents />
             {/* <EventsDisplay /> */}
+            <StyledBox
+              sx={{ height: '114px', width: '100%' }}
+              pt="10px"
+              alignItems="flex-start"
+              justifyContent="space-around"
+            >
+              <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
+                Config
+              </StyledText>
+              {configItems.map((value, index) => (
+                <StyledBox
+                  flexDirection={'row'}
+                  ml="5px"
+                  cursor="pointer"
+                  key={index}
+                  width="95%"
+                  position="relative"
+                  justifyContent="flex-start"
+                  p="4px 8px 4px 0px"
+                  gap="4"
+                  height="28px"
+                  sx={{
+                    background: router.asPath === value.path ? 'rgba(4, 5, 11, 0.1)' : '',
+                    borderRadius: '8px',
+                  }}
+                >
+                  {router.asPath === value.path && (
+                    <Image
+                      src={Rectangle}
+                      alt=""
+                      style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
+                    />
+                  )}
+                  <Box ml={4}>{value.icon}</Box>
+                  <StyledText
+                    key={index}
+                    pl="0px"
+                    variant="16Regular.black"
+                    transition="outline 0.2s"
+                    onClick={() => {
+                      router.push(value.path);
+                    }}
+                  >
+                    {value.name}
+                  </StyledText>
+                </StyledBox>
+              ))}
+            </StyledBox>
 
-            <Box flex="1"></Box>
+            <StyledBox flex="1"></StyledBox>
             <SidebarCalendar scale={0.95} />
-            {isAdmin && (
+            {/* {isAdmin && (
               <Button
                 onClick={() => {
                   router.push(`/${orgId}/settings`);
@@ -125,18 +183,27 @@ const Sidebar = ({ isOpen, onClose }) => {
               >
                 Settings
               </Button>
-            )}
+            )} */}
 
-            <Box paddingY={4}>
+            <StyledBox
+              paddingY={4}
+              sx={{
+                borderRight: '1px solid rgba(4, 5, 11, 0.1)',
+                borderTop: '1px solid rgba(4, 5, 11, 0.1)',
+                width: '240px',
+              }}
+            >
               <Button
                 onClick={handleLogout}
                 isLoading={loading}
                 loadingText="Please Wait"
                 width="100%"
+                bg={'#11185A'}
+                color={'#FFF'}
               >
                 Logout
               </Button>
-            </Box>
+            </StyledBox>
           </StyledBox>
         </StyledBox>
       ) : (
@@ -176,14 +243,14 @@ const Sidebar = ({ isOpen, onClose }) => {
                       </Button>
                     )}
 
-                    <Button
+                    {/* <Button
                       onClick={handleLogout}
                       isLoading={loading}
                       loadingText="Please Wait"
                       width="100%"
                     >
                       Logout
-                    </Button>
+                    </Button> */}
                   </div>
                 </DrawerBody>
               </DrawerContent>
@@ -222,13 +289,14 @@ const SidebarContents = () => {
         justifyContent="space-around"
       >
         <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
-          Applications
+          Tools
         </StyledText>
         {sidebarItems.map((value, index) => (
           <StyledBox
             flexDirection={'row'}
             ml="5px"
             cursor="pointer"
+            key={index}
             width="95%"
             position="relative"
             justifyContent="flex-start"

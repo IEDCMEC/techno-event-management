@@ -39,9 +39,9 @@ export default function Settings() {
             <Input
               type="text"
               name="firstName"
-              value={formData.firstName || ''}
+              value={accountDetails.firstName}
               onChange={(e) => {
-                setFormData((preValue) => {
+                setAccountDetails((preValue) => {
                   return {
                     ...preValue,
                     firstName: e.target.value,
@@ -65,9 +65,9 @@ export default function Settings() {
             <Input
               type="text"
               name="lastName"
-              value={formData.lastName || ''}
+              value={accountDetails.lastName}
               onChange={(e) => {
-                setFormData((preValue) => {
+                setAccountDetails((preValue) => {
                   return {
                     ...preValue,
                     lastName: e.target.value,
@@ -78,14 +78,15 @@ export default function Settings() {
           </FormControl>
         </Box>
         <Button
-          onClick={() => {
-            setAccountDetails((preValue) => {
-              return {
-                ...preValue,
-                ...formData,
-              };
-            });
-            updateAccountDetails();
+          onClick={async () => {
+            // setAccountDetails((preValue) => {
+            //   return {
+            //     ...preValue,
+            //     firstName: formData.firstName,
+            //     lastName: formData.lastName,
+            //   };
+            // });
+            await updateAccountDetails();
           }}
         >
           Save
