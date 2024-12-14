@@ -125,7 +125,6 @@ export default function ParticipantsCheckIn() {
       ) : (
         <></>
       )}
-      
     </DashboardLayout>
   );
 }
