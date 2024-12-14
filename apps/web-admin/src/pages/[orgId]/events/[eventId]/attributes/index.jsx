@@ -167,7 +167,7 @@ export default function Attributes() {
           router.push(`/${orgId}/events/${eventId}/attributes/${row.id}`);
         }}
       />
-      {attributes.length === 0 ? (
+      {(!loading && attributes.length === 0) ? (
         <div style={{ textAlign: 'center', margin: '20px' }}>
           <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No attributes created
