@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import MyLogo from '@/utils/logo';
 import {
   Box,
   Text,
@@ -21,7 +22,10 @@ import { Router, useRouter } from 'next/router';
 import { RiTeamFill } from 'react-icons/ri';
 import EventsDisplay from './EventsDisplay';
 import { account } from '../contexts/MyContext';
-
+import { StyledBox } from './ui/StyledComponents';
+import { logo, logo_text } from './landing/assets';
+import { useBreakpointValue } from '@chakra-ui/icons';
+import Image from 'next/image';
 const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
@@ -29,7 +33,10 @@ const Sidebar = ({ isOpen, onClose }) => {
   const { accountDetails } = useContext(account);
   const isAdmin = accountDetails.role === 'ADMIN';
   // const isUser = accountDetails.role === 'USER';
-
+  const logoSrc = useBreakpointValue({
+    base: logo,
+    md: logo_text,
+  });
   const router = useRouter();
   const orgId = accountDetails.orgId;
 
@@ -46,19 +53,14 @@ const Sidebar = ({ isOpen, onClose }) => {
   return (
     <>
       {!isMobile ? (
-        <Box
-          padding={4}
-          height="100%"
-          minWidth={50}
-          width={80}
-          display="flex"
-          flexDirection="column"
-        >
-          <Box paddingY={4}>
-            <Text fontSize="4xl" fontWeight="bold">
+        <StyledBox width={'212px'} height="100%">
+          <StyledBox height={'68px'} sx={{ display: 'flex', padding: '15px' }}>
+            {/* <Text fontSize="4xl" fontWeight="bold">
               Event Sync
-            </Text>
-          </Box>
+            </Text> */}
+            <MyLogo />
+            {/* <Image src={logoSrc} alt="EVENTSYNC" /> */}
+          </StyledBox>
 
           <EventsDisplay />
           <SidebarContents />
@@ -87,7 +89,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               Logout
             </Button>
           </Box>
-        </Box>
+        </StyledBox>
       ) : (
         <>
           <Drawer isOpen={isOpen} onClose={onClose} placement="left">
