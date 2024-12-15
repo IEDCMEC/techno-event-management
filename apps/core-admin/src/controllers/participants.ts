@@ -823,7 +823,7 @@ export const checkInParticipant = async (req: Request, res: Response) => {
 
     const { orgId, eventId } = req?.params;
 
-    const { checkedInAt, checkInKey } = req?.body;
+    const { checkedInAt, checkInKey, assignedKey} = req?.body;
 
     if (!checkedInAt || !checkInKey) {
       return res.status(400).json({ error: 'checkInAt and checkInKey is required' });
@@ -844,7 +844,16 @@ export const checkInParticipant = async (req: Request, res: Response) => {
       },
     });
 
-    if (!participantAlreadyCheckedIn) {
+    if (participantAlreadyCheckedIn) {
+      const updatedParticipant = await prisma.participant.update({
+        where: {
+          id: participantAlreadyCheckedIn.id,
+        },
+        data: {
+          assignedKey: assignedKey
+        }
+      })
+    } else {
       return res.status(404).json({ error: 'Participant not found' });
     }
 
