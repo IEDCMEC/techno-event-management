@@ -103,6 +103,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
@@ -111,6 +112,7 @@ import { useAlert } from '@/hooks/useAlert';
 import DataDisplay from '@/components/DataDisplay';
 import NewExtraForm from './new'; // Import the form component
 import useWrapper from '@/hooks/useWrapper';
+import NavigationMenu from '../navigationmenu';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
@@ -166,6 +168,7 @@ export default function Extras() {
       }
       debugInfo={extras}
     >
+      <NavigationMenu orgId={orgId} eventId={eventId} />
       <DataDisplay
         loading={loading}
         columns={columns}
@@ -174,6 +177,18 @@ export default function Extras() {
           router.push(`/${orgId}/events/${eventId}/extras/${row.id}`);
         }}
       />
+      {!loading && extras.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+            No extras created
+          </Text>
+          <Text color={'gray.500'} mb={3}>
+            Add extras assigned and checked in to see details
+          </Text>
+        </div>
+      ) : (
+        <></>
+      )}
 
       {/* Modal for creating a new extra */}
       <Modal isOpen={isOpen} onClose={onClose}>

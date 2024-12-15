@@ -1,5 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 
+/**
+ * Middleware to authorize requests reaching Auth0 actions.
+ * @param req
+ * @param res
+ * @param next
+ */
 export const authorize = (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
 

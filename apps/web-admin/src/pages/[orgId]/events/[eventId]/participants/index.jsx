@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, useDisclosure } from '@chakra-ui/react';
+import { Button, Text, useDisclosure } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
@@ -12,6 +12,7 @@ import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
 import axios from 'axios';
 import useWrapper from '@/hooks/useWrapper';
+import NavigationMenu from '../navigationmenu';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -172,7 +173,20 @@ export default function Participants() {
       }
       debugInfo={participants}
     >
+      <NavigationMenu orgId={orgId} eventId={eventId} />
       <DataDisplay loading={loading} rows={participants} columns={columns} />
+      {!loading && participants.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+            No participants
+          </Text>
+          <Text color={'gray.500'} mb={3}>
+            Add participants for the event to see details
+          </Text>
+        </div>
+      ) : (
+        <></>
+      )}
       <MultiStepModal
         isOpen={qrIsOpen}
         onClose={qROnClose}

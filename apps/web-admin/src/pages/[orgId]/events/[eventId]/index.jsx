@@ -28,6 +28,7 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 // import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import useWrapper from '@/hooks/useWrapper';
+import NavigationMenu from './navigationmenu';
 
 export default function EventById() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -100,17 +101,6 @@ export default function EventById() {
   //   fetchEventAttributes();
   // }, []);
 
-  const tabStyle = (isActive) => ({
-    color: isActive ? '#369b97' : '#369b97',
-    backgroundColor: isActive ? '#e6f7f5' : '#e6f7f5',
-    padding: '10px 20px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontSize: { base: '14px', md: '17px' },
-    fontWeight: '600',
-    width: { base: '100%', md: 'auto' },
-  });
-
   return (
     <DashboardLayout
       pageTitle={event?.name}
@@ -134,7 +124,7 @@ export default function EventById() {
       }
     >
       <Flex flexDirection="column" height="100%" px={{ base: 4, md: 0 }}>
-        <Box
+        {/*<Box
           width="100%"
           backgroundColor="#e6f7f5"
           py={2}
@@ -185,7 +175,9 @@ export default function EventById() {
               </Button>
             ))}
           </Flex>
-        </Box>
+        </Box> */}
+
+        <NavigationMenu orgId={orgId} eventId={eventId} />
 
         <Flex
           height="100%"
@@ -196,8 +188,7 @@ export default function EventById() {
           py={6}
         >
           <Text fontSize={{ base: 'xl', md: '3xl' }}>
-            Total Participants:{' '}
-            <span style={{ fontWeight: 'bold' }}>{event.numberOfParticipants}</span>
+            Participants: <span style={{ fontWeight: 'bold' }}>{event.numberOfParticipants}</span>
           </Text>
 
           <Text fontSize={{ base: 'xl', md: '3xl' }}>

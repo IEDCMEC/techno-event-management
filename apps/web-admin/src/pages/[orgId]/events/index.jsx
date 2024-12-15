@@ -112,6 +112,7 @@ export default function Events() {
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
+  Text,
   Button,
   Modal,
   ModalOverlay,
@@ -163,7 +164,7 @@ export default function Events() {
     {}, // headers
     {}, // options
     (data) => {
-      console.log(data.data.events);
+      console.log(`events: ${data.data.events}`);
       setEvents(data.data.events || []);
     },
   );
@@ -204,9 +205,21 @@ export default function Events() {
         columns={columns}
         rows={events}
         onRowClick={(row) => {
-          router.push(`/${orgId}/events/${row.id}`);
+          router.push(`/${orgId}/events/${row.id}/participants`);
         }}
       />
+      {!loading && events.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+            No events for this organization
+          </Text>
+          <Text color={'gray.500'} mb={3}>
+            Add events for this organization to see details
+          </Text>
+        </div>
+      ) : (
+        <></>
+      )}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
