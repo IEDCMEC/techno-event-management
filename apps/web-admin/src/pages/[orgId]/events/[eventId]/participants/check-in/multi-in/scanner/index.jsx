@@ -10,7 +10,7 @@ import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 
-export default function CheckInParticipantWithScanner() {
+export default function CheckInParticipantWithMultiScanner() {
   const { loading, post, get } = useFetch();
   const showAlert = useAlert();
 
@@ -19,8 +19,11 @@ export default function CheckInParticipantWithScanner() {
 
   const { useGetQuery } = useWrapper();
 
+  const [stage, setStage] = useState(1);
   const [previousCheckInKey, setPreviousCheckInKey] = useState(null);
   const [checkInKey, setCheckInKey] = useState(null);
+  const [assignedKey, setAssignedKey] = useState(null);
+  const [scannedValue, setScannedValue] = useState(null);
   const [participant, setParticipant] = useState(null);
 
   const [fastMode, setFastMode] = useState(false);
@@ -31,7 +34,7 @@ export default function CheckInParticipantWithScanner() {
       {},
       {
         checkInKey,
-        assignedKey: null,
+        assignedKey,
         checkedInAt: new Date().toISOString(),
       },
     );
@@ -41,17 +44,36 @@ export default function CheckInParticipantWithScanner() {
         description: data.message,
         status: 'success',
       });
-      setPreviousCheckInKey(checkInKey);
-      setCheckInKey(null);
-      setParticipant(null);
+      resetScanner(checkInKey);
     } else {
       showAlert({
         title: 'Error',
         description: data.error,
         status: 'error',
       });
-      setCheckInKey(null);
-      setPreviousCheckInKey(null);
+      resetScanner(null);
+    }
+  };
+
+  // reset states
+  const resetScanner = (value) => {
+    setStage(1);
+    setCheckInKey(null);
+    setPreviousCheckInKey(value);
+    setAssignedKey(null);
+    setScannedValue(null);
+    setParticipant(null);
+  };
+
+  // sets scanned value to corresponding state
+  const confirmScannedValue = () => {
+    if (stage == 1) {
+      setCheckInKey(scannedValue);
+      setScannedValue(null);
+      setStage(2);
+    } else if (stage == 2) {
+      setAssignedKey(scannedValue);
+      handleSubmit();
     }
   };
 
@@ -66,10 +88,23 @@ export default function CheckInParticipantWithScanner() {
   );
 
   useEffect(() => {
-    if (checkInKey && previousCheckInKey !== checkInKey && fastMode) {
+    if (checkInKey && previousCheckInKey !== checkInKey && assignedKey && fastMode) {
       handleSubmit();
     }
-  }, [checkInKey]);
+  }, [assignedKey]);
+
+  // in fast mode, when checkInKey is set, state is changed to scan assignedKey & an alert is shown
+  useEffect(() => {
+    if (fastMode && checkInKey && previousCheckInKey != checkInKey && !assignedKey) {
+      setAssignedKey(scannedValue);
+      setStage(2);
+      showAlert({
+        title: 'Scan Assigned Key QR Code',
+        description: 'Fast mode is enabled. Scan QR Code to assign Event Key to participant',
+        status: 'info',
+      });
+    }
+  }, [scannedValue]);
 
   useEffect(() => {
     if (fastMode) {
@@ -88,8 +123,9 @@ export default function CheckInParticipantWithScanner() {
     const intervalId = setInterval(() => {
       setPreviousCheckInKey(null);
       setCheckInKey(null);
+      setAssignedKey(null);
       setParticipant(null);
-    }, 10000);
+    }, 20000);
 
     return () => clearInterval(intervalId);
   }, [previousCheckInKey]);
@@ -101,13 +137,30 @@ export default function CheckInParticipantWithScanner() {
       debugInfo={checkInKey + ' ' + previousCheckInKey}
     >
       <Flex height="100%" width="100%" flexDirection="column" alignItems="center">
-        <Flex pb="6" justifyContent="center" alignItems="center" gap="6">
+        <Flex pb="6" justifyContent="center" alignItems="center" fontSize="xl" gap="1">
+          <Text>Current Stage: </Text>
+          <Text fontWeight="semibold">
+            Scanning {stage === 1 ? 'Check-In Key' : 'Assigned Key'}
+          </Text>
+        </Flex>
+        <Flex pb="3" justifyContent="center" alignItems="center" gap="4">
           <Text fontSize="xl">Fast Mode</Text>
           <Switch colorScheme="red" size="md" onChange={() => setFastMode(!fastMode)} />
         </Flex>
-        <Box width={['100%', '60%', '50%', '30%']}>
-          <Scanner result={checkInKey} setResult={setCheckInKey} />
+        <Box width={['100%', '60%', '50%', '30%']} pb="3">
+          <Scanner result={scannedValue} setResult={setScannedValue} />
         </Box>
+        <Flex
+          flexDirection="column"
+          gap="0.8"
+          fontSize="lg"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text>Scanned Value: {scannedValue ? scannedValue : 'None'}</Text>
+          <Text>Check-In Key: {checkInKey ? checkInKey : 'None'}</Text>
+          <Text>Assigned Key: {assignedKey ? assignedKey : 'None'}</Text>
+        </Flex>
         {!fastMode && participant && (
           <Flex width="100%" flexDirection="column" alignItems="center" gap="6">
             <Flex gap="1" width="100%" justifyContent="space-between">
@@ -133,20 +186,20 @@ export default function CheckInParticipantWithScanner() {
                 )}
               </Flex>
             </Flex>
-            <Flex gap="6">
-              <Button onClick={handleSubmit}>Confirm</Button>
-              <Button
-                onClick={() => {
-                  setCheckInKey(null);
-                  setParticipant(null);
-                  setPreviousCheckInKey(null);
-                }}
-              >
-                Clear
-              </Button>
-            </Flex>
           </Flex>
         )}
+        <Flex gap="6" pt="3">
+          {scannedValue && (
+            <Button onClick={confirmScannedValue}>Confirm {stage === 1 ? 'Value' : ''}</Button>
+          )}
+          <Button
+            onClick={() => {
+              resetScanner(null);
+            }}
+          >
+            Clear
+          </Button>
+        </Flex>
       </Flex>
     </DashboardLayout>
   );

@@ -844,7 +844,7 @@ export const checkInParticipant = async (req: Request, res: Response) => {
       },
     });
 
-    if (participantAlreadyCheckedIn) {
+    if (assignedKey && participantAlreadyCheckedIn) {
       const updatedParticipant = await prisma.participant.update({
         where: {
           id: participantAlreadyCheckedIn.id,
@@ -853,7 +853,9 @@ export const checkInParticipant = async (req: Request, res: Response) => {
           assignedKey: assignedKey
         }
       })
-    } else {
+    }
+    
+    if (!participantAlreadyCheckedIn) {
       return res.status(404).json({ error: 'Participant not found' });
     }
 
