@@ -19,6 +19,7 @@ export default function DashboardLayout({ headerButton, children }) {
   const { isOpen, onOpen, onClose } = useDisclosure(); // useDisclosure hook for modal
   useEffect(() => {
     console.log(router.asPath);
+    console.log(accountDetails);
   }, [router.asPath]);
   if (isAuthenticated) {
     return (
@@ -33,7 +34,9 @@ export default function DashboardLayout({ headerButton, children }) {
               alignItems="center"
             >
               <Text fontSize="4xl" fontWeight="bold">
-                {accountDetails?.name}
+                {accountDetails.firstName !== '' && accountDetails.lastName !== ''
+                  ? `${accountDetails.firstName} ${accountDetails.lastName}`
+                  : accountDetails?.name}
               </Text>
               <Flex
                 height={10}

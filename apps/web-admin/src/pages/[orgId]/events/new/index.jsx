@@ -5,6 +5,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  Box,
   Input,
   Textarea,
   Select,
@@ -147,137 +148,186 @@ export default function NewEvent() {
   };
 
   return (
-    <DashboardLayout pageTitle="New Event" previousPage={`/organizations/${orgId}/events`}>
-      <div style={{ maxHeight: '80vh', overflowY: 'auto', padding: '20px' }}>
-        <form onSubmit={handleSubmit}>
-          <FormControl isRequired my={4} isInvalid={formErrors.name}>
-            <FormLabel>Name</FormLabel>
-            <Input
-              type="name"
-              name="name"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
-            <FormErrorMessage>{formErrors.name}</FormErrorMessage>
-          </FormControl>
-          <FormControl isRequired my={4} isInvalid={formErrors.startDate}>
-            <FormLabel>Start Date</FormLabel>
-            <Input
-              type="datetime-local"
-              name="startDate"
-              value={startDate}
-              onChange={(e) => {
-                setStartDate(e.target.value);
-              }}
-            />
-            <FormErrorMessage>{formErrors.startDate}</FormErrorMessage>
-          </FormControl>
-          <FormControl isRequired my={4} isInvalid={formErrors.endDate}>
-            <FormLabel>End Date</FormLabel>
-            <Input
-              type="datetime-local"
-              name="endDate"
-              value={endDate}
-              onChange={(e) => {
-                setEndDate(e.target.value);
-              }}
-            />
-            <FormErrorMessage>{formErrors.endDate}</FormErrorMessage>
-          </FormControl>
-          <FormControl isRequired my={4} isInvalid={formErrors.desc}>
-            <FormLabel>Description</FormLabel>
-            <Textarea
-              type="text"
-              name="desc"
-              rows={5}
-              value={desc}
-              onChange={(e) => {
-                setDesc(e.target.value);
-              }}
-            />
-            <FormErrorMessage>{formErrors.desc}</FormErrorMessage>
-          </FormControl>
-          <FormControl isRequired my={4}>
-            <FormLabel>Type</FormLabel>
-            <Select value={type} onChange={(e) => setType(e.target.value)}>
-              <option value="Public">Public</option>
-              <option value="Private">Private</option>
-            </Select>
-          </FormControl>
-          <FormControl isRequired my={4} isInvalid={formErrors.venue}>
-            <FormLabel>Venue</FormLabel>
-            <Input
-              type="text"
-              name="venue"
-              value={venue}
-              onChange={(e) => {
-                setVenue(e.target.value);
-              }}
-            />
-            <FormErrorMessage>{formErrors.venue}</FormErrorMessage>
-          </FormControl>
-          <FormControl isRequired my={4} isInvalid={formErrors.street}>
-            <FormLabel>Street</FormLabel>
-            <Input
-              type="text"
-              name="street"
-              value={street}
-              onChange={(e) => {
-                setStreet(e.target.value);
-              }}
-            />
-            <FormErrorMessage>{formErrors.street}</FormErrorMessage>
-          </FormControl>
-          <FormControl isRequired my={4} isInvalid={formErrors.city}>
-            <FormLabel>City</FormLabel>
-            <Input
-              type="text"
-              name="city"
-              value={city}
-              onChange={(e) => {
-                setCity(e.target.value);
-              }}
-            />
-            <FormErrorMessage>{formErrors.city}</FormErrorMessage>
-          </FormControl>
-          <FormControl isRequired my={4} isInvalid={formErrors.state}>
-            <FormLabel>State</FormLabel>
-            <Input
-              type="text"
-              name="state"
-              value={state}
-              onChange={(e) => {
-                setState(e.target.value);
-              }}
-            />
-            <FormErrorMessage>{formErrors.state}</FormErrorMessage>
-          </FormControl>
-          <FormControl isRequired my={4} isInvalid={formErrors.country}>
-            <FormLabel>Country</FormLabel>
-            <Input
-              type="text"
-              name="country"
-              value={country}
-              onChange={(e) => {
-                setCountry(e.target.value);
-              }}
-            />
-            <FormErrorMessage>{formErrors.country}</FormErrorMessage>
-          </FormControl>
-          <FormControl isRequired my={4} isInvalid={formErrors.pincode}>
-            <FormLabel>Pincode</FormLabel>
-            <Input
-              type="number"
-              name="pincode"
-              value={pincode}
-              onChange={(e) => {
-                setPincode(e.target.value);
-              }}
-            />
-            <FormErrorMessage>{formErrors.pincode}</FormErrorMessage>
-          </FormControl>
+    <Box sx={{ maxHeight: '80vh', overflowY: 'auto', padding: '10px' }}>
+      <Box
+        as="form"
+        onSubmit={handleSubmit}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexDirection: 'column',
+          width: '100%',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexDirection: { base: 'column', md: 'row' },
+            width: '95%',
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexDirection: 'column',
+              width: { base: '100%', md: '49%' },
+            }}
+          >
+            <FormControl isRequired my={4} isInvalid={formErrors.name}>
+              <FormLabel>Name</FormLabel>
+              <Input
+                type="name"
+                name="name"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.name}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired my={4} isInvalid={formErrors.startDate}>
+              <FormLabel>Start Date</FormLabel>
+              <Input
+                type="datetime-local"
+                name="startDate"
+                value={startDate}
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.startDate}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired my={4} isInvalid={formErrors.endDate}>
+              <FormLabel>End Date</FormLabel>
+              <Input
+                type="datetime-local"
+                name="endDate"
+                value={endDate}
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.endDate}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired my={4} isInvalid={formErrors.desc}>
+              <FormLabel>Description</FormLabel>
+              <Textarea
+                type="text"
+                name="desc"
+                rows={5}
+                value={desc}
+                onChange={(e) => {
+                  setDesc(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.desc}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired my={4}>
+              <FormLabel>Type</FormLabel>
+              <Select value={type} onChange={(e) => setType(e.target.value)}>
+                <option value="Public">Public</option>
+                <option value="Private">Private</option>
+              </Select>
+            </FormControl>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexDirection: 'column',
+              width: { base: '100%', md: '49%' },
+            }}
+          >
+            <FormControl isRequired my={4} isInvalid={formErrors.venue}>
+              <FormLabel>Venue</FormLabel>
+              <Input
+                type="text"
+                name="venue"
+                value={venue}
+                onChange={(e) => {
+                  setVenue(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.venue}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired my={4} isInvalid={formErrors.street}>
+              <FormLabel>Street</FormLabel>
+              <Input
+                type="text"
+                name="street"
+                value={street}
+                onChange={(e) => {
+                  setStreet(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.street}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired my={4} isInvalid={formErrors.city}>
+              <FormLabel>City</FormLabel>
+              <Input
+                type="text"
+                name="city"
+                value={city}
+                onChange={(e) => {
+                  setCity(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.city}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired my={4} isInvalid={formErrors.state}>
+              <FormLabel>State</FormLabel>
+              <Input
+                type="text"
+                name="state"
+                value={state}
+                onChange={(e) => {
+                  setState(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.state}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired my={4} isInvalid={formErrors.country}>
+              <FormLabel>Country</FormLabel>
+              <Input
+                type="text"
+                name="country"
+                value={country}
+                onChange={(e) => {
+                  setCountry(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.country}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired my={4} isInvalid={formErrors.pincode}>
+              <FormLabel>Pincode</FormLabel>
+              <Input
+                type="number"
+                name="pincode"
+                value={pincode}
+                onChange={(e) => {
+                  setPincode(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.pincode}</FormErrorMessage>
+            </FormControl>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            alignContent: 'center',
+            justifyContent: 'space-between',
+            flexDirection: { base: 'column', md: 'row' },
+            width: '95%',
+            gap: '15px',
+          }}
+        >
           <FormControl my={4} isRequired isInvalid={formErrors.eventlogo}>
             <FormLabel>Event Logo</FormLabel>
             <Input
@@ -311,11 +361,11 @@ export default function NewEvent() {
             />
             <FormErrorMessage>{formErrors.regimg}</FormErrorMessage>
           </FormControl>
-          <Button type="submit" width="100%" my="4" isLoading={loading} loadingText="Please Wait">
-            Add
-          </Button>
-        </form>
-      </div>
-    </DashboardLayout>
+        </Box>
+        <Button type="submit" width="100%" my="4" isLoading={loading} loadingText="Please Wait">
+          Add
+        </Button>
+      </Box>
+    </Box>
   );
 }

@@ -39,7 +39,7 @@ export default function OrganizationMembers() {
     data,
     status,
     error,
-    isLoading: loading,
+    isFetching: loading,
   } = useGetQuery(
     `/core/organizations/${orgId}/members`,
     `/core/organizations/${orgId}/members`,

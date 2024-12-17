@@ -82,7 +82,7 @@ export const ProtectedRoute = ({ children }) => {
     data: userCredsData,
     status: userCredsStatus,
     error: credsError,
-    isLoading: loading,
+    isFetching: loading,
   } = useGetQuery('/core/users/mycreds', '/core/users/mycreds', {}, {}, (response) => {
     setAccountDetails((preValue) => ({
       ...preValue,
