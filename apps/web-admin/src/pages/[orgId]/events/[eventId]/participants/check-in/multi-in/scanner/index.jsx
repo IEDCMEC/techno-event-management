@@ -87,48 +87,48 @@ export default function CheckInParticipantWithMultiScanner() {
     },
   );
 
-  useEffect(() => {
-    if (checkInKey && previousCheckInKey !== checkInKey && assignedKey && fastMode) {
-      handleSubmit();
-    }
-  }, [assignedKey]);
+  // useEffect(() => {
+  //   if (checkInKey && previousCheckInKey !== checkInKey && assignedKey && fastMode) {
+  //     handleSubmit();
+  //   }
+  // }, [assignedKey]);
 
   // in fast mode, when checkInKey is set, state is changed to scan assignedKey & an alert is shown
-  useEffect(() => {
-    if (fastMode && checkInKey && previousCheckInKey != checkInKey && !assignedKey) {
-      setAssignedKey(scannedValue);
-      setStage(2);
-      showAlert({
-        title: 'Scan Assigned Key QR Code',
-        description: 'Fast mode is enabled. Scan QR Code to assign Event Key to participant',
-        status: 'info',
-      });
-    }
-  }, [scannedValue]);
+  // useEffect(() => {
+  //   if (fastMode && checkInKey && previousCheckInKey != checkInKey && !assignedKey) {
+  //     setAssignedKey(scannedValue);
+  //     setStage(2);
+  //     showAlert({
+  //       title: 'Scan Assigned Key QR Code',
+  //       description: 'Fast mode is enabled. Scan QR Code to assign Event Key to participant',
+  //       status: 'info',
+  //     });
+  //   }
+  // }, [scannedValue]);
 
-  useEffect(() => {
-    if (fastMode) {
-      showAlert({
-        title: 'Fast Mode',
-        description: 'Fast mode is enabled. Participants will be checked in without confirmation.',
-        status: 'info',
-      });
-    }
-  }, [fastMode]);
+  // useEffect(() => {
+  //   if (fastMode) {
+  //     showAlert({
+  //       title: 'Fast Mode',
+  //       description: 'Fast mode is enabled. Participants will be checked in without confirmation.',
+  //       status: 'info',
+  //     });
+  //   }
+  // }, [fastMode]);
 
   //
   // Periodically clear the previous participant id
   //
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setPreviousCheckInKey(null);
-      setCheckInKey(null);
-      setAssignedKey(null);
-      setParticipant(null);
-    }, 20000);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     setPreviousCheckInKey(null);
+  //     setCheckInKey(null);
+  //     setAssignedKey(null);
+  //     setParticipant(null);
+  //   }, 20000);
 
-    return () => clearInterval(intervalId);
-  }, [previousCheckInKey]);
+  //   return () => clearInterval(intervalId);
+  // }, [previousCheckInKey]);
 
   return (
     <DashboardLayout
@@ -143,10 +143,10 @@ export default function CheckInParticipantWithMultiScanner() {
             Scanning {stage === 1 ? 'Check-In Key' : 'Assigned Key'}
           </Text>
         </Flex>
-        <Flex pb="3" justifyContent="center" alignItems="center" gap="4">
+        {/* <Flex pb="3" justifyContent="center" alignItems="center" gap="4">
           <Text fontSize="xl">Fast Mode</Text>
           <Switch colorScheme="red" size="md" onChange={() => setFastMode(!fastMode)} />
-        </Flex>
+        </Flex> */}
         <Box width={['100%', '60%', '50%', '30%']} pb="3">
           <Scanner result={scannedValue} setResult={setScannedValue} />
         </Box>
@@ -161,7 +161,7 @@ export default function CheckInParticipantWithMultiScanner() {
           <Text>Check-In Key: {checkInKey ? checkInKey : 'None'}</Text>
           <Text>Assigned Key: {assignedKey ? assignedKey : 'None'}</Text>
         </Flex>
-        {!fastMode && participant && (
+        {participant && (
           <Flex width="100%" flexDirection="column" alignItems="center" gap="6">
             <Flex gap="1" width="100%" justifyContent="space-between">
               <Flex width="100%" flexDirection="column">
