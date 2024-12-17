@@ -64,6 +64,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   const [selectedProject, setSelectedProject] = useState({});
   const [recipients, setRecipients] = useState([]);
   const [mailStatus, setMailStatus] = useState(null);
+  const [flag, setFlag] = useState(false);
   useEffect(() => {
     const fetchText = async () => {
       const response = await fetch('/QrTemplate.txt');
@@ -200,8 +201,19 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   );
   const updateEmailTemplate = async (e) => {
     e.preventDefault();
-    // //console.log(renderHtml(emailContent));
+    //console.log(emailContent);
     if (accountDetails.orgId) {
+      let flag1 = false;
+      let flag2 = false;
+      if (/<\s+[^>]+\s+>/.test(emailContent)) {
+        flag1 = true;
+      }
+      if (!(/{{name}}/.test(emailContent) && /{{payload}}/.test(emailContent))) {
+        flag2 = true;
+      }
+      const flag3 = flag1 || flag2;
+      setFlag(flag3);
+      //console.log(flag3);
       updateEmailMutation({
         projectId: selectedProject.id,
         html_template: emailContent,
@@ -617,7 +629,16 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             {step < 4 && (
               <Button
                 onClick={() => {
-                  nextStep();
+                  if (!flag) {
+                    nextStep();
+                  } else {
+                    showAlert({
+                      title: 'Failure...make sure',
+                      description: 'Check whether {{}} is present and < something > is not',
+                      status: 'success',
+                    });
+                  }
+
                   //   //console.log(step);
                 }}
               >
