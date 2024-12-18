@@ -33,10 +33,8 @@ export default function DashboardLayout({ headerButton, children }) {
               justifyContent="space-between"
               alignItems="center"
             >
-              <Text fontSize="4xl" fontWeight="bold">
-                {accountDetails.firstName !== '' && accountDetails.lastName !== ''
-                  ? `${accountDetails.firstName} ${accountDetails.lastName}`
-                  : accountDetails?.name}
+              <Text fontSize="2xl" fontWeight="bold">
+                {accountDetails?.name}
               </Text>
               <Flex
                 height={10}
