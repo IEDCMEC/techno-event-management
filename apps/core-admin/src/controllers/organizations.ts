@@ -84,11 +84,7 @@ export const getUsersOrganizations = async (req: Request, res: Response) => {
       },
     });
 
-    organizations = organizations.map((organization: any) => ({
-      id: organization.id,
-      name: organization.name,
-      numberOfEvents: organization.Event.length,
-    }));
+    organizations = organizations.map((organization: any) => organization);
 
     return res.status(200).json({ organizations });
   } catch (err: any) {

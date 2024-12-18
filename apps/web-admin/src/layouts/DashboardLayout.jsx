@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState, useContext, useEffect } from 'react';
-import { Box, useMediaQuery, Flex, Text, Button, useDisclosure } from '@chakra-ui/react';
+import { Box, useMediaQuery, Flex, Text, Button, useDisclosure, Select } from '@chakra-ui/react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import Sidebar from '@/components/Sidebar';
@@ -12,7 +12,7 @@ import OrganizationSettingsModal from './OrganizationSettingsModal';
 
 export default function DashboardLayout({ headerButton, children }) {
   const router = useRouter();
-  const { accountDetails, setAccountDetails } = useContext(account);
+  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
   const [isMobile] = useMediaQuery('(max-width: 768px)');
   const [isSidebarOpen, setSidebarOpen] = useState(isMobile);
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -80,7 +80,7 @@ export default function DashboardLayout({ headerButton, children }) {
                       router.back();
                     }}
                   />
-                  <Image
+                  {/* <Image
                     src={user.picture}
                     alt="logo"
                     height={50}
@@ -89,10 +89,41 @@ export default function DashboardLayout({ headerButton, children }) {
                     onClick={() => {
                       router.push(`/${accountDetails?.orgId}/events`);
                     }}
-                  />
+                  /> */}
                   <Text fontSize="4xl" fontWeight="bold">
                     {accountDetails?.name}
                   </Text>
+                  {/* <Select
+                    value={accountDetails.name}
+                    fontSize="4xl"
+                    fontWeight="bold"
+                    focusBorderColor="transparent"
+                    width="350px"
+                    cursor={'pointer'}
+                    sx={{
+                      border: 'none',
+                    }}
+                    onChange={(e) => {
+                      console.log('changes');
+                      console.log(e.target.value);
+                      setAccountDetails(
+                        allAccounts.filter((value) => value.name === e.target.value)[0],
+                      );
+                      router.push(`/${accountDetails.orgId}/events`);
+                    }}
+                  >
+                    {allAccounts.map((value, key) => {
+                      return (
+                        <option
+                          value={value.name}
+                          key={key}
+                          style={{ fontSize: '15px', fontWeight: '400' }}
+                        >
+                          {value.name}
+                        </option>
+                      );
+                    })}
+                  </Select> */}
                 </Flex>
               )}
               <Flex

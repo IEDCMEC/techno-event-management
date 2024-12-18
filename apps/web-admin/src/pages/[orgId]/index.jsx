@@ -34,7 +34,7 @@ export default function OrganizationById() {
     data,
     status,
     error,
-    isFetching: loading,
+    isLoading: loading,
   } = useGetQuery(
     `/core/organizations/${orgId}`,
     `/core/organizations/${orgId}`,

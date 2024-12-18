@@ -52,6 +52,7 @@ const MyContext = ({ children }) => {
     }
   };
   const [activeTab, setActiveTab] = useState('Participants');
+  const [allAccounts, setAllAccounts] = useState([]);
 
   return (
     <div>
@@ -60,6 +61,8 @@ const MyContext = ({ children }) => {
           accountDetails,
           emailProjects,
           setEmailProjects,
+          allAccounts,
+          setAllAccounts,
           setAccountDetails,
           activeTab,
           setActiveTab,

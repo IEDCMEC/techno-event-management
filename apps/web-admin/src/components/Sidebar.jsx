@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
-  const { accountDetails } = useContext(account);
+  const { accountDetails, allAccounts, setAccountDetails } = useContext(account);
   const isAdmin = accountDetails.role === 'ADMIN';
   // const isUser = accountDetails.role === 'USER';
   const logoSrc = useBreakpointValue({
@@ -59,13 +59,20 @@ const Sidebar = ({ isOpen, onClose }) => {
     { name: 'Excel `24', status: false },
   ];
   const configItems = [
-    { name: 'Settings', icon: <IoSettingsOutline />, path: `/${accountDetails.orgId}/settings` },
+    ...(isAdmin ? [{ name: 'Settings', path: `/${accountDetails.orgId}/settings`, icon: <IoSettingsOutline /> }] : []),
+    // { name: 'Settings', icon: <IoSettingsOutline />, path: `/${accountDetails.orgId}/settings` },
     {
       name: 'Help',
       icon: <IoIosInformationCircleOutline />,
       path: `/${accountDetails.orgId}/profile`,
     },
   ];
+  const myOrganizations = allAccounts.map((value) => ({
+    name: value.name,
+    path: `/${value.orgId}/events`,
+    status: true,
+    data: value
+  }));
   return (
     <>
       {!isMobile ? (
@@ -103,10 +110,19 @@ const Sidebar = ({ isOpen, onClose }) => {
               justifyContent="space-around"
             >
               <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
-                Starred
+                Organizations
               </StyledText>
-              {starredItems.map((value, index) => (
-                <StyledText key={index} pl="10px" variant="16Regular.black">
+              {myOrganizations.map((value, index) => (
+                <StyledText
+                  key={index}
+                  pl="10px"
+                  variant="16Regular.black"
+                  cursor="pointer"
+                  onClick={() => {
+                    router.push(value.path)
+                    setAccountDetails(value.data)
+                  }}
+                >
                   <StyledBox
                     h="5px"
                     w="5px"
@@ -123,7 +139,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             <SidebarContents />
             {/* <EventsDisplay /> */}
             <StyledBox
-              sx={{ height: '114px', width: '100%' }}
+              sx={{ height: `${configItems.length * 50}px`, width: '100%' }}
               pt="10px"
               alignItems="flex-start"
               justifyContent="space-around"
@@ -141,7 +157,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   position="relative"
                   justifyContent="flex-start"
                   p="4px 8px 4px 0px"
-                  gap="4"
+                  gap="2"
                   height="28px"
                   sx={{
                     background: router.asPath === value.path ? 'rgba(4, 5, 11, 0.1)' : '',
@@ -274,7 +290,7 @@ const SidebarContents = () => {
     { label: 'Members', path: `/${orgId}/members`, icon: <RiTeamFill /> },
     { label: 'Certificates', path: `/${orgId}/mycertificates`, icon: <PiCertificate /> },
     { label: 'Emailer', path: `/${orgId}/emailer`, icon: <MdOutlineEmail /> },
-    ...(isUser ? [{ label: 'Settings', path: `/settings`, icon: <MdOutlineSettings /> }] : []),
+    // ...(isUser ? [{ label: 'Settings', path: `/settings`, icon: <MdOutlineSettings /> }] : []),
     // ...(isAdmin ? [{label:'Organizaion Settings',path:'/${orgId}/settings',icon}]: []),
   ];
 

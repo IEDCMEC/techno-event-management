@@ -62,7 +62,7 @@ export default function EventById() {
       setEvent(data.data.event || []);
     },
   );
-  const { isFetching: loading } = useGetQuery(
+  const { isLoading: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     {},

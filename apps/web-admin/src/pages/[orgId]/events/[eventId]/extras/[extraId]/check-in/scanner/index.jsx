@@ -21,7 +21,7 @@ export default function CheckInParticipantWithScanner() {
   const [participantId, setParticipantId] = useState(null);
   const [participants, setParticipants] = useState([]);
   const { useGetQuery, usePostMutation } = useWrapper();
-  const { isFetching: loading } = useGetQuery(
+  const { isLoading: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     {},

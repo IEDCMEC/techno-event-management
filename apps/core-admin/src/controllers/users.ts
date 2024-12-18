@@ -35,7 +35,7 @@ export const myCredential = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     // console.log(prisma.)
-    const userDetails = await prisma.organizationUser.findFirst({
+    const userDetails = await prisma.organizationUser.findMany({
       where: {
         userId: userId, // assuming userId is a unique identifier
       },

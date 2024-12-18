@@ -38,7 +38,7 @@ export default function CheckInExtra() {
       },
     },
   );
-  const { isFetching: loading } = useGetQuery(
+  const { isLoading: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     {},

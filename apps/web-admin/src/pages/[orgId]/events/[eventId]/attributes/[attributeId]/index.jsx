@@ -30,7 +30,7 @@ export default function AttributeById() {
   const [attribute, setAttribute] = useState({});
   const [attributeDetails, setAttributeDetails] = useState([]);
   const { useGetQuery } = useWrapper();
-  const { isFetching: loading } = useGetQuery(
+  const { isLoading: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/attributes/${attributeId}`,
     `/core/organizations/${orgId}/events/${eventId}/attributes/${attributeId}`,
     {},

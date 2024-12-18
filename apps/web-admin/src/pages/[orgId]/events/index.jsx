@@ -157,7 +157,7 @@ export default function Events() {
     data,
     status,
     error,
-    isFetching: loading,
+    isLoading: loading,
   } = useGetQuery(
     `/core/organizations/${orgId}/events`,
     `/core/organizations/${orgId}/events`,

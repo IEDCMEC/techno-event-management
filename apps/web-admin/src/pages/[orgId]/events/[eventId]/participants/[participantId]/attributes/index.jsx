@@ -30,7 +30,7 @@ export default function Events() {
   const [participantAttributes, setParticipantAttributes] = useState([]);
   const { useGetQuery } = useWrapper();
 
-  const { isFetching: loading } = useGetQuery(
+  const { isLoading: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
     `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
     {},
