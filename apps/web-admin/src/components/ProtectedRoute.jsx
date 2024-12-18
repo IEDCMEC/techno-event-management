@@ -16,8 +16,14 @@ import { title } from 'process';
 export const ProtectedRoute = ({ children }) => {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
-  const { accountDetails, setAccountDetails, updateAccountDetails, allAccounts, setAllAccounts } =
-    useContext(account);
+  const {
+    accountDetails,
+    setAccountDetails,
+    updateAccountDetails,
+    setUserDetails,
+    allAccounts,
+    setAllAccounts,
+  } = useContext(account);
   const showAlert = useAlert();
   const { useGetQuery } = useWrapper();
   const handleLogin = async () => {
@@ -88,12 +94,21 @@ export const ProtectedRoute = ({ children }) => {
       const name = user.nickname;
       const response = await postOrg({ id, name }); // Triggering the POST request using usePostMutation
       // router.replace('/404'); // Uncomment if you want to navigate to a 404 page
-      if (response.status !== 200) {
+      if (response && response.status !== 200) {
         showAlert({
           title: 'Authentication Error',
           description: 'Log out and then sign in again!!',
         });
       }
+    }
+
+    let userDetailsResponse = await get('/core/users/me');
+    if (userDetailsResponse && userDetailsResponse.status === 200) {
+      console.log(userDetailsResponse.data);
+      setUserDetails((preValue) => ({
+        ...preValue,
+        ...userDetailsResponse.data.accountDetails,
+      }));
     }
   }
   // const {
