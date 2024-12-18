@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
-  const { accountDetails } = useContext(account);
+  const { accountDetails, allAccounts, setAccountDetails, userDetails } = useContext(account);
   const isAdmin = accountDetails.role === 'ADMIN';
   // const isUser = accountDetails.role === 'USER';
   const logoSrc = useBreakpointValue({
@@ -59,13 +59,28 @@ const Sidebar = ({ isOpen, onClose }) => {
     { name: 'Excel `24', status: false },
   ];
   const configItems = [
-    { name: 'Settings', icon: <IoSettingsOutline />, path: `/${accountDetails.orgId}/settings` },
+    ...(isAdmin
+      ? [
+          {
+            name: 'Settings',
+            path: `/${accountDetails.orgId}/settings`,
+            icon: <IoSettingsOutline />,
+          },
+        ]
+      : []),
+    // { name: 'Settings', icon: <IoSettingsOutline />, path: `/${accountDetails.orgId}/settings` },
     {
       name: 'Help',
       icon: <IoIosInformationCircleOutline />,
       path: `/${accountDetails.orgId}/profile`,
     },
   ];
+  const myOrganizations = allAccounts.map((value) => ({
+    name: value.name,
+    path: `/${value.orgId}/events`,
+    status: true,
+    data: value,
+  }));
   return (
     <>
       {!isMobile ? (
@@ -103,10 +118,19 @@ const Sidebar = ({ isOpen, onClose }) => {
               justifyContent="space-around"
             >
               <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
-                Starred
+                Organizations
               </StyledText>
-              {starredItems.map((value, index) => (
-                <StyledText key={index} pl="10px" variant="16Regular.black">
+              {myOrganizations.map((value, index) => (
+                <StyledText
+                  key={index}
+                  pl="10px"
+                  variant="16Regular.black"
+                  cursor="pointer"
+                  onClick={() => {
+                    router.push(value.path);
+                    setAccountDetails(value.data);
+                  }}
+                >
                   <StyledBox
                     h="5px"
                     w="5px"
@@ -123,7 +147,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             <SidebarContents />
             {/* <EventsDisplay /> */}
             <StyledBox
-              sx={{ height: '114px', width: '100%' }}
+              sx={{ height: `${configItems.length * 50}px`, width: '100%' }}
               pt="10px"
               alignItems="flex-start"
               justifyContent="space-around"
@@ -141,7 +165,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   position="relative"
                   justifyContent="flex-start"
                   p="4px 8px 4px 0px"
-                  gap="4"
+                  gap="2"
                   height="28px"
                   sx={{
                     background: router.asPath === value.path ? 'rgba(4, 5, 11, 0.1)' : '',
@@ -213,45 +237,150 @@ const Sidebar = ({ isOpen, onClose }) => {
               <DrawerContent>
                 <DrawerCloseButton />
                 <DrawerHeader>
-                  <Text fontSize="2xl" fontWeight="bold">
-                    Event Sync
-                  </Text>
-                </DrawerHeader>
-                <DrawerBody>
-                  <div
-                    style={{
+                  <StyledBox
+                    height={'68px'}
+                    sx={{
                       display: 'flex',
-                      flexDirection: 'column',
-                      height: '100%',
-                      justifyContent: 'center',
+                      padding: '10px',
+                      // borderBottom: '1px solid rgba(4, 5, 11, 0.1)',
+                      // borderRight: '1px solid rgba(4, 5, 11, 0.1)',
+                    }}
+                    width="95%"
+                  >
+                    {/* <Text fontSize="4xl" fontWeight="bold">
+              Event Sync
+            </Text> */}
+                    {/* <MyLogo /> */}
+                    <Image src={logoSrc} alt="EVENTSYNC" height={'44px'} width="344px" />
+                  </StyledBox>
+                </DrawerHeader>
+                <DrawerBody
+                  sx={{
+                    height: 'calc(100vh - 68px)',
+                    // borderBottom: '1px solid rgba(4, 5, 11, 0.1)',
+                    // borderRight: '1px solid rgba(4, 5, 11, 0.1)',
+                    padding: '20px 16px 0px 16px',
+                  }}
+                  width="100%"
+                >
+                  {/* Starred Items */}
+                  <StyledBox
+                    sx={{ height: '114px', width: '100%' }}
+                    pt="10px"
+                    alignItems="flex-start"
+                    justifyContent="space-around"
+                  >
+                    <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
+                      Organizations
+                    </StyledText>
+                    {myOrganizations.map((value, index) => (
+                      <StyledText
+                        key={index}
+                        pl="10px"
+                        variant="16Regular.black"
+                        cursor="pointer"
+                        onClick={() => {
+                          router.push(value.path);
+                          setAccountDetails(value.data);
+                        }}
+                      >
+                        <StyledBox
+                          h="5px"
+                          w="5px"
+                          bg={value.status ? '#2DD811' : '#E7431F'}
+                          borderRadius="100%"
+                          as="span"
+                          mr="10px"
+                        />
+                        {value.name}
+                      </StyledText>
+                    ))}
+                  </StyledBox>
+
+                  <SidebarContents />
+                  {/* <EventsDisplay /> */}
+                  <StyledBox
+                    sx={{ height: `${configItems.length * 50}px`, width: '100%' }}
+                    pt="10px"
+                    alignItems="flex-start"
+                    justifyContent="space-around"
+                  >
+                    <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
+                      Config
+                    </StyledText>
+                    {configItems.map((value, index) => (
+                      <StyledBox
+                        flexDirection={'row'}
+                        ml="5px"
+                        cursor="pointer"
+                        key={index}
+                        width="95%"
+                        position="relative"
+                        justifyContent="flex-start"
+                        p="4px 8px 4px 0px"
+                        gap="2"
+                        height="28px"
+                        sx={{
+                          background: router.asPath === value.path ? 'rgba(4, 5, 11, 0.1)' : '',
+                          borderRadius: '8px',
+                        }}
+                      >
+                        {router.asPath === value.path && (
+                          <Image
+                            src={Rectangle}
+                            alt=""
+                            style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
+                          />
+                        )}
+                        <Box ml={4}>{value.icon}</Box>
+                        <StyledText
+                          key={index}
+                          pl="0px"
+                          variant="16Regular.black"
+                          transition="outline 0.2s"
+                          onClick={() => {
+                            router.push(value.path);
+                          }}
+                        >
+                          {value.name}
+                        </StyledText>
+                      </StyledBox>
+                    ))}
+                  </StyledBox>
+
+                  <StyledBox flex="1"></StyledBox>
+                  <SidebarCalendar scale={0.95} />
+                  {/* {isAdmin && (
+              <Button
+                onClick={() => {
+                  router.push(`/${orgId}/settings`);
+                }}
+                isLoading={loading}
+                width="100%"
+              >
+                Settings
+              </Button>
+            )} */}
+
+                  <StyledBox
+                    paddingY={4}
+                    sx={{
+                      // borderRight: '1px solid rgba(4, 5, 11, 0.1)',
+                      // borderTop: '1px solid rgba(4, 5, 11, 0.1)',
+                      width: '100%',
                     }}
                   >
-                    <EventsDisplay />
-                    <SidebarContents />
-                    <Box flex="1"></Box>
-                    <SidebarCalendar scale={1.1} />
-                    {isAdmin && (
-                      <Button
-                        onClick={() => {
-                          router.push(`/${orgId}/settings`);
-                        }}
-                        isLoading={loading}
-                        width="100%"
-                        margin="20px 0px 10px 0px"
-                      >
-                        Organization Settings
-                      </Button>
-                    )}
-
-                    {/* <Button
+                    <Button
                       onClick={handleLogout}
                       isLoading={loading}
                       loadingText="Please Wait"
                       width="100%"
+                      bg={'#11185A'}
+                      color={'#FFF'}
                     >
                       Logout
-                    </Button> */}
-                  </div>
+                    </Button>
+                  </StyledBox>
                 </DrawerBody>
               </DrawerContent>
             </DrawerOverlay>
@@ -274,7 +403,7 @@ const SidebarContents = () => {
     { label: 'Members', path: `/${orgId}/members`, icon: <RiTeamFill /> },
     { label: 'Certificates', path: `/${orgId}/mycertificates`, icon: <PiCertificate /> },
     { label: 'Emailer', path: `/${orgId}/emailer`, icon: <MdOutlineEmail /> },
-    ...(isUser ? [{ label: 'Settings', path: `/settings`, icon: <MdOutlineSettings /> }] : []),
+    // ...(isUser ? [{ label: 'Settings', path: `/settings`, icon: <MdOutlineSettings /> }] : []),
     // ...(isAdmin ? [{label:'Organizaion Settings',path:'/${orgId}/settings',icon}]: []),
   ];
 
