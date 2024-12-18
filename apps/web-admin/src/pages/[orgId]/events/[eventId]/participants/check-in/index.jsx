@@ -66,7 +66,7 @@ export default function ParticipantsCheckIn() {
               mt="auto"
               mb="0.5"
               onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in/scanner`);
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`);
               }}
               isLoading={loading}
             >
