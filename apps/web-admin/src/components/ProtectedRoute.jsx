@@ -162,19 +162,19 @@ export const ProtectedRoute = ({ children }) => {
   //   }
   // });
 
-//   const {
-//     data: userCredsData,
-//     status: userCredsStatus,
-//     error: credsError,
-//     isFetching: loading,
-//   } = useGetQuery('/core/users/mycreds', '/core/users/mycreds', {}, {}, (response) => {
-//     setAccountDetails((preValue) => ({
-//       ...preValue,
-//       role: response.data.data.role,
-//       orgId: response.data.data.organizationId,
-//       name: user.nickname,
-//     }));
-//   });
+  //   const {
+  //     data: userCredsData,
+  //     status: userCredsStatus,
+  //     error: credsError,
+  //     isFetching: loading,
+  //   } = useGetQuery('/core/users/mycreds', '/core/users/mycreds', {}, {}, (response) => {
+  //     setAccountDetails((preValue) => ({
+  //       ...preValue,
+  //       role: response.data.data.role,
+  //       orgId: response.data.data.organizationId,
+  //       name: user.nickname,
+  //     }));
+  //   });
 
   // const { mutate: postOrg } = usePostMutation('/core/organizations', {
   //   onSuccess: () => {
