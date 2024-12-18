@@ -19,7 +19,7 @@ const StyledBox = forwardRef(({ children, ...props }, ref) => {
 const StyledText = forwardRef(({ children, variant, ...props }, ref) => {
   const styles = {
     /* 16 Regular */
-    '16Regular.grey': {
+    '14Regular.grey': {
       color: 'rgba(4, 5, 11, 0.4)',
       fontFamily: inter.style.fontFamily,
       fontSize: '16px',
@@ -28,7 +28,7 @@ const StyledText = forwardRef(({ children, variant, ...props }, ref) => {
       letterSpacing: '0%',
       textAlign: 'center',
     },
-    '16Regular.black': {
+    '14Regular.black': {
       /* 16 Regular */
       color: 'rgb(4, 5, 11)',
       fontFamily: inter.style.fontFamily,
@@ -38,7 +38,7 @@ const StyledText = forwardRef(({ children, variant, ...props }, ref) => {
       letterSpacing: '0%',
       textAlign: 'left',
     },
-    '16Regular.black.highlighted': {
+    '14Regular.black.highlighted': {
       borderRadius: '8px',
       background: 'rgba(4, 5, 11, 0.1);',
       fontFamily: inter.style.fontFamily,

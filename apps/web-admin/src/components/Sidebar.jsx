@@ -117,14 +117,14 @@ const Sidebar = ({ isOpen, onClose }) => {
               alignItems="flex-start"
               justifyContent="space-around"
             >
-              <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
+              <StyledText variant="14Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
                 Organizations
               </StyledText>
               {myOrganizations.map((value, index) => (
                 <StyledText
                   key={index}
                   pl="10px"
-                  variant="16Regular.black"
+                  variant="14Regular.black"
                   cursor="pointer"
                   onClick={() => {
                     router.push(value.path);
@@ -152,7 +152,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               alignItems="flex-start"
               justifyContent="space-around"
             >
-              <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
+              <StyledText variant="14Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
                 Config
               </StyledText>
               {configItems.map((value, index) => (
@@ -183,7 +183,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   <StyledText
                     key={index}
                     pl="0px"
-                    variant="16Regular.black"
+                    variant="14Regular.black"
                     transition="outline 0.2s"
                     onClick={() => {
                       router.push(value.path);
@@ -270,14 +270,14 @@ const Sidebar = ({ isOpen, onClose }) => {
                     alignItems="flex-start"
                     justifyContent="space-around"
                   >
-                    <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
+                    <StyledText variant="14Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
                       Organizations
                     </StyledText>
                     {myOrganizations.map((value, index) => (
                       <StyledText
                         key={index}
                         pl="10px"
-                        variant="16Regular.black"
+                        variant="14Regular.black"
                         cursor="pointer"
                         onClick={() => {
                           router.push(value.path);
@@ -305,7 +305,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     alignItems="flex-start"
                     justifyContent="space-around"
                   >
-                    <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
+                    <StyledText variant="14Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
                       Config
                     </StyledText>
                     {configItems.map((value, index) => (
@@ -336,7 +336,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                         <StyledText
                           key={index}
                           pl="0px"
-                          variant="16Regular.black"
+                          variant="14Regular.black"
                           transition="outline 0.2s"
                           onClick={() => {
                             router.push(value.path);
@@ -417,7 +417,7 @@ const SidebarContents = () => {
         alignItems="flex-start"
         justifyContent="space-around"
       >
-        <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
+        <StyledText variant="14Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
           Tools
         </StyledText>
         {sidebarItems.map((value, index) => (
@@ -448,7 +448,7 @@ const SidebarContents = () => {
             <StyledText
               key={index}
               pl="0px"
-              variant="16Regular.black"
+              variant="14Regular.black"
               transition="outline 0.2s"
               onClick={() => {
                 router.push(value.path);
