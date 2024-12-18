@@ -177,3 +177,89 @@ export const addOrganizationMember = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Something went wrong' });
   }
 };
+export const updateOrganizationDetails = async (req: Request, res: Response) => {
+  try {
+    const {
+      orgId,
+      description,
+      logo,
+      tagline,
+      email,
+      linkedInLink,
+      instagramLink,
+      phoneNo,
+      twitter,
+      website,
+      addressDetails, // Contains address fields: name, city, state, country, pincode, locationUrl
+    } = req.body;
+
+    if (
+      !orgId ||
+      !email ||
+      !phoneNo ||
+      !website ||
+      !addressDetails?.city ||
+      !addressDetails?.state ||
+      !addressDetails?.country ||
+      !addressDetails?.pincode
+    ) {
+      return res.status(400).json({ error: 'Missing required parameters.' });
+    }
+
+    const organization = await prisma.organization.findUnique({
+      where: { id: orgId },
+    });
+
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found.' });
+    }
+
+    let addressId = organization.addressId;
+    if (addressId) {
+      await prisma.address.update({
+        where: { id: addressId },
+        data: {
+          name: addressDetails.name || '',
+          city: addressDetails.city,
+          state: addressDetails.state,
+          country: addressDetails.country,
+          pincode: addressDetails.pincode,
+          locationUrl: addressDetails.locationUrl || '',
+        },
+      });
+    } else {
+      const newAddress = await prisma.address.create({
+        data: {
+          name: addressDetails.name || '',
+          city: addressDetails.city,
+          state: addressDetails.state,
+          country: addressDetails.country,
+          pincode: addressDetails.pincode,
+          locationUrl: addressDetails.locationUrl || '',
+        },
+      });
+      addressId = newAddress.id;
+    }
+
+    await prisma.organization.update({
+      where: { id: orgId },
+      data: {
+        description,
+        Logo: logo,
+        Tagline: tagline,
+        email,
+        linkedInLink,
+        instagramLink,
+        phoneNo,
+        twitterLink: twitter,
+        website,
+        addressId,
+      },
+    });
+
+    return res.status(200).json({ message: 'Organization details updated successfully.' });
+  } catch (error) {
+    console.error('Error updating organization details:', error);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+};
