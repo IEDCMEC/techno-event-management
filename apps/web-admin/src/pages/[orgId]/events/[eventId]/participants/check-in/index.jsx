@@ -61,6 +61,18 @@ export default function ParticipantsCheckIn() {
       previousPage={`/${orgId}/events/${eventId}/participants`}
       headerButton={
         <>
+          <Flex h="100%" flexDirection="column">
+            <Button
+              mt="auto"
+              mb="0.5"
+              onClick={() => {
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`);
+              }}
+              isLoading={loading}
+            >
+              Multi-Stage Scanner
+            </Button>
+          </Flex>
           <Flex flexDirection="column" gap={4}>
             <Button
               onClick={() => {

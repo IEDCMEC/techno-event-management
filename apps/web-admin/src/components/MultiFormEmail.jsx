@@ -118,7 +118,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       ],
     },
   );
-  // const {data, isLoading: loading} = useGetQuery(`/core/organizations/${accountDetails.orgId}/`)
+  // const {data, isFetching: loading} = useGetQuery(`/core/organizations/${accountDetails.orgId}/`)
   const addNewRecipients = () => {
     if (accountDetails.orgId) {
       const myData = recipients.map((value) => ({
@@ -226,7 +226,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     data: emailContentData,
     status: emailContentStatus,
     error: emailContentError,
-    isLoading: loading,
+    isFetching: loading,
   } = useGetQuery(
     `/core/organizations/${accountDetails.orgId}/getEmailProjects`,
     `/core/organizations/${accountDetails.orgId}/getEmailProjects`,

@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
-  const { accountDetails, allAccounts, setAccountDetails } = useContext(account);
+  const { accountDetails, allAccounts, setAccountDetails, userDetails } = useContext(account);
   const isAdmin = accountDetails.role === 'ADMIN';
   // const isUser = accountDetails.role === 'USER';
   const logoSrc = useBreakpointValue({

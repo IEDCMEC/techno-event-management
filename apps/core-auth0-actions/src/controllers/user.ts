@@ -2,6 +2,12 @@ import { Request, Response } from 'express';
 
 import prisma from '../utils/database';
 
+/**
+ * Get user's permissions under an organization. This gets executed when the user logs in and Auth0 action for log in is
+ * triggered.
+ * @param req
+ * @param res
+ */
 export const getUserPermissions = async (req: Request, res: Response) => {
   try {
     const { userId } = req.query;

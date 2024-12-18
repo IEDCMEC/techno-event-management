@@ -47,7 +47,7 @@ export default function ExtraById() {
   const [extra, setExtra] = useState({});
   const [extraDetails, setExtraDetails] = useState([]);
   const { useGetQuery } = useWrapper();
-  const { isLoading: loading } = useGetQuery(
+  const { isFetching: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/extras/${extraId}`,
     `/core/organizations/${orgId}/events/${eventId}/extras/${extraId}`,
     {},

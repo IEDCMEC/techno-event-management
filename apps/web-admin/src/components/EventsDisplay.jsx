@@ -34,7 +34,7 @@ const EventsDisplay = () => {
     data,
     status,
     error,
-    isLoading: loading,
+    isFetching: loading,
   } = useGetQuery(
     `/core/organizations/${orgId}/events`,
     `/core/organizations/${orgId}/events`,
