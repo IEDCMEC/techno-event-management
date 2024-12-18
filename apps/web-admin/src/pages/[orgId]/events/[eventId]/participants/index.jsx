@@ -49,7 +49,7 @@ export default function Participants() {
     data,
     status,
     error,
-    isFetching: loading,
+    isLoading: loading,
   } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/participants`,
     `/core/organizations/${orgId}/events/${eventId}/participants`,

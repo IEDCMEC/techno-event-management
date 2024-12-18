@@ -2,6 +2,12 @@ import { Request, Response } from 'express';
 
 import prisma from '../utils/database';
 
+/**
+ * Add new user to database on register. This is a must because Auth0 has no connection with our database. Not
+ * performing this action will result in a mismatch between the user in Auth0 and the user in our database.
+ * @param req
+ * @param res
+ */
 export const addNewUserToDatabaseOnRegister = async (req: Request, res: Response) => {
   try {
     const { userId, email } = req.body;
