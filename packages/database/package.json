@@ -6,7 +6,7 @@
   "scripts": {
     "db:generate": "prisma generate",
     "db:push": "prisma db push --skip-generate",
-    "setup": "node -e \"require('fs').copyFile('.env.example', '.env', (err) => {if (err) {console.log(err);} else {console.log('Prisma client generated and environment variables set up successfully');}});\" && prisma generate"
+    "setup": "node -e \"require('fs').copyFile('.env.example', '.env', (err) => {if (err) {//console.log(err);} else {//console.log('Prisma client generated and environment variables set up successfully');}});\" && prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.7.1"

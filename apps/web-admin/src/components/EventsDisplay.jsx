@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 // import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
+import { inter } from './ui/fonts';
 import {
   Box,
   UnorderedList,
@@ -33,7 +34,7 @@ const EventsDisplay = () => {
     data,
     status,
     error,
-    isLoading: loading,
+    isFetching: loading,
   } = useGetQuery(
     `/core/organizations/${orgId}/events`,
     `/core/organizations/${orgId}/events`,
@@ -51,7 +52,7 @@ const EventsDisplay = () => {
   // }
 
   return (
-    <Accordion allowToggle>
+    <Accordion allowToggle width={'95%'}>
       <AccordionItem border="none">
         <AccordionButton
           _hover={{ color: 'black.400', backgroundColor: 'gray.100', cursor: 'pointer' }}
@@ -61,11 +62,12 @@ const EventsDisplay = () => {
           display="flex"
           flexDirection="row"
           alignItems="center"
+          fontFamily={inter.style.fontFamily}
         >
           <Box mr={2}>
             <MdOutlineEvent />
           </Box>
-          <Text fontSize="lg">Events</Text>
+          <Text fontSize="16px">Events</Text>
           <AccordionIcon />
         </AccordionButton>
         <AccordionPanel pb={4}>

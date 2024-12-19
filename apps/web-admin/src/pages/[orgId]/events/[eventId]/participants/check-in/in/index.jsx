@@ -59,7 +59,7 @@ export default function CheckInParticipant() {
   );
 
   useEffect(() => {
-    console.log('checkInKey', checkInKey);
+    //console.log('checkInKey', checkInKey);
   }, [checkInKey]);
 
   return (

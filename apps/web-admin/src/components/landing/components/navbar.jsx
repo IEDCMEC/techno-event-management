@@ -32,7 +32,7 @@ export default function Navbar() {
         audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
       },
     });
-    console.log(user);
+    //console.log(user);
   };
   const logoSrc = useBreakpointValue({
     base: logo,

@@ -139,7 +139,7 @@ export default function NewParticipantByCSVUpload() {
           !(column.field.startsWith('_') || column.field.startsWith('&')),
       )
     ) {
-      console.log({ columns });
+      //console.log({ columns });
 
       showAlert({
         title: 'Error',

@@ -13,7 +13,7 @@ const Scanner = ({ result, setResult }) => {
     console.error(err);
   };
   const { ref } = useZxing({
-    onDecodeResult(result) {    
+    onDecodeResult(result) {
       setResult(result.getText());
     },
   });
