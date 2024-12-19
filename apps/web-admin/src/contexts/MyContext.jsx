@@ -4,10 +4,14 @@ import { useAlert } from '@/hooks/useAlert';
 import { useAuth0 } from '@auth0/auth0-react';
 export const account = createContext();
 const MyContext = ({ children }) => {
-  const [accountDetails, setAccountDetails] = useState({});
+  const [accountDetails, setAccountDetails] = useState({
+    firstName: '',
+    lastName: '',
+  });
   const [emailProjects, setEmailProjects] = useState([]);
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const [participants, setParticipants] = useState([]);
+  const [userDetails, setUserDetails] = useState([]);
 
   const { loading, get, put } = useFetch();
   const showAlert = useAlert();
@@ -34,7 +38,7 @@ const MyContext = ({ children }) => {
         status: 'success',
       });
       console.log(data);
-      setAccountDetails((prev) => {
+      setUserDetails((prev) => {
         return {
           ...prev,
           ...(data.accountDetails || {}),
@@ -49,6 +53,7 @@ const MyContext = ({ children }) => {
     }
   };
   const [activeTab, setActiveTab] = useState('Participants');
+  const [allAccounts, setAllAccounts] = useState([]);
 
   return (
     <div>
@@ -57,6 +62,10 @@ const MyContext = ({ children }) => {
           accountDetails,
           emailProjects,
           setEmailProjects,
+          allAccounts,
+          setAllAccounts,
+          userDetails,
+          setUserDetails,
           setAccountDetails,
           activeTab,
           setActiveTab,

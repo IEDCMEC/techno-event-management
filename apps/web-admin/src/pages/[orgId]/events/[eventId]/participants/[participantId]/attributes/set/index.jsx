@@ -66,7 +66,7 @@ export default function NewOrganization() {
     //   alert(data.error);
     // }
   };
-  const { isLoading: loading } = useGetQuery(
+  const { isFetching: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     {},

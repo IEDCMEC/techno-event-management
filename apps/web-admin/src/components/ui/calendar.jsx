@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { DayPicker } from 'react-day-picker';
-
+import { inter } from './fonts';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 
@@ -19,8 +19,8 @@ function Calendar({ className, classNames, showOutsideDays = true, scale = 1, ..
         showOutsideDays={showOutsideDays}
         className={cn('p-2.5', className)}
         classNames={{
-          months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
-          month: 'space-y-2',
+          months: `flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 ${inter.className}`,
+          month: `space-y-2 ${inter.className}`,
           caption: 'flex justify-center pt-1 relative items-center',
           caption_label: 'text-sm font-medium',
           nav: 'space-x-1 flex items-center',
@@ -41,8 +41,8 @@ function Calendar({ className, classNames, showOutsideDays = true, scale = 1, ..
           ),
           day_range_end: 'day-range-end',
           day_selected:
-            'bg-teal text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-teal focus:text-primary-foreground',
-          day_today: 'bg-accent text-accent-foreground',
+            'bg-[#11185A] text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-teal focus:text-primary-foreground',
+          day_today: `bg-[#11185A] text-accent-foreground`,
           day_outside:
             'day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
           day_disabled: 'text-muted-foreground opacity-50',

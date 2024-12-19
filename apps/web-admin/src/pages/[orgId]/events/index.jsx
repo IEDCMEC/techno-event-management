@@ -157,7 +157,7 @@ export default function Events() {
     data,
     status,
     error,
-    isLoading: loading,
+    isFetching: loading,
   } = useGetQuery(
     `/core/organizations/${orgId}/events`,
     `/core/organizations/${orgId}/events`,
@@ -223,7 +223,7 @@ export default function Events() {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent width={{ base: '95vw', md: '75vw' }} maxWidth={'95vw'}>
           <ModalHeader>Create New Event</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

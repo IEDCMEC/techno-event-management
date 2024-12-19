@@ -129,7 +129,7 @@ export default function NewParticipant() {
       });
     }
   };
-  const { isLoading: loading } = useGetQuery(
+  const { isFetching: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     {},
