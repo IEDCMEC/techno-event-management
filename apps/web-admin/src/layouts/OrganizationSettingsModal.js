@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -15,36 +15,149 @@ import {
   useDisclosure,
   Heading,
 } from '@chakra-ui/react';
+import { useContext } from 'react';
+import { account } from '@/contexts/MyContext';
+import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
+import { useAlert } from '@/hooks/useAlert';
 
 const OrganizationSettingsModal = ({ isOpen, onClose }) => {
+  const { accountDetails, setAccountDetails, setAllAccounts, allAccounts } = useContext(account);
+  useEffect(() => {
+    // //console.log(accountDetails);
+    setFormData({
+      orgName: accountDetails.name,
+      logo: accountDetails.Logo,
+      tagline: accountDetails.Tagline,
+      description: accountDetails.Description,
+      // address: ,
+      phone: accountDetails.phoneNo,
+      email: accountDetails.email,
+      website: accountDetails.website,
+      // socialLinks: ,
+      LinkedIn: accountDetails.linkedInLink,
+      Instagram: accountDetails.instagramLink,
+      Twitter: accountDetails.twitterLink,
+      City: accountDetails.addressData
+        ? accountDetails.addressData.city
+          ? accountDetails.addressData.city
+          : ''
+        : '',
+      State: accountDetails.addressData
+        ? accountDetails.addressData.state
+          ? accountDetails.addressData.state
+          : ''
+        : '',
+      Country: accountDetails.addressData
+        ? accountDetails.addressData.country
+          ? accountDetails.addressData.country
+          : ''
+        : '',
+      Pincode: accountDetails.addressData
+        ? `${accountDetails.addressData.pinCode}`
+          ? `${accountDetails.addressData.pinCode}`
+          : ''
+        : '',
+      Location: accountDetails.addressData
+        ? accountDetails.addressData.locationUrl
+          ? accountDetails.addressData.locationUrl
+          : ''
+        : '',
+      orgId: accountDetails ? accountDetails.orgId : null,
+    });
+  }, [accountDetails]);
+  const { usePostMutation } = useWrapper();
+
   const [formData, setFormData] = useState({
-    orgName: '',
-    logo: '',
-    tagline: '',
-    description: '',
-    address: '',
-    phone: '',
-    email: '',
-    website: '',
-    socialLinks: '',
-    LinkedIn: '',
-    Instagram: '',
-    Twitter: '',
-    City: '',
-    State: '',
-    Country: '',
-    Pincode: '',
-    Location: '',
+    orgName: accountDetails.name,
+    logo: accountDetails.Logo,
+    tagline: accountDetails.Tagline,
+    description: accountDetails.Description,
+    // address: ,
+    phone: accountDetails.phoneNo,
+    email: accountDetails.email,
+    website: accountDetails.website,
+    // socialLinks: ,
+    LinkedIn: accountDetails.linkedInLink,
+    Instagram: accountDetails.instagramLink,
+    Twitter: accountDetails.twitterLink,
+    City: accountDetails.addressData
+      ? accountDetails.addressData.city
+        ? accountDetails.addressData.city
+        : ''
+      : '',
+    State: accountDetails.addressData
+      ? accountDetails.addressData.state
+        ? accountDetails.addressData.state
+        : ''
+      : '',
+    Country: accountDetails.addressData
+      ? accountDetails.addressData.country
+        ? accountDetails.addressData.country
+        : ''
+      : '',
+    Pincode: accountDetails.addressData
+      ? `${accountDetails.addressData.pinCode}`
+        ? `${accountDetails.addressData.pinCode}`
+        : ''
+      : '',
+    Location: accountDetails.addressData
+      ? accountDetails.addressData.locationUrl
+        ? accountDetails.addressData.locationUrl
+        : ''
+      : '',
+    orgId: accountDetails ? accountDetails.orgId : null,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  const showAlert = useAlert();
+  const { mutate: updateOrgDeets } = usePostMutation(
+    '/core/organizations/update',
+    {},
+    {
+      onError: (response) => {
+        showAlert({
+          title: 'Failure',
+          description: `Error: ${response.data.error}`,
+          status: 'error',
+        });
+        onClose();
+      },
+      invalidateKeys: ['/core/organizations'],
+    },
+    (response) => {
+      showAlert({
+        title: 'Success',
+        description: 'Organization details updated successfully!',
+        status: 'success',
+      });
+      //console.log(response.data.data);
+      setAllAccounts(() => {
+        // console.log('left: ', response.data.data.data.id)
+        const filteredOut = allAccounts.filter(
+          (value) => value.id !== response.data.data.newDetails.id,
+        );
+        // console.log(filteredOut.length);
+        return [
+          ...filteredOut,
+          {
+            ...response.data.data.newDetails,
+            orgId: response.data.data.newDetails.id,
+            role: accountDetails.role,
+          },
+        ];
+      });
+      setAccountDetails({ ...response.data.data.newDetails, role: accountDetails.role });
+      onClose();
+    },
+  );
   const handleSubmit = async () => {
     const payload = {
       orgId: formData.orgId, // Ensure orgId is available
+      name: formData.orgName,
       description: formData.description,
       logo: formData.logo,
       tagline: formData.tagline,
@@ -63,29 +176,31 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
         locationUrl: formData.Location,
       },
     };
-
+    // const {post} = useFetch();
     try {
-      const response = await fetch('/organization/update', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        alert('Organization details updated successfully!');
-        onClose();
-      } else {
-        const data = await response.json();
-        alert(`Error: ${data.error}`);
-      }
+      // const response = await post('/organization/update', {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(payload),
+      // });
+      updateOrgDeets(payload);
+      // if (response.ok) {
+      //   alert('Organization details updated successfully!');
+      //   onClose();
+      // } else {
+      //   const data = await response.json();
+      //   alert(`Error: ${data.error}`);
+      // }
     } catch (error) {
       console.error('Error updating organization:', error);
       alert('An error occurred while updating organization details.');
     }
   };
-
+  useEffect(() => {
+    console.log(allAccounts);
+  }, [allAccounts]);
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -97,7 +212,7 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
             <FormLabel>Organization Name</FormLabel>
             <Input name="orgName" value={formData.orgName} onChange={handleChange} />
           </FormControl>
-          <FormControl id="description" is isRequired>
+          <FormControl id="description" isRequired>
             <FormLabel>Description</FormLabel>
             <Textarea name="description" value={formData.description} onChange={handleChange} />
           </FormControl>
@@ -117,7 +232,7 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
             <FormLabel>Phone Number</FormLabel>
             <Input name="phone" value={formData.phone} onChange={handleChange} />
           </FormControl>
-          <FormControl id="website" is isRequired>
+          <FormControl id="website" isRequired>
             <FormLabel>Website</FormLabel>
             <Input name="website" value={formData.website} onChange={handleChange} />
           </FormControl>
@@ -136,23 +251,23 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
           <Heading size="md" mt={6}>
             Address
           </Heading>
-          <FormControl id="City" is isRequired>
+          <FormControl id="City" isRequired>
             <FormLabel>City</FormLabel>
             <Input name="City" value={formData.City} onChange={handleChange} />
           </FormControl>
-          <FormControl id="State" is isRequired>
+          <FormControl id="State" isRequired>
             <FormLabel>State</FormLabel>
             <Input name="State" value={formData.State} onChange={handleChange} />
           </FormControl>
-          <FormControl id="Country" is isRequired>
+          <FormControl id="Country" isRequired>
             <FormLabel>Country</FormLabel>
             <Input name="Country" value={formData.Country} onChange={handleChange} />
           </FormControl>
-          <FormControl id="Pincode" is isRequired>
+          <FormControl id="Pincode" isRequired>
             <FormLabel>Pincode</FormLabel>
             <Input name="Pincode" value={formData.Pincode} onChange={handleChange} />
           </FormControl>
-          <FormControl id="Location" is isRequired>
+          <FormControl id="Location" isRequired>
             <FormLabel>Location URL</FormLabel>
             <Input name="Location" value={formData.Location} onChange={handleChange} />
           </FormControl>

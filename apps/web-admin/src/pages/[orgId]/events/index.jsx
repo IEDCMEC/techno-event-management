@@ -129,18 +129,23 @@ import DataDisplay from '@/components/DataDisplay';
 import { CSVLink } from 'react-csv';
 import NewEventForm from './new';
 import useWrapper from '@/hooks/useWrapper';
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
+import { IoFilterSharp } from 'react-icons/io5';
+import { IconButton } from '@chakra-ui/icons';
+import { IoSwapVertical } from 'react-icons/io5';
 
 const columns = [
-  { field: 'name', headerName: 'Name', width: 200 },
-  { field: 'numberOfParticipants', headerName: 'No of Participants', width: 200 },
+  { field: 'status', headerName: 'Status', width: 200 },
+  { field: 'name', headerName: 'Event Title', width: 200 },
+  { field: 'numberOfParticipants', headerName: 'No. Participants', width: 200 },
   {
     field: 'numberOfParticipantsCheckedIn',
-    headerName: 'No of Participants Checked In',
+    headerName: 'Checked-In Count',
     width: 200,
   },
-  { field: 'numberOfAttributes', headerName: 'No of Attributes', width: 200 },
-  { field: 'numberOfExtras', headerName: 'No of Extras', width: 200 },
-  { field: 'createdAt', headerName: 'Created At', width: 200 },
+  { field: 'numberOfAttributes', headerName: 'No. of Attributes', width: 200 },
+  //{ field: 'numberOfExtras', headerName: 'No of Extras', width: 200 },
+  { field: 'createdAt', headerName: 'Event Date', width: 200 },
 ];
 
 export default function Events() {
@@ -151,8 +156,13 @@ export default function Events() {
   // const { loading, get } = useFetch();
   const { useGetQuery } = useWrapper();
 
+  const links = [
+    { label: 'Dashboards', href: '#' },
+    { label: 'My Events', href: '#', isCurrent: true },
+  ];
+
   const [events, setEvents] = useState([]);
-  console.log(orgId);
+  //console.log(orgId);
   const {
     data,
     status,
@@ -164,7 +174,7 @@ export default function Events() {
     {}, // headers
     {}, // options
     (data) => {
-      console.log(`events: ${data.data.events}`);
+      //console.log(`events: ${data.data.events}`);
       setEvents(data.data.events || []);
     },
   );
@@ -190,16 +200,60 @@ export default function Events() {
     <DashboardLayout
       pageTitle="Event"
       previousPage={`${orgId}`}
-      headerButton={
-        <>
-          <Button onClick={onOpen} isLoading={loading}>
-            New Event
-          </Button>
-          {exportToCsv()}
-        </>
-      }
+      // linksForBreadCrumbs = {links}
+      // headerButton={
+      //   <>
+      //     <Button onClick={onOpen} isLoading={loading}>
+      //       New Event
+      //     </Button>
+      //     {exportToCsv()}
+      //   </>
+      // }
+
       debugInfo={events}
     >
+      <StyledBox
+        w="100%"
+        h="8%"
+        bg="#efeef3"
+        borderRadius="8px"
+        justifyContent="space-between"
+        flexDirection="row"
+        padding="10px"
+      >
+        <StyledBox bg="#efeef3" flexDirection="row" gap="5px">
+          <Button
+            variant="outline"
+            onClick={onOpen}
+            isLoading={loading}
+            sx={{ borderRadius: '10px', gap: '5px', color: 'black', borderColor: 'gray.400' }}
+          >
+            Add <StyledText fontSize="20px">+</StyledText>
+          </Button>
+          <IconButton aria-label="filter" variant={'ghost'}>
+            <IoFilterSharp fontSize={'20px'} color="black" />
+          </IconButton>
+          <IconButton aria-label="opposite-arrows" variant={'ghost'}>
+            <IoSwapVertical fontSize={'20px'} color="black" />
+          </IconButton>
+        </StyledBox>
+
+        <StyledBox bg="#efeef3" flexDirection="row" gap="5px">
+          <Button
+            variant="outline"
+            sx={{ borderRadius: '10px', gap: '5px', color: 'black', borderColor: 'gray.400' }}
+          >
+            Events
+          </Button>
+          <Button
+            variant="outline"
+            isDisabled
+            sx={{ borderRadius: '10px', gap: '5px', color: 'black', borderColor: 'gray.400' }}
+          >
+            Members
+          </Button>
+        </StyledBox>
+      </StyledBox>
       <DataDisplay
         loading={loading}
         columns={columns}

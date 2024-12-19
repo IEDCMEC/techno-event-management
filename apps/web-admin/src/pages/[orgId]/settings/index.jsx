@@ -15,7 +15,7 @@ export default function Settings() {
     lastName: accountDetails.lastName || '',
   });
   useEffect(() => {
-    console.log(formData, accountDetails);
+    //console.log(formData, accountDetails);
   }, [formData, accountDetails]);
   return (
     <DashboardLayout pageTitle="Settings" previousPage={`/`} debugInfo={accountDetails}>

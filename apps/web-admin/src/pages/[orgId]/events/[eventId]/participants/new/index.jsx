@@ -135,7 +135,7 @@ export default function NewParticipant() {
     {},
     {
       onError: (error) => {
-        console.log(error);
+        //console.log(error);
       },
     },
     (response) => {

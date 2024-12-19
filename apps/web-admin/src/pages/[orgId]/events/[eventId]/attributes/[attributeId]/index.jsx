@@ -44,12 +44,12 @@ export default function AttributeById() {
       },
     },
     (response) => {
-      // console.log(response.data);
+      // //console.log(response.data);
       setAttribute(response.data.attribute || []);
       setAttributeDetails(response.data.attribute?.participantAttributeDetails || []);
     },
   );
-  // console.log(loading);
+  // //console.log(loading);
   // useEffect(() => {
   //   const fetchAttribute = async () => {
   //     const { data, status } = await get(

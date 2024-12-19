@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 const NavigationMenu = ({ orgId, eventId }) => {
   const router = useRouter();
   const menuLabels = ['Participants', 'Participants Check In', 'Attributes', 'Extras'];
-  console.log("navigation menu loaded")
+  //console.log("navigation menu loaded")
   return (
     <>
     <Menu>
@@ -58,7 +58,7 @@ const NavigationMenu = ({ orgId, eventId }) => {
   ];
   const { activeTab, setActiveTab } = useContext(account);
   useEffect(() => {
-    console.log(activeTab);
+    //console.log(activeTab);
   }, [activeTab]);
   return (
     <Box

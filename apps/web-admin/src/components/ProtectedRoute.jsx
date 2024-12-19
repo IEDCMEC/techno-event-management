@@ -36,14 +36,14 @@ export const ProtectedRoute = ({ children }) => {
   const { get, post } = useFetch();
   // useEffect();
   useMemo(() => {
-    console.log(accountDetails);
+    //console.log(accountDetails);
     if (accountDetails.orgId) {
-      // // console.log('route')
+      // // //console.log('route')
       router.replace(`/${accountDetails.orgId}/events`);
     }
   }, [isAuthenticated, accountDetails.orgId]);
   useEffect(() => {
-    // console.log(accountDetails);
+    // //console.log(accountDetails);
   }, [accountDetails]);
   async function postOrg() {
     const id = user.sub.substring(6);
@@ -51,7 +51,7 @@ export const ProtectedRoute = ({ children }) => {
     const response = await post(`/core/organizations`, {}, { id, name });
     if (response) {
       const { data, mystatus } = response;
-      console.log('created');
+      //console.log('created');
       if (mystatus === 200) {
         showAlert({
           title: 'Success',
@@ -68,7 +68,7 @@ export const ProtectedRoute = ({ children }) => {
   }
   async function checkOrg() {
     let myResponse = await get('/core/users/mycreds');
-    // console.log(myResponse.data.data);
+    // //console.log(myResponse.data.data);
     if (myResponse && myResponse.status === 200) {
       setAllAccounts(
         myResponse.data.data.map((value) => ({
@@ -84,7 +84,7 @@ export const ProtectedRoute = ({ children }) => {
             const others = response.data.organizations.filter((value) => value.id === orgId)[0];
             return { ...value, ...others };
           });
-          console.log('final: ', data);
+          //console.log('final: ', data);
           setAccountDetails(data[0]);
           return data;
         });
@@ -104,7 +104,7 @@ export const ProtectedRoute = ({ children }) => {
 
     let userDetailsResponse = await get('/core/users/me');
     if (userDetailsResponse && userDetailsResponse.status === 200) {
-      console.log(userDetailsResponse.data);
+      //console.log(userDetailsResponse.data);
       setUserDetails((preValue) => ({
         ...preValue,
         ...userDetailsResponse.data.accountDetails,
@@ -118,7 +118,7 @@ export const ProtectedRoute = ({ children }) => {
   //   isLoading: loading,
   // } = useGetQuery('/core/users/mycreds', '/core/users/mycreds', {}, {}, (response) => {
   //   // setAccountDetails((preValue) => {
-  //   //   console.log({
+  //   //   //console.log({
   //   //     ...preValue,
   //   //     role: response.data.data.role,
   //   //     orgId: response.data.data.organizationId,
@@ -146,7 +146,7 @@ export const ProtectedRoute = ({ children }) => {
   //   isLoading: myLoading,
   //   // isLoading: loading,
   // } = useGetQuery('/core/organizations', '/core/organizations', {}, {}, (response) => {
-  //   console.log(response.data.organizations);
+  //   //console.log(response.data.organizations);
   //   // setAllAccounts(response.data.organizations);
   //   if (allAccounts.length === 0) {
   //     setAllAccounts((preValue) => {
@@ -155,7 +155,7 @@ export const ProtectedRoute = ({ children }) => {
   //         const others = response.data.organizations.filter((value) => value.id === orgId)[0];
   //         return { ...value, ...others };
   //       });
-  //       console.log('final: ', data);
+  //       //console.log('final: ', data);
   //       setAccountDetails(data[0]);
   //       return data;
   //     });
@@ -193,9 +193,9 @@ export const ProtectedRoute = ({ children }) => {
   useMemo(
     async () => {
       // if (isAuthenticated) {
-      //   // console.log(userCredsData, userCredsStatus);
+      //   // //console.log(userCredsData, userCredsStatus);
       //   if (userCredsStatus === 'success' && userCredsData) {
-      //     // console.log(userCredsData);
+      //     // //console.log(userCredsData);
       //   } else if (userCredsStatus !== 'loading' && userCredsStatus !== 'error') {
       //     const id = user.sub.substring(6);
       //     const name = user.nickname;
@@ -217,7 +217,7 @@ export const ProtectedRoute = ({ children }) => {
       router.replace('/');
     } else if (isAuthenticated && !user.email_verified) {
       router.replace('/onboarding/verify-email');
-      // // console.log('reroute');
+      // // //console.log('reroute');
       return children;
     }
     return children;

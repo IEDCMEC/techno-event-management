@@ -37,7 +37,7 @@ export default function Events() {
     {
       onSuccess: (response) => {
         setParticipantAttributes(response.data.participantAttributes || []);
-        console.log(data);
+        //console.log(data);
       },
       onError: (error) => {
         showAlert({
@@ -54,7 +54,7 @@ export default function Events() {
   //       `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
   //     );
   //     setParticipantAttributes(data.participantAttributes || []);
-  //     console.log(data);
+  //     //console.log(data);
   //   };
   //   fetchParticipantAttributes();
   // }, [orgId, eventId, participantId]);
