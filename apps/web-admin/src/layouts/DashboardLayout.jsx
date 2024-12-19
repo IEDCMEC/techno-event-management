@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState, useContext, useEffect } from 'react';
+import { inter } from '@/components/ui/fonts';
 import {
   Box,
   useMediaQuery,
@@ -55,6 +56,7 @@ export default function DashboardLayout({ headerButton, children }) {
     //console.log(router.asPath);
     //console.log(accountDetails);
   }, [router.asPath]);
+  const [date, setDate] = useState(new Date());
   if (isAuthenticated) {
     return (
       <Flex height="100vh" flexDirection="column">
@@ -270,7 +272,13 @@ export default function DashboardLayout({ headerButton, children }) {
                     <PopoverArrow />
                     <PopoverCloseButton />
                     <PopoverBody>
-                      <Calendar />
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        scale={1}
+                        className={`${inter.className}`}
+                      />
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>
