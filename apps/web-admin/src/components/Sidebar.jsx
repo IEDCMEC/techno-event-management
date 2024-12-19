@@ -112,12 +112,12 @@ const Sidebar = ({ isOpen, onClose }) => {
           >
             {/* Starred Items */}
             <StyledBox
-              sx={{ height: '114px', width: '100%' }}
+              sx={{ height: `${myOrganizations.length * 70}px`, width: '100%' }}
               pt="10px"
               alignItems="flex-start"
               justifyContent="space-around"
             >
-              <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
+              <StyledText variant="16Regular.grey" gap={4} margin={'8px 0'} fontWeight="600">
                 Organizations
               </StyledText>
               {myOrganizations.map((value, index) => (
