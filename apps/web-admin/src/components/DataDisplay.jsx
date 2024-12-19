@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { extendTheme } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { StyledText } from './ui/StyledComponents';
-import { GoDotFill } from "react-icons/go";
+import { GoDotFill } from 'react-icons/go';
 const chakraTheme = extendTheme({
   colors: {
     primary: {
@@ -34,19 +34,19 @@ export default function DataDisplay({
   setState = null,
 }) {
   const [selectedRows, setSelectedRows] = useState([]);
-  // console.log(state);
+  // //console.log(state);
   const handleRowClick = (row) => {
     if (onRowClick) {
       onRowClick(row);
     } else {
-      // console.log(row);
+      // //console.log(row);
     }
   };
-  console.log(rows);
-  // //console.log(Object.keys(rows[0]));
+  //console.log(rows);
+  // ////console.log(Object.keys(rows[0]));
   const handleCheckboxChange = (row) => {
-    //console.log('handle')
-    // //console.log(row);
+    ////console.log('handle')
+    // ////console.log(row);
     if (!state || !setState) {
       setSelectedRows((prevSelectedRows) =>
         prevSelectedRows.includes(row.id)
@@ -54,7 +54,7 @@ export default function DataDisplay({
           : [...prevSelectedRows, row.id],
       );
     } else {
-      // console.log(row);
+      // //console.log(row);
       setState(row);
     }
   };
@@ -64,7 +64,7 @@ export default function DataDisplay({
     return date.toLocaleDateString('en-US', options).replace(',', '');
   }
   // useEffect(() => {
-  //   //console.log(selectedRows);
+  //   ////console.log(selectedRows);
   // }, [selectedRows]);
   return (
     <ChakraProvider theme={chakraTheme}>
@@ -75,8 +75,9 @@ export default function DataDisplay({
           <TableContainer height={height} overflowY={overflowY} sx={{}}>
             <Table variant="simple" overflowY={overflowY}>
               <Thead>
-                <Tr borderBottom={"3px solid #efeef3"}>
-                  <Th>{/*
+                <Tr borderBottom={'3px solid #efeef3'}>
+                  <Th>
+                    {/*
                     <Checkbox
                       isChecked=
                         state === null || setState === null
@@ -92,7 +93,7 @@ export default function DataDisplay({
                         if (!state || !setState) {
                           setSelectedRows(e.target.checked ? rows.map((row) => row.email) : []);
                         } else {
-                          //console.log(e.target.indeterminate, e.target.checked);
+                          ////console.log(e.target.indeterminate, e.target.checked);
                           // setState(e.target.checked ? )
                           setState(e.target.checked ? rows.map((row) => row.id) : []);
                         }
@@ -101,7 +102,9 @@ export default function DataDisplay({
                     */}
                   </Th>
                   {columns.map((column) => (
-                    <Th key={column.field} color={"gray"}>{column.headerName}</Th>
+                    <Th key={column.field} color={'gray'}>
+                      {column.headerName}
+                    </Th>
                   ))}
                 </Tr>
               </Thead>
@@ -116,7 +119,8 @@ export default function DataDisplay({
                     }}
                     _hover={{ bg: 'gray.100', cursor: 'pointer' }}
                   >
-                    <Td>{/*
+                    <Td>
+                      {/*
                       <Checkbox
                         isChecked={
                           state === null || setState === null
@@ -130,9 +134,17 @@ export default function DataDisplay({
                         */}
                     </Td>
                     {columns.map((column) => (
-                      <Td key={column.field}>{column.field=="createdAt"?formatTimestamp(row[column.field]):column.field == "status" && row[column.field] == undefined?
-                        <StyledText color="red"><GoDotFill/> Scheduled</StyledText>:
-                        row[column.field]}</Td>
+                      <Td key={column.field}>
+                        {column.field == 'createdAt' ? (
+                          formatTimestamp(row[column.field])
+                        ) : column.field == 'status' && row[column.field] == undefined ? (
+                          <StyledText color="red">
+                            <GoDotFill /> Scheduled
+                          </StyledText>
+                        ) : (
+                          row[column.field]
+                        )}
+                      </Td>
                     ))}
                   </Tr>
                 ))}

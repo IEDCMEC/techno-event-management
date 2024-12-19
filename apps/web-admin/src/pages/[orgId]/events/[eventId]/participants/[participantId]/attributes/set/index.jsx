@@ -73,7 +73,7 @@ export default function NewOrganization() {
     {
       onSuccess: (response) => {
         setAttributes(response.data.attributes || []);
-        console.log(data);
+        //console.log(data);
       },
       onError: (error) => {
         showAlert({
@@ -90,7 +90,7 @@ export default function NewOrganization() {
   //       `/core/organizations/${orgId}/events/${eventId}/attributes`,
   //     );
   //     setAttributes(data.attributes || []);
-  //     console.log(data);
+  //     //console.log(data);
   //   };
   //   fetchAttributes();
   // }, [orgId, eventId, participantId]);
@@ -119,7 +119,7 @@ export default function NewOrganization() {
                   placeholder="Select option"
                   onChange={(e) => {
                     setAttributeId(e.target.value);
-                    console.log(e.target.value);
+                    //console.log(e.target.value);
                   }}
                 >
                   {attributes.map((attribute) => (

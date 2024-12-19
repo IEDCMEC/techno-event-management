@@ -70,10 +70,10 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       const response = await fetch('/QrTemplate.txt');
       const data = await response.text();
       setEmailContent(data);
-      // console.log(data);
+      // //console.log(data);
     };
     if (emailContent.length === 0) {
-      console.log('fetching text');
+      //console.log('fetching text');
       fetchText();
     }
   }, [selectedProject]);
@@ -81,7 +81,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     useContext(account);
 
   // useEffect(() => {
-  //   console.log(participants);
+  //   //console.log(participants);
   // }, [participants]);
   // useEffect(() => {
   //   async fetchEmailTemplate = ()=>
@@ -126,8 +126,8 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         email: value.email,
         payload: value.checkInKey,
       }));
-      //console.log('Request');
-      //console.log(myData, recipients);
+      ////console.log('Request');
+      ////console.log(myData, recipients);
       // Trigger the mutation
       addRecipientsMutation({
         projectId: selectedProject.id,
@@ -136,9 +136,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     }
   };
   useEffect(() => {
-    //console.log(recipients);
+    ////console.log(recipients);
   }, [recipients]);
-  // //console.log(`/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`);
+  // ////console.log(`/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`);
   useGetQuery(
     `/core/organizations/${accountDetails.orgId}/getRecipients/${
       selectedProject.id ? selectedProject.id : ''
@@ -149,11 +149,11 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     {},
     {
       onError: (error) => {
-        //console.log(error);
+        ////console.log(error);
       },
     },
     (response) => {
-      // //console.log(response.data.recipients);
+      // ////console.log(response.data.recipients);
       // setMailStatus(response.data.recipients);
       setRecipients(() => {
         const myParts = response.data.recipients.map((value) => value.email);
@@ -183,7 +183,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         });
       },
       onError: (error) => {
-        //console.log(error);
+        ////console.log(error);
         showAlert({
           title: 'Failure',
           description: 'Failed to update email template',
@@ -196,12 +196,12 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       ],
     },
     ({ data, variables, context }) => {
-      //console.log(data);
+      ////console.log(data);
     },
   );
   const updateEmailTemplate = async (e) => {
     e.preventDefault();
-    //console.log(emailContent);
+    ////console.log(emailContent);
     if (accountDetails.orgId) {
       let flag1 = false;
       let flag2 = false;
@@ -213,7 +213,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       }
       const flag3 = flag1 || flag2;
       setFlag(flag3);
-      //console.log(flag3);
+      ////console.log(flag3);
       updateEmailMutation({
         projectId: selectedProject.id,
         html_template: emailContent,
@@ -253,7 +253,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         // onClose();
       },
       onError: (error) => {
-        //console.log(error);
+        ////console.log(error);
       },
     },
   );
@@ -270,7 +270,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         },
         {
           onSuccess: (response) => {
-            //console.log(response.data);
+            ////console.log(response.data);
             // setMailStatus(response.data);
           },
         },
@@ -283,7 +283,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     {},
     {
       onSuccess: (response) => {
-        //console.log(response);
+        ////console.log(response);
         showAlert({
           title: 'Success',
           description: 'Email Project Added',
@@ -309,13 +309,13 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       ],
     },
     ({ data, variables, context }) => {
-      //console.log(data);
+      ////console.log(data);
     },
   );
   const handleEmailProjectSubmit = async (e) => {
     e.preventDefault();
-    // //console.log('Hekki')
-    //console.log(newEmailProject);
+    // ////console.log('Hekki')
+    ////console.log(newEmailProject);
     if (emailProjects.length > 9) {
       showAlert({
         title: 'Failure',
@@ -340,17 +340,17 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     {},
     {
       onSuccess: (response) => {
-        //console.log(response.data);
+        ////console.log(response.data);
         setMailStatus(response.data);
       },
     },
   );
   const nextStep = async () => {
     if (step == 3) {
-      //console.log('hi');
+      ////console.log('hi');
       addNewRecipients();
     }
-    //console.log(step);
+    ////console.log(step);
     setStep((prev) => Math.min(prev + 1, 5));
     // if(step == 4){
     //   checkMailStatusMutation({
@@ -381,13 +381,13 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                     placeholder="Select an Email recipient list"
                     // value={}
                     onChange={(e) => {
-                      // //console.log(emailProjects[e.target.value]['html_template']);
+                      // ////console.log(emailProjects[e.target.value]['html_template']);
                       setSelectedProject(emailProjects[e.target.value]);
                       setEmailContent(emailProjects[e.target.value]['html_template']);
                     }}
                   >
                     {emailProjects.map((value, index) => {
-                      // //console.log(value);
+                      // ////console.log(value);
                       return (
                         <option key={index} value={index}>
                           {value.name}
@@ -511,24 +511,24 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   overflowY="visible"
                   height="500px"
                   onRowClick={(value) => {
-                    //console.log(value);
+                    ////console.log(value);
                   }}
                   state={recipients.map((value) => value.email)}
                   // state={recipients}
                   setState={(selectedValue) => {
-                    ////console.log(selectedValue);
+                    //////console.log(selectedValue);
                     if (Array.isArray(selectedValue)) {
-                      // //console.log(selectedValue);
-                      ////console.log('hello trigger')
+                      // ////console.log(selectedValue);
+                      //////console.log('hello trigger')
                       if (selectedValue.length > 0) {
                         setRecipients(participants);
                       } else {
                         setRecipients([]);
                       }
                     } else {
-                      ////console.log('trigger')
+                      //////console.log('trigger')
                       setRecipients((prevSelectedRows) => {
-                        //console.log(prevSelectedRows);
+                        ////console.log(prevSelectedRows);
                         const myIds = prevSelectedRows.map((value) => value.email);
                         return myIds.includes(selectedValue.email)
                           ? prevSelectedRows.filter((value) => value.email !== selectedValue.email)
@@ -639,7 +639,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                     });
                   }
 
-                  //   //console.log(step);
+                  //   ////console.log(step);
                 }}
               >
                 Next
@@ -655,7 +655,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 onClick={() => {
                   onClose();
                   setStep(1);
-                  //   //console.log(step);
+                  //   ////console.log(step);
                 }}
               >
                 Close

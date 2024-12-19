@@ -41,7 +41,7 @@ export class Mail {
 }
 
 export function parseMail(str: string): Mail {
-  console.log(str);
+  //console.log(str);
   const parsed = JSON.parse(str);
   return new Mail(
     parsed.from,

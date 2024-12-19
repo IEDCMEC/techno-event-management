@@ -75,12 +75,27 @@ const Sidebar = ({ isOpen, onClose }) => {
       path: `/${accountDetails.orgId}/profile`,
     },
   ];
-  const myOrganizations = allAccounts.map((value) => ({
-    name: value.name,
-    path: `/${value.orgId}/events`,
-    status: true,
-    data: value,
-  }));
+
+  const [myOrganizations, setMyOrganizations] = useState(
+    allAccounts.map((value) => ({
+      name: value.name,
+      path: `/${value.orgId}/events`,
+      status: true,
+      data: value,
+    })),
+  );
+
+  useEffect(() => {
+    setMyOrganizations(
+      allAccounts.map((value) => ({
+        name: value.name,
+        path: `/${value.orgId}/events`,
+        status: true,
+        data: value,
+      })),
+    );
+  }, [allAccounts]);
+  // const myOrganizations = ;
   return (
     <>
       {!isMobile ? (

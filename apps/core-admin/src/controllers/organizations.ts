@@ -6,7 +6,7 @@ export const createNewOrganization = async (req: Request, res: Response) => {
   try {
     const userId = req?.auth?.payload?.sub;
     const { id, name } = req.body;
-    console.log(id, name);
+    //console.log(id, name);
     const newOrganization = await prisma.organization.create({
       data: {
         id,
@@ -51,16 +51,32 @@ export const getOrganizationStats = async (req: Request, res: Response) => {
     if (!organization) {
       return res.status(404).json({ error: 'Organization not found' });
     }
-
-    organization = {
-      id: organization.id,
-      name: organization.name,
-      createdAt: organization.createdAt,
-      numberOfEvents: organization.Event.length,
-      numberOfMembers: organization.OrganizationUser.length,
-    };
-
-    return res.status(200).json({ organization });
+    //console.log(organization.addressId !== null);
+    if (organization.addressId !== null) {
+      let address = await prisma.Address.findUnique({
+        where: {
+          id: organization.addressId,
+        },
+      });
+      organization = {
+        id: organization.id,
+        name: organization.name,
+        createdAt: organization.createdAt,
+        numberOfEvents: organization.Event.length,
+        numberOfMembers: organization.OrganizationUser.length,
+        addressData: address,
+      };
+      return res.status(200).json({ organization });
+    } else {
+      organization = {
+        id: organization.id,
+        name: organization.name,
+        createdAt: organization.createdAt,
+        numberOfEvents: organization.Event.length,
+        numberOfMembers: organization.OrganizationUser.length,
+      };
+      return res.status(200).json({ organization });
+    }
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });
@@ -84,9 +100,26 @@ export const getUsersOrganizations = async (req: Request, res: Response) => {
       },
     });
 
-    organizations = organizations.map((organization: any) => organization);
-
-    return res.status(200).json({ organizations });
+    const updatedOrganizations = await Promise.all(
+      organizations.map(async (organization: any) => {
+        //console.log(organization.addressId !== null);
+        if (organization.addressId !== null) {
+          let address = await prisma.Address.findUnique({
+            where: {
+              id: organization.addressId,
+            },
+          });
+          const data = {
+            ...organization,
+            addressData: address,
+          };
+          return data;
+        } else {
+          return organization;
+        }
+      }),
+    );
+    return res.status(200).json({ organizations: updatedOrganizations });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });
@@ -174,9 +207,11 @@ export const addOrganizationMember = async (req: Request, res: Response) => {
   }
 };
 export const updateOrganizationDetails = async (req: Request, res: Response) => {
+  //console.log('Hello world');
   try {
     const {
       orgId,
+      name,
       description,
       logo,
       tagline,
@@ -193,12 +228,14 @@ export const updateOrganizationDetails = async (req: Request, res: Response) => 
       !orgId ||
       !email ||
       !phoneNo ||
+      !name ||
       !website ||
       !addressDetails?.city ||
       !addressDetails?.state ||
       !addressDetails?.country ||
       !addressDetails?.pincode
     ) {
+      // //console.log(req.body);
       return res.status(400).json({ error: 'Missing required parameters.' });
     }
 
@@ -211,36 +248,38 @@ export const updateOrganizationDetails = async (req: Request, res: Response) => 
     }
 
     let addressId = organization.addressId;
+    let updatedAddress = [];
     if (addressId) {
-      await prisma.address.update({
+      updatedAddress = await prisma.address.update({
         where: { id: addressId },
         data: {
           name: addressDetails.name || '',
           city: addressDetails.city,
           state: addressDetails.state,
           country: addressDetails.country,
-          pincode: addressDetails.pincode,
+          pinCode: parseInt(addressDetails.pincode),
           locationUrl: addressDetails.locationUrl || '',
         },
       });
     } else {
-      const newAddress = await prisma.address.create({
+      updatedAddress = await prisma.address.create({
         data: {
           name: addressDetails.name || '',
           city: addressDetails.city,
           state: addressDetails.state,
           country: addressDetails.country,
-          pincode: addressDetails.pincode,
+          pinCode: parseInt(addressDetails.pincode),
           locationUrl: addressDetails.locationUrl || '',
         },
       });
-      addressId = newAddress.id;
+      addressId = updatedAddress.id;
     }
 
-    await prisma.organization.update({
+    const updatedDetails = await prisma.organization.update({
       where: { id: orgId },
       data: {
-        description,
+        name,
+        Description: description,
         Logo: logo,
         Tagline: tagline,
         email,
@@ -253,7 +292,10 @@ export const updateOrganizationDetails = async (req: Request, res: Response) => 
       },
     });
 
-    return res.status(200).json({ message: 'Organization details updated successfully.' });
+    return res.status(200).json({
+      message: 'Organization details updated successfully.',
+      newDetails: { addressData: updatedAddress, ...updatedDetails },
+    });
   } catch (error) {
     console.error('Error updating organization details:', error);
     return res.status(500).json({ error: 'Internal server error.' });

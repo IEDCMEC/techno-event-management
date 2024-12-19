@@ -109,10 +109,11 @@ router.put(
   updateParticipantAttribute,
 );
 
-router.put('/organization/update', updateOrganizationDetails); //ajay
+router.post('/organizations/update', updateOrganizationDetails); //ajay
 
 router.get('/organizations/:orgId/events/:eventId/attributes', getAllAttributes); // done
 router.get('/organizations/:orgId/events/:eventId/attributes/:attributeId', getAttributeById); //done
+
 router.get(
   '/organizations/:orgId/events/:eventId/attributes/:attributeId/participants',
   getAttributeParticipants,

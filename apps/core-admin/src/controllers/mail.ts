@@ -12,7 +12,7 @@ import { marked } from 'marked';
 const MAILER_URL = process.env.MAILER_URL;
 const MAILER_DATABASE_URL = process.env.MAILER_DATABASE_URL;
 const AUTHORIZATION_TOKEN = process.env.AUTHORIZATION_TOKEN;
-// console.log(AUTHORIZATION_TOKEN);
+// //console.log(AUTHORIZATION_TOKEN);
 export const getStatusOfEmails = async (req: Request, res: Response) => {
   try {
     const { emailArray } = req.body;
@@ -46,14 +46,14 @@ export const getStatusOfEmails = async (req: Request, res: Response) => {
                 authorization: AUTHORIZATION_TOKEN,
               },
             });
-            console.log(emailStatus);
+            //console.log(emailStatus);
 
             if (
               emailStatus &&
               emailStatus.status === 200 &&
               emailStatus.data.status.status == 'SENT'
             ) {
-              console.log({ ...emailStatus.data.status });
+              //console.log({ ...emailStatus.data.status });
               // return res.status(200).json({
               //   ...emailStatus.data.status,
               // });
@@ -109,9 +109,9 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
           if (recipient.emailSent) {
             numberOfRecipientsAlreadyMailed++;
             recipientAlreadyMailed.push(recipient);
-            console.log(`Project: ${projectId} - Mail already sent to ${recipient.email}`);
+            //console.log(`Project: ${projectId} - Mail already sent to ${recipient.email}`);
           } else {
-            console.log(`Project: ${projectId} - Sending mail to ${recipient.email}`);
+            //console.log(`Project: ${projectId} - Sending mail to ${recipient.email}`);
             await sleepAsync(5); // Assuming you have this function defined for waiting
 
             const form = new FormData();
@@ -134,7 +134,7 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
                 authorization: AUTHORIZATION_TOKEN,
               },
             });
-            console.log(response.data);
+            //console.log(response.data);
             if (response && response.status == 200) {
               // Update the recipient's record in Prisma
               await prisma.Recipients.update({
@@ -155,9 +155,9 @@ export const sendMailWithQR = async (req: Request, res: Response) => {
               });
             } else {
               try {
-                console.log(response.data);
+                //console.log(response.data);
               } catch (e) {
-                console.log('error', e);
+                //console.log('error', e);
               }
               numberOfRecipientsFailed++;
               RecipientsNotMailed.push({
@@ -192,7 +192,7 @@ function sleepAsync(ms: number) {
 export const getRecipients = async (req: Request, res: Response) => {
   try {
     const { projectId, orgId } = req?.params;
-    // console.log('Hello')
+    // //console.log('Hello')
     if (!projectId || !orgId) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
@@ -241,7 +241,7 @@ export const getMailStatus = async (req: Request, res: Response) => {
         });
 
         if (emailStatus && emailStatus.status === 200) {
-          console.log({ ...emailStatus.data.status });
+          //console.log({ ...emailStatus.data.status });
           return res.status(200).json({
             ...emailStatus.data.status,
           });
@@ -267,14 +267,14 @@ export const updateMailProject = async (req: Request, res: Response) => {
     if (!projectId || !orgId) {
       return res.status(400).send({ message: 'Missing required fields!' });
     }
-    console.log(projectId);
+    //console.log(projectId);
 
-    // console.log(html_template);
+    // //console.log(html_template);
     const response = await prisma.Projects.update({
       where: { id: projectId },
       data: { html_template: html_template },
     });
-    console.log(response);
+    //console.log(response);
 
     if (response) {
       return res.status(200).json({
@@ -287,7 +287,7 @@ export const updateMailProject = async (req: Request, res: Response) => {
       });
     }
   } catch (e) {
-    console.log(e);
+    //console.log(e);
     return res.status(400).send({ message: e });
   }
 };
@@ -299,7 +299,7 @@ export const newMailProject = async (req: Request, res: Response) => {
     if (!name || !desc || !orgId || !html_template) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
-    console.log(name, desc, orgId);
+    //console.log(name, desc, orgId);
     // if (supabase) {
     // const response = await supabase.from('Projects').select('name').eq('name', name);
     const response = await prisma.Projects.findMany({
@@ -310,7 +310,7 @@ export const newMailProject = async (req: Request, res: Response) => {
         name: true,
       },
     });
-    // console.log(response);
+    // //console.log(response);
     if (response) {
       if (response && response?.length == 0) {
         // const response = await supabase
@@ -324,7 +324,7 @@ export const newMailProject = async (req: Request, res: Response) => {
             html_template: html_template,
           },
         });
-        // console.log(response)
+        // //console.log(response)
         if (response) {
           // const currentProject = await supabase.from('Projects').select('*').eq('name', name);
           const currentProject = await prisma.Projects.findFirst({
@@ -358,7 +358,7 @@ export const newMailProject = async (req: Request, res: Response) => {
 export const getMailProjects = async (req: Request, res: Response) => {
   try {
     const { orgId } = req?.params;
-    console.log(orgId);
+    //console.log(orgId);
     if (!orgId) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
@@ -416,7 +416,7 @@ export const addNewRecipient = async (req: Request, res: Response) => {
         },
       });
 
-      // console.log('Insert:', response);
+      // //console.log('Insert:', response);
       return res.status(200).json({ message: 'User successfully Added' });
     }
   } catch (e: any) {
@@ -433,12 +433,12 @@ type mytype = {
 export const addNewRecipients = async (req: Request, res: Response) => {
   try {
     const { data, projectId } = req.body;
-    console.log(data.length);
+    //console.log(data.length);
     const arrayOfElements = data as mytype[];
     let nonProcessed = [];
     let processed = [];
     if (!arrayOfElements || !projectId) {
-      console.log(arrayOfElements, projectId);
+      //console.log(arrayOfElements, projectId);
       return res.status(400).send({ message: 'Missing required fields' });
     } else if (Array.isArray(arrayOfElements)) {
       for (const element of arrayOfElements) {
@@ -469,7 +469,7 @@ export const addNewRecipients = async (req: Request, res: Response) => {
             } else {
               nonProcessed.push(element);
             }
-            // console.log('Insert:', response);
+            // //console.log('Insert:', response);
             // return res.status(200).json({ message: 'User successfully Added' });
           }
         }
@@ -482,7 +482,7 @@ export const addNewRecipients = async (req: Request, res: Response) => {
       return res.status(400).send({ message: 'Element not an array' });
     }
   } catch (e: any) {
-    console.log(e);
+    //console.log(e);
     return res.status(400).send({ message: e.message || 'Something went wrong' });
   }
 };
@@ -494,7 +494,7 @@ const generateOTP = () => {
 export const sendOTP = async (req: Request, res: Response) => {
   try {
     const { email, name, projectId } = req.body;
-    console.log(req.body);
+    //console.log(req.body);
 
     // Check for required fields
     if (!email || !name || !projectId) {
@@ -515,7 +515,7 @@ export const sendOTP = async (req: Request, res: Response) => {
         email: email,
       },
     });
-    console.log(otpRecord);
+    //console.log(otpRecord);
     if (otpRecord) {
       // OTP already exists, update the OTP code
       const otp = generateOTP();
@@ -523,10 +523,10 @@ export const sendOTP = async (req: Request, res: Response) => {
         where: { email: email },
         data: { code: otp },
       });
-      // console.log(otpUpdateResponse)
+      // //console.log(otpUpdateResponse)
       if (otpUpdateResponse) {
         // Send OTP email
-        console.log(AUTHORIZATION_TOKEN);
+        //console.log(AUTHORIZATION_TOKEN);
         const form = new FormData();
         form.append('name', name);
         form.append('to', email);
@@ -534,12 +534,12 @@ export const sendOTP = async (req: Request, res: Response) => {
         let emailText: string = await marked(markdown.html_template);
         emailText = emailText.replace('((otp))', otp.toString());
         emailText = emailText.replace('{{name}}', name);
-        console.log(emailText);
+        //console.log(emailText);
         emailText = emailText.replace(/\n/g, '');
         emailText = emailText.replace(/"/g, "'");
         form.append('html', emailText);
         form.append('text', 'Confirm your OTP');
-        console.log(`${MAILER_URL}/mail`);
+        //console.log(`${MAILER_URL}/mail`);
         const response = await axios.post(`${MAILER_URL}/mail`, form, {
           headers: {
             ...form.getHeaders(),
@@ -547,8 +547,8 @@ export const sendOTP = async (req: Request, res: Response) => {
           },
         });
 
-        console.log(response.data);
-        console.log(response);
+        //console.log(response.data);
+        //console.log(response);
         if (response.status === 200) {
           return res.status(200).json({
             message: 'OTP successfully sent',
@@ -583,7 +583,7 @@ export const sendOTP = async (req: Request, res: Response) => {
         let emailText: string = await marked(markdown.html_template);
         emailText = emailText.replace('((otp))', otp.toString());
         emailText = emailText.replace('{{name}}', name);
-        console.log(emailText);
+        //console.log(emailText);
         emailText = emailText.replace(/\n/g, '');
         emailText = emailText.replace(/"/g, "'");
         form.append('html', emailText);
@@ -596,7 +596,7 @@ export const sendOTP = async (req: Request, res: Response) => {
           },
         });
 
-        console.log(response.data);
+        //console.log(response.data);
 
         if (response.status === 200) {
           return res.status(200).json({
@@ -627,7 +627,7 @@ export const verifyOTP = async (req: Request, res: Response) => {
     if (!email || !otp) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
-    console.log(email, otp);
+    //console.log(email, otp);
     // Fetch OTP record for the provided email
     const otpRecord = await prisma.Otp.findFirst({
       where: {
@@ -636,7 +636,7 @@ export const verifyOTP = async (req: Request, res: Response) => {
     });
 
     if (otpRecord) {
-      console.log(otpRecord);
+      //console.log(otpRecord);
       // Check if the provided OTP matches the stored one
       if (otpRecord.code.toString() === otp.toString()) {
         return res.status(200).json({
