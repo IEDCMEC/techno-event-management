@@ -101,7 +101,13 @@ const Sidebar = ({ isOpen, onClose }) => {
   return (
     <>
       {!isMobile ? (
-        <StyledBox width={'250px'} height="100%" borderRight="1px solid rgba(4, 5, 11, 0.1)">
+        <StyledBox
+          width={'250px'}
+          height="100%"
+          borderRight={
+            colorMode === 'light' ? '1px solid rgba(4, 5, 11, 0.1)' : ' rgba(251, 251, 254, 0.10)'
+          }
+        >
           <StyledBox
             height={'68px'}
             sx={{
