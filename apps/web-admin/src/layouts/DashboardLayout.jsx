@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState, useContext, useEffect } from 'react';
+import { inter } from '@/components/ui/fonts';
 import {
   Box,
   useMediaQuery,
@@ -18,11 +19,10 @@ import Image from 'next/image';
 import { account } from '@/contexts/MyContext';
 import OrganizationSettingsModal from './OrganizationSettingsModal';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
-import { StyledText } from '@/components/ui/StyledComponents';
-import { FiSun } from 'react-icons/fi';
-import { IoNotificationsOutline } from 'react-icons/io5';
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import { VscCalendar } from 'react-icons/vsc';
 import { Calendar } from '@/components/ui/calendar';
+import { PiCopyrightThin } from 'react-icons/pi';
 import {
   Popover,
   PopoverTrigger,
@@ -31,14 +31,21 @@ import {
   PopoverCloseButton,
   PopoverBody,
 } from '@chakra-ui/react';
+import { FiSun } from 'react-icons/fi';
+import { FiMoon } from 'react-icons/fi';
+import { IoNotificationsOutline } from 'react-icons/io5';
+import { useColorMode } from '@chakra-ui/react';
+
 // Adjust the import path as needed
 
 export default function DashboardLayout({ headerButton, children }) {
   const router = useRouter();
   const pathSegments = router.asPath.split('/').filter(Boolean);
+  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
+  //console.log(accountDetails.Event)
   //console.log('Path: ' + pathSegments);
   const Dashboard = ['events', 'members', 'mycertificates', 'emailer'];
-  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
+  const { toggleColorMode, colorMode } = useColorMode();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
   const [isSidebarOpen, setSidebarOpen] = useState(isMobile);
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -52,12 +59,19 @@ export default function DashboardLayout({ headerButton, children }) {
       .join(' '); // Join the words back into a string
   }
   useEffect(() => {
-    //console.log(router.asPath);
-    //console.log(accountDetails);
+    console.log(router.asPath);
+    console.log(accountDetails);
   }, [router.asPath]);
+  const [date, setDate] = useState(new Date());
+
   if (isAuthenticated) {
     return (
-      <Flex height="100vh" flexDirection="column">
+      <Flex
+        height="100vh"
+        flexDirection="column"
+        id="hello"
+        bg={colorMode === 'light' ? 'rgb(251, 251, 254)' : '#04050B'}
+      >
         <Flex height="100%" overflow="hidden" flexDirection={isMobile ? 'column' : 'row'}>
           {isMobile && (
             <Flex
@@ -96,7 +110,7 @@ export default function DashboardLayout({ headerButton, children }) {
             id="main-cover"
           >
             <Flex
-              height={isMobile ? 'auto' : '70px'}
+              height={isMobile ? 'auto' : '68px'}
               width="100%"
               p={5}
               flexDirection="row"
@@ -104,10 +118,11 @@ export default function DashboardLayout({ headerButton, children }) {
               alignItems="center"
               id="sub-cover"
               borderBottom={'1px solid rgba(4, 5, 11, 0.1)'}
+              padding={'20px 28px 20px 28px'}
             >
               {!isMobile && (
                 <Flex width="100%" alignItems="center" gap={10} id="sample">
-                  <Flex width="70%" id="breadcumb-container">
+                  <Flex width="80%" id="breadcumb-container">
                     {/* <Breadcrumb separator={"/"}>
                     {/* {linksForBreadCrumbs.map((link, index) => (
                     <BreadcrumbItem key={index} isCurrentPage={link.isCurrent}>
@@ -132,9 +147,9 @@ export default function DashboardLayout({ headerButton, children }) {
                       <BreadcrumbItem>
                         <BreadcrumbLink href="/">
                           {Dashboard.includes(pathSegments[1]) ? (
-                            <Text>Dashboards</Text>
+                            <StyledText>Dashboard</StyledText>
                           ) : (
-                            <Text>Pages</Text>
+                            <StyledText>Pages</StyledText>
                           )}
                         </BreadcrumbLink>
                       </BreadcrumbItem>
@@ -151,23 +166,32 @@ export default function DashboardLayout({ headerButton, children }) {
                         return (
                           <BreadcrumbItem key={href} isCurrentPage={isLast}>
                             {isLast ? (
-                              <Text>
+                              <StyledText>
                                 {segment == 'events' ? (
-                                  <Text>My Events</Text>
+                                  <StyledText>My Events</StyledText>
                                 ) : segment == 'mycertificates' ? (
-                                  <Text>My Certificates</Text>
+                                  <StyledText>My Certificates</StyledText>
                                 ) : (
-                                  <Text>{toTitleCase(segment)}</Text>
+                                  <StyledText>{toTitleCase(segment)}</StyledText>
                                 )}
-                              </Text>
+                              </StyledText>
                             ) : (
                               <BreadcrumbLink href={href}>
                                 {segment == 'events' ? (
-                                  <Text>My Events</Text>
+                                  <StyledText>My Events</StyledText>
                                 ) : segment == 'mycertificates' ? (
-                                  <Text>My Certificates</Text>
+                                  <StyledText fontWeight={'light'} color={'rgba(4, 5, 11, 0.4)'}>
+                                    My Certificates
+                                  </StyledText>
                                 ) : (
-                                  <Text>{toTitleCase(segment)}</Text>
+                                  <StyledText
+                                    fontWeight={'light'}
+                                    fontFamily={'sans-serif'}
+                                    color={'rgba(4, 5, 11, 0.4)'}
+                                    id="hello"
+                                  >
+                                    {toTitleCase(segment)}
+                                  </StyledText>
                                 )}
                               </BreadcrumbLink>
                             )}
@@ -212,8 +236,8 @@ export default function DashboardLayout({ headerButton, children }) {
                       border: 'none',
                     }}
                     onChange={(e) => {
-                      //console.log('changes');
-                      //console.log(e.target.value);
+                      console.log('changes');
+                      console.log(e.target.value);
                       setAccountDetails(
                         allAccounts.filter((value) => value.name === e.target.value)[0],
                       );
@@ -242,10 +266,7 @@ export default function DashboardLayout({ headerButton, children }) {
                 gap={4}
               >
                 {headerButton}
-                {accountDetails.role === 'ADMIN' &&
-                  router.asPath === `/${accountDetails.orgId}/settings` && (
-                    <Button onClick={onOpen}>Organization Settings</Button>
-                  )}
+                {/*<Button onClick={onOpen}>Organization Settings</Button> */}
                 {/* Button to open modal */}
               </Flex>
               <Flex
@@ -254,23 +275,43 @@ export default function DashboardLayout({ headerButton, children }) {
                 width="50%"
                 justifyContent={'flex-end'}
               >
-                <IconButton aria-label="toggle dark-bright" variant={'ghost'}>
-                  <FiSun fontSize={'20px'} color="black" />
+                <IconButton
+                  aria-label="toggle dark-bright"
+                  variant={'ghost'}
+                  onClick={() => toggleColorMode()}
+                >
+                  {colorMode === 'dark' ? (
+                    <FiSun fontSize={'20px'} color="white" />
+                  ) : (
+                    <FiMoon fontSize={'20px'} color="black" />
+                  )}
                 </IconButton>
                 <IconButton aria-label="bell-icon" variant={'ghost'}>
-                  <IoNotificationsOutline fontSize={'20px'} color="black" />
+                  <IoNotificationsOutline
+                    fontSize={'20px'}
+                    color={colorMode === 'light' ? 'black' : 'white'}
+                  />
                 </IconButton>
                 <Popover>
                   <PopoverTrigger>
                     <IconButton aria-label="calender-icon" variant="ghost">
-                      <VscCalendar fontSize="20px" color="black" />
+                      <VscCalendar
+                        fontSize="20px"
+                        color={colorMode === 'light' ? 'black' : 'white'}
+                      />
                     </IconButton>
                   </PopoverTrigger>
                   <PopoverContent>
                     <PopoverArrow />
                     <PopoverCloseButton />
                     <PopoverBody>
-                      <Calendar />
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        scale={1}
+                        className={`${inter.className}`}
+                      />
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>
@@ -279,6 +320,17 @@ export default function DashboardLayout({ headerButton, children }) {
             <Box height="100%" overflowY="auto" overflowX={'auto'} p={4}>
               {children}
             </Box>
+            <Flex
+              w={'200px'}
+              h={'18px'}
+              id="footer"
+              marginLeft={'40px'}
+              marginBottom={'20px'}
+              alignItems={'center'}
+            >
+              <PiCopyrightThin />
+              <StyledText fontWeight={'light'}>2024 EventSync</StyledText>
+            </Flex>
           </Flex>
         </Flex>
         <OrganizationSettingsModal isOpen={isOpen} onClose={onClose} />{' '}
