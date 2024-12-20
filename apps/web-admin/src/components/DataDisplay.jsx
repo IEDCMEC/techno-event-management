@@ -12,14 +12,14 @@ import {
   Checkbox,
   IconButton,
   Button,
-  HStack
+  HStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { extendTheme } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { StyledText } from './ui/StyledComponents';
-import { GoDotFill } from "react-icons/go";
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { GoDotFill } from 'react-icons/go';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 const chakraTheme = extendTheme({
   colors: {
     primary: {
@@ -52,18 +52,13 @@ export default function DataDisplay({
 
   // Calculate pagination details
   const totalPages = Math.ceil(rows.length / rowsPerPage);
-  const currentData = rows.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
+  const currentData = rows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
   // Handlers
   const handlePrevious = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const handleNext = () =>
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const handlePageClick = (page) => setCurrentPage(page);
 
- 
   // //console.log(Object.keys(rows[0]));
   const handleCheckboxChange = (row) => {
     //console.log('handle')
@@ -96,8 +91,9 @@ export default function DataDisplay({
           <TableContainer height={height} overflowY={overflowY} sx={{}}>
             <Table variant="simple" overflowY={overflowY}>
               <Thead>
-                <Tr borderBottom={"3px solid #efeef3"}>
-                  <Th>{/*
+                <Tr borderBottom={'3px solid #efeef3'}>
+                  <Th>
+                    {/*
                     <Checkbox
                       isChecked=
                         state === null || setState === null
@@ -122,7 +118,9 @@ export default function DataDisplay({
                     */}
                   </Th>
                   {columns.map((column) => (
-                    <Th key={column.field} color={"rgba(4, 5, 11, 0.4)"}>{column.headerName}</Th>
+                    <Th key={column.field} color={'rgba(4, 5, 11, 0.4)'}>
+                      {column.headerName}
+                    </Th>
                   ))}
                 </Tr>
               </Thead>
@@ -130,14 +128,15 @@ export default function DataDisplay({
                 {currentData.map((row) => (
                   <Tr
                     key={row.id}
-                    borderRadius={"8px"}
+                    borderRadius={'8px'}
                     onClick={() => {
                       handleRowClick(row);
                       handleCheckboxChange(row);
                     }}
                     _hover={{ bg: 'gray.100', cursor: 'pointer' }}
                   >
-                    <Td borderTopLeftRadius={"8px"} borderBottomLeftRadius={"8px"}>{/*
+                    <Td borderTopLeftRadius={'8px'} borderBottomLeftRadius={'8px'}>
+                      {/*
                       <Checkbox
                         isChecked={
                           state === null || setState === null
@@ -151,40 +150,52 @@ export default function DataDisplay({
                         */}
                     </Td>
                     {columns.map((column) => (
-                      <Td key={column.field}>{column.field=="startTime"?formatTimestamp(row[column.field]):column.field == "isRegistrationClosed" && row[column.field]?
-                        <StyledText color="red"><GoDotFill/> Closed</StyledText>:column.field == "isRegistrationClosed" && !row[column.field]?<StyledText color="green"><GoDotFill/> Open </StyledText>:
-                        row[column.field]}</Td>
+                      <Td key={column.field}>
+                        {column.field == 'startTime' ? (
+                          formatTimestamp(row[column.field])
+                        ) : column.field == 'isRegistrationClosed' && row[column.field] ? (
+                          <StyledText color="red">
+                            <GoDotFill /> Closed
+                          </StyledText>
+                        ) : column.field == 'isRegistrationClosed' && !row[column.field] ? (
+                          <StyledText color="green">
+                            <GoDotFill /> Open{' '}
+                          </StyledText>
+                        ) : (
+                          row[column.field]
+                        )}
+                      </Td>
                     ))}
                   </Tr>
                 ))}
               </Tbody>
             </Table>
             <HStack spacing={2} justify="flex-end" mt={4}>
-                <IconButton
-                  icon={<ChevronLeftIcon />}
-                  isDisabled={currentPage === 1 || totalPages === 1}
-                  onClick={handlePrevious}
-                  aria-label="Previous Page"
-                  variant={"ghost"}
-                />
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <Button
-                    key={index + 1}
-                    onClick={() => handlePageClick(index + 1)}
-                    bg={currentPage === index + 1 ? "rgba(4, 5, 11, 0.1)" : "white"}
-                    borderRadius={"8px"}
-                  >
-                    {index + 1}
-                  </Button>
-                ))}
-                <IconButton
-                  icon={<ChevronRightIcon />}
-                  isDisabled={currentPage === totalPages || totalPages === 1}
-                  onClick={handleNext}
-                  aria-label="Next Page"
-                  variant={"ghost"}
-                />
-              </HStack>
+              <IconButton
+                icon={<ChevronLeftIcon />}
+                isDisabled={currentPage === 1 || totalPages === 1}
+                onClick={handlePrevious}
+                aria-label="Previous Page"
+                variant={'ghost'}
+              />
+              {Array.from({ length: totalPages }, (_, index) => (
+                <Button
+                  key={index + 1}
+                  onClick={() => handlePageClick(index + 1)}
+                  bg={currentPage === index + 1 ? 'rgba(4, 5, 11, 0.1)' : 'white'}
+                  borderRadius={'8px'}
+                >
+                  {index + 1}
+                </Button>
+              ))}
+              <IconButton
+                icon={<ChevronRightIcon />}
+                isDisabled={currentPage === totalPages || totalPages === 1}
+                onClick={handleNext}
+                aria-label="Next Page"
+                variant={'ghost'}
+              />
+            </HStack>
           </TableContainer>
         )}
       </Box>

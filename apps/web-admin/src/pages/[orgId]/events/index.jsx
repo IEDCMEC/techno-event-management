@@ -110,7 +110,7 @@ export default function Events() {
 }
 */
 import { useRouter } from 'next/router';
-import { useEffect, useState , useContext} from 'react';
+import { useEffect, useState, useContext } from 'react';
 import {
   Text,
   Box,
@@ -131,14 +131,13 @@ import { CSVLink } from 'react-csv';
 import NewEventForm from './new';
 import useWrapper from '@/hooks/useWrapper';
 import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
-import { IoFilterSharp } from "react-icons/io5";
+import { IoFilterSharp } from 'react-icons/io5';
 import { IconButton } from '@chakra-ui/icons';
-import { IoSwapVertical } from "react-icons/io5";
+import { IoSwapVertical } from 'react-icons/io5';
 import { account } from '@/contexts/MyContext';
 
-
 const columns = [
-  {field:"isRegistrationClosed" , headerName:"Registration" ,width:200},
+  { field: 'isRegistrationClosed', headerName: 'Registration', width: 200 },
   { field: 'name', headerName: 'Event Title', width: 200 },
   { field: 'numberOfParticipants', headerName: 'No. Participants', width: 200 },
   {
@@ -159,8 +158,7 @@ export default function Events() {
   // const { loading, get } = useFetch();
   const { useGetQuery } = useWrapper();
   const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
-  console.log(accountDetails.Event)
-
+  console.log(accountDetails.Event);
 
   const [events, setEvents] = useState([]);
   console.log(orgId);
@@ -184,7 +182,6 @@ export default function Events() {
     const additionalData = (accountDetails?.Event || []).find((e) => e.id === event.id) || {};
     return { ...event, ...additionalData };
   });
-  
 
   console.log(mergedEvents);
 
@@ -209,7 +206,7 @@ export default function Events() {
     <DashboardLayout
       pageTitle="Event"
       previousPage={`${orgId}`}
-     // linksForBreadCrumbs = {links}
+      // linksForBreadCrumbs = {links}
       // headerButton={
       //   <>
       //     <Button onClick={onOpen} isLoading={loading}>
@@ -218,20 +215,71 @@ export default function Events() {
       //     {exportToCsv()}
       //   </>
       // }
-    
+
       debugInfo={events}
     >
-      <StyledBox w="100%" h="44px" bg="var(--black-5, rgba(4, 5, 11, 0.05))" borderRadius="8px" justifyContent="space-between" flexDirection = "row" padding="10px">
-        <StyledBox flexDirection= "row" gap="8px" bg="none">
-          <Button variant="outline" onClick={onOpen} isLoading={loading} padding={"8px 9px 8px 12px"} sx={{borderRadius: "8px", gap:"8px", width:"70px", height:"28px" , color:"black" , borderColor:"rgba(4, 5, 11, 0.1)"}}>Add <StyledText fontSize="20px">+</StyledText></Button>
-          <IconButton aria-label='filter' height={"28px"} width={"28px"} variant={"ghost"}><IoFilterSharp fontSize={"20px"} color='black'/></IconButton>
-          <IconButton aria-label='opposite-arrows' height={"28px"} width={"28px"} variant={"ghost"}><IoSwapVertical fontSize={"20px"} color='black'/></IconButton>
+      <StyledBox
+        w="100%"
+        h="44px"
+        bg="var(--black-5, rgba(4, 5, 11, 0.05))"
+        borderRadius="8px"
+        justifyContent="space-between"
+        flexDirection="row"
+        padding="10px"
+      >
+        <StyledBox flexDirection="row" gap="8px" bg="none">
+          <Button
+            variant="outline"
+            onClick={onOpen}
+            isLoading={loading}
+            padding={'8px 9px 8px 12px'}
+            sx={{
+              borderRadius: '8px',
+              gap: '8px',
+              width: '70px',
+              height: '28px',
+              color: 'black',
+              borderColor: 'rgba(4, 5, 11, 0.1)',
+            }}
+          >
+            Add <StyledText fontSize="20px">+</StyledText>
+          </Button>
+          <IconButton aria-label="filter" height={'28px'} width={'28px'} variant={'ghost'}>
+            <IoFilterSharp fontSize={'20px'} color="black" />
+          </IconButton>
+          <IconButton aria-label="opposite-arrows" height={'28px'} width={'28px'} variant={'ghost'}>
+            <IoSwapVertical fontSize={'20px'} color="black" />
+          </IconButton>
         </StyledBox>
 
-        <StyledBox flexDirection = "row" gap="8px" bg="none">
-        <Button variant="outline" sx={{borderRadius: "8px", gap:"5px" , color:"black",width:"87px" , height:"28px" , borderColor:"rgba(4, 5, 11, 0.1)"}}>Events</Button>
-        <Button variant="outline" isDisabled sx={{borderRadius: "8px", gap:"5px", width:"87px" , height:"28px" , color:"black" , borderColor:"rgba(4, 5, 11, 0.1)",
-        }}>Members</Button>
+        <StyledBox flexDirection="row" gap="8px" bg="none">
+          <Button
+            variant="outline"
+            sx={{
+              borderRadius: '8px',
+              gap: '5px',
+              color: 'black',
+              width: '87px',
+              height: '28px',
+              borderColor: 'rgba(4, 5, 11, 0.1)',
+            }}
+          >
+            Events
+          </Button>
+          <Button
+            variant="outline"
+            isDisabled
+            sx={{
+              borderRadius: '8px',
+              gap: '5px',
+              width: '87px',
+              height: '28px',
+              color: 'black',
+              borderColor: 'rgba(4, 5, 11, 0.1)',
+            }}
+          >
+            Members
+          </Button>
         </StyledBox>
       </StyledBox>
       <DataDisplay

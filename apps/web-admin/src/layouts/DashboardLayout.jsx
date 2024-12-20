@@ -1,15 +1,16 @@
 import { useRouter } from 'next/router';
 import { useState, useContext, useEffect } from 'react';
 import { inter } from '@/components/ui/fonts';
-import { 
-   Box,
-   useMediaQuery,
-   Flex,
-   Text,
-   Button,
-   useDisclosure,
-   Select,
-   IconButton } from '@chakra-ui/react';
+import {
+  Box,
+  useMediaQuery,
+  Flex,
+  Text,
+  Button,
+  useDisclosure,
+  Select,
+  IconButton,
+} from '@chakra-ui/react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import Sidebar from '@/components/Sidebar';
@@ -19,16 +20,17 @@ import { account } from '@/contexts/MyContext';
 import OrganizationSettingsModal from './OrganizationSettingsModal';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
-import { VscCalendar } from "react-icons/vsc";
+import { VscCalendar } from 'react-icons/vsc';
 import { Calendar } from '@/components/ui/calendar';
-import { PiCopyrightThin } from "react-icons/pi";
-import { 
-   Popover,
-   PopoverTrigger,
-   PopoverContent,
-   PopoverArrow,
-   PopoverCloseButton,
-   PopoverBody } from '@chakra-ui/react';
+import { PiCopyrightThin } from 'react-icons/pi';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
+} from '@chakra-ui/react';
 import { FiSun } from 'react-icons/fi';
 import { FiMoon } from 'react-icons/fi';
 import { IoNotificationsOutline } from 'react-icons/io5';
@@ -51,8 +53,8 @@ export default function DashboardLayout({ headerButton, children }) {
   function toTitleCase(str) {
     return str
       .split(' ') // Split the string into words
-      .map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() // Capitalize first letter and make rest lowercase
+      .map(
+        (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(), // Capitalize first letter and make rest lowercase
       )
       .join(' '); // Join the words back into a string
   }
@@ -64,7 +66,7 @@ export default function DashboardLayout({ headerButton, children }) {
 
   if (isAuthenticated) {
     return (
-      <Flex height="100vh" flexDirection="column" id='hello'>
+      <Flex height="100vh" flexDirection="column" id="hello">
         <Flex height="100%" overflow="hidden" flexDirection={isMobile ? 'column' : 'row'}>
           {isMobile && (
             <Flex
@@ -73,7 +75,7 @@ export default function DashboardLayout({ headerButton, children }) {
               flexDirection="row"
               justifyContent="space-between"
               alignItems="center"
-              id='burger-box'
+              id="burger-box"
             >
               {/* <Text fontSize="2xl" fontWeight="bold">
                 {accountDetails?.name}
@@ -83,7 +85,7 @@ export default function DashboardLayout({ headerButton, children }) {
                 width={10}
                 justifyContent="center"
                 alignItems="center"
-                id='burger'
+                id="burger"
                 onClick={() => {
                   setSidebarOpen(true);
                 }}
@@ -100,23 +102,23 @@ export default function DashboardLayout({ headerButton, children }) {
             flexDirection="column"
             marginLeft={-2}
             transition="margin 0.3s ease"
-            id='main-cover'
+            id="main-cover"
           >
             <Flex
-              height={isMobile ? 'auto' : "68px"}
+              height={isMobile ? 'auto' : '68px'}
               width="100%"
               p={5}
               flexDirection="row"
               justifyContent="space-between"
               alignItems="center"
-              id='sub-cover'
+              id="sub-cover"
               borderBottom={'1px solid rgba(4, 5, 11, 0.1)'}
-              padding={"20px 28px 20px 28px"}
+              padding={'20px 28px 20px 28px'}
             >
               {!isMobile && (
-                <Flex width="100%" alignItems="center" gap={10} id='sample'>
-                  <Flex width="80%" id='breadcumb-container'>
-                  {/* <Breadcrumb separator={"/"}>
+                <Flex width="100%" alignItems="center" gap={10} id="sample">
+                  <Flex width="80%" id="breadcumb-container">
+                    {/* <Breadcrumb separator={"/"}>
                     {/* {linksForBreadCrumbs.map((link, index) => (
                     <BreadcrumbItem key={index} isCurrentPage={link.isCurrent}>
                       {link.isCurrent ? (
@@ -136,37 +138,64 @@ export default function DashboardLayout({ headerButton, children }) {
                       <BreadcrumbLink href="#"><StyledText>My Events</StyledText></BreadcrumbLink>
                     </BreadcrumbItem>
                   </Breadcrumb> */}
-                  <Breadcrumb separator="/">
-                    <BreadcrumbItem>
-                      <BreadcrumbLink  href="/">
-                        {Dashboard.includes(pathSegments[1])?<Text>Dashboards</Text>: <Text>Pages</Text> }
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    {pathSegments.map((segment, index) => {
-                      // Check if the segment contains an integer
-                      const hasNumber = /\d/.test(segment);
-
-                      // Skip breadcrumb if the segment has a number
-                      if (hasNumber) return null;
-                    
-                      const href = '/' + pathSegments.slice(0, index + 1).join('/');
-                      const isLast = index === pathSegments.length - 1;
-
-                      return (
-                        <BreadcrumbItem key={href} isCurrentPage={isLast}>
-                          {isLast ? (
-                            <Text>{segment == "events"? <Text>My Events</Text>: segment=="mycertificates"?<Text>My Certificates</Text>: <Text>{toTitleCase(segment)}</Text>}</Text>
+                    <Breadcrumb separator="/">
+                      <BreadcrumbItem>
+                        <BreadcrumbLink href="/">
+                          {Dashboard.includes(pathSegments[1]) ? (
+                            <Text>Dashboards</Text>
                           ) : (
-                            <BreadcrumbLink href={href}>
-                              {segment == "events"? <Text>My Events</Text>:segment=="mycertificates"?<Text fontWeight={"light"} color={"rgba(4, 5, 11, 0.4)"}>My Certificates</Text>: <Text fontWeight={"light"} fontFamily={"sans-serif"} color={"rgba(4, 5, 11, 0.4)"} id='hello'>{toTitleCase(segment)}</Text>}
-                            </BreadcrumbLink>
+                            <Text>Pages</Text>
                           )}
-                        </BreadcrumbItem>
-                      );
-                    })}
-                  </Breadcrumb>
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                      {pathSegments.map((segment, index) => {
+                        // Check if the segment contains an integer
+                        const hasNumber = /\d/.test(segment);
+
+                        // Skip breadcrumb if the segment has a number
+                        if (hasNumber) return null;
+
+                        const href = '/' + pathSegments.slice(0, index + 1).join('/');
+                        const isLast = index === pathSegments.length - 1;
+
+                        return (
+                          <BreadcrumbItem key={href} isCurrentPage={isLast}>
+                            {isLast ? (
+                              <Text>
+                                {segment == 'events' ? (
+                                  <Text>My Events</Text>
+                                ) : segment == 'mycertificates' ? (
+                                  <Text>My Certificates</Text>
+                                ) : (
+                                  <Text>{toTitleCase(segment)}</Text>
+                                )}
+                              </Text>
+                            ) : (
+                              <BreadcrumbLink href={href}>
+                                {segment == 'events' ? (
+                                  <Text>My Events</Text>
+                                ) : segment == 'mycertificates' ? (
+                                  <Text fontWeight={'light'} color={'rgba(4, 5, 11, 0.4)'}>
+                                    My Certificates
+                                  </Text>
+                                ) : (
+                                  <Text
+                                    fontWeight={'light'}
+                                    fontFamily={'sans-serif'}
+                                    color={'rgba(4, 5, 11, 0.4)'}
+                                    id="hello"
+                                  >
+                                    {toTitleCase(segment)}
+                                  </Text>
+                                )}
+                              </BreadcrumbLink>
+                            )}
+                          </BreadcrumbItem>
+                        );
+                      })}
+                    </Breadcrumb>
                   </Flex>
-                  
+
                   {/* <IoMdArrowRoundBack
                     size={30}
                     style={{
@@ -222,7 +251,6 @@ export default function DashboardLayout({ headerButton, children }) {
                       );
                     })}
                   </Select> */}
-                  
                 </Flex>
               )}
               <Flex
@@ -232,9 +260,9 @@ export default function DashboardLayout({ headerButton, children }) {
                 alignItems="center"
                 gap={4}
               >
-                 
                 {headerButton}
-                {/*<Button onClick={onOpen}>Organization Settings</Button> */}{/* Button to open modal */}
+                {/*<Button onClick={onOpen}>Organization Settings</Button> */}
+                {/* Button to open modal */}
               </Flex>
               <Flex
                 id="buttons-at-the-end"
@@ -266,7 +294,7 @@ export default function DashboardLayout({ headerButton, children }) {
                     <PopoverArrow />
                     <PopoverCloseButton />
                     <PopoverBody>
-                    <Calendar
+                      <Calendar
                         mode="single"
                         selected={date}
                         onSelect={setDate}
@@ -281,19 +309,21 @@ export default function DashboardLayout({ headerButton, children }) {
             <Box height="100%" overflowY="auto" overflowX={'auto'} p={4}>
               {children}
             </Box>
-            <Flex w={"200px"} h={"18px"} id='footer' marginLeft={"40px"} marginBottom={"20px"} alignItems={"center"}>
+            <Flex
+              w={'200px'}
+              h={'18px'}
+              id="footer"
+              marginLeft={'40px'}
+              marginBottom={'20px'}
+              alignItems={'center'}
+            >
               <PiCopyrightThin />
-              <Text fontWeight={"light"}>2024 EventSync</Text>
+              <Text fontWeight={'light'}>2024 EventSync</Text>
             </Flex>
           </Flex>
-          
-          
         </Flex>
-        
         <OrganizationSettingsModal isOpen={isOpen} onClose={onClose} />{' '}
-        
         {/* Organization Settings modal */}
-       
       </Flex>
     );
   } else {
