@@ -276,8 +276,7 @@ export default function DashboardLayout({ headerButton, children }) {
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>
-              </StyledBox>
-              
+              </Flex>
             </Flex>
             <Box height="100%" overflowY="auto" overflowX={'auto'} p={4}>
               {children}
