@@ -21,6 +21,7 @@ import OrganizationSettingsModal from './OrganizationSettingsModal';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { StyledText } from '@/components/ui/StyledComponents';
 import { FiSun } from 'react-icons/fi';
+import { FiMoon } from 'react-icons/fi';
 import { IoNotificationsOutline } from 'react-icons/io5';
 import { VscCalendar } from 'react-icons/vsc';
 import { Calendar } from '@/components/ui/calendar';
@@ -32,6 +33,7 @@ import {
   PopoverCloseButton,
   PopoverBody,
 } from '@chakra-ui/react';
+import { useColorMode } from '@chakra-ui/icons';
 // Adjust the import path as needed
 
 export default function DashboardLayout({ headerButton, children }) {
@@ -39,7 +41,8 @@ export default function DashboardLayout({ headerButton, children }) {
   const pathSegments = router.asPath.split('/').filter(Boolean);
   //console.log('Path: ' + pathSegments);
   const Dashboard = ['events', 'members', 'mycertificates', 'emailer'];
-  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
+  const { accountDetails } = useContext(account);
+  const { toggleColorMode, colorMode } = useColorMode();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
   const [isSidebarOpen, setSidebarOpen] = useState(isMobile);
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -57,6 +60,7 @@ export default function DashboardLayout({ headerButton, children }) {
     //console.log(accountDetails);
   }, [router.asPath]);
   const [date, setDate] = useState(new Date());
+
   if (isAuthenticated) {
     return (
       <Flex height="100vh" flexDirection="column">
@@ -256,8 +260,16 @@ export default function DashboardLayout({ headerButton, children }) {
                 width="50%"
                 justifyContent={'flex-end'}
               >
-                <IconButton aria-label="toggle dark-bright" variant={'ghost'}>
-                  <FiSun fontSize={'20px'} color="black" />
+                <IconButton
+                  aria-label="toggle dark-bright"
+                  variant={'ghost'}
+                  onClick={() => toggleColorMode()}
+                >
+                  {colorMode === 'dark' ? (
+                    <FiSun fontSize={'20px'} color="white" />
+                  ) : (
+                    <FiMoon fontSize={'20px'} color="black" />
+                  )}
                 </IconButton>
                 <IconButton aria-label="bell-icon" variant={'ghost'}>
                   <IoNotificationsOutline fontSize={'20px'} color="black" />

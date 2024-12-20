@@ -127,7 +127,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           >
             {/* Starred Items */}
             <StyledBox
-              sx={{ height: `${myOrganizations.length * 52}px`, width: '100%' }}
+              sx={{ height: `${75 + myOrganizations.length * 22}px`, width: '100%' }}
               pt="10px"
               alignItems="flex-start"
               justifyContent="space-around"
