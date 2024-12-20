@@ -138,17 +138,17 @@ function CertifcateUploadBox() {
 
   const handleEditClick = (textObj) => {
     setSelectedText(textObj); // Set selected text to edit
-    //console.log(textObj);
+    ////console.log(textObj);
     //  setState(true);
     //const stage = e.target.getStage();
     //const pointerPosition = stage.getPointerPosition();
     onOpen(); // Open modal
   };
   // useEffect(()=>{
-  //   console.log(selectedText)
+  //   //console.log(selectedText)
   //   if(selectedText){
-  //     console.log('hello world');
-  //     // console.log(selectedText.text)
+  //     //console.log('hello world');
+  //     // //console.log(selectedText.text)
   //     onOpen();
   //   }
   // },[selectedText])
@@ -160,20 +160,20 @@ function CertifcateUploadBox() {
 
   const handleModalSubmit = () => {
     // Update the text object
-    //console.log(selectedText)
+    ////console.log(selectedText)
     setTexts((prevTexts) =>
       prevTexts.map((text) => (text.id === selectedText.id ? { ...text, ...selectedText } : text)),
     );
     {
       texts.map((text) => {
-        console.log(text);
+        //console.log(text);
       });
     }
-    console.log(selectedText);
+    //console.log(selectedText);
 
-    //console.log(selectedText.currentTarget.id);
-    //console.log(selectedText.id);
-    //console.log()
+    ////console.log(selectedText.currentTarget.id);
+    ////console.log(selectedText.id);
+    ////console.log()
     onClose(); // Close modal
   };
 
@@ -263,7 +263,7 @@ function CertifcateUploadBox() {
                         onDragMove={(e) => {
                           textObj.x = e.target.position().x;
                           textObj.y = e.target.position().y;
-                          //console.log(textObj.id,e.target.position().x,e.target.position().y)
+                          ////console.log(textObj.id,e.target.position().x,e.target.position().y)
                         }}
                         onClick={() => {
                           handleEditClick(textObj);

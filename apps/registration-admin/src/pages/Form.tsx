@@ -49,7 +49,7 @@ const Form = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
+    //console.log(formData);
     const response = await post(`/registration/${orgID}/event/${eventID}/submit`, formData);
     if (response?.status === 200) {
       document.cookie = `registered_${eventID}=true; path=/; max-age=${60 * 60 * 24 * 30};`;

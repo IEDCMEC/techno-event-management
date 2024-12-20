@@ -1,0 +1,116 @@
+import { forwardRef, Box, Text } from '@chakra-ui/react';
+import { inter } from './fonts';
+import { useColorMode, Td } from '@chakra-ui/react';
+import { useState } from 'react';
+import { useEffect } from 'react';
+const StyledBox = forwardRef(({ children, ...props }, ref) => {
+  const { colorMode, toggleColorMode } = useColorMode();
+  return (
+    <Box
+      ref={ref}
+      display={'flex'}
+      alignItems={'center'}
+      justifyContent={'center'}
+      flexDirection={'column'}
+      bg={colorMode === 'light' ? 'rgb(251, 251, 254)' : '#04050B'}
+      {...props}
+    >
+      {children}
+    </Box>
+  );
+});
+
+const StyledText = forwardRef(({ children, color, variant, ...props }, ref) => {
+  const { colorMode } = useColorMode(); // No need for toggleColorMode here
+  const styles = {
+    '16Regular.grey': {
+      color: colorMode === 'light' ? 'rgba(4, 5, 11, 0.4)' : 'rgba(251, 251, 254, 0.40)',
+      fontFamily: inter.style.fontFamily,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0%',
+      textAlign: 'center',
+    },
+    '16Regular.black': {
+      color: colorMode === 'light' ? '#04050B' : 'white',
+      fontFamily: inter.style.fontFamily,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0%',
+      textAlign: 'left',
+    },
+    '16Regular.black.highlighted': {
+      borderRadius: '8px',
+      background: colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)',
+      fontFamily: inter.style.fontFamily,
+      fontSize: '16px',
+      lineHeight: '20px',
+      color: colorMode === 'light' ? '#04050B' : 'white',
+      letterSpacing: '0%',
+      textAlign: 'left',
+    },
+  };
+
+  // Compute styles dynamically based on variant and colorMode
+  const computedStyles = styles[variant || '16Regular.black'];
+
+  return (
+    <Text
+      ref={ref}
+      position={'relative'}
+      {...props}
+      display={'flex'}
+      flexDirection={'row'}
+      alignItems={'center'}
+      sx={computedStyles} // Apply dynamically computed styles
+    >
+      {children}
+    </Text>
+  );
+});
+
+const StyledTd = forwardRef(({ children, color, variant, ...props }, ref) => {
+  const { colorMode } = useColorMode(); // No need for toggleColorMode here
+  const styles = {
+    '16Regular.grey': {
+      color: colorMode === 'light' ? 'rgba(4, 5, 11, 0.4)' : 'rgba(251, 251, 254, 0.40)',
+      fontFamily: inter.style.fontFamily,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0%',
+      textAlign: 'center',
+    },
+    '16Regular.black': {
+      color: colorMode === 'light' ? '#04050B' : 'white',
+      fontFamily: inter.style.fontFamily,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0%',
+      textAlign: 'left',
+    },
+    '16Regular.black.highlighted': {
+      borderRadius: '8px',
+      backgroundColor: colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)',
+      fontFamily: inter.style.fontFamily,
+      fontSize: '16px',
+      lineHeight: '20px',
+      color: colorMode === 'light' ? '#04050B' : 'white',
+      letterSpacing: '0%',
+      textAlign: 'left',
+    },
+  };
+
+  // Compute styles dynamically based on variant and colorMode
+  const computedStyles = styles[variant || '16Regular.black'];
+  return (
+    <Td
+      ref={ref}
+      sx={computedStyles}
+      borderBottomColor={colorMode === 'dark' ? '#04050B' : 'white'}
+    >
+      {children}
+    </Td>
+  );
+});
+
+export { StyledBox, StyledText, StyledTd };

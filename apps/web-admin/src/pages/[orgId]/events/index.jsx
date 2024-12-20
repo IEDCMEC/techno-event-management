@@ -109,10 +109,12 @@ export default function Events() {
   );
 }
 */
+import { useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import {
   Text,
+  Box,
   Button,
   Modal,
   ModalOverlay,
@@ -129,18 +131,24 @@ import DataDisplay from '@/components/DataDisplay';
 import { CSVLink } from 'react-csv';
 import NewEventForm from './new';
 import useWrapper from '@/hooks/useWrapper';
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
+import { IoFilterSharp } from 'react-icons/io5';
+import { IconButton } from '@chakra-ui/icons';
+import { IoSwapVertical } from 'react-icons/io5';
+import { account } from '@/contexts/MyContext';
 
 const columns = [
-  { field: 'name', headerName: 'Name', width: 200 },
-  { field: 'numberOfParticipants', headerName: 'No of Participants', width: 200 },
+  { field: 'isRegistrationClosed', headerName: 'Registration', width: 200 },
+  { field: 'name', headerName: 'Event Title', width: 200 },
+  { field: 'numberOfParticipants', headerName: 'No. Participants', width: 200 },
   {
     field: 'numberOfParticipantsCheckedIn',
-    headerName: 'No of Participants Checked In',
+    headerName: 'Checked-In Count',
     width: 200,
   },
-  { field: 'numberOfAttributes', headerName: 'No of Attributes', width: 200 },
-  { field: 'numberOfExtras', headerName: 'No of Extras', width: 200 },
-  { field: 'createdAt', headerName: 'Created At', width: 200 },
+  { field: 'numberOfAttributes', headerName: 'No. of Attributes', width: 200 },
+  //{ field: 'numberOfExtras', headerName: 'No of Extras', width: 200 },
+  { field: 'startTime', headerName: 'Event Date', width: 200 },
 ];
 
 export default function Events() {
@@ -150,6 +158,8 @@ export default function Events() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const { loading, get } = useFetch();
   const { useGetQuery } = useWrapper();
+  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
+  console.log(accountDetails.Event);
 
   const [events, setEvents] = useState([]);
   console.log(orgId);
@@ -157,17 +167,25 @@ export default function Events() {
     data,
     status,
     error,
-    isLoading: loading,
+    isFetching: loading,
   } = useGetQuery(
     `/core/organizations/${orgId}/events`,
     `/core/organizations/${orgId}/events`,
     {}, // headers
     {}, // options
     (data) => {
-      console.log(`events: ${data.data.events}`);
+      console.log(data.data.events);
       setEvents(data.data.events || []);
     },
   );
+
+  const mergedEvents = events.map((event) => {
+    const additionalData = (accountDetails?.Event || []).find((e) => e.id === event.id) || {};
+    // console.log({ ...event, ...additionalData })
+    return { ...event, ...additionalData };
+  });
+
+  console.log(mergedEvents);
 
   const exportToCsv = () => {
     const csvData = events.map((event) => ({
@@ -185,25 +203,97 @@ export default function Events() {
       </CSVLink>
     );
   };
-
+  const { colorMode } = useColorMode();
   return (
     <DashboardLayout
       pageTitle="Event"
       previousPage={`${orgId}`}
-      headerButton={
-        <>
-          <Button onClick={onOpen} isLoading={loading}>
-            New Event
-          </Button>
-          {exportToCsv()}
-        </>
-      }
+      // linksForBreadCrumbs = {links}
+      // headerButton={
+      //   <>
+      //     <Button onClick={onOpen} isLoading={loading}>
+      //       New Event
+      //     </Button>
+      //     {exportToCsv()}
+      //   </>
+      // }
+
       debugInfo={events}
     >
+      <StyledBox
+        w="100%"
+        h="44px"
+        bg={
+          colorMode === 'light'
+            ? 'var(--black-5, rgba(4, 5, 11, 0.05))'
+            : 'rgba(251, 251, 254, 0.05)'
+        }
+        borderRadius="8px"
+        justifyContent="space-between"
+        flexDirection="row"
+        padding="10px"
+      >
+        <StyledBox flexDirection="row" gap="8px" bg="none">
+          <Button
+            variant="outline"
+            onClick={onOpen}
+            isLoading={loading}
+            padding={'8px 9px 8px 12px'}
+            sx={{
+              borderRadius: '8px',
+              gap: '8px',
+              width: '70px',
+              height: '28px',
+              color: colorMode === 'light' ? 'black' : 'white',
+              borderColor: 'rgba(4, 5, 11, 0.1)',
+            }}
+          >
+            Add <StyledText fontSize="20px">+</StyledText>
+          </Button>
+          <IconButton aria-label="filter" height={'28px'} width={'28px'} variant={'ghost'}>
+            <IoFilterSharp fontSize={'20px'} color={colorMode === 'light' ? 'black' : 'white'} />
+          </IconButton>
+          <IconButton aria-label="opposite-arrows" height={'28px'} width={'28px'} variant={'ghost'}>
+            <IoSwapVertical fontSize={'20px'} color={colorMode === 'light' ? 'black' : 'white'} />
+          </IconButton>
+        </StyledBox>
+
+        <StyledBox flexDirection="row" gap="8px" bg="none">
+          <Button
+            variant="outline"
+            sx={{
+              borderRadius: '8px',
+              gap: '5px',
+              color: colorMode === 'light' ? 'black' : 'white',
+              width: '87px',
+              height: '28px',
+              borderColor:
+                colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)',
+            }}
+          >
+            Events
+          </Button>
+          <Button
+            variant="outline"
+            isDisabled
+            sx={{
+              borderRadius: '8px',
+              gap: '5px',
+              width: '87px',
+              height: '28px',
+              color: colorMode === 'light' ? 'black' : 'white',
+              borderColor:
+                colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)',
+            }}
+          >
+            Members
+          </Button>
+        </StyledBox>
+      </StyledBox>
       <DataDisplay
         loading={loading}
         columns={columns}
-        rows={events}
+        rows={mergedEvents}
         onRowClick={(row) => {
           router.push(`/${orgId}/events/${row.id}/participants`);
         }}
@@ -223,7 +313,7 @@ export default function Events() {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent width={{ base: '95vw', md: '75vw' }} maxWidth={'95vw'}>
           <ModalHeader>Create New Event</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

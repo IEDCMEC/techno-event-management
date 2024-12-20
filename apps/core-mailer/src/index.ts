@@ -49,7 +49,7 @@ app.post('/mail', authorize, async (req: Request, res: Response) => {
       }
       // Process fields and files as needed
       const { name, to, subject, text, html } = fields;
-      console.log(name, to, subject, text, html);
+      //console.log(name, to, subject, text, html);
       if (!name || !to || !subject || !text || !html) {
         return res.status(400).send({ message: 'Missing required fields' });
       }
@@ -61,7 +61,7 @@ app.post('/mail', authorize, async (req: Request, res: Response) => {
       });
     });
     // if (!name || !to || !subject || !text || !html) {
-    //   console.log(req.body);
+    //   //console.log(req.body);
 
     //   return res.status(400).send({ message: 'Missing required fields' });
     // }
@@ -96,7 +96,7 @@ app.get('/mail', authorize, async (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-  console.log(`Core Mailer is running on ${port}`);
+  //console.log(`Core Mailer is running on ${port}`);
 });
 
 // Check queue for new emails and send them
@@ -105,7 +105,7 @@ async function startMailSub() {
     const rmqInstance: MailService = new MailService();
     await rmqInstance.initialize();
     await rmqInstance.subscribe();
-    console.log('Subscribed to RabbitMQ email queue');
+    //console.log('Subscribed to RabbitMQ email queue');
   } catch (error) {
     console.error('Failed to subscribe to RabbitMQ email queue: ', error);
   }

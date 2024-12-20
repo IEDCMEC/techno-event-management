@@ -30,14 +30,14 @@ export default function Events() {
   const [participantAttributes, setParticipantAttributes] = useState([]);
   const { useGetQuery } = useWrapper();
 
-  const { isLoading: loading } = useGetQuery(
+  const { isFetching: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
     `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
     {},
     {
       onSuccess: (response) => {
         setParticipantAttributes(response.data.participantAttributes || []);
-        console.log(data);
+        //console.log(data);
       },
       onError: (error) => {
         showAlert({
@@ -54,7 +54,7 @@ export default function Events() {
   //       `/core/organizations/${orgId}/events/${eventId}/participants/${participantId}/attributes`,
   //     );
   //     setParticipantAttributes(data.participantAttributes || []);
-  //     console.log(data);
+  //     //console.log(data);
   //   };
   //   fetchParticipantAttributes();
   // }, [orgId, eventId, participantId]);

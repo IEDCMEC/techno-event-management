@@ -27,7 +27,7 @@ export const addNewUserToDatabaseOnRegister = async (req: Request, res: Response
       return res.status(500).send('Error creating user');
     }
 
-    console.log(`User ${userId} with email ${email} created`);
+    //console.log(`User ${userId} with email ${email} created`);
 
     return res.status(200).send(newUser);
   } catch (err) {

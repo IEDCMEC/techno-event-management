@@ -44,6 +44,7 @@ import {
   updateMailProject,
   verifyOTP,
 } from './controllers/mail';
+import { updateOrganizationDetails } from './controllers/organizations';
 
 const router: Router = express.Router();
 
@@ -108,8 +109,11 @@ router.put(
   updateParticipantAttribute,
 );
 
+router.post('/organizations/update', updateOrganizationDetails); //ajay
+
 router.get('/organizations/:orgId/events/:eventId/attributes', getAllAttributes); // done
 router.get('/organizations/:orgId/events/:eventId/attributes/:attributeId', getAttributeById); //done
+
 router.get(
   '/organizations/:orgId/events/:eventId/attributes/:attributeId/participants',
   getAttributeParticipants,
