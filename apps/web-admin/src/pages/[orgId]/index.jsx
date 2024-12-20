@@ -18,17 +18,17 @@ export default function OrganizationById() {
   const { orgId } = router.query;
   const { user, isAuthenticated } = useAuth0();
   const { useGetQuery } = useWrapper();
-  // console.log(user);
+  // //console.log(user);
   const showAlert = useAlert();
 
   // const { loading, get } = useFetch();
   const { accountDetails, setAccountDetails } = useContext(account);
-  // console.log(accountDetails.orgId);
-  // console.log(orgId);
-  // console.log(
+  // //console.log(accountDetails.orgId);
+  // //console.log(orgId);
+  // //console.log(
   //   orgId !== undefined , orgId !== accountDetails?.orgId , accountDetails?.orgId === undefined,
   // );
-  // console.log(orgId, accountDetails.orgId);
+  // //console.log(orgId, accountDetails.orgId);
 
   const {
     data,
@@ -52,7 +52,7 @@ export default function OrganizationById() {
 
   // Use useEffect to respond to the result of the hook
   // Only trigger when data, status, or error changes
-  // console.log(accountDetails?.orgId);
+  // //console.log(accountDetails?.orgId);
   return (
     <DashboardLayout
       pageTitle={accountDetails?.name}

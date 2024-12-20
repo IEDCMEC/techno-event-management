@@ -121,9 +121,9 @@ export const addNewParticipant = async (req: Request, res: Response) => {
 
           if (!newParticipant) {
             participantsNotAdded.push(p);
-            // console.log(`Participant ${p.firstName} ${p.lastName} not added`);
+            // //console.log(`Participant ${p.firstName} ${p.lastName} not added`);
           } else {
-            // console.log(`Participant ${p.firstName} ${p.lastName} added`);
+            // //console.log(`Participant ${p.firstName} ${p.lastName} added`);
           }
         });
       }

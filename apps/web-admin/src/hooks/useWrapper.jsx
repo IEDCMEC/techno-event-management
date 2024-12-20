@@ -38,8 +38,8 @@ const useWrapper = () => {
       put,
       delete: del,
     }[method];
-    // console.log(options?.invalidateKeys);
-    // console.log(method);
+    // //console.log(options?.invalidateKeys);
+    // //console.log(method);
 
     return useMutation((body = {}) => mutationFn(endpoint, headers, body), {
       ...options,

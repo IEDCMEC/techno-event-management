@@ -38,12 +38,12 @@ export default function DataDisplayNew({
   // const {accountDetails} = useContext(account);
 
   //const [selectedRows, setSelectedRows] = useState([]);
-  // console.log(state);
+  // //console.log(state);
 
-  // //console.log(Object.keys(rows[0]));
+  // ////console.log(Object.keys(rows[0]));
 
   // useEffect(() => {
-  //   //console.log(selectedRows);
+  //   ////console.log(selectedRows);
   // }, [selectedRows]);
   return (
     <ChakraProvider theme={chakraTheme}>

@@ -110,9 +110,10 @@ export default function Events() {
 }
 */
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState , useContext} from 'react';
 import {
   Text,
+  Box,
   Button,
   Modal,
   ModalOverlay,
@@ -133,10 +134,11 @@ import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import { IoFilterSharp } from "react-icons/io5";
 import { IconButton } from '@chakra-ui/icons';
 import { IoSwapVertical } from "react-icons/io5";
+import { account } from '@/contexts/MyContext';
 
 
 const columns = [
-  {field:"status" , headerName:"Status" ,width:200},
+  {field:"isRegistrationClosed" , headerName:"Registration" ,width:200},
   { field: 'name', headerName: 'Event Title', width: 200 },
   { field: 'numberOfParticipants', headerName: 'No. Participants', width: 200 },
   {
@@ -146,7 +148,7 @@ const columns = [
   },
   { field: 'numberOfAttributes', headerName: 'No. of Attributes', width: 200 },
   //{ field: 'numberOfExtras', headerName: 'No of Extras', width: 200 },
-  { field: 'createdAt', headerName: 'Event Date', width: 200 },
+  { field: 'startTime', headerName: 'Event Date', width: 200 },
 ];
 
 export default function Events() {
@@ -156,11 +158,9 @@ export default function Events() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const { loading, get } = useFetch();
   const { useGetQuery } = useWrapper();
+  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
+  console.log(accountDetails.Event)
 
-  const links = [
-    {label: "Dashboards" , href: "#"},
-    {label: "My Events" , href: "#" , isCurrent: true}
-  ];
 
   const [events, setEvents] = useState([]);
   console.log(orgId);
@@ -175,10 +175,18 @@ export default function Events() {
     {}, // headers
     {}, // options
     (data) => {
-      console.log(`events: ${data.data.events}`);
+      console.log(data.data.events);
       setEvents(data.data.events || []);
     },
   );
+
+  const mergedEvents = events.map((event) => {
+    const additionalData = (accountDetails?.Event || []).find((e) => e.id === event.id) || {};
+    return { ...event, ...additionalData };
+  });
+  
+
+  console.log(mergedEvents);
 
   const exportToCsv = () => {
     const csvData = events.map((event) => ({
@@ -213,23 +221,23 @@ export default function Events() {
     
       debugInfo={events}
     >
-      <StyledBox w="100%" h="8%" bg="#efeef3" borderRadius="8px" justifyContent="space-between" flexDirection = "row" padding="10px">
-        <StyledBox bg="#efeef3" flexDirection= "row" gap="5px">
-          <Button variant="outline" onClick={onOpen} isLoading={loading} sx={{borderRadius: "10px", gap:"5px" , color:"black" , borderColor:"gray.400"}}>Add <StyledText fontSize="20px">+</StyledText></Button>
-          <IconButton aria-label='filter' variant={"ghost"}><IoFilterSharp fontSize={"20px"} color='black'/></IconButton>
-          <IconButton aria-label='opposite-arrows' variant={"ghost"}><IoSwapVertical fontSize={"20px"} color='black'/></IconButton>
+      <StyledBox w="100%" h="44px" bg="var(--black-5, rgba(4, 5, 11, 0.05))" borderRadius="8px" justifyContent="space-between" flexDirection = "row" padding="10px">
+        <StyledBox flexDirection= "row" gap="8px" bg="none">
+          <Button variant="outline" onClick={onOpen} isLoading={loading} padding={"8px 9px 8px 12px"} sx={{borderRadius: "8px", gap:"8px", width:"70px", height:"28px" , color:"black" , borderColor:"rgba(4, 5, 11, 0.1)"}}>Add <StyledText fontSize="20px">+</StyledText></Button>
+          <IconButton aria-label='filter' height={"28px"} width={"28px"} variant={"ghost"}><IoFilterSharp fontSize={"20px"} color='black'/></IconButton>
+          <IconButton aria-label='opposite-arrows' height={"28px"} width={"28px"} variant={"ghost"}><IoSwapVertical fontSize={"20px"} color='black'/></IconButton>
         </StyledBox>
 
-        <StyledBox bg="#efeef3" flexDirection = "row" gap="5px">
-        <Button variant="outline" sx={{borderRadius: "10px", gap:"5px" , color:"black" , borderColor:"gray.400"}}>Events</Button>
-        <Button variant="outline" isDisabled sx={{borderRadius: "10px", gap:"5px" , color:"black" , borderColor:"gray.400",
+        <StyledBox flexDirection = "row" gap="8px" bg="none">
+        <Button variant="outline" sx={{borderRadius: "8px", gap:"5px" , color:"black",width:"87px" , height:"28px" , borderColor:"rgba(4, 5, 11, 0.1)"}}>Events</Button>
+        <Button variant="outline" isDisabled sx={{borderRadius: "8px", gap:"5px", width:"87px" , height:"28px" , color:"black" , borderColor:"rgba(4, 5, 11, 0.1)",
         }}>Members</Button>
         </StyledBox>
       </StyledBox>
       <DataDisplay
         loading={loading}
         columns={columns}
-        rows={events}
+        rows={mergedEvents}
         onRowClick={(row) => {
           router.push(`/${orgId}/events/${row.id}/participants`);
         }}

@@ -9,20 +9,21 @@ import Image from 'next/image';
 import { account } from '@/contexts/MyContext';
 import OrganizationSettingsModal from './OrganizationSettingsModal';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
-import { StyledText } from '@/components/ui/StyledComponents';
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import { FiSun } from "react-icons/fi";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { VscCalendar } from "react-icons/vsc";
 import { Calendar } from '@/components/ui/calendar';
+import { PiCopyrightThin } from "react-icons/pi";
 import { Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverBody } from '@chakra-ui/react';
 // Adjust the import path as needed
 
 export default function DashboardLayout({ headerButton, children }) {
   const router = useRouter();
   const pathSegments = router.asPath.split('/').filter(Boolean);
-  console.log("Path: "+pathSegments);
   const Dashboard = ["events", "members" ,"mycertificates" , "emailer"];
   const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
+  //console.log(accountDetails.Event)
   const [isMobile] = useMediaQuery('(max-width: 768px)');
   const [isSidebarOpen, setSidebarOpen] = useState(isMobile);
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -41,7 +42,7 @@ export default function DashboardLayout({ headerButton, children }) {
   }, [router.asPath]);
   if (isAuthenticated) {
     return (
-      <Flex height="100vh" flexDirection="column">
+      <Flex height="100vh" flexDirection="column" id='hello'>
         <Flex height="100%" overflow="hidden" flexDirection={isMobile ? 'column' : 'row'}>
           {isMobile && (
             <Flex
@@ -80,7 +81,7 @@ export default function DashboardLayout({ headerButton, children }) {
             id='main-cover'
           >
             <Flex
-              height={isMobile ? 'auto' : "70px"}
+              height={isMobile ? 'auto' : "68px"}
               width="100%"
               p={5}
               flexDirection="row"
@@ -88,10 +89,11 @@ export default function DashboardLayout({ headerButton, children }) {
               alignItems="center"
               id='sub-cover'
               borderBottom={'1px solid rgba(4, 5, 11, 0.1)'}
+              padding={"20px 28px 20px 28px"}
             >
               {!isMobile && (
                 <Flex width="100%" alignItems="center" gap={10} id='sample'>
-                  <Flex width="70%" id='breadcumb-container'>
+                  <Flex width="80%" id='breadcumb-container'>
                   {/* <Breadcrumb separator={"/"}>
                     {/* {linksForBreadCrumbs.map((link, index) => (
                     <BreadcrumbItem key={index} isCurrentPage={link.isCurrent}>
@@ -134,7 +136,7 @@ export default function DashboardLayout({ headerButton, children }) {
                             <Text>{segment == "events"? <Text>My Events</Text>: segment=="mycertificates"?<Text>My Certificates</Text>: <Text>{toTitleCase(segment)}</Text>}</Text>
                           ) : (
                             <BreadcrumbLink href={href}>
-                              {segment == "events"? <Text>My Events</Text>:segment=="mycertificates"?<Text>My Certificates</Text>: <Text>{toTitleCase(segment)}</Text>}
+                              {segment == "events"? <Text>My Events</Text>:segment=="mycertificates"?<Text fontWeight={"light"} color={"rgba(4, 5, 11, 0.4)"}>My Certificates</Text>: <Text fontWeight={"light"} fontFamily={"sans-serif"} color={"rgba(4, 5, 11, 0.4)"} id='hello'>{toTitleCase(segment)}</Text>}
                             </BreadcrumbLink>
                           )}
                         </BreadcrumbItem>
@@ -198,6 +200,7 @@ export default function DashboardLayout({ headerButton, children }) {
                       );
                     })}
                   </Select> */}
+                  
                 </Flex>
               )}
               <Flex
@@ -207,10 +210,11 @@ export default function DashboardLayout({ headerButton, children }) {
                 alignItems="center"
                 gap={4}
               >
+                 
                 {headerButton}
                 {/*<Button onClick={onOpen}>Organization Settings</Button> */}{/* Button to open modal */}
               </Flex>
-              <Flex id='buttons-at-the-end' flexDirection={"row"} width="50%" justifyContent={"flex-end"}>
+              <StyledBox id='buttons-at-the-end' flexDirection={"row"} width="50%" justifyContent={"flex-end"}>
                 <IconButton aria-label='toggle dark-bright' variant={"ghost"}><FiSun fontSize={"20px"} color='black'/></IconButton>
                 <IconButton aria-label='bell-icon' variant={"ghost"}><IoNotificationsOutline fontSize={"20px"} color='black'/></IconButton>
                 <Popover>
@@ -227,16 +231,25 @@ export default function DashboardLayout({ headerButton, children }) {
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>
-              </Flex>
+              </StyledBox>
+              
             </Flex>
             <Box height="100%" overflowY="auto" overflowX={'auto'} p={4}>
               {children}
             </Box>
+            <Flex w={"200px"} h={"18px"} id='footer' marginLeft={"40px"} marginBottom={"20px"} alignItems={"center"}>
+              <PiCopyrightThin />
+              <Text fontWeight={"light"}>2024 EventSync</Text>
+            </Flex>
           </Flex>
+          
+          
         </Flex>
+        
         <OrganizationSettingsModal isOpen={isOpen} onClose={onClose} />{' '}
         
         {/* Organization Settings modal */}
+       
       </Flex>
     );
   } else {

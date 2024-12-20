@@ -75,12 +75,27 @@ const Sidebar = ({ isOpen, onClose }) => {
       path: `/${accountDetails.orgId}/profile`,
     },
   ];
-  const myOrganizations = allAccounts.map((value) => ({
-    name: value.name,
-    path: `/${value.orgId}/events`,
-    status: true,
-    data: value,
-  }));
+
+  const [myOrganizations, setMyOrganizations] = useState(
+    allAccounts.map((value) => ({
+      name: value.name,
+      path: `/${value.orgId}/events`,
+      status: true,
+      data: value,
+    })),
+  );
+
+  useEffect(() => {
+    setMyOrganizations(
+      allAccounts.map((value) => ({
+        name: value.name,
+        path: `/${value.orgId}/events`,
+        status: true,
+        data: value,
+      })),
+    );
+  }, [allAccounts]);
+  // const myOrganizations = ;
   return (
     <>
       {!isMobile ? (
@@ -112,7 +127,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           >
             {/* Starred Items */}
             <StyledBox
-              sx={{ height: `${myOrganizations.length * 70}px`, width: '100%' }}
+              sx={{ height: `${myOrganizations.length * 52}px`, width: '100%' }}
               pt="10px"
               alignItems="flex-start"
               justifyContent="space-around"
@@ -123,22 +138,37 @@ const Sidebar = ({ isOpen, onClose }) => {
               {myOrganizations.map((value, index) => (
                 <StyledText
                   key={index}
-                  pl="10px"
                   variant="16Regular.black"
+                  borderRadius="8px"
+                  width="95%"
                   cursor="pointer"
+                  p="4px 8px 4px 0px"
+                  backgroundColor={accountDetails.name === value.name ? 'rgba(4, 5, 11, 0.1)' : ''}
+                  sx={{
+                    borderRadius: '8px',
+                  }}
+                  pl="15px"
+                  ml="5px"
                   onClick={() => {
                     router.push(value.path);
                     setAccountDetails(value.data);
                   }}
                 >
-                  <StyledBox
+                  {accountDetails.name === value.name && (
+                    <Image
+                      src={Rectangle}
+                      alt=""
+                      style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
+                    />
+                  )}
+                  {/* <StyledBox
                     h="5px"
                     w="5px"
                     bg={value.status ? '#2DD811' : '#E7431F'}
                     borderRadius="100%"
                     as="span"
                     mr="10px"
-                  />
+                  /> */}
                   {value.name}
                 </StyledText>
               ))}
@@ -147,7 +177,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             <SidebarContents />
             {/* <EventsDisplay /> */}
             <StyledBox
-              sx={{ height: `${configItems.length * 50}px`, width: '100%' }}
+              sx={{ height: `${configItems.length * 52}px`, width: '100%' }}
               pt="10px"
               alignItems="flex-start"
               justifyContent="space-around"
@@ -265,12 +295,12 @@ const Sidebar = ({ isOpen, onClose }) => {
                 >
                   {/* Starred Items */}
                   <StyledBox
-                    sx={{ height: '114px', width: '100%' }}
+                    sx={{ height: `${myOrganizations.length * 52}px`, width: '100%' }}
                     pt="10px"
                     alignItems="flex-start"
                     justifyContent="space-around"
                   >
-                    <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
+                    <StyledText variant="16Regular.grey" gap={4} margin={'8px 0'} fontWeight="600">
                       Organizations
                     </StyledText>
                     {myOrganizations.map((value, index) => (
@@ -278,7 +308,11 @@ const Sidebar = ({ isOpen, onClose }) => {
                         key={index}
                         pl="10px"
                         variant="16Regular.black"
+                        borderRadius="8px"
+                        width="95%"
                         cursor="pointer"
+                        p="4px 8px 4px 0px"
+                        ml="5px"
                         onClick={() => {
                           router.push(value.path);
                           setAccountDetails(value.data);
@@ -300,7 +334,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   <SidebarContents />
                   {/* <EventsDisplay /> */}
                   <StyledBox
-                    sx={{ height: `${configItems.length * 50}px`, width: '100%' }}
+                    sx={{ height: `${configItems.length * 52}px`, width: '100%' }}
                     pt="10px"
                     alignItems="flex-start"
                     justifyContent="space-around"
@@ -412,7 +446,7 @@ const SidebarContents = () => {
       {/* DashBoard Items */}
 
       <StyledBox
-        sx={{ height: '170px', width: '100%' }}
+        sx={{ height: `${sidebarItems.length * 42}px`, width: '100%' }}
         pt="10px"
         alignItems="flex-start"
         justifyContent="space-around"
