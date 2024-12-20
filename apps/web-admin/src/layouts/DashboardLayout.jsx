@@ -1,6 +1,15 @@
 import { useRouter } from 'next/router';
 import { useState, useContext, useEffect } from 'react';
-import { Box, useMediaQuery, Flex, Text, Button, useDisclosure, Select, IconButton } from '@chakra-ui/react';
+import { inter } from '@/components/ui/fonts';
+import { 
+   Box,
+   useMediaQuery,
+   Flex,
+   Text,
+   Button,
+   useDisclosure,
+   Select,
+   IconButton } from '@chakra-ui/react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import Sidebar from '@/components/Sidebar';
@@ -15,7 +24,13 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { VscCalendar } from "react-icons/vsc";
 import { Calendar } from '@/components/ui/calendar';
 import { PiCopyrightThin } from "react-icons/pi";
-import { Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverBody } from '@chakra-ui/react';
+import { 
+   Popover,
+   PopoverTrigger,
+   PopoverContent,
+   PopoverArrow,
+   PopoverCloseButton,
+   PopoverBody } from '@chakra-ui/react';
 // Adjust the import path as needed
 
 export default function DashboardLayout({ headerButton, children }) {
@@ -40,6 +55,7 @@ export default function DashboardLayout({ headerButton, children }) {
     console.log(router.asPath);
     console.log(accountDetails);
   }, [router.asPath]);
+  const [date, setDate] = useState(new Date());
   if (isAuthenticated) {
     return (
       <Flex height="100vh" flexDirection="column" id='hello'>
@@ -227,7 +243,13 @@ export default function DashboardLayout({ headerButton, children }) {
                     <PopoverArrow />
                     <PopoverCloseButton />
                     <PopoverBody>
-                      <Calendar />
+                    <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        scale={1}
+                        className={`${inter.className}`}
+                      />
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>
