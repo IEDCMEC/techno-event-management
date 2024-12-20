@@ -20,6 +20,7 @@ import { account } from '@/contexts/MyContext';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 import { useAlert } from '@/hooks/useAlert';
+import { StyledBox } from '@/components/ui/StyledComponents';
 
 const OrganizationSettingsModal = ({ isOpen, onClose }) => {
   const { accountDetails, setAccountDetails, setAllAccounts, allAccounts } = useContext(account);
@@ -154,7 +155,8 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
       onClose();
     },
   );
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const payload = {
       orgId: formData.orgId, // Ensure orgId is available
       name: formData.orgName,
@@ -178,21 +180,9 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
     };
     // const {post} = useFetch();
     try {
-      // const response = await post('/organization/update', {
-      //   method: 'PUT',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(payload),
-      // });
-      updateOrgDeets(payload);
-      // if (response.ok) {
-      //   alert('Organization details updated successfully!');
-      //   onClose();
-      // } else {
-      //   const data = await response.json();
-      //   alert(`Error: ${data.error}`);
-      // }
+      if (!Object.values(payload).includes('')) {
+        updateOrgDeets(payload);
+      }
     } catch (error) {
       console.error('Error updating organization:', error);
       alert('An error occurred while updating organization details.');
@@ -204,82 +194,115 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent sx={{ minWidth: { base: '95vw', md: '75vw' } }}>
         <ModalHeader>Organization Settings</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <FormControl id="orgName" isRequired>
-            <FormLabel>Organization Name</FormLabel>
-            <Input name="orgName" value={formData.orgName} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="description" isRequired>
-            <FormLabel>Description</FormLabel>
-            <Textarea name="description" value={formData.description} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="logo">
-            <FormLabel>Logo URL</FormLabel>
-            <Input name="logo" value={formData.logo} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="tagline">
-            <FormLabel>Tagline or Slogan</FormLabel>
-            <Input name="tagline" value={formData.tagline} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="email" isRequired>
-            <FormLabel>Email Address</FormLabel>
-            <Input name="email" value={formData.email} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="phone" isRequired>
-            <FormLabel>Phone Number</FormLabel>
-            <Input name="phone" value={formData.phone} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="website" isRequired>
-            <FormLabel>Website</FormLabel>
-            <Input name="website" value={formData.website} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="LinkedIn">
-            <FormLabel>LinkedIn</FormLabel>
-            <Input name="LinkedIn" value={formData.LinkedIn} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="Instagram">
-            <FormLabel>Instagram</FormLabel>
-            <Input name="Instagram" value={formData.Instagram} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="Twitter">
-            <FormLabel>Twitter</FormLabel>
-            <Input name="Twitter" value={formData.Twitter} onChange={handleChange} />
-          </FormControl>
-          <Heading size="md" mt={6}>
-            Address
-          </Heading>
-          <FormControl id="City" isRequired>
-            <FormLabel>City</FormLabel>
-            <Input name="City" value={formData.City} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="State" isRequired>
-            <FormLabel>State</FormLabel>
-            <Input name="State" value={formData.State} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="Country" isRequired>
-            <FormLabel>Country</FormLabel>
-            <Input name="Country" value={formData.Country} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="Pincode" isRequired>
-            <FormLabel>Pincode</FormLabel>
-            <Input name="Pincode" value={formData.Pincode} onChange={handleChange} />
-          </FormControl>
-          <FormControl id="Location" isRequired>
-            <FormLabel>Location URL</FormLabel>
-            <Input name="Location" value={formData.Location} onChange={handleChange} />
-          </FormControl>
-        </ModalBody>
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
-            Submit
-          </Button>
-          <Button variant="ghost" onClick={onClose}>
-            Cancel
-          </Button>
-        </ModalFooter>
+
+        <form onSubmit={handleSubmit}>
+          <ModalBody>
+            <StyledBox
+              flexDirection={{ base: 'column', md: 'row' }}
+              width="95%"
+              justifyContent="space-between"
+              alignItems="flex-start"
+            >
+              <StyledBox
+                flexDirection="column"
+                justifyContent="space-between"
+                alignItems="flex-start"
+                width="49%"
+              >
+                <FormControl id="orgName" isRequired>
+                  <FormLabel>Organization Name</FormLabel>
+                  <Input name="orgName" value={formData.orgName} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="description" isRequired>
+                  <FormLabel>Description</FormLabel>
+                  <Textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                <FormControl id="logo" isRequired>
+                  <FormLabel>Logo URL</FormLabel>
+                  <Input name="logo" value={formData.logo} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="tagline" isRequired>
+                  <FormLabel>Tagline or Slogan</FormLabel>
+                  <Input name="tagline" value={formData.tagline} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="email" isRequired>
+                  <FormLabel>Email Address</FormLabel>
+                  <Input name="email" value={formData.email} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="phone" isRequired>
+                  <FormLabel>Phone Number</FormLabel>
+                  <Input name="phone" value={formData.phone} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="website" isRequired>
+                  <FormLabel>Website</FormLabel>
+                  <Input name="website" value={formData.website} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="LinkedIn" isRequired>
+                  <FormLabel>LinkedIn</FormLabel>
+                  <Input name="LinkedIn" value={formData.LinkedIn} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="Instagram" isRequired>
+                  <FormLabel>Instagram</FormLabel>
+                  <Input name="Instagram" value={formData.Instagram} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="Twitter" isRequired>
+                  <FormLabel>Twitter</FormLabel>
+                  <Input name="Twitter" value={formData.Twitter} onChange={handleChange} />
+                </FormControl>
+              </StyledBox>
+              <StyledBox
+                flexDirection="column"
+                justifyContent="space-between"
+                alignItems="flex-start"
+                width="49%"
+              >
+                <Heading size="md" mt={6}>
+                  Address
+                </Heading>
+                <FormControl id="City" isRequired>
+                  <FormLabel>City</FormLabel>
+                  <Input name="City" value={formData.City} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="State" isRequired>
+                  <FormLabel>State</FormLabel>
+                  <Input name="State" value={formData.State} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="Country" isRequired>
+                  <FormLabel>Country</FormLabel>
+                  <Input name="Country" value={formData.Country} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="Pincode" isRequired>
+                  <FormLabel>Pincode</FormLabel>
+                  <Input name="Pincode" value={formData.Pincode} onChange={handleChange} />
+                </FormControl>
+                <FormControl id="Location" isRequired>
+                  <FormLabel>Location URL</FormLabel>
+                  <Input
+                    name="Location"
+                    value={formData.Location}
+                    onChange={handleChange}
+                    isRequired
+                  />
+                </FormControl>
+              </StyledBox>
+            </StyledBox>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} type="submit">
+              Submit
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </form>
       </ModalContent>
     </Modal>
   );
