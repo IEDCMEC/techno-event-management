@@ -34,7 +34,7 @@ import {
 import { FiSun } from 'react-icons/fi';
 import { FiMoon } from 'react-icons/fi';
 import { IoNotificationsOutline } from 'react-icons/io5';
-import { useColorMode } from '@chakra-ui/icons';
+import { useColorMode } from '@chakra-ui/react';
 
 // Adjust the import path as needed
 
@@ -66,7 +66,12 @@ export default function DashboardLayout({ headerButton, children }) {
 
   if (isAuthenticated) {
     return (
-      <Flex height="100vh" flexDirection="column" id="hello">
+      <Flex
+        height="100vh"
+        flexDirection="column"
+        id="hello"
+        bg={colorMode === 'light' ? 'rgb(251, 251, 254)' : '#04050B'}
+      >
         <Flex height="100%" overflow="hidden" flexDirection={isMobile ? 'column' : 'row'}>
           {isMobile && (
             <Flex
@@ -142,9 +147,9 @@ export default function DashboardLayout({ headerButton, children }) {
                       <BreadcrumbItem>
                         <BreadcrumbLink href="/">
                           {Dashboard.includes(pathSegments[1]) ? (
-                            <Text>Dashboards</Text>
+                            <StyledText>Dashboard</StyledText>
                           ) : (
-                            <Text>Pages</Text>
+                            <StyledText>Pages</StyledText>
                           )}
                         </BreadcrumbLink>
                       </BreadcrumbItem>
@@ -161,32 +166,32 @@ export default function DashboardLayout({ headerButton, children }) {
                         return (
                           <BreadcrumbItem key={href} isCurrentPage={isLast}>
                             {isLast ? (
-                              <Text>
+                              <StyledText>
                                 {segment == 'events' ? (
-                                  <Text>My Events</Text>
+                                  <StyledText>My Events</StyledText>
                                 ) : segment == 'mycertificates' ? (
-                                  <Text>My Certificates</Text>
+                                  <StyledText>My Certificates</StyledText>
                                 ) : (
-                                  <Text>{toTitleCase(segment)}</Text>
+                                  <StyledText>{toTitleCase(segment)}</StyledText>
                                 )}
-                              </Text>
+                              </StyledText>
                             ) : (
                               <BreadcrumbLink href={href}>
                                 {segment == 'events' ? (
-                                  <Text>My Events</Text>
+                                  <StyledText>My Events</StyledText>
                                 ) : segment == 'mycertificates' ? (
-                                  <Text fontWeight={'light'} color={'rgba(4, 5, 11, 0.4)'}>
+                                  <StyledText fontWeight={'light'} color={'rgba(4, 5, 11, 0.4)'}>
                                     My Certificates
-                                  </Text>
+                                  </StyledText>
                                 ) : (
-                                  <Text
+                                  <StyledText
                                     fontWeight={'light'}
                                     fontFamily={'sans-serif'}
                                     color={'rgba(4, 5, 11, 0.4)'}
                                     id="hello"
                                   >
                                     {toTitleCase(segment)}
-                                  </Text>
+                                  </StyledText>
                                 )}
                               </BreadcrumbLink>
                             )}
@@ -282,12 +287,18 @@ export default function DashboardLayout({ headerButton, children }) {
                   )}
                 </IconButton>
                 <IconButton aria-label="bell-icon" variant={'ghost'}>
-                  <IoNotificationsOutline fontSize={'20px'} color="black" />
+                  <IoNotificationsOutline
+                    fontSize={'20px'}
+                    color={colorMode === 'light' ? 'black' : 'white'}
+                  />
                 </IconButton>
                 <Popover>
                   <PopoverTrigger>
                     <IconButton aria-label="calender-icon" variant="ghost">
-                      <VscCalendar fontSize="20px" color="black" />
+                      <VscCalendar
+                        fontSize="20px"
+                        color={colorMode === 'light' ? 'black' : 'white'}
+                      />
                     </IconButton>
                   </PopoverTrigger>
                   <PopoverContent>
@@ -318,7 +329,7 @@ export default function DashboardLayout({ headerButton, children }) {
               alignItems={'center'}
             >
               <PiCopyrightThin />
-              <Text fontWeight={'light'}>2024 EventSync</Text>
+              <StyledText fontWeight={'light'}>2024 EventSync</StyledText>
             </Flex>
           </Flex>
         </Flex>

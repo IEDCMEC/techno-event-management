@@ -3,8 +3,10 @@ import { DayPicker } from 'react-day-picker';
 import { inter } from './fonts';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
+import { useColorMode } from '@chakra-ui/react';
 
 function Calendar({ className, classNames, showOutsideDays = true, scale = 1, ...props }) {
+  const { colorMode } = useColorMode();
   return (
     <div
       style={{
@@ -40,9 +42,8 @@ function Calendar({ className, classNames, showOutsideDays = true, scale = 1, ..
             'h-7 w-7 p-0 font-normal aria-selected:opacity-100',
           ),
           day_range_end: 'day-range-end',
-          day_selected:
-            'bg-[#11185A] text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-teal focus:text-primary-foreground',
-          day_today: `bg-[#11185A] text-accent-foreground`,
+          day_selected: `bg-[#AFB4E9] hover:bg-[#AFB4E9] text-black hover:text-black focus:bg-[#AFB4E9] focus:text-black`,
+          day_today: `bg-[#AFB4E9] hover:bg-[#AFB4E9] text-black focus:text-primary-foreground hover:text-black`,
           day_outside:
             'day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
           day_disabled: 'text-muted-foreground opacity-50',

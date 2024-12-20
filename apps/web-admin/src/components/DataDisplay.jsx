@@ -17,9 +17,10 @@ import {
 import { useState } from 'react';
 import { extendTheme } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { StyledText } from './ui/StyledComponents';
+import { StyledText, StyledBox } from './ui/StyledComponents';
 import { GoDotFill } from 'react-icons/go';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { useColorMode } from '@chakra-ui/react';
 const chakraTheme = extendTheme({
   colors: {
     primary: {
@@ -39,6 +40,7 @@ export default function DataDisplay({
 }) {
   const [selectedRows, setSelectedRows] = useState([]);
   // console.log(state);
+  const { colorMode } = useColorMode();
   const handleRowClick = (row) => {
     if (onRowClick) {
       onRowClick(row);
@@ -82,18 +84,27 @@ export default function DataDisplay({
   // useEffect(() => {
   //   //console.log(selectedRows);
   // }, [selectedRows]);
+  useEffect(() => {
+    console.log(colorMode);
+  }, [colorMode]);
   return (
-    <ChakraProvider theme={chakraTheme}>
-      <Box p={4}>
-        {loading ? (
-          <Spinner size="xl" color="primary.500" />
-        ) : (
-          <TableContainer height={height} overflowY={overflowY} sx={{}}>
-            <Table variant="simple" overflowY={overflowY}>
-              <Thead>
-                <Tr borderBottom={'3px solid #efeef3'}>
-                  <Th>
-                    {/*
+    // <ChakraProvider theme={chakraTheme}>
+    <Box p={4}>
+      {loading ? (
+        <Spinner size="xl" color="#319795" />
+      ) : (
+        <TableContainer height={height} overflowY={overflowY} sx={{}}>
+          <Table variant="simple" overflowY={overflowY}>
+            <Thead>
+              <Tr
+                borderBottom={
+                  colorMode === 'light'
+                    ? '3px solid #efeef3'
+                    : '3px solid rgba(251, 251, 254, 0.20)'
+                }
+              >
+                {/* <Th> */}
+                {/*
                     <Checkbox
                       isChecked=
                         state === null || setState === null
@@ -116,27 +127,36 @@ export default function DataDisplay({
                       }}
                     />
                     */}
-                  </Th>
-                  {columns.map((column) => (
-                    <Th key={column.field} color={'rgba(4, 5, 11, 0.4)'}>
+                {/* </Th> */}
+                {columns.map((column) => (
+                  <Th key={column.field} color={'rgba(4, 5, 11, 0.4)'}>
+                    <StyledText variant="16Regular.black" textTransform="none">
                       {column.headerName}
-                    </Th>
-                  ))}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {currentData.map((row) => (
-                  <Tr
-                    key={row.id}
-                    borderRadius={'8px'}
-                    onClick={() => {
-                      handleRowClick(row);
-                      handleCheckboxChange(row);
-                    }}
-                    _hover={{ bg: 'gray.100', cursor: 'pointer' }}
-                  >
-                    <Td borderTopLeftRadius={'8px'} borderBottomLeftRadius={'8px'}>
-                      {/*
+                    </StyledText>
+                  </Th>
+                ))}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {currentData.map((row) => (
+                <Tr
+                  key={row.id}
+                  borderRadius={'8px'}
+                  onClick={() => {
+                    handleRowClick(row);
+                    handleCheckboxChange(row);
+                  }}
+                  _hover={{
+                    bg:
+                      colorMode === 'light' ? 'rgba(4, 5, 11, 0.05)' : 'rgba(251, 251, 254, 0.05)',
+                    cursor: 'pointer',
+                  }}
+                  sx={{
+                    borderBottom: '1px solid #efeef3',
+                  }}
+                >
+                  {/* <Td borderTopLeftRadius={'8px'} borderBottomLeftRadius={'8px'}> */}
+                  {/*
                       <Checkbox
                         isChecked={
                           state === null || setState === null
@@ -148,57 +168,107 @@ export default function DataDisplay({
                         }}
                       />
                         */}
+                  {/* </Td> */}
+                  {columns.map((column) => (
+                    <Td
+                      key={column.field}
+                      borderBottomColor={
+                        colorMode === 'light' ? '#efeef3' : 'rgba(251, 251, 254, 0.20)'
+                      }
+                    >
+                      {column.field == 'startTime' ? (
+                        <StyledText>{formatTimestamp(row[column.field])}</StyledText>
+                      ) : column.field == 'isRegistrationClosed' && row[column.field] ? (
+                        // <StyledBox flexDirection='row'>
+                        <StyledText>
+                          <GoDotFill color="red" /> Closed
+                        </StyledText>
+                      ) : // </StyledBox>
+                      column.field == 'isRegistrationClosed' && !row[column.field] ? (
+                        // <StyledBox flexDirection='row'>
+                        <StyledText>
+                          <GoDotFill color="green" /> Open
+                        </StyledText>
+                      ) : (
+                        // </StyledBox>
+                        <StyledText>{row[column.field]}</StyledText>
+                      )}
                     </Td>
-                    {columns.map((column) => (
-                      <Td key={column.field}>
-                        {column.field == 'startTime' ? (
-                          formatTimestamp(row[column.field])
-                        ) : column.field == 'isRegistrationClosed' && row[column.field] ? (
-                          <StyledText color="red">
-                            <GoDotFill /> Closed
-                          </StyledText>
-                        ) : column.field == 'isRegistrationClosed' && !row[column.field] ? (
-                          <StyledText color="green">
-                            <GoDotFill /> Open{' '}
-                          </StyledText>
-                        ) : (
-                          row[column.field]
-                        )}
-                      </Td>
-                    ))}
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-            <HStack spacing={2} justify="flex-end" mt={4}>
-              <IconButton
-                icon={<ChevronLeftIcon />}
-                isDisabled={currentPage === 1 || totalPages === 1}
-                onClick={handlePrevious}
-                aria-label="Previous Page"
-                variant={'ghost'}
-              />
-              {Array.from({ length: totalPages }, (_, index) => (
-                <Button
-                  key={index + 1}
-                  onClick={() => handlePageClick(index + 1)}
-                  bg={currentPage === index + 1 ? 'rgba(4, 5, 11, 0.1)' : 'white'}
-                  borderRadius={'8px'}
-                >
-                  {index + 1}
-                </Button>
+                  ))}
+                </Tr>
               ))}
-              <IconButton
-                icon={<ChevronRightIcon />}
-                isDisabled={currentPage === totalPages || totalPages === 1}
-                onClick={handleNext}
-                aria-label="Next Page"
-                variant={'ghost'}
-              />
-            </HStack>
-          </TableContainer>
-        )}
-      </Box>
-    </ChakraProvider>
+            </Tbody>
+          </Table>
+          <HStack spacing={2} justify="flex-end" mt={4}>
+            <IconButton
+              icon={<ChevronLeftIcon />}
+              isDisabled={currentPage === 1 || totalPages === 1}
+              onClick={handlePrevious}
+              aria-label="Previous Page"
+              variant={'ghost'}
+              sx={{
+                borderRadius: '8px',
+                gap: '8px',
+                width: '70px',
+                height: '28px',
+                color: colorMode === 'light' ? 'black' : 'white',
+                borderColor: 'rgba(4, 5, 11, 0.1)',
+              }}
+              _hover={{
+                backgroundColor: colorMode === 'light' ? 'white' : 'black',
+              }}
+            />
+            {Array.from({ length: totalPages }, (_, index) => (
+              <Button
+                key={index + 1}
+                onClick={() => handlePageClick(index + 1)}
+                bg={
+                  currentPage === index + 1
+                    ? colorMode === 'light'
+                      ? 'rgba(4, 5, 11, 0.1)'
+                      : 'rgba(251, 251, 254, 0.10)'
+                    : colorMode === 'light'
+                      ? 'white'
+                      : 'black'
+                }
+                color={colorMode === 'light' ? 'black' : 'white'}
+                borderRadius={'8px'}
+                _hover={{
+                  backgroundColor:
+                    currentPage === index + 1
+                      ? colorMode === 'light'
+                        ? 'rgba(4, 5, 11, 0.1)'
+                        : 'rgba(251, 251, 254, 0.10)'
+                      : colorMode === 'light'
+                        ? 'white'
+                        : 'black',
+                }}
+              >
+                {index + 1}
+              </Button>
+            ))}
+            <IconButton
+              icon={<ChevronRightIcon />}
+              isDisabled={currentPage === totalPages || totalPages === 1}
+              onClick={handleNext}
+              aria-label="Next Page"
+              variant={'ghost'}
+              sx={{
+                borderRadius: '8px',
+                gap: '8px',
+                width: '70px',
+                height: '28px',
+                color: colorMode === 'light' ? 'black' : 'white',
+                borderColor: 'rgba(4, 5, 11, 0.1)',
+              }}
+              _hover={{
+                backgroundColor: colorMode === 'light' ? 'white' : 'black',
+              }}
+            />
+          </HStack>
+        </TableContainer>
+      )}
+    </Box>
+    // </ChakraProvider>
   );
 }

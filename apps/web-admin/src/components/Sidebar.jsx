@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import MyLogo from '@/utils/logo';
+import DarkEventSync from '@/assets/Dark.png';
+import LightEventSync from '@/assets/Light.png';
 import { MdOutlineEvent } from 'react-icons/md';
 import { IoSettingsOutline } from 'react-icons/io5';
 import {
@@ -30,7 +31,7 @@ import { useBreakpointValue } from '@chakra-ui/icons';
 import Image from 'next/image';
 import Rectangle from '@/utils/Rectangle 1.svg';
 import { IoIosInformationCircleOutline } from 'react-icons/io';
-
+import { useColorMode } from '@chakra-ui/icons';
 const Sidebar = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth0();
@@ -96,17 +97,17 @@ const Sidebar = ({ isOpen, onClose }) => {
     );
   }, [allAccounts]);
   // const myOrganizations = ;
+  const { colorMode } = useColorMode();
   return (
     <>
       {!isMobile ? (
-        <StyledBox width={'250px'} height="100%">
+        <StyledBox width={'250px'} height="100%" borderRight="1px solid rgba(4, 5, 11, 0.1)">
           <StyledBox
             height={'68px'}
             sx={{
               display: 'flex',
               padding: '10px',
               borderBottom: '1px solid rgba(4, 5, 11, 0.1)',
-              borderRight: '1px solid rgba(4, 5, 11, 0.1)',
             }}
             width="95%"
           >
@@ -114,13 +115,18 @@ const Sidebar = ({ isOpen, onClose }) => {
               Event Sync
             </Text> */}
             {/* <MyLogo /> */}
-            <Image src={logoSrc} alt="EVENTSYNC" height={'44px'} width="344px" />
+            <Image
+              src={colorMode === 'light' ? LightEventSync : DarkEventSync}
+              alt="EVENTSYNC"
+              height={'44px'}
+              width="344px"
+            />
           </StyledBox>
           <StyledBox
             sx={{
               height: 'calc(100vh - 68px)',
               borderBottom: '1px solid rgba(4, 5, 11, 0.1)',
-              borderRight: '1px solid rgba(4, 5, 11, 0.1)',
+              // borderRight: '1px solid rgba(4, 5, 11, 0.1)',
               padding: '20px 16px 0px 16px',
             }}
             width="95%"
@@ -138,12 +144,16 @@ const Sidebar = ({ isOpen, onClose }) => {
               {myOrganizations.map((value, index) => (
                 <StyledText
                   key={index}
-                  variant="16Regular.black"
+                  // variant=""
                   borderRadius="8px"
                   width="95%"
                   cursor="pointer"
                   p="4px 8px 4px 0px"
-                  backgroundColor={accountDetails.name === value.name ? 'rgba(4, 5, 11, 0.1)' : ''}
+                  variant={
+                    accountDetails.name !== value.name
+                      ? '16Regular.black'
+                      : '16Regular.black.highlighted'
+                  }
                   sx={{
                     borderRadius: '8px',
                   }}
@@ -198,7 +208,6 @@ const Sidebar = ({ isOpen, onClose }) => {
                   gap="2"
                   height="28px"
                   sx={{
-                    background: router.asPath === value.path ? 'rgba(4, 5, 11, 0.1)' : '',
                     borderRadius: '8px',
                   }}
                 >
@@ -213,7 +222,11 @@ const Sidebar = ({ isOpen, onClose }) => {
                   <StyledText
                     key={index}
                     pl="0px"
-                    variant="16Regular.black"
+                    variant={
+                      router.asPath === value.path
+                        ? '16Regular.black.highlighted'
+                        : '16Regular.black'
+                    }
                     transition="outline 0.2s"
                     onClick={() => {
                       router.push(value.path);
@@ -242,7 +255,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             <StyledBox
               paddingY={4}
               sx={{
-                borderRight: '1px solid rgba(4, 5, 11, 0.1)',
+                // borderRight: '1px solid rgba(4, 5, 11, 0.1)',
                 borderTop: '1px solid rgba(4, 5, 11, 0.1)',
                 width: '240px',
               }}
@@ -252,8 +265,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                 isLoading={loading}
                 loadingText="Please Wait"
                 width="100%"
-                bg={'#11185A'}
-                color={'#FFF'}
+                bg={'#AFB4E9'}
+                color={'black'}
               >
                 Logout
               </Button>
@@ -263,10 +276,18 @@ const Sidebar = ({ isOpen, onClose }) => {
       ) : (
         <>
           <Drawer isOpen={isOpen} onClose={onClose} placement="left">
-            <DrawerOverlay>
-              <DrawerContent>
+            <DrawerOverlay
+              sx={{
+                background:
+                  'linear-gradient(147deg, rgba(130, 126, 126, 0.08) 2.41%, rgba(218, 218, 218, 0.08) 46.47%, rgba(148, 142, 142, 0.08) 87.35%);',
+                // filter: 'blur(1.5px)',
+              }}
+            >
+              <DrawerContent
+              // bg={colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)'}
+              >
                 <DrawerCloseButton />
-                <DrawerHeader>
+                <DrawerHeader bg={colorMode === 'light' ? 'rgb(251, 251, 254)' : '#04050B'}>
                   <StyledBox
                     height={'68px'}
                     sx={{
@@ -281,7 +302,12 @@ const Sidebar = ({ isOpen, onClose }) => {
               Event Sync
             </Text> */}
                     {/* <MyLogo /> */}
-                    <Image src={logoSrc} alt="EVENTSYNC" height={'44px'} width="344px" />
+                    <Image
+                      src={colorMode === 'light' ? LightEventSync : DarkEventSync}
+                      alt="EVENTSYNC"
+                      height={'44px'}
+                      width="344px"
+                    />
                   </StyledBox>
                 </DrawerHeader>
                 <DrawerBody
@@ -292,6 +318,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     padding: '20px 16px 0px 16px',
                   }}
                   width="100%"
+                  bg={colorMode === 'light' ? 'rgb(251, 251, 254)' : '#04050B'}
                 >
                   {/* Starred Items */}
                   <StyledBox
@@ -409,8 +436,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                       isLoading={loading}
                       loadingText="Please Wait"
                       width="100%"
-                      bg={'#11185A'}
-                      color={'#FFF'}
+                      bg={'#AFB4E9'}
+                      color={'#black'}
                     >
                       Logout
                     </Button>
@@ -431,7 +458,7 @@ const SidebarContents = () => {
   const { accountDetails } = useContext(account);
   const isUser = accountDetails.role === 'USER';
   const orgId = accountDetails.orgId;
-
+  const { colorMode } = useColorMode();
   const sidebarItems = [
     { label: 'Events', path: `/${orgId}/events`, icon: <MdOutlineEvent /> },
     { label: 'Members', path: `/${orgId}/members`, icon: <RiTeamFill /> },
@@ -467,7 +494,12 @@ const SidebarContents = () => {
             gap="4"
             height="28px"
             sx={{
-              background: router.asPath === value.path ? 'rgba(4, 5, 11, 0.1)' : '',
+              background:
+                router.asPath === value.path
+                  ? colorMode === 'light'
+                    ? 'rgba(4, 5, 11, 0.1)'
+                    : 'rgba(251, 251, 254, 0.10)'
+                  : '',
               borderRadius: '8px',
             }}
           >

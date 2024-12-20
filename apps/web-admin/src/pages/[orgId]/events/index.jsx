@@ -109,6 +109,7 @@ export default function Events() {
   );
 }
 */
+import { useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useContext } from 'react';
 import {
@@ -180,6 +181,7 @@ export default function Events() {
 
   const mergedEvents = events.map((event) => {
     const additionalData = (accountDetails?.Event || []).find((e) => e.id === event.id) || {};
+    // console.log({ ...event, ...additionalData })
     return { ...event, ...additionalData };
   });
 
@@ -201,7 +203,7 @@ export default function Events() {
       </CSVLink>
     );
   };
-
+  const { colorMode } = useColorMode();
   return (
     <DashboardLayout
       pageTitle="Event"
@@ -221,7 +223,11 @@ export default function Events() {
       <StyledBox
         w="100%"
         h="44px"
-        bg="var(--black-5, rgba(4, 5, 11, 0.05))"
+        bg={
+          colorMode === 'light'
+            ? 'var(--black-5, rgba(4, 5, 11, 0.05))'
+            : 'rgba(251, 251, 254, 0.05)'
+        }
         borderRadius="8px"
         justifyContent="space-between"
         flexDirection="row"
@@ -238,17 +244,17 @@ export default function Events() {
               gap: '8px',
               width: '70px',
               height: '28px',
-              color: 'black',
+              color: colorMode === 'light' ? 'black' : 'white',
               borderColor: 'rgba(4, 5, 11, 0.1)',
             }}
           >
             Add <StyledText fontSize="20px">+</StyledText>
           </Button>
           <IconButton aria-label="filter" height={'28px'} width={'28px'} variant={'ghost'}>
-            <IoFilterSharp fontSize={'20px'} color="black" />
+            <IoFilterSharp fontSize={'20px'} color={colorMode === 'light' ? 'black' : 'white'} />
           </IconButton>
           <IconButton aria-label="opposite-arrows" height={'28px'} width={'28px'} variant={'ghost'}>
-            <IoSwapVertical fontSize={'20px'} color="black" />
+            <IoSwapVertical fontSize={'20px'} color={colorMode === 'light' ? 'black' : 'white'} />
           </IconButton>
         </StyledBox>
 
@@ -258,10 +264,11 @@ export default function Events() {
             sx={{
               borderRadius: '8px',
               gap: '5px',
-              color: 'black',
+              color: colorMode === 'light' ? 'black' : 'white',
               width: '87px',
               height: '28px',
-              borderColor: 'rgba(4, 5, 11, 0.1)',
+              borderColor:
+                colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)',
             }}
           >
             Events
@@ -274,8 +281,9 @@ export default function Events() {
               gap: '5px',
               width: '87px',
               height: '28px',
-              color: 'black',
-              borderColor: 'rgba(4, 5, 11, 0.1)',
+              color: colorMode === 'light' ? 'black' : 'white',
+              borderColor:
+                colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)',
             }}
           >
             Members

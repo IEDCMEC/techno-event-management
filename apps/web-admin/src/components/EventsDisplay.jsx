@@ -16,7 +16,7 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 import useWrapper from '@/hooks/useWrapper';
-
+import { StyledText } from './ui/StyledComponents';
 import NextLink from 'next/link';
 import { MdOutlineEvent } from 'react-icons/md';
 import { useRouter } from 'next/router';
@@ -67,7 +67,7 @@ const EventsDisplay = () => {
           <Box mr={2}>
             <MdOutlineEvent />
           </Box>
-          <Text fontSize="16px">Events</Text>
+          <StyledText fontSize="16px">Events</StyledText>
           <AccordionIcon />
         </AccordionButton>
         <AccordionPanel pb={4}>
