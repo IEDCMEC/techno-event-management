@@ -14,6 +14,8 @@ import {
   Textarea,
   useDisclosure,
   Heading,
+  Box,
+  Flex,
 } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
@@ -296,7 +298,7 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} type="submit">
-              Submit
+              Save
             </Button>
             <Button variant="ghost" onClick={onClose}>
               Cancel

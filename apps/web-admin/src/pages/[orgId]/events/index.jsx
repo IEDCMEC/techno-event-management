@@ -161,6 +161,11 @@ export default function Events() {
   const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
   console.log(accountDetails.Event);
 
+  const links = [
+    { label: 'Dashboards', href: '#' },
+    { label: 'My Events', href: '#', isCurrent: true },
+  ];
+
   const [events, setEvents] = useState([]);
   console.log(orgId);
   const {
