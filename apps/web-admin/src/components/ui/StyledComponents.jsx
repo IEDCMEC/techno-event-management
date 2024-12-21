@@ -71,7 +71,49 @@ const StyledText = forwardRef(({ children, color, variant, ...props }, ref) => {
     </Text>
   );
 });
+const StyledTd = forwardRef(({ children, color, variant, ...props }, ref) => {
+  const { colorMode } = useColorMode(); // No need for toggleColorMode here
+  const styles = {
+    '16Regular.grey': {
+      color: colorMode === 'light' ? 'rgba(4, 5, 11, 0.4)' : 'rgba(251, 251, 254, 0.40)',
+      fontFamily: inter.style.fontFamily,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0%',
+      textAlign: 'center',
+    },
+    '16Regular.black': {
+      color: colorMode === 'light' ? '#04050B' : 'white',
+      fontFamily: inter.style.fontFamily,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0%',
+      textAlign: 'left',
+    },
+    '16Regular.black.highlighted': {
+      borderRadius: '8px',
+      backgroundColor: colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)',
+      fontFamily: inter.style.fontFamily,
+      fontSize: '16px',
+      lineHeight: '20px',
+      color: colorMode === 'light' ? '#04050B' : 'white',
+      letterSpacing: '0%',
+      textAlign: 'left',
+    },
+  };
 
+  // Compute styles dynamically based on variant and colorMode
+  const computedStyles = styles[variant || '16Regular.black'];
+  return (
+    <Td
+      ref={ref}
+      sx={computedStyles}
+      borderBottomColor={colorMode === 'dark' ? '#04050B' : 'white'}
+    >
+      {children}
+    </Td>
+  );
+});
 const StyledIconButton = forwardRef(({ children, iconD, ...props }, ref) => {
   const { colorMode } = useColorMode();
   const iconColor = colorMode === 'light' ? '#11185A' : 'white';
@@ -124,4 +166,4 @@ const StyledDisabledIconButton = forwardRef(({ children, iconD, ...props }, ref)
   );
 });
 
-export { StyledBox, StyledText, StyledIconButton, StyledDisabledIconButton };
+export { StyledBox, StyledText, StyledTd, StyledIconButton, StyledDisabledIconButton };

@@ -167,7 +167,7 @@ export default function Events() {
   ];
 
   const [events, setEvents] = useState([]);
-  //console.log(orgId);
+  console.log(orgId);
   const {
     data,
     status,

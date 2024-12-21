@@ -59,8 +59,8 @@ export default function DashboardLayout({ headerButton, children }) {
       .join(' '); // Join the words back into a string
   }
   useEffect(() => {
-    //console.log(router.asPath);
-    //console.log(accountDetails);
+    console.log(router.asPath);
+    console.log(accountDetails);
   }, [router.asPath]);
   const [date, setDate] = useState(new Date());
 
@@ -236,8 +236,8 @@ export default function DashboardLayout({ headerButton, children }) {
                       border: 'none',
                     }}
                     onChange={(e) => {
-                      //console.log('changes');
-                      //console.log(e.target.value);
+                      console.log('changes');
+                      console.log(e.target.value);
                       setAccountDetails(
                         allAccounts.filter((value) => value.name === e.target.value)[0],
                       );

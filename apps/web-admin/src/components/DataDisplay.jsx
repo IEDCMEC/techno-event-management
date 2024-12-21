@@ -45,7 +45,7 @@ export default function DataDisplay({
     if (onRowClick) {
       onRowClick(row);
     } else {
-      // //console.log(row);
+      // console.log(row);
     }
   };
   console.log(rows);
@@ -63,8 +63,8 @@ export default function DataDisplay({
 
   // //console.log(Object.keys(rows[0]));
   const handleCheckboxChange = (row) => {
-    ////console.log('handle')
-    // ////console.log(row);
+    //console.log('handle')
+    // //console.log(row);
     if (!state || !setState) {
       setSelectedRows((prevSelectedRows) =>
         prevSelectedRows.includes(row.id)
@@ -72,7 +72,7 @@ export default function DataDisplay({
           : [...prevSelectedRows, row.id],
       );
     } else {
-      // //console.log(row);
+      // console.log(row);
       setState(row);
     }
   };
@@ -82,7 +82,7 @@ export default function DataDisplay({
     return date.toLocaleDateString('en-US', options).replace(',', '');
   }
   // useEffect(() => {
-  //   ////console.log(selectedRows);
+  //   //console.log(selectedRows);
   // }, [selectedRows]);
   useEffect(() => {
     console.log(colorMode);
@@ -120,7 +120,7 @@ export default function DataDisplay({
                         if (!state || !setState) {
                           setSelectedRows(e.target.checked ? rows.map((row) => row.email) : []);
                         } else {
-                          ////console.log(e.target.indeterminate, e.target.checked);
+                          //console.log(e.target.indeterminate, e.target.checked);
                           // setState(e.target.checked ? )
                           setState(e.target.checked ? rows.map((row) => row.id) : []);
                         }
