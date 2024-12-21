@@ -3,6 +3,7 @@ import MyContext from '@/contexts/MyContext';
 import { extendTheme, ChakraProvider, withDefaultColorScheme } from '@chakra-ui/react';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { ColorModeScript } from '@chakra-ui/icons';
 import '../styles/globals.css';
 // import '@uiw/react-md-editor/markdown-editor.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -29,6 +30,7 @@ export default function App({ Component, pageProps }) {
       <QueryClientProvider client={queryClient}>
         <MyContext>
           <ProtectedRoute>
+            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
             <ChakraProvider theme={theme}>
               <Component {...pageProps} />
             </ChakraProvider>

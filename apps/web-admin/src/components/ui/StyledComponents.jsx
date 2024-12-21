@@ -1,8 +1,13 @@
 import { forwardRef, Box, Text, IconButton, Tooltip } from '@chakra-ui/react';
 import { FaLinkedin, FaInstagramSquare } from 'react-icons/fa';
+import { HiGlobeAlt } from 'react-icons/hi2';
 import { FaXTwitter } from 'react-icons/fa6';
 import { inter } from './fonts';
+import { useColorMode, Td } from '@chakra-ui/react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 const StyledBox = forwardRef(({ children, ...props }, ref) => {
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Box
       ref={ref}
@@ -10,7 +15,7 @@ const StyledBox = forwardRef(({ children, ...props }, ref) => {
       alignItems={'center'}
       justifyContent={'center'}
       flexDirection={'column'}
-      bg={'rgb(251, 251, 254)'}
+      bg={colorMode === 'light' ? 'rgb(251, 251, 254)' : '#04050B'}
       {...props}
     >
       {children}
@@ -18,39 +23,40 @@ const StyledBox = forwardRef(({ children, ...props }, ref) => {
   );
 });
 
-const StyledText = forwardRef(({ children, variant, ...props }, ref) => {
+const StyledText = forwardRef(({ children, color, variant, ...props }, ref) => {
+  const { colorMode } = useColorMode(); // No need for toggleColorMode here
   const styles = {
-    /* 16 Regular */
     '16Regular.grey': {
-      color: 'rgba(4, 5, 11, 0.4)',
+      color: colorMode === 'light' ? 'rgba(4, 5, 11, 0.4)' : 'rgba(251, 251, 254, 0.40)',
       fontFamily: inter.style.fontFamily,
       fontSize: '16px',
-      // fontWeight: '400',
       lineHeight: '20px',
       letterSpacing: '0%',
       textAlign: 'center',
     },
     '16Regular.black': {
-      /* 16 Regular */
-      color: 'rgb(4, 5, 11)',
+      color: colorMode === 'light' ? '#04050B' : 'white',
       fontFamily: inter.style.fontFamily,
       fontSize: '16px',
-      // fontWeight: '400',
       lineHeight: '20px',
       letterSpacing: '0%',
       textAlign: 'left',
     },
     '16Regular.black.highlighted': {
       borderRadius: '8px',
-      background: 'rgba(4, 5, 11, 0.1);',
+      background: colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)',
       fontFamily: inter.style.fontFamily,
       fontSize: '16px',
-      // fontWeight: '400',
       lineHeight: '20px',
+      color: colorMode === 'light' ? '#04050B' : 'white',
       letterSpacing: '0%',
       textAlign: 'left',
     },
   };
+
+  // Compute styles dynamically based on variant and colorMode
+  const computedStyles = styles[variant || '16Regular.black'];
+
   return (
     <Text
       ref={ref}
@@ -59,10 +65,7 @@ const StyledText = forwardRef(({ children, variant, ...props }, ref) => {
       display={'flex'}
       flexDirection={'row'}
       alignItems={'center'}
-      sx={styles[variant]}
-      // apply default styling here inline
-      // don't define the sx prop here, let it be there for overriding
-      // use chakra ui inline styles for most purposes
+      sx={computedStyles} // Apply dynamically computed styles
     >
       {children}
     </Text>
@@ -70,7 +73,10 @@ const StyledText = forwardRef(({ children, variant, ...props }, ref) => {
 });
 
 const StyledIconButton = forwardRef(({ children, iconD, ...props }, ref) => {
+  const { colorMode } = useColorMode();
+  const iconColor = colorMode === 'light' ? '#11185A' : 'white';
   const list = {
+    w: <HiGlobeAlt />,
     l: <FaLinkedin />,
     t: <FaXTwitter />,
     i: <FaInstagramSquare />,
@@ -79,7 +85,7 @@ const StyledIconButton = forwardRef(({ children, iconD, ...props }, ref) => {
     <IconButton
       ref={ref}
       icon={list[iconD]}
-      color="#11185A"
+      color={iconColor}
       boxSize={['20px', '26px', '32px']} // Responsive size based on screen width
       fontSize={['20px', '22px', '28px']}
       variant="ghost"
@@ -90,7 +96,10 @@ const StyledIconButton = forwardRef(({ children, iconD, ...props }, ref) => {
   );
 });
 const StyledDisabledIconButton = forwardRef(({ children, iconD, ...props }, ref) => {
+  const { colorMode } = useColorMode();
+  const iconColor = colorMode === 'light' ? '#11185A' : 'white';
   const list = {
+    w: <HiGlobeAlt />,
     l: <FaLinkedin />,
     t: <FaXTwitter />,
     i: <FaInstagramSquare />,
@@ -100,7 +109,7 @@ const StyledDisabledIconButton = forwardRef(({ children, iconD, ...props }, ref)
       <IconButton
         ref={ref}
         icon={list[iconD]}
-        color="#11185A"
+        color={iconColor}
         boxSize={['20px', '26px', '32px']} // Responsive size based on screen width
         fontSize={['20px', '22px', '28px']}
         variant="ghost"

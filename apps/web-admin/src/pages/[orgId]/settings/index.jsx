@@ -11,6 +11,7 @@ import {
   Button,
   useDisclosure,
   Alert,
+  useColorMode,
 } from '@chakra-ui/react';
 import { GrLocation } from 'react-icons/gr';
 import { LuPhone } from 'react-icons/lu';
@@ -25,6 +26,9 @@ import OrganizationSettingsModal from '@/layouts/OrganizationSettingsModal';
 export default function Settings() {
   //const { loading, get, put } = useFetch();
   //const showAlert = useAlert();
+  const { colorMode } = useColorMode();
+  const iconColor = colorMode === 'light' ? 'black' : 'white';
+  const bgColor = colorMode === 'light' ? 'white' : 'black';
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure(); // useDisclosure hook for modal
   const { accountDetails, setAccountDetails, updateAccountDetails } = useContext(account);
@@ -73,6 +77,7 @@ export default function Settings() {
         title="Your organization details are currently incomplete. Kindly review and complete the necessary fields"
       />;
     }
+    //console.log(formData, accountDetails);
   }, [accountDetails]);
   return (
     <DashboardLayout pageTitle="Settings" previousPage={`/`} debugInfo={accountDetails}>
@@ -85,6 +90,7 @@ export default function Settings() {
                   Data.logo ||
                   'https://upload.wikimedia.org/wikipedia/commons/7/70/User_icon_BLACK-01.png'
                 }
+                alt="organization image"
                 maxH="220"
                 maxW="200"
                 borderRadius="lg"
@@ -97,7 +103,12 @@ export default function Settings() {
                     {Data.orgName || 'Loading...'}
                   </Text>
                   {accountDetails.role === 'ADMIN' && (
-                    <Button onClick={onOpen} color="black" variant="outline">
+                    <Button
+                      onClick={onOpen}
+                      color={iconColor}
+                      backgroundColor={bgColor}
+                      variant="outline"
+                    >
                       <Icon as={CiEdit} boxSize={6} mr={2} /> {/**/}
                       Edit
                     </Button>
@@ -111,6 +122,13 @@ export default function Settings() {
                   {Data.description || 'Loading...'}
                 </Text>
                 <Flex direction={'row'} wrap={true} gap={4} padding={1}>
+                  {Data.website ? (
+                    <Link href={Data.website} isExternal>
+                      <StyledIconButton aria-label="website" iconD="w" />
+                    </Link>
+                  ) : (
+                    <StyledDisabledIconButton aria-label="website" iconD="w" />
+                  )}
                   {Data.LinkedIn ? (
                     <Link href={Data.LinkedIn} isExternal>
                       <StyledIconButton aria-label="LinkedIn" iconD="l" />
@@ -180,7 +198,7 @@ export default function Settings() {
                     <Text fontSize="md">Country: {Data.Country || ' Loading...'}</Text>
                     <Text fontSize="md">Pincode: {Data.Pincode || ' Loading...'}</Text>
                     <a href={Data.Location} target="_blank" rel="noopener noreferrer">
-                      <Button color="black" variant="outline">
+                      <Button color={iconColor} backgroundColor={bgColor} variant="outline">
                         Location
                       </Button>
                     </a>
@@ -244,7 +262,7 @@ export default function Settings() {
                 </Text>
                 <Box
                   border={0.1}
-                  backgroundColor="#04050B0D"
+                  backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
                   height="100%"
                   borderRadius={12}
                   p={8}
@@ -252,7 +270,7 @@ export default function Settings() {
                   flexDirection="row"
                   alignItems="center"
                 >
-                  You don't have any new notifications now
+                  You don&apos;t have any new notifications now
                 </Box>
               </Flex>
             </Flex>

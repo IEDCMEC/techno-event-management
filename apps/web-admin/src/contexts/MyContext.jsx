@@ -2,6 +2,7 @@ import { React, createContext, useState, useEffect } from 'react';
 import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useColorMode } from '@chakra-ui/react';
 export const account = createContext();
 const MyContext = ({ children }) => {
   const [accountDetails, setAccountDetails] = useState({
@@ -54,7 +55,7 @@ const MyContext = ({ children }) => {
   };
   const [activeTab, setActiveTab] = useState('Participants');
   const [allAccounts, setAllAccounts] = useState([]);
-
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
     <div>
       <account.Provider
