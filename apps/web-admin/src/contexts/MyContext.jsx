@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { React, createContext, useState, useEffect } from 'react';
 import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -20,24 +20,24 @@ const MyContext = ({ children }) => {
   //     if (isAuthenticated) {
   //       const { data, status } = await get('/core/users/me');
   //       const response = await get('/core/users/mycreds');
-  //       // console.log(response, data);
+  //       // //console.log(response, data);
   //       setAccountDetails((preValue) => ({ ...preValue, ...(data.accountDetails || {}) }));
   //     }
   //   };
   //   fetchAccountDetails();
-  //   // console.log('trigger');
+  //   // //console.log('trigger');
   // }, [isAuthenticated]);
-  // console.log(accountDetails);
+  // //console.log(accountDetails);
   const updateAccountDetails = async () => {
     const { data, status } = await put('/core/users/me', {}, accountDetails);
-    // console.log(data);
+    // //console.log(data);
     if (status === 200) {
       showAlert({
         title: 'Success',
         description: 'Account details updated successfully.',
         status: 'success',
       });
-      console.log(data);
+      //console.log(data);
       setUserDetails((prev) => {
         return {
           ...prev,

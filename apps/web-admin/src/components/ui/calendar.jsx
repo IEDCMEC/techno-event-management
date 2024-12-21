@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { DayPicker } from 'react-day-picker';
 import { inter } from './fonts';
@@ -13,6 +12,7 @@ function Calendar({ className, classNames, showOutsideDays = true, scale = 1, ..
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
+        fontFamily: inter.style.fontFamily,
       }}
     >
       <DayPicker
