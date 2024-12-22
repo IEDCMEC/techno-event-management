@@ -198,9 +198,7 @@ export default function Settings() {
                     <Text fontSize="md">Country: {Data.Country || ' Loading...'}</Text>
                     <Text fontSize="md">Pincode: {Data.Pincode || ' Loading...'}</Text>
                     <a href={Data.Location} target="_blank" rel="noopener noreferrer">
-                      <Button color={iconColor} backgroundColor={bgColor} variant="outline">
-                        Location
-                      </Button>
+                      Location
                     </a>
                   </Stack>
                 </Stack>
