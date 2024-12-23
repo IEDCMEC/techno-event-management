@@ -90,13 +90,17 @@ import {
   ModalCloseButton,
   Text,
   useDisclosure,
+  IconButton,
 } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
 import { useFetch } from '@/hooks/useFetch';
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import { useAlert } from '@/hooks/useAlert';
+import { IoFilterSharp, IoSwapVertical } from 'react-icons/io5';
 import NewMemberForm from './new';
-
+import { useColorMode } from '@chakra-ui/react';
+// import
 const columns = [
   { field: 'role', headerName: 'Role', width: 200 },
   { field: 'email', headerName: 'Email', width: 200 },
@@ -107,6 +111,7 @@ const columns = [
 
 export default function OrganizationMembers() {
   const router = useRouter();
+  const { colorMode } = useColorMode();
   const { orgId } = router.query;
   const showAlert = useAlert();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -136,13 +141,86 @@ export default function OrganizationMembers() {
       previousPage={`/organizations/${orgId}`}
       headerButton={
         <>
-          <Button onClick={onOpen} isLoading={loading}>
+          {/* <Button onClick={onOpen} isLoading={loading}>
             Add Member
-          </Button>
+          </Button> */}
         </>
       }
       debugInfo={members}
     >
+      {' '}
+      <StyledBox
+        w="100%"
+        h="44px"
+        bg={
+          colorMode === 'light'
+            ? 'var(--black-5, rgba(4, 5, 11, 0.05))'
+            : 'rgba(251, 251, 254, 0.05)'
+        }
+        borderRadius="8px"
+        justifyContent="space-between"
+        flexDirection="row"
+        padding="10px"
+      >
+        <StyledBox flexDirection="row" gap="8px" bg="none">
+          <Button
+            variant="outline"
+            onClick={onOpen}
+            isLoading={loading}
+            padding={'8px 9px 8px 12px'}
+            sx={{
+              borderRadius: '8px',
+              gap: '8px',
+              width: '70px',
+              height: '28px',
+              color: colorMode === 'light' ? 'black' : 'white',
+              borderColor: 'rgba(4, 5, 11, 0.1)',
+            }}
+          >
+            Add <StyledText fontSize="20px">+</StyledText>
+          </Button>
+          <IconButton aria-label="filter" height={'28px'} width={'28px'} variant={'ghost'}>
+            <IoFilterSharp fontSize={'20px'} color={colorMode === 'light' ? 'black' : 'white'} />
+          </IconButton>
+          <IconButton aria-label="opposite-arrows" height={'28px'} width={'28px'} variant={'ghost'}>
+            <IoSwapVertical fontSize={'20px'} color={colorMode === 'light' ? 'black' : 'white'} />
+          </IconButton>
+        </StyledBox>
+
+        <StyledBox flexDirection="row" gap="8px" bg="none">
+          <Button
+            variant="outline"
+            // isDisabled
+            onClick={() => router.push(`/${orgId}/events`)}
+            sx={{
+              borderRadius: '8px',
+              gap: '5px',
+              color: colorMode === 'light' ? 'black' : 'white',
+              width: '87px',
+              height: '28px',
+              borderColor:
+                colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)',
+            }}
+          >
+            Events
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => router.push(`/${orgId}/members`)}
+            sx={{
+              borderRadius: '8px',
+              gap: '5px',
+              width: '87px',
+              height: '28px',
+              color: colorMode === 'light' ? 'black' : 'white',
+              borderColor:
+                colorMode === 'light' ? 'rgba(4, 5, 11, 0.1)' : 'rgba(251, 251, 254, 0.10)',
+            }}
+          >
+            Members
+          </Button>
+        </StyledBox>
+      </StyledBox>
       <DataDisplay loading={loading} columns={columns} rows={members} />
       {!loading && members.length === 0 ? (
         <div style={{ textAlign: 'center', margin: '20px' }}>
@@ -156,7 +234,6 @@ export default function OrganizationMembers() {
       ) : (
         <></>
       )}
-
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

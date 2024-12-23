@@ -268,6 +268,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               <Button
                 onClick={handleLogout}
                 isLoading={loading}
+                variant={'outline'}
                 loadingText="Please Wait"
                 width="100%"
                 bg={'#AFB4E9'}
@@ -320,14 +321,18 @@ const Sidebar = ({ isOpen, onClose }) => {
                     height: 'calc(100vh - 68px)',
                     // borderBottom: '1px solid rgba(4, 5, 11, 0.1)',
                     // borderRight: '1px solid rgba(4, 5, 11, 0.1)',
-                    padding: '20px 16px 0px 16px',
+                    // padding: '0px 16px 0px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                    flexDirection: 'column',
                   }}
                   width="100%"
                   bg={colorMode === 'light' ? 'rgb(251, 251, 254)' : '#04050B'}
                 >
                   {/* Starred Items */}
                   <StyledBox
-                    sx={{ height: `${myOrganizations.length * 52}px`, width: '100%' }}
+                    sx={{ height: `${75 + myOrganizations.length * 22}px`, width: '100%' }}
                     pt="10px"
                     alignItems="flex-start"
                     justifyContent="space-around"
@@ -338,26 +343,41 @@ const Sidebar = ({ isOpen, onClose }) => {
                     {myOrganizations.map((value, index) => (
                       <StyledText
                         key={index}
-                        pl="10px"
-                        variant="16Regular.black"
+                        // variant=""
                         borderRadius="8px"
                         width="95%"
                         cursor="pointer"
                         p="4px 8px 4px 0px"
+                        variant={
+                          accountDetails.name !== value.name
+                            ? '16Regular.black'
+                            : '16Regular.black.highlighted'
+                        }
+                        sx={{
+                          borderRadius: '8px',
+                        }}
+                        pl="15px"
                         ml="5px"
                         onClick={() => {
                           router.push(value.path);
                           setAccountDetails(value.data);
                         }}
                       >
-                        <StyledBox
-                          h="5px"
-                          w="5px"
-                          bg={value.status ? '#2DD811' : '#E7431F'}
-                          borderRadius="100%"
-                          as="span"
-                          mr="10px"
-                        />
+                        {accountDetails.name === value.name && (
+                          <Image
+                            src={Rectangle}
+                            alt=""
+                            style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
+                          />
+                        )}
+                        {/* <StyledBox
+                    h="5px"
+                    w="5px"
+                    bg={value.status ? '#2DD811' : '#E7431F'}
+                    borderRadius="100%"
+                    as="span"
+                    mr="10px"
+                  /> */}
                         {value.name}
                       </StyledText>
                     ))}
