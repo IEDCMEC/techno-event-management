@@ -198,8 +198,14 @@ export default function Settings() {
             margin={6}
             width={'100%'}
             maxW="98%"
+            mb="6"
           >
-            <Flex direction={['column', 'column', 'row']} wrap={true} justify="space-between">
+            <Flex
+              direction={['column', 'column', 'row']}
+              wrap={true}
+              justify="space-between"
+              mb="6"
+            >
               <Flex direction="column" wrap={true} gap={6} width={['100%', '100%', '49%']}>
                 <StyledText
                   fontSize={20}
@@ -228,7 +234,13 @@ export default function Settings() {
                         Address
                       </div>
                     </StyledText>
-                    <Stack display="flex" flexDirection="column" alignItems="start" width={'100%'}>
+                    <Stack
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="start"
+                      width={'100%'}
+                      gap={5}
+                    >
                       <StyledText
                         fontSize="md"
                         border={0.1}
