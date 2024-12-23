@@ -207,7 +207,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 Config
               </StyledText>
               {configItems.map((value, index) => (
-                <StyledBox
+                <StyledText
                   flexDirection={'row'}
                   ml="5px"
                   cursor="pointer"
@@ -215,11 +215,17 @@ const Sidebar = ({ isOpen, onClose }) => {
                   width="95%"
                   position="relative"
                   justifyContent="flex-start"
+                  variant={
+                    router.asPath === value.path ? '16Regular.black.highlighted' : '16Regular.black'
+                  }
                   p="4px 8px 4px 0px"
                   gap="2"
                   height="28px"
                   sx={{
                     borderRadius: '8px',
+                  }}
+                  onClick={() => {
+                    router.push(value.path);
                   }}
                 >
                   {router.asPath === value.path && (
@@ -229,23 +235,11 @@ const Sidebar = ({ isOpen, onClose }) => {
                       style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
                     />
                   )}
-                  <Box ml={4}>{value.icon}</Box>
-                  <StyledText
-                    key={index}
-                    pl="0px"
-                    variant={
-                      router.asPath === value.path
-                        ? '16Regular.black.highlighted'
-                        : '16Regular.black'
-                    }
-                    transition="outline 0.2s"
-                    onClick={() => {
-                      router.push(value.path);
-                    }}
-                  >
-                    {value.name}
-                  </StyledText>
-                </StyledBox>
+                  <Box ml={4} as="span">
+                    {value.icon}
+                  </Box>
+                  {value.name}
+                </StyledText>
               ))}
             </StyledBox>
 
