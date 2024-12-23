@@ -73,32 +73,6 @@ export default function DashboardLayout({ headerButton, children }) {
         bg={colorMode === 'light' ? 'rgb(251, 251, 254)' : '#04050B'}
       >
         <Flex height="100%" overflow="hidden" flexDirection={isMobile ? 'column' : 'row'}>
-          {isMobile && (
-            <Flex
-              height={24}
-              p={4}
-              flexDirection="row"
-              justifyContent="space-between"
-              alignItems="center"
-              id="burger-box"
-            >
-              {/* <Text fontSize="2xl" fontWeight="bold">
-                {accountDetails?.name}
-              </Text> */}
-              <Flex
-                height={10}
-                width={10}
-                justifyContent="center"
-                alignItems="center"
-                id="burger"
-                onClick={() => {
-                  setSidebarOpen(true);
-                }}
-              >
-                <RxHamburgerMenu fontSize={30} color="black" />
-              </Flex>
-            </Flex>
-          )}
           <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
           <Flex
             height="100%"
@@ -256,6 +230,23 @@ export default function DashboardLayout({ headerButton, children }) {
                       );
                     })}
                   </Select> */}
+                </Flex>
+              )}
+              {isMobile && (
+                <Flex
+                  height={10}
+                  width={10}
+                  justifyContent="center"
+                  alignItems="center"
+                  id="burger"
+                  onClick={() => {
+                    setSidebarOpen(true);
+                  }}
+                >
+                  <RxHamburgerMenu
+                    fontSize={30}
+                    color={colorMode === 'light' ? 'black' : 'white'}
+                  />
                 </Flex>
               )}
               <Flex

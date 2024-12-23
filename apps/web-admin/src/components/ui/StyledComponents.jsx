@@ -1,4 +1,7 @@
-import { forwardRef, Box, Text } from '@chakra-ui/react';
+import { forwardRef, Box, Text, IconButton, Tooltip } from '@chakra-ui/react';
+import { FaLinkedin, FaInstagramSquare } from 'react-icons/fa';
+import { HiGlobeAlt } from 'react-icons/hi2';
+import { FaXTwitter } from 'react-icons/fa6';
 import { inter } from './fonts';
 import { useColorMode, Td } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -68,7 +71,6 @@ const StyledText = forwardRef(({ children, color, variant, ...props }, ref) => {
     </Text>
   );
 });
-
 const StyledTd = forwardRef(({ children, color, variant, ...props }, ref) => {
   const { colorMode } = useColorMode(); // No need for toggleColorMode here
   const styles = {
@@ -113,4 +115,56 @@ const StyledTd = forwardRef(({ children, color, variant, ...props }, ref) => {
   );
 });
 
-export { StyledBox, StyledText, StyledTd };
+const StyledIconButton = forwardRef(({ children, iconD, ...props }, ref) => {
+  const { colorMode } = useColorMode();
+  const iconColor = colorMode === 'light' ? '#11185A' : 'white';
+  const list = {
+    w: <HiGlobeAlt />,
+    l: <FaLinkedin />,
+    t: <FaXTwitter />,
+    i: <FaInstagramSquare />,
+  };
+  return (
+    <IconButton
+      ref={ref}
+      icon={list[iconD]}
+      color={iconColor}
+      boxSize={['20px', '26px', '32px']} // Responsive size based on screen width
+      fontSize={['20px', '22px', '28px']}
+      variant="ghost"
+      {...props}
+    >
+      {children}
+    </IconButton>
+  );
+});
+const StyledDisabledIconButton = forwardRef(({ children, iconD, ...props }, ref) => {
+  const { colorMode } = useColorMode();
+  const iconColor = colorMode === 'light' ? '#11185A' : 'white';
+  const list = {
+    w: <HiGlobeAlt />,
+    l: <FaLinkedin />,
+    t: <FaXTwitter />,
+    i: <FaInstagramSquare />,
+  };
+  return (
+    <Tooltip label="Link not Provided">
+      <IconButton
+        ref={ref}
+        icon={list[iconD]}
+        color={iconColor}
+        boxSize={['20px', '26px', '32px']} // Responsive size based on screen width
+        fontSize={['20px', '22px', '28px']}
+        variant="ghost"
+        display={'flex'}
+        flexDirection={'row'}
+        alignItems={'center'}
+        {...props}
+      >
+        {children}
+      </IconButton>
+    </Tooltip>
+  );
+});
+
+export { StyledBox, StyledText, StyledTd, StyledIconButton, StyledDisabledIconButton };

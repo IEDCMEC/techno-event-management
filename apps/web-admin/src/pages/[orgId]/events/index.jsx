@@ -161,6 +161,11 @@ export default function Events() {
   const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
   console.log(accountDetails.Event);
 
+  const links = [
+    { label: 'Dashboards', href: '#' },
+    { label: 'My Events', href: '#', isCurrent: true },
+  ];
+
   const [events, setEvents] = useState([]);
   console.log(orgId);
   const {
@@ -261,6 +266,7 @@ export default function Events() {
         <StyledBox flexDirection="row" gap="8px" bg="none">
           <Button
             variant="outline"
+            onClick={() => router.push(`/${orgId}/events`)}
             sx={{
               borderRadius: '8px',
               gap: '5px',
@@ -275,7 +281,7 @@ export default function Events() {
           </Button>
           <Button
             variant="outline"
-            isDisabled
+            onClick={() => router.push(`/${orgId}/members`)}
             sx={{
               borderRadius: '8px',
               gap: '5px',
