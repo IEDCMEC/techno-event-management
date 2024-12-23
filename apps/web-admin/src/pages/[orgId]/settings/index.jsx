@@ -23,6 +23,7 @@ import {
   StyledIconButton,
   StyledDisabledIconButton,
   StyledText,
+  StyledBox,
 } from '@/components/ui/StyledComponents';
 
 import { inter } from '@/components/ui/fonts';
@@ -221,24 +222,25 @@ export default function Settings() {
                 </StyledText>
                 <Stack direction="column" gap={6}>
                   <Stack direction="row" gap={6}>
-                    <StyledText
+                    <StyledBox
                       fontSize="md"
                       width={[24, 100, 250]}
                       display="flex"
                       flexDirection="column"
-                      alignItems="center"
+                      alignItems="flex-start"
+                      justifyContent="flex-start"
                     >
-                      <div>
+                      <StyledBox flexDirection="row" m={1.5}>
                         <Icon fontSize={20}>
                           <GrLocation />
                         </Icon>
-                        Address
-                      </div>
-                    </StyledText>
+                        <StyledText>Address</StyledText>
+                      </StyledBox>
+                    </StyledBox>
                     <Stack
                       display="flex"
                       flexDirection="column"
-                      alignItems="start"
+                      alignItems="flex-start"
                       width={'100%'}
                       gap={5}
                     >
@@ -304,6 +306,7 @@ export default function Settings() {
                         pb={1.5}
                         pl={3}
                         width="100%"
+                        textDecoration="underline"
                       >
                         <a href={Data.Location} target="_blank" rel="noopener noreferrer">
                           Location
@@ -404,18 +407,15 @@ export default function Settings() {
                 <StyledText fontSize={20} fontWeight="semibold" textDecoration="underline" mb="6">
                   Notifications
                 </StyledText>
-                <Box
+                <StyledBox
                   border={0.1}
                   backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
                   borderRadius={12}
                   height="100%"
                   p={8}
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
                 >
-                  You don&apos;t have any new notifications now
-                </Box>
+                  <StyledText> You don&apos;t have any new notifications now</StyledText>
+                </StyledBox>
               </Flex>
             </Flex>
           </Box>
