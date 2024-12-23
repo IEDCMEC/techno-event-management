@@ -266,6 +266,7 @@ export default function Events() {
         <StyledBox flexDirection="row" gap="8px" bg="none">
           <Button
             variant="outline"
+            onClick={() => router.push(`/${orgId}/events`)}
             sx={{
               borderRadius: '8px',
               gap: '5px',
@@ -280,7 +281,7 @@ export default function Events() {
           </Button>
           <Button
             variant="outline"
-            isDisabled
+            onClick={() => router.push(`/${orgId}/members`)}
             sx={{
               borderRadius: '8px',
               gap: '5px',
