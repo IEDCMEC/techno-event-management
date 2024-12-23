@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { account } from '@/contexts/MyContext';
 import {
   Box,
+  Text,
   Stack,
   Flex,
   Image,
@@ -22,7 +23,10 @@ import {
   StyledIconButton,
   StyledDisabledIconButton,
   StyledText,
+  StyledBox,
 } from '@/components/ui/StyledComponents';
+
+import { inter } from '@/components/ui/fonts';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import OrganizationSettingsModal from '@/layouts/OrganizationSettingsModal';
 
@@ -84,10 +88,25 @@ export default function Settings() {
   }, [accountDetails]);
   return (
     <DashboardLayout pageTitle="Settings" previousPage={`/`} debugInfo={accountDetails}>
-      <Box width="100%" height="100%">
+      <Box overflow="hidden">
         <Stack spacing={4} direction="column" wrap={true} height={{ base: 'auto', md: '35%' }}>
-          <Box borderWidth="1px" borderRadius="md" p={6} shadow={6} margin={6}>
-            <Flex direction={['column', 'row', 'row']} wrap={true} gap={8}>
+          <Box
+            borderWidth="1px"
+            borderRadius="md"
+            p={[4, 6]}
+            shadow={6}
+            margin={[4, 6]}
+            width={'100%'}
+            maxW="96%"
+            boxSizing="border-box"
+          >
+            <Box
+              display="flex"
+              flexDirection={['column', 'row', 'row']}
+              wrap="wrap"
+              gap={8}
+              width={'100%'}
+            >
               <Image
                 src={
                   Data.logo ||
@@ -100,11 +119,24 @@ export default function Settings() {
                 boxSize="170px"
                 fit="cover"
               />
-              <Flex direction="column">
-                <Box display="flex" flexDirection="row" justifyContent="space-between">
-                  <StyledText fontSize={28} fontWeight="bold">
+              <Flex direction="column" width={'100%'}>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  width={'100%'}
+                >
+                  <Text
+                    color={colorMode === 'light' ? '#04050B' : 'white'}
+                    fontFamily={inter.style.fontFamily}
+                    fontSize="30px"
+                    lineHeight="20px"
+                    letterSpacing="0%"
+                    textAlign="left"
+                    fontWeight="bold"
+                  >
                     {Data.orgName || 'Loading...'}
-                  </StyledText>
+                  </Text>
                   {accountDetails.role === 'ADMIN' && (
                     <Button
                       onClick={onOpen}
@@ -155,7 +187,7 @@ export default function Settings() {
                   )}
                 </Flex>
               </Flex>
-            </Flex>
+            </Box>
           </Box>
         </Stack>
         <Stack direction="row" height={{ base: 'auto', md: '65%' }}>
@@ -166,9 +198,16 @@ export default function Settings() {
             shadow={6}
             margin={6}
             width={'100%'}
+            maxW="98%"
+            mb="6"
           >
-            <Flex direction={['column', 'column', 'row']} wrap={true} justify="space-between">
-              <Flex direction="column" wrap={true} gap={4}>
+            <Flex
+              direction={['column', 'column', 'row']}
+              wrap={true}
+              justify="space-between"
+              mb="6"
+            >
+              <Flex direction="column" wrap={true} gap={6} width={['100%', '100%', '49%']}>
                 <StyledText
                   fontSize={20}
                   fontWeight="semibold"
@@ -180,99 +219,202 @@ export default function Settings() {
                 >
                   Contact Info
                 </StyledText>
-                <Stack direction="row" gap={8}>
-                  <StyledText
-                    fontSize="md"
-                    width={[24, 100, 250]}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                  >
-                    <div>
-                      <Icon fontSize={20}>
-                        <GrLocation />
-                      </Icon>
-                      Address
-                    </div>
-                  </StyledText>
-                  <Stack display="flex" flexDirection="column" alignItems="start">
-                    <StyledText fontSize="md">City: {Data.City || ' Loading...'}</StyledText>
-                    <StyledText fontSize="md">State: {Data.State || ' Loading...'}</StyledText>
-                    <StyledText fontSize="md">Country: {Data.Country || ' Loading...'}</StyledText>
-                    <StyledText fontSize="md">Pincode: {Data.Pincode || ' Loading...'}</StyledText>
-                    <a href={Data.Location} target="_blank" rel="noopener noreferrer">
-                      Location
-                    </a>
+                <Stack direction="column" gap={6}>
+                  <Stack direction="row" gap={6}>
+                    <StyledBox
+                      fontSize="md"
+                      width={[24, 100, 250]}
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="flex-start"
+                      justifyContent="flex-start"
+                    >
+                      <StyledBox flexDirection="row" m={1.5}>
+                        <Icon fontSize={20}>
+                          <GrLocation />
+                        </Icon>
+                        <StyledText>Address</StyledText>
+                      </StyledBox>
+                    </StyledBox>
+                    <Stack
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="flex-start"
+                      width={'100%'}
+                      gap={5}
+                    >
+                      <StyledText
+                        fontSize="md"
+                        border={0.1}
+                        backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
+                        borderRadius={12}
+                        pt={1.5}
+                        pr={2}
+                        pb={1.5}
+                        pl={3}
+                        width="100%"
+                      >
+                        City: {Data.City || ' Loading...'}
+                      </StyledText>
+                      <StyledText
+                        fontSize="md"
+                        border={0.1}
+                        backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
+                        borderRadius={12}
+                        pt={1.5}
+                        pr={2}
+                        pb={1.5}
+                        pl={3}
+                        width="100%"
+                      >
+                        State: {Data.State || ' Loading...'}
+                      </StyledText>
+                      <StyledText
+                        fontSize="md"
+                        border={0.1}
+                        backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
+                        borderRadius={12}
+                        pt={1.5}
+                        pr={2}
+                        pb={1.5}
+                        pl={3}
+                        width="100%"
+                      >
+                        Country: {Data.Country || ' Loading...'}
+                      </StyledText>
+                      <StyledText
+                        fontSize="md"
+                        border={0.1}
+                        backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
+                        borderRadius={12}
+                        pt={1.5}
+                        pr={2}
+                        pb={1.5}
+                        pl={3}
+                        width="100%"
+                      >
+                        Pincode: {Data.Pincode || ' Loading...'}
+                      </StyledText>
+                      <StyledText
+                        fontSize="md"
+                        border={0.1}
+                        backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
+                        borderRadius={12}
+                        pt={1.5}
+                        pr={2}
+                        pb={1.5}
+                        pl={3}
+                        width="100%"
+                        textDecoration="underline"
+                      >
+                        <a href={Data.Location} target="_blank" rel="noopener noreferrer">
+                          Location
+                        </a>
+                      </StyledText>
+                    </Stack>
+                  </Stack>
+                  <Stack direction="row" gap={6}>
+                    <StyledText
+                      fontSize="md"
+                      width={[24, 100, 250]}
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                    >
+                      <div>
+                        <Icon fontSize={20}>
+                          <LuPhone />
+                        </Icon>
+                        Phone
+                      </div>
+                    </StyledText>
+                    <StyledText
+                      border={0.1}
+                      backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
+                      borderRadius={12}
+                      p={2}
+                      width="100%"
+                      pt={1.5}
+                      pr={2}
+                      pb={1.5}
+                      pl={3}
+                    >
+                      {Data.phone || 'Loading...'}
+                    </StyledText>
+                  </Stack>
+                  <Stack direction="row" gap={6}>
+                    <StyledText
+                      fontSize="md"
+                      width={[24, 100, 250]}
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                    >
+                      <div>
+                        <Icon fontSize={21}>
+                          <BsLink45Deg />
+                        </Icon>
+                        Website
+                      </div>
+                    </StyledText>
+                    <StyledText
+                      border={0.1}
+                      backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
+                      borderRadius={12}
+                      p={2}
+                      width="100%"
+                      pt={1.5}
+                      pr={2}
+                      pb={1.5}
+                      pl={3}
+                    >
+                      {Data.website || 'Loading...'}
+                    </StyledText>
+                  </Stack>
+                  <Stack direction="row" gap={6}>
+                    <StyledText
+                      fontSize="md"
+                      width={[24, 100, 250]}
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                    >
+                      <div>
+                        <Icon fontSize={20}>
+                          <IoMailOutline />
+                        </Icon>
+                        Email
+                      </div>
+                    </StyledText>
+                    <StyledText
+                      border={0.1}
+                      backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
+                      borderRadius={12}
+                      p={2}
+                      width="100%"
+                      pt={1.5}
+                      pr={2}
+                      pb={1.5}
+                      pl={3}
+                    >
+                      {Data.email || 'Loading...'}
+                    </StyledText>
                   </Stack>
                 </Stack>
-                <Stack direction="row" gap={8}>
-                  <StyledText
-                    fontSize="md"
-                    width={[24, 100, 250]}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                  >
-                    <div>
-                      <Icon fontSize={20}>
-                        <LuPhone />
-                      </Icon>
-                      Phone
-                    </div>
-                  </StyledText>
-                  <StyledText>{Data.phone || 'Loading...'}</StyledText>
-                </Stack>
-                <Stack direction="row" gap={8}>
-                  <StyledText
-                    fontSize="md"
-                    width={[24, 100, 250]}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                  >
-                    <div>
-                      <Icon fontSize={21}>
-                        <BsLink45Deg />
-                      </Icon>
-                      Website
-                    </div>
-                  </StyledText>
-                  <StyledText>{Data.website || 'Loading...'}</StyledText>
-                </Stack>
-                <Stack direction="row" gap={8}>
-                  <StyledText
-                    fontSize="md"
-                    width={[24, 100, 250]}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                  >
-                    <div>
-                      <Icon fontSize={20}>
-                        <IoMailOutline />
-                      </Icon>
-                      Email
-                    </div>
-                  </StyledText>
-                  <StyledText>{Data.email || 'Loading...'}</StyledText>
-                </Stack>
               </Flex>
-              <Flex direction="column" wrap={true} gap={3}>
+              <Flex direction="column" wrap={true} gap={3} width={['100%', '100%', '49%']}>
                 <StyledText fontSize={20} fontWeight="semibold" textDecoration="underline">
                   Notifications
                 </StyledText>
-                <Box
+                <StyledBox
                   border={0.1}
                   backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
-                  height="100%"
                   borderRadius={12}
+                  height="100%"
                   p={8}
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
                 >
-                  You don&apos;t have any new notifications now
-                </Box>
+                  <StyledText> You don&apos;t have any new notifications now</StyledText>
+                </StyledBox>
               </Flex>
             </Flex>
           </Box>
