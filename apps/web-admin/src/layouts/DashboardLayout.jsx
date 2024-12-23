@@ -333,8 +333,6 @@ export default function DashboardLayout({ headerButton, children }) {
             </Flex>
           </Flex>
         </Flex>
-        <OrganizationSettingsModal isOpen={isOpen} onClose={onClose} />{' '}
-        {/* Organization Settings modal */}
       </Flex>
     );
   } else {
