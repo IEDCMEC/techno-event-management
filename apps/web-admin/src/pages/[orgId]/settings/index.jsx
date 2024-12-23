@@ -3,7 +3,6 @@ import { account } from '@/contexts/MyContext';
 import {
   Box,
   Stack,
-  Text,
   Flex,
   Image,
   Link,
@@ -19,7 +18,11 @@ import { BsLink45Deg } from 'react-icons/bs';
 import { IoMailOutline } from 'react-icons/io5';
 import { CiEdit } from 'react-icons/ci';
 import { useState, useEffect, useContext } from 'react';
-import { StyledIconButton, StyledDisabledIconButton } from '@/components/ui/StyledComponents';
+import {
+  StyledIconButton,
+  StyledDisabledIconButton,
+  StyledText,
+} from '@/components/ui/StyledComponents';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import OrganizationSettingsModal from '@/layouts/OrganizationSettingsModal';
 
@@ -82,7 +85,7 @@ export default function Settings() {
   return (
     <DashboardLayout pageTitle="Settings" previousPage={`/`} debugInfo={accountDetails}>
       <Box width="100%" height="100%">
-        <Stack spacing={4} direction="column" wrap={true}>
+        <Stack spacing={4} direction="column" wrap={true} height={{ base: 'auto', md: '35%' }}>
           <Box borderWidth="1px" borderRadius="md" p={6} shadow={6} margin={6}>
             <Flex direction={['column', 'row', 'row']} wrap={true} gap={8}>
               <Image
@@ -99,9 +102,9 @@ export default function Settings() {
               />
               <Flex direction="column">
                 <Box display="flex" flexDirection="row" justifyContent="space-between">
-                  <Text fontSize={28} fontWeight="bold">
+                  <StyledText fontSize={28} fontWeight="bold">
                     {Data.orgName || 'Loading...'}
-                  </Text>
+                  </StyledText>
                   {accountDetails.role === 'ADMIN' && (
                     <Button
                       onClick={onOpen}
@@ -115,12 +118,12 @@ export default function Settings() {
                   )}
                   {/* Button to open modal */}
                 </Box>
-                <Text fontSize="md" padding={1}>
+                <StyledText fontSize="md" padding={1}>
                   {Data.tagline || 'Loading...'}
-                </Text>
-                <Text fontSize="md" padding={1}>
+                </StyledText>
+                <StyledText fontSize="md" padding={1}>
                   {Data.description || 'Loading...'}
-                </Text>
+                </StyledText>
                 <Flex direction={'row'} wrap={true} gap={4} padding={1}>
                   {Data.website ? (
                     <Link href={Data.website} isExternal>
@@ -155,18 +158,18 @@ export default function Settings() {
             </Flex>
           </Box>
         </Stack>
-        <Stack direction="row">
+        <Stack direction="row" height={{ base: 'auto', md: '65%' }}>
           <Box
             borderWidth="1px"
             borderRadius="md"
             p={[4, 4, 6]}
             shadow={6}
-            margin={5}
+            margin={6}
             width={'100%'}
           >
             <Flex direction={['column', 'column', 'row']} wrap={true} justify="space-between">
               <Flex direction="column" wrap={true} gap={4}>
-                <Text
+                <StyledText
                   fontSize={20}
                   fontWeight="semibold"
                   textDecoration="underline"
@@ -176,9 +179,9 @@ export default function Settings() {
                   alignItems="center"
                 >
                   Contact Info
-                </Text>
+                </StyledText>
                 <Stack direction="row" gap={8}>
-                  <Text
+                  <StyledText
                     fontSize="md"
                     width={[24, 100, 250]}
                     display="flex"
@@ -191,19 +194,19 @@ export default function Settings() {
                       </Icon>
                       Address
                     </div>
-                  </Text>
+                  </StyledText>
                   <Stack display="flex" flexDirection="column" alignItems="start">
-                    <Text fontSize="md">City: {Data.City || ' Loading...'}</Text>
-                    <Text fontSize="md">State: {Data.State || ' Loading...'}</Text>
-                    <Text fontSize="md">Country: {Data.Country || ' Loading...'}</Text>
-                    <Text fontSize="md">Pincode: {Data.Pincode || ' Loading...'}</Text>
+                    <StyledText fontSize="md">City: {Data.City || ' Loading...'}</StyledText>
+                    <StyledText fontSize="md">State: {Data.State || ' Loading...'}</StyledText>
+                    <StyledText fontSize="md">Country: {Data.Country || ' Loading...'}</StyledText>
+                    <StyledText fontSize="md">Pincode: {Data.Pincode || ' Loading...'}</StyledText>
                     <a href={Data.Location} target="_blank" rel="noopener noreferrer">
                       Location
                     </a>
                   </Stack>
                 </Stack>
                 <Stack direction="row" gap={8}>
-                  <Text
+                  <StyledText
                     fontSize="md"
                     width={[24, 100, 250]}
                     display="flex"
@@ -216,11 +219,11 @@ export default function Settings() {
                       </Icon>
                       Phone
                     </div>
-                  </Text>
-                  <Text>{Data.phone || 'Loading...'}</Text>
+                  </StyledText>
+                  <StyledText>{Data.phone || 'Loading...'}</StyledText>
                 </Stack>
                 <Stack direction="row" gap={8}>
-                  <Text
+                  <StyledText
                     fontSize="md"
                     width={[24, 100, 250]}
                     display="flex"
@@ -233,11 +236,11 @@ export default function Settings() {
                       </Icon>
                       Website
                     </div>
-                  </Text>
-                  <Text>{Data.website || 'Loading...'}</Text>
+                  </StyledText>
+                  <StyledText>{Data.website || 'Loading...'}</StyledText>
                 </Stack>
                 <Stack direction="row" gap={8}>
-                  <Text
+                  <StyledText
                     fontSize="md"
                     width={[24, 100, 250]}
                     display="flex"
@@ -250,14 +253,14 @@ export default function Settings() {
                       </Icon>
                       Email
                     </div>
-                  </Text>
-                  <Text>{Data.email || 'Loading...'}</Text>
+                  </StyledText>
+                  <StyledText>{Data.email || 'Loading...'}</StyledText>
                 </Stack>
               </Flex>
               <Flex direction="column" wrap={true} gap={3}>
-                <Text fontSize={20} fontWeight="semibold" textDecoration="underline">
+                <StyledText fontSize={20} fontWeight="semibold" textDecoration="underline">
                   Notifications
-                </Text>
+                </StyledText>
                 <Box
                   border={0.1}
                   backgroundColor={colorMode === 'light' ? '#04050B0D' : '#282828'}
