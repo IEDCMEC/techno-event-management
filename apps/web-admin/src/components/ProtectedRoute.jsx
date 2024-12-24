@@ -41,7 +41,7 @@ export const ProtectedRoute = ({ children }) => {
       // // //console.log('route')
       router.replace(`/${accountDetails.orgId}/events`);
     }
-  }, [isAuthenticated, accountDetails.orgId]);
+  }, [isAuthenticated, accountDetails]);
   useEffect(() => {
     // //console.log(accountDetails);
   }, [accountDetails]);
