@@ -179,6 +179,7 @@ export default function Events() {
     (data) => {
       console.log(data.data.events);
       setEvents(data.data.events || []);
+      setAccountDetails((preValue) => ({ ...preValue, Event: data.data.events }));
     },
   );
 
@@ -317,7 +318,7 @@ export default function Events() {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent width={{ base: '95vw', md: '75vw' }} maxWidth={'95vw'}>
+        <ModalContent minWidth={'85vw'} minHeight={'85vh'}>
           <ModalHeader>Create New Event</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

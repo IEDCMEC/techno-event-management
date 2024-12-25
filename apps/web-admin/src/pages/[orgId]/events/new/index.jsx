@@ -12,10 +12,9 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 
-import DashboardLayout from '@/layouts/DashboardLayout';
-
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import useWrapper from '@/hooks/useWrapper';
 
 export default function NewEvent() {
   const { loading, post } = useFetch();
@@ -38,7 +37,23 @@ export default function NewEvent() {
   const [eventlogo, setEventlogo] = useState(null);
   const [coverimg, setCoverimg] = useState(null);
   const [regimg, setRegimg] = useState(null);
-
+  const [locationUrl, setLocationUrl] = useState(null);
+  // const [formData, setFormData] = useState({
+  //   name: '',
+  //   startDate: new Date(),
+  //   endDate: new Date(),
+  //   desc: '',
+  //   type: 'Public',
+  //   venue: '',
+  //   street: '',
+  //   city: '',
+  //   state: '',
+  //   country: '',
+  //   pincode: null,
+  //   eventlogo: null,
+  //   coverimg: null,
+  //   regimg: null,
+  // });
   const [formErrors, setFormErrors] = useState({
     name: '',
     startDate: '',
@@ -53,6 +68,7 @@ export default function NewEvent() {
     eventlogo: '',
     coverimg: '',
     regimg: '',
+    locationUrl: '',
   });
 
   const validateForm = () => {
@@ -100,51 +116,98 @@ export default function NewEvent() {
     if (!regimg) {
       errors.regimg = 'Registration form background required';
     }
+    const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9.-]+)(\.[a-zA-Z]{2,})(:\d+)?(\/[^\s]*)?$/;
+    if (!locationUrl) {
+      errors.locationUrl = 'Google Maps link required!!';
+    }
+    if (urlRegex.test(locationUrl)) {
+      errors.locationUrl = 'Enter valid Google Maps link';
+    }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-
-    const { data, status } = await post(
-      `/core/organizations/${orgId}/events`,
-      {},
-      {
-        name,
-        startDate,
-        endDate,
-        desc,
-        type,
-        venue,
-        street,
-        city,
-        state,
-        country,
-        pincode,
-        eventlogo,
-        coverimg,
-        regimg,
+  const { usePostMutation } = useWrapper();
+  const { mutate: handleSubmitMutation } = usePostMutation(
+    `/core/organizations/${orgId}/events`,
+    {},
+    {
+      onError: () => {
+        showAlert({
+          title: 'Error',
+          description: data.error,
+          status: 'error',
+        });
       },
-    );
-    if (status === 200) {
+      invalidateKeys: [`/core/organizations/${orgId}/events`],
+    },
+    (response) => {
       showAlert({
         title: 'Success',
         description: 'Event has been created successfully.',
         status: 'success',
       });
       router.push(`/${orgId}/events`);
-    } else {
-      showAlert({
-        title: 'Error',
-        description: data.error,
-        status: 'error',
-      });
+      console.log(response.data, 'Event addition');
+      onClose();
+    },
+  );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      return;
     }
+    handleSubmitMutation({
+      name,
+      startDate,
+      endDate,
+      desc,
+      type,
+      venue,
+      street,
+      city,
+      state,
+      country,
+      pincode,
+      eventlogo,
+      coverimg,
+      regimg,
+      locationUrl,
+    });
+    // const { data, status } = await post(
+    //   `/core/organizations/${orgId}/events`,
+    //   {},
+    //   {
+    //     name,
+    //     startDate,
+    //     endDate,
+    //     desc,
+    //     type,
+    //     venue,
+    //     street,
+    //     city,
+    //     state,
+    //     country,
+    //     pincode,
+    //     eventlogo,
+    //     coverimg,
+    //     regimg,
+    //   },
+    // );
+    // if (status === 200) {
+    //   showAlert({
+    //     title: 'Success',
+    //     description: 'Event has been created successfully.',
+    //     status: 'success',
+    //   });
+    //   router.push(`/${orgId}/events`);
+    // } else {
+    //   showAlert({
+    //     title: 'Error',
+    //     description: data.error,
+    //     status: 'error',
+    //   });
+    // }
   };
 
   return (
@@ -315,6 +378,18 @@ export default function NewEvent() {
                 }}
               />
               <FormErrorMessage>{formErrors.pincode}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired my={4} isInvalid={formErrors.locationUrl}>
+              <FormLabel>Enter location url</FormLabel>
+              <Input
+                type="number"
+                name="pincode"
+                value={locationUrl}
+                onChange={(e) => {
+                  setLocationUrl(e.target.value);
+                }}
+              />
+              <FormErrorMessage>{formErrors.locationUrl}</FormErrorMessage>
             </FormControl>
           </Box>
         </Box>

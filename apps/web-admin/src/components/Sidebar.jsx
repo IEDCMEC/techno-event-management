@@ -176,8 +176,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                     pl="15px"
                     ml="5px"
                     onClick={() => {
-                      router.push(value.path);
                       setAccountDetails(value.data);
+                      router.push(value.path);
                     }}
                   >
                     {accountDetails.name === value.name && (
@@ -370,8 +370,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                           pl="15px"
                           ml="5px"
                           onClick={() => {
-                            router.push(value.path);
                             setAccountDetails(value.data);
+                            router.push(value.path);
                           }}
                         >
                           {accountDetails.name === value.name && (

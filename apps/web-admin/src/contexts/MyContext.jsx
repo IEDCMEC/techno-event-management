@@ -16,6 +16,9 @@ const MyContext = ({ children }) => {
 
   const { loading, get, put } = useFetch();
   const showAlert = useAlert();
+  useEffect(() => {
+    console.log(accountDetails);
+  }, [accountDetails]);
   // useEffect(() => {
   //   const fetchAccountDetails = async () => {
   //     if (isAuthenticated) {
