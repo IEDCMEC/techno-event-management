@@ -21,7 +21,7 @@ import OrganizationSettingsModal from './OrganizationSettingsModal';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import { VscCalendar } from 'react-icons/vsc';
-import { Calendar } from '@/components/ui/calendar';
+// import { Calendar } from '@/components/ui/calendar';
 import { PiCopyrightThin } from 'react-icons/pi';
 import {
   Popover,
@@ -35,6 +35,7 @@ import { FiSun } from 'react-icons/fi';
 import { FiMoon } from 'react-icons/fi';
 import { IoNotificationsOutline } from 'react-icons/io5';
 import { useColorMode } from '@chakra-ui/react';
+import NewCalendar from '@/components/NewCalendar';
 
 // Adjust the import path as needed
 
@@ -301,17 +302,13 @@ export default function DashboardLayout({ headerButton, children }) {
                       />
                     </IconButton>
                   </PopoverTrigger>
-                  <PopoverContent>
+                  <PopoverContent
+                    sx={{ background: colorMode === 'light' ? 'white' : 'hsl(0 0% 3.9%)' }}
+                  >
                     <PopoverArrow />
                     <PopoverCloseButton />
                     <PopoverBody>
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        scale={1}
-                        className={`${inter.className}`}
-                      />
+                      <NewCalendar />
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>
