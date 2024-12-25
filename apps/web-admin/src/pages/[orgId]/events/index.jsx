@@ -113,8 +113,6 @@ import { useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useContext } from 'react';
 import {
-  Text,
-  Box,
   Button,
   Modal,
   ModalOverlay,
