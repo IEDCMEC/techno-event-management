@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { React, createContext, useState, useEffect } from 'react';
 import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -16,6 +16,9 @@ const MyContext = ({ children }) => {
 
   const { loading, get, put } = useFetch();
   const showAlert = useAlert();
+  useEffect(() => {
+    console.log(accountDetails);
+  }, [accountDetails]);
   // useEffect(() => {
   //   const fetchAccountDetails = async () => {
   //     if (isAuthenticated) {

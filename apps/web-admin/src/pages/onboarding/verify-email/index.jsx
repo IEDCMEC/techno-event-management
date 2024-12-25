@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { Text, Flex } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
+import { StyledText } from '@/components/ui/StyledComponents';
 
 export default function VerifyEmail() {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -19,10 +20,10 @@ export default function VerifyEmail() {
   return (
     <DashboardLayout pageTitle="Email Not Verified" previousPage={`/`} debugInfo={user}>
       <Flex height="100%" width="100%" alignItems="center" justifyContent="center">
-        <Text fontSize="3xl">
+        <StyledText fontSize="3xl">
           Please verify your email to continue using the application. Do not forget to check the
           spam folder too.
-        </Text>
+        </StyledText>
       </Flex>
     </DashboardLayout>
   );

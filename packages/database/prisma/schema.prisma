@@ -66,6 +66,7 @@ model OrganizationUser {
 model Address {
   id           String         @id @default(uuid())
   name         String?
+  street       String?
   city         String?
   state        String?
   country      String?

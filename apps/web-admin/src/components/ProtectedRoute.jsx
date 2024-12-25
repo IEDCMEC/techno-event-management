@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -37,11 +39,15 @@ export const ProtectedRoute = ({ children }) => {
   // useEffect();
   useMemo(() => {
     //console.log(accountDetails);
-    if (accountDetails.orgId) {
+    if (
+      accountDetails &&
+      accountDetails.orgId &&
+      router.asPath !== `/${accountDetails.orgId}/events`
+    ) {
       // // //console.log('route')
       router.replace(`/${accountDetails.orgId}/events`);
     }
-  }, [isAuthenticated, accountDetails.orgId]);
+  }, [isAuthenticated, accountDetails]);
   useEffect(() => {
     // //console.log(accountDetails);
   }, [accountDetails]);
@@ -52,6 +58,8 @@ export const ProtectedRoute = ({ children }) => {
     if (response) {
       const { data, mystatus } = response;
       //console.log('created');
+      setAllAccounts([{ ...response.data }]);
+      setAccountDetails(response.data);
       if (mystatus === 200) {
         showAlert({
           title: 'Success',
@@ -69,7 +77,7 @@ export const ProtectedRoute = ({ children }) => {
   async function checkOrg() {
     let myResponse = await get('/core/users/mycreds');
     // //console.log(myResponse.data.data);
-    if (myResponse && myResponse.status === 200) {
+    if (myResponse && myResponse.status === 200 && myResponse.data.data.length !== 0) {
       setAllAccounts(
         myResponse.data.data.map((value) => ({
           role: value.role,

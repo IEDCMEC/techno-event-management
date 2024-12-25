@@ -113,8 +113,6 @@ import { useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useContext } from 'react';
 import {
-  Text,
-  Box,
   Button,
   Modal,
   ModalOverlay,
@@ -159,7 +157,12 @@ export default function Events() {
   // const { loading, get } = useFetch();
   const { useGetQuery } = useWrapper();
   const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
-  console.log(accountDetails.Event);
+  // console.log(accountDetails.Event);
+
+  const links = [
+    { label: 'Dashboards', href: '#' },
+    { label: 'My Events', href: '#', isCurrent: true },
+  ];
 
   const [events, setEvents] = useState([]);
   console.log(orgId);
@@ -176,6 +179,7 @@ export default function Events() {
     (data) => {
       console.log(data.data.events);
       setEvents(data.data.events || []);
+      setAccountDetails((preValue) => ({ ...preValue, Event: data.data.events }));
     },
   );
 
@@ -261,6 +265,7 @@ export default function Events() {
         <StyledBox flexDirection="row" gap="8px" bg="none">
           <Button
             variant="outline"
+            onClick={() => router.push(`/${orgId}/events`)}
             sx={{
               borderRadius: '8px',
               gap: '5px',
@@ -275,7 +280,7 @@ export default function Events() {
           </Button>
           <Button
             variant="outline"
-            isDisabled
+            onClick={() => router.push(`/${orgId}/members`)}
             sx={{
               borderRadius: '8px',
               gap: '5px',
@@ -299,21 +304,21 @@ export default function Events() {
         }}
       />
       {!loading && events.length === 0 ? (
-        <div style={{ textAlign: 'center', margin: '20px' }}>
-          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+        <StyledBox style={{ textAlign: 'center', margin: '20px' }}>
+          <StyledText fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No events for this organization
-          </Text>
-          <Text color={'gray.500'} mb={3}>
+          </StyledText>
+          <StyledText color={'gray.500'} mb={3}>
             Add events for this organization to see details
-          </Text>
-        </div>
+          </StyledText>
+        </StyledBox>
       ) : (
         <></>
       )}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent width={{ base: '95vw', md: '75vw' }} maxWidth={'95vw'}>
+        <ModalContent minWidth={'85vw'} minHeight={'85vh'}>
           <ModalHeader>Create New Event</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

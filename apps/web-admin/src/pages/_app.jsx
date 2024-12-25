@@ -10,11 +10,18 @@ import '../styles/globals.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 const queryClient = new QueryClient();
 
-const theme = extendTheme(
-  withDefaultColorScheme({
+const theme = extendTheme({
+  ...withDefaultColorScheme({
     colorScheme: 'teal',
   }),
-);
+  components: {
+    Button: {
+      _hover: {
+        bg: 'auto',
+      },
+    },
+  },
+});
 
 export default function App({ Component, pageProps }) {
   return (

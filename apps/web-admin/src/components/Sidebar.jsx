@@ -37,14 +37,14 @@ const Sidebar = ({ isOpen, onClose }) => {
   const { logout } = useAuth0();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
   const { accountDetails, allAccounts, setAccountDetails, userDetails } = useContext(account);
-  const isAdmin = accountDetails.role === 'ADMIN';
+  const isAdmin = accountDetails && accountDetails.role ? accountDetails.role === 'ADMIN' : '';
   // const isUser = accountDetails.role === 'USER';
   const logoSrc = useBreakpointValue({
     base: logo,
     md: logo_text,
   });
   const router = useRouter();
-  const orgId = accountDetails.orgId;
+  const orgId = accountDetails && accountDetails.orgId ? accountDetails.orgId : '';
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -59,23 +59,26 @@ const Sidebar = ({ isOpen, onClose }) => {
     { name: 'Technopreneur `24', status: true },
     { name: 'Excel `24', status: false },
   ];
-  const configItems = [
-    ...(isAdmin
+  const configItems =
+    orgId.length !== 0
       ? [
+          ...(isAdmin
+            ? [
+                {
+                  name: 'Settings',
+                  path: `/${accountDetails.orgId}/settings`,
+                  icon: <IoSettingsOutline />,
+                },
+              ]
+            : []),
+          // { name: 'Settings', icon: <IoSettingsOutline />, path: `/${accountDetails.orgId}/settings` },
           {
-            name: 'Settings',
-            path: `/${accountDetails.orgId}/settings`,
-            icon: <IoSettingsOutline />,
+            name: 'Help',
+            icon: <IoIosInformationCircleOutline />,
+            path: `/${accountDetails.orgId}/profile`,
           },
         ]
-      : []),
-    // { name: 'Settings', icon: <IoSettingsOutline />, path: `/${accountDetails.orgId}/settings` },
-    {
-      name: 'Help',
-      icon: <IoIosInformationCircleOutline />,
-      path: `/${accountDetails.orgId}/profile`,
-    },
-  ];
+      : [];
 
   const [myOrganizations, setMyOrganizations] = useState(
     allAccounts.map((value) => ({
@@ -152,37 +155,39 @@ const Sidebar = ({ isOpen, onClose }) => {
               <StyledText variant="16Regular.grey" gap={4} margin={'8px 0'} fontWeight="600">
                 Organizations
               </StyledText>
-              {myOrganizations.map((value, index) => (
-                <StyledText
-                  key={index}
-                  // variant=""
-                  borderRadius="8px"
-                  width="95%"
-                  cursor="pointer"
-                  p="4px 8px 4px 0px"
-                  variant={
-                    accountDetails.name !== value.name
-                      ? '16Regular.black'
-                      : '16Regular.black.highlighted'
-                  }
-                  sx={{
-                    borderRadius: '8px',
-                  }}
-                  pl="15px"
-                  ml="5px"
-                  onClick={() => {
-                    router.push(value.path);
-                    setAccountDetails(value.data);
-                  }}
-                >
-                  {accountDetails.name === value.name && (
-                    <Image
-                      src={Rectangle}
-                      alt=""
-                      style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
-                    />
-                  )}
-                  {/* <StyledBox
+              {accountDetails &&
+                accountDetails.orgId &&
+                myOrganizations.map((value, index) => (
+                  <StyledText
+                    key={index}
+                    // variant=""
+                    borderRadius="8px"
+                    width="95%"
+                    cursor="pointer"
+                    p="4px 8px 4px 0px"
+                    variant={
+                      accountDetails.name !== value.name
+                        ? '16Regular.black'
+                        : '16Regular.black.highlighted'
+                    }
+                    sx={{
+                      borderRadius: '8px',
+                    }}
+                    pl="15px"
+                    ml="5px"
+                    onClick={() => {
+                      setAccountDetails(value.data);
+                      router.push(value.path);
+                    }}
+                  >
+                    {accountDetails.name === value.name && (
+                      <Image
+                        src={Rectangle}
+                        alt=""
+                        style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
+                      />
+                    )}
+                    {/* <StyledBox
                     h="5px"
                     w="5px"
                     bg={value.status ? '#2DD811' : '#E7431F'}
@@ -190,9 +195,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                     as="span"
                     mr="10px"
                   /> */}
-                  {value.name}
-                </StyledText>
-              ))}
+                    {value.name}
+                  </StyledText>
+                ))}
             </StyledBox>
 
             <SidebarContents />
@@ -206,47 +211,45 @@ const Sidebar = ({ isOpen, onClose }) => {
               <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
                 Config
               </StyledText>
-              {configItems.map((value, index) => (
-                <StyledBox
-                  flexDirection={'row'}
-                  ml="5px"
-                  cursor="pointer"
-                  key={index}
-                  width="95%"
-                  position="relative"
-                  justifyContent="flex-start"
-                  p="4px 8px 4px 0px"
-                  gap="2"
-                  height="28px"
-                  sx={{
-                    borderRadius: '8px',
-                  }}
-                >
-                  {router.asPath === value.path && (
-                    <Image
-                      src={Rectangle}
-                      alt=""
-                      style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
-                    />
-                  )}
-                  <Box ml={4}>{value.icon}</Box>
+              {accountDetails &&
+                accountDetails.orgId &&
+                configItems.map((value, index) => (
                   <StyledText
+                    flexDirection={'row'}
+                    ml="5px"
+                    cursor="pointer"
                     key={index}
-                    pl="0px"
+                    width="95%"
+                    position="relative"
+                    justifyContent="flex-start"
                     variant={
                       router.asPath === value.path
                         ? '16Regular.black.highlighted'
                         : '16Regular.black'
                     }
-                    transition="outline 0.2s"
+                    p="4px 8px 4px 0px"
+                    gap="2"
+                    height="28px"
+                    sx={{
+                      borderRadius: '8px',
+                    }}
                     onClick={() => {
                       router.push(value.path);
                     }}
                   >
+                    {router.asPath === value.path && (
+                      <Image
+                        src={Rectangle}
+                        alt=""
+                        style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
+                      />
+                    )}
+                    <Box ml={4} as="span">
+                      {value.icon}
+                    </Box>
                     {value.name}
                   </StyledText>
-                </StyledBox>
-              ))}
+                ))}
             </StyledBox>
 
             <StyledBox flex="1"></StyledBox>
@@ -274,6 +277,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               <Button
                 onClick={handleLogout}
                 isLoading={loading}
+                variant={'outline'}
                 loadingText="Please Wait"
                 width="100%"
                 bg={'#AFB4E9'}
@@ -326,14 +330,18 @@ const Sidebar = ({ isOpen, onClose }) => {
                     height: 'calc(100vh - 68px)',
                     // borderBottom: '1px solid rgba(4, 5, 11, 0.1)',
                     // borderRight: '1px solid rgba(4, 5, 11, 0.1)',
-                    padding: '20px 16px 0px 16px',
+                    // padding: '0px 16px 0px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                    flexDirection: 'column',
                   }}
                   width="100%"
                   bg={colorMode === 'light' ? 'rgb(251, 251, 254)' : '#04050B'}
                 >
                   {/* Starred Items */}
                   <StyledBox
-                    sx={{ height: `${myOrganizations.length * 52}px`, width: '100%' }}
+                    sx={{ height: `${75 + myOrganizations.length * 22}px`, width: '100%' }}
                     pt="10px"
                     alignItems="flex-start"
                     justifyContent="space-around"
@@ -341,32 +349,49 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <StyledText variant="16Regular.grey" gap={4} margin={'8px 0'} fontWeight="600">
                       Organizations
                     </StyledText>
-                    {myOrganizations.map((value, index) => (
-                      <StyledText
-                        key={index}
-                        pl="10px"
-                        variant="16Regular.black"
-                        borderRadius="8px"
-                        width="95%"
-                        cursor="pointer"
-                        p="4px 8px 4px 0px"
-                        ml="5px"
-                        onClick={() => {
-                          router.push(value.path);
-                          setAccountDetails(value.data);
-                        }}
-                      >
-                        <StyledBox
-                          h="5px"
-                          w="5px"
-                          bg={value.status ? '#2DD811' : '#E7431F'}
-                          borderRadius="100%"
-                          as="span"
-                          mr="10px"
-                        />
-                        {value.name}
-                      </StyledText>
-                    ))}
+                    {accountDetails &&
+                      accountDetails.orgId &&
+                      myOrganizations.map((value, index) => (
+                        <StyledText
+                          key={index}
+                          // variant=""
+                          borderRadius="8px"
+                          width="95%"
+                          cursor="pointer"
+                          p="4px 8px 4px 0px"
+                          variant={
+                            accountDetails.name !== value.name
+                              ? '16Regular.black'
+                              : '16Regular.black.highlighted'
+                          }
+                          sx={{
+                            borderRadius: '8px',
+                          }}
+                          pl="15px"
+                          ml="5px"
+                          onClick={() => {
+                            setAccountDetails(value.data);
+                            router.push(value.path);
+                          }}
+                        >
+                          {accountDetails.name === value.name && (
+                            <Image
+                              src={Rectangle}
+                              alt=""
+                              style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
+                            />
+                          )}
+                          {/* <StyledBox
+                    h="5px"
+                    w="5px"
+                    bg={value.status ? '#2DD811' : '#E7431F'}
+                    borderRadius="100%"
+                    as="span"
+                    mr="10px"
+                  /> */}
+                          {value.name}
+                        </StyledText>
+                      ))}
                   </StyledBox>
 
                   <SidebarContents />
@@ -380,44 +405,46 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <StyledText variant="16Regular.grey" gap={8} margin={'8px 0'} fontWeight="600">
                       Config
                     </StyledText>
-                    {configItems.map((value, index) => (
-                      <StyledBox
-                        flexDirection={'row'}
-                        ml="5px"
-                        cursor="pointer"
-                        key={index}
-                        width="95%"
-                        position="relative"
-                        justifyContent="flex-start"
-                        p="4px 8px 4px 0px"
-                        gap="2"
-                        height="28px"
-                        sx={{
-                          background: router.asPath === value.path ? 'rgba(4, 5, 11, 0.1)' : '',
-                          borderRadius: '8px',
-                        }}
-                      >
-                        {router.asPath === value.path && (
-                          <Image
-                            src={Rectangle}
-                            alt=""
-                            style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
-                          />
-                        )}
-                        <Box ml={4}>{value.icon}</Box>
-                        <StyledText
+                    {accountDetails &&
+                      accountDetails.orgId &&
+                      configItems.map((value, index) => (
+                        <StyledBox
+                          flexDirection={'row'}
+                          ml="5px"
+                          cursor="pointer"
                           key={index}
-                          pl="0px"
-                          variant="16Regular.black"
-                          transition="outline 0.2s"
-                          onClick={() => {
-                            router.push(value.path);
+                          width="95%"
+                          position="relative"
+                          justifyContent="flex-start"
+                          p="4px 8px 4px 0px"
+                          gap="2"
+                          height="28px"
+                          sx={{
+                            background: router.asPath === value.path ? 'rgba(4, 5, 11, 0.1)' : '',
+                            borderRadius: '8px',
                           }}
                         >
-                          {value.name}
-                        </StyledText>
-                      </StyledBox>
-                    ))}
+                          {router.asPath === value.path && (
+                            <Image
+                              src={Rectangle}
+                              alt=""
+                              style={{ zIndex: '100', position: 'absolute', top: '6px', left: '0' }}
+                            />
+                          )}
+                          <Box ml={4}>{value.icon}</Box>
+                          <StyledText
+                            key={index}
+                            pl="0px"
+                            variant="16Regular.black"
+                            transition="outline 0.2s"
+                            onClick={() => {
+                              router.push(value.path);
+                            }}
+                          >
+                            {value.name}
+                          </StyledText>
+                        </StyledBox>
+                      ))}
                   </StyledBox>
 
                   <StyledBox flex="1"></StyledBox>
@@ -467,8 +494,8 @@ const SidebarContents = () => {
   const router = useRouter();
 
   const { accountDetails } = useContext(account);
-  const isUser = accountDetails.role === 'USER';
-  const orgId = accountDetails.orgId;
+  // const isUser = accountDetails.role === 'USER';
+  const orgId = accountDetails && accountDetails.orgId ? accountDetails.orgId : undefined;
   const { colorMode } = useColorMode();
   const sidebarItems = [
     { label: 'Events', path: `/${orgId}/events`, icon: <MdOutlineEvent /> },
