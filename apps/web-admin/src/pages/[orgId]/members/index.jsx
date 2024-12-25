@@ -92,7 +92,6 @@ import {
   IconButton,
 } from '@chakra-ui/react';
 import DashboardLayout from '@/layouts/DashboardLayout';
-import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import DataDisplay from '@/components/DataDisplay';
 import { useFetch } from '@/hooks/useFetch';
 import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
