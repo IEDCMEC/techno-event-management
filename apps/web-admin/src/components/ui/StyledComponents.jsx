@@ -117,7 +117,7 @@ const StyledTd = forwardRef(({ children, color, variant, ...props }, ref) => {
 
 const StyledIconButton = forwardRef(({ children, iconD, ...props }, ref) => {
   const { colorMode } = useColorMode();
-  const iconColor = colorMode === 'light' ? '#11185A' : 'white';
+  const iconColor = colorMode === 'light' ? 'black' : 'white';
   const list = {
     w: <HiGlobeAlt />,
     l: <FaLinkedin />,
@@ -140,7 +140,7 @@ const StyledIconButton = forwardRef(({ children, iconD, ...props }, ref) => {
 });
 const StyledDisabledIconButton = forwardRef(({ children, iconD, ...props }, ref) => {
   const { colorMode } = useColorMode();
-  const iconColor = colorMode === 'light' ? '#11185A' : 'white';
+  const iconColor = colorMode === 'light' ? 'black' : 'white';
   const list = {
     w: <HiGlobeAlt />,
     l: <FaLinkedin />,
