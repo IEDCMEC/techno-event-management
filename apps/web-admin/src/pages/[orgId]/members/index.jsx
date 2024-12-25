@@ -88,7 +88,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  Text,
   useDisclosure,
   IconButton,
 } from '@chakra-ui/react';
@@ -223,14 +222,14 @@ export default function OrganizationMembers() {
       </StyledBox>
       <DataDisplay loading={loading} columns={columns} rows={members} />
       {!loading && members.length === 0 ? (
-        <div style={{ textAlign: 'center', margin: '20px' }}>
-          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+        <StyledBox style={{ textAlign: 'center', margin: '20px' }}>
+          <StyledText fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No members for the event
-          </Text>
-          <Text color={'gray.500'} mb={3}>
+          </StyledText>
+          <StyledText color={'gray.500'} mb={3}>
             Add members for the event and their details
-          </Text>
-        </div>
+          </StyledText>
+        </StyledBox>
       ) : (
         <></>
       )}

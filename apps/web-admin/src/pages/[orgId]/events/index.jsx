@@ -113,8 +113,6 @@ import { useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useContext } from 'react';
 import {
-  Text,
-  Box,
   Button,
   Modal,
   ModalOverlay,
@@ -159,7 +157,7 @@ export default function Events() {
   // const { loading, get } = useFetch();
   const { useGetQuery } = useWrapper();
   const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
-  console.log(accountDetails.Event);
+  // console.log(accountDetails.Event);
 
   const links = [
     { label: 'Dashboards', href: '#' },

@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import { Text, Flex } from '@chakra-ui/react';
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
@@ -96,14 +97,14 @@ export default function ParticipantById() {
         <DataDisplay loading={loading} columns={extraColumns} rows={participantExtras} />
       </Flex>
       {!loading && participant.length === 0 ? (
-        <div style={{ textAlign: 'center', margin: '20px' }}>
-          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+        <StyledBox style={{ textAlign: 'center', margin: '20px' }}>
+          <StyledText fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No participants created
-          </Text>
-          <Text color={'gray.500'} mb={3}>
+          </StyledText>
+          <StyledText color={'gray.500'} mb={3}>
             Add participants and assignment to see details
-          </Text>
-        </div>
+          </StyledText>
+        </StyledBox>
       ) : (
         <></>
       )}

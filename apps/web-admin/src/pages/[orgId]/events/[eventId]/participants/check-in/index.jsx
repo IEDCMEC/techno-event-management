@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 
@@ -125,14 +126,14 @@ export default function ParticipantsCheckIn() {
         }}
       />
       {!loading && participantsCheckIn.length === 0 ? (
-        <div style={{ textAlign: 'center', margin: '20px' }}>
-          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+        <StyledBox style={{ textAlign: 'center', margin: '20px' }}>
+          <StyledText fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No participants checked-in
-          </Text>
-          <Text color={'gray.500'} mb={3}>
+          </StyledText>
+          <StyledText color={'gray.500'} mb={3}>
             Add details about the checked-in participants
-          </Text>
-        </div>
+          </StyledText>
+        </StyledBox>
       ) : (
         <></>
       )}

@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Text, Button, Flex } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
@@ -113,14 +114,14 @@ export default function ExtraById() {
         }}
       />
       {!loading && extraDetails.length === 0 ? (
-        <div style={{ textAlign: 'center', margin: '20px' }}>
-          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+        <StyledBox style={{ textAlign: 'center', margin: '20px' }}>
+          <StyledText fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No participants assigned
-          </Text>
-          <Text color={'gray.500'} mb={3}>
+          </StyledText>
+          <StyledText color={'gray.500'} mb={3}>
             Assign participants for extras to see details
-          </Text>
-        </div>
+          </StyledText>
+        </StyledBox>
       ) : (
         <></>
       )}

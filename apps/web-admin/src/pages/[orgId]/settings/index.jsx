@@ -158,30 +158,30 @@ export default function Settings() {
                 </StyledText>
                 <Flex direction={'row'} wrap={true} gap={4} padding={1}>
                   {Data.website ? (
-                    <Link href={Data.website} isExternal>
+                    <a href={Data.website} target="_blank" rel="noopener noreferrer">
                       <StyledIconButton aria-label="website" iconD="w" />
-                    </Link>
+                    </a>
                   ) : (
                     <StyledDisabledIconButton aria-label="website" iconD="w" />
                   )}
                   {Data.LinkedIn ? (
-                    <Link href={Data.LinkedIn} isExternal>
+                    <a href={Data.LinkedIn} target="_blank" rel="noopener noreferrer">
                       <StyledIconButton aria-label="LinkedIn" iconD="l" />
-                    </Link>
+                    </a>
                   ) : (
                     <StyledDisabledIconButton aria-label="LinkedIn" iconD="l" />
                   )}
                   {Data.Twitter ? (
-                    <Link href={Data.Twitter} isExternal>
+                    <a href={Data.Twitter} target="_blank" rel="noopener noreferrer">
                       <StyledIconButton aria-label="Twitter" iconD="t" />
-                    </Link>
+                    </a>
                   ) : (
                     <StyledDisabledIconButton aria-label="Twitter" iconD="t" />
                   )}
                   {Data.Instagram ? (
-                    <Link href={Data.Instagram} isExternal>
+                    <a href={Data.Instagram} target="_blank" rel="noopener noreferrer">
                       <StyledIconButton aria-label="Instagram" iconD="i" />
-                    </Link>
+                    </a>
                   ) : (
                     <StyledDisabledIconButton aria-label="Instagram" iconD="i" />
                   )}
@@ -216,6 +216,7 @@ export default function Settings() {
                   display="flex"
                   flexDirection="column"
                   alignItems="center"
+                  mb="6"
                 >
                   Contact Info
                 </StyledText>
@@ -403,7 +404,7 @@ export default function Settings() {
                 </Stack>
               </Flex>
               <Flex direction="column" wrap={true} gap={3} width={['100%', '100%', '49%']}>
-                <StyledText fontSize={20} fontWeight="semibold" textDecoration="underline">
+                <StyledText fontSize={20} fontWeight="semibold" textDecoration="underline" mb="6">
                   Notifications
                 </StyledText>
                 <StyledBox
