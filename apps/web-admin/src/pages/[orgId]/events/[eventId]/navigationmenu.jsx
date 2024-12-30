@@ -50,13 +50,22 @@ const NavigationMenu = ({ orgId, eventId }) => {
     width: { base: '100%', md: 'auto' },
   });
   const router = useRouter();
-  const navItems = [
-    { link: 'participants', name: 'Participants' },
-    { link: 'check-in', name: 'Participants Check In' },
-    { link: 'attributes', name: 'Attributes' },
-    { link: 'extras', name: 'Extras' },
-  ];
-  const { activeTab, setActiveTab } = useContext(account);
+  const { activeTab, setActiveTab, eventDetails } = useContext(account);
+  console.log('trial', eventDetails.isShortlisting);
+  const navItems =
+    eventDetails.isShortlisting && router.asPath.endsWith('/participants')
+      ? [
+          { link: 'registrants', name: 'Registrants' },
+          { link: 'check-in', name: 'Participants Check In' },
+          { link: 'attributes', name: 'Attributes' },
+          { link: 'extras', name: 'Extras' },
+        ]
+      : [
+          { link: 'participants', name: 'Participants' },
+          { link: 'check-in', name: 'Participants Check In' },
+          { link: 'attributes', name: 'Attributes' },
+          { link: 'extras', name: 'Extras' },
+        ];
   useEffect(() => {
     //console.log(activeTab);
   }, [activeTab]);
@@ -94,24 +103,27 @@ const NavigationMenu = ({ orgId, eventId }) => {
         width="100%"
         display={{ base: 'none', md: 'flex' }} // Horizontal layout on desktop
       >
-        {['participants', 'check-in', 'attributes', 'extras'].map((tab) => (
-          <Button
-            key={tab}
-            style={tabStyle(activeTab === tab)}
-            onClick={() => {
-              setActiveTab(tab);
-              const element = tab === 'check-in' ? 'participants/check-in' : tab;
-              router.push(
-                `/${orgId}/events/${eventId}/${element}
+        {navItems.map((content) => {
+          const tab = content.link;
+          return (
+            <Button
+              key={tab}
+              style={tabStyle(activeTab === tab)}
+              onClick={() => {
+                setActiveTab(tab);
+                const element = tab === 'check-in' ? 'participants/check-in' : tab;
+                router.push(
+                  `/${orgId}/events/${eventId}/${element}
                 `,
-              );
-            }}
-          >
-            {tab === 'check-in'
-              ? 'Participant Check In'
-              : tab.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
-          </Button>
-        ))}
+                );
+              }}
+            >
+              {tab === 'check-in'
+                ? 'Participant Check In'
+                : tab.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
+            </Button>
+          );
+        })}
       </Flex>
     </Box>
   );
