@@ -116,7 +116,6 @@ export default function ParticipantsCheckIn() {
       debugInfo={participantsCheckIn}
     >
       <NavigationMenu orgId={orgId} eventId={eventId} />
-
       <DataDisplay
         loading={loading}
         rows={participantsCheckIn}

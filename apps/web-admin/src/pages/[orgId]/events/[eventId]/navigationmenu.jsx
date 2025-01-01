@@ -38,7 +38,8 @@ import { Box, VStack, Button, Flex } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
-const NavigationMenu = ({ orgId, eventId }) => {
+
+const NavigationMenu = ({ orgId, eventId , }) => {
   const tabStyle = (isActive) => ({
     color: isActive ? '#369b97' : '#369b97',
     backgroundColor: isActive ? '#e6f7f5' : '#e6f7f5',
@@ -50,12 +51,14 @@ const NavigationMenu = ({ orgId, eventId }) => {
     width: { base: '100%', md: 'auto' },
   });
   const router = useRouter();
-  const navItems = [
+  const navItems = 
+  [
     { link: 'participants', name: 'Participants' },
     { link: 'check-in', name: 'Participants Check In' },
     { link: 'attributes', name: 'Attributes' },
     { link: 'extras', name: 'Extras' },
   ];
+  
   const { activeTab, setActiveTab } = useContext(account);
   useEffect(() => {
     //console.log(activeTab);
