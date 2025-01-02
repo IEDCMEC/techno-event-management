@@ -14,70 +14,10 @@ import { account } from '@/contexts/MyContext';
 import axios from 'axios';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
-import { ChevronLeftIcon, ChevronDownIcon } from '@chakra-ui/icons';
-import React from 'react';
-import { Box, Text,Image } from '@chakra-ui/react';
-import UsersIcon from '@/assets/events/Users.png';
+import { ChevronLeftIcon, ChevronDownIcon,Menu, MenuButton, MenuList, MenuItem  } from '@chakra-ui/icons';
+import CustomStyledBox from '@/pages/CustomStyledBox';
+// import AdduserIcon from '@/assets/events/Adduser.png';
 
-const CustomStyledBox = () => {
-  return (
-<Box
-  display="flex"
-  flexDirection="column"
-  alignItems="flex-start"
-  justifyContent="center"
-  width="245px"
-  height="112px"
-  minWidth="245px"
-  padding="16px" /* Adjusted padding */
-  gap="12px" /* Increased gap for better spacing */
-  borderRadius="var(--16)"
-  bg="rgba(224, 227, 255, 1)"
->
-  {/* Top Row: Text and Image */}
-  <Box
-    display="flex"
-    alignItems="center"
-    justifyContent="flex-start"
-    gap="20px" 
-    width="197px"
-  >
-    <Text
-      fontFamily="DM Sans"
-      fontSize="14px"
-      fontWeight="600"
-      lineHeight="20px"
-      textAlign="left"
-      color="var(--black, rgba(4, 5, 11, 1))"
-    >
-      Total Participants
-    </Text>
-    <Image
-      // src="/assets/events/Users.png"
-      //src="../../../../../../../../assets/events/Users.png"
-      src={UsersIcon}
-      alt="Users Icon"
-      width="20px"
-      height="14.89px"
-      border="1.5px solid var(--black, rgba(4, 5, 11, 1))"
-    />
-  </Box>
-
-  {/* 7034 Text */}
-  <Text
-    fontFamily="DM Sans"
-    fontSize="24px"
-    fontWeight="700"
-    lineHeight="36px"
-    textAlign="left"
-    color="var(--black, rgba(4, 5, 11, 1))"
-  >
-    7034
-  </Text>
-</Box>
-
-  )
-};  
 
 
 
@@ -199,7 +139,7 @@ export default function Participants() {
         filename={`participants-${eventId}.csv`}
         style={{ textDecoration: 'none' }}
       >
-        <Button colorScheme="teal" variant="solid">
+        <Button colorScheme="gray" variant="solid">
           Export to CSV
         </Button>
       </CSVLink>
@@ -212,9 +152,8 @@ export default function Participants() {
       previousPage={`/organizations/${orgId}/events/${eventId}`}
       debugInfo={participants}
     >
-      <NavigationMenu orgId={orgId} eventId={eventId} />
-      
-      {/* Updated navbuttons with flexbox layout */}
+      <NavigationMenu orgId={orgId} eventId={eventId} 
+      navButton={
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px',marginTop: '10px' }}>
         <div style={{ display: 'flex', gap: '10px' }}>
           <Button
@@ -225,9 +164,37 @@ export default function Participants() {
           >
             Back
           </Button>
-          <Button rightIcon={<ChevronDownIcon />} colorScheme="gray">
-            Participants Detail
-          </Button>
+          <Menu>
+  <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
+    Participants Details
+  </MenuButton>
+  <MenuList bg="gray.100" borderColor="gray.200">
+    <MenuItem
+      color="gray.700"
+      fontWeight="medium"
+      _hover={{ bg: "gray.200" }}
+      onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in`)}
+    >
+      Participants Check-in Details
+    </MenuItem>
+    <MenuItem
+      color="gray.700"
+      fontWeight="medium"
+      _hover={{ bg: "gray.200" }}
+      onClick={() => router.push(`/${orgId}/events/${eventId}/attributes`)}
+    >
+      Attributes Details
+    </MenuItem>
+    <MenuItem
+      color="gray.700"
+      fontWeight="medium"
+      _hover={{ bg: "gray.200" }}
+      onClick={() => router.push(`/${orgId}/events/${eventId}/extras`)}
+    >
+      Extras Details
+    </MenuItem>
+  </MenuList>
+</Menu>
         </div>
         
         <div style={{ display: 'flex', gap: '10px' }}>
@@ -247,6 +214,9 @@ export default function Participants() {
           </Button>
         </div>
       </div>
+      }
+      />
+
 
       <CustomStyledBox></CustomStyledBox>
 
