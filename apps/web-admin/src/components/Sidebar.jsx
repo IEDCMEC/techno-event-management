@@ -17,7 +17,7 @@ import {
   DrawerCloseButton,
   useMediaQuery,
 } from '@chakra-ui/react';
-import SidebarCalendar from './SidebarCalendar';
+// import SidebarCalendar from './SidebarCalendar';
 import { PiCertificate } from 'react-icons/pi';
 import { MdOutlineEmail } from 'react-icons/md';
 import { MdOutlineSettings } from 'react-icons/md';
@@ -253,7 +253,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             </StyledBox>
 
             <StyledBox flex="1"></StyledBox>
-            <SidebarCalendar scale={0.95} />
+            {/* <SidebarCalendar scale={0.95} /> */}
             {/* {isAdmin && (
               <Button
                 onClick={() => {
@@ -448,7 +448,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   </StyledBox>
 
                   <StyledBox flex="1"></StyledBox>
-                  <SidebarCalendar scale={0.95} />
+                  {/* <SidebarCalendar scale={0.95} /> */}
                   {/* {isAdmin && (
               <Button
                 onClick={() => {
