@@ -4,6 +4,7 @@ import { extendTheme, ChakraProvider, withDefaultColorScheme } from '@chakra-ui/
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ColorModeScript } from '@chakra-ui/icons';
+import 'react-day-picker/dist/style.css';
 import '../styles/globals.css';
 // import '@uiw/react-md-editor/markdown-editor.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
