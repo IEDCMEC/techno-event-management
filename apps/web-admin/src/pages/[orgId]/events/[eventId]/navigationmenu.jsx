@@ -103,7 +103,7 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
           );
         })}
       </Flex>
-    </Box>
+    </VStack>
   );
 };
 

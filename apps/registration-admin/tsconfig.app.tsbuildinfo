@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/hooks/usealert.tsx","./src/hooks/usefetch.tsx","./src/pages/form.tsx","./src/pages/notfound.tsx","./src/pages/registered.tsx","./src/pages/registrationclosed.tsx"],"version":"5.7.2"}
+{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/hooks/useAlert.tsx","./src/hooks/useFetch.tsx","./src/pages/Form.tsx","./src/pages/NotFound.tsx","./src/pages/Registered.tsx","./src/pages/RegistrationClosed.tsx"],"version":"5.7.2"}
