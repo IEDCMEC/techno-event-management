@@ -156,7 +156,7 @@ export default function Events() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const { loading, get } = useFetch();
   const { useGetQuery } = useWrapper();
-  const { accountDetails, setAccountDetails, setEventDetails } = useContext(account);
+  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
   // console.log(accountDetails.Event);
 
   const links = [
