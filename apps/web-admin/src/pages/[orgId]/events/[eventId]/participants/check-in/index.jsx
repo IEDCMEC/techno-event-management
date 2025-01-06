@@ -14,6 +14,13 @@ import useWrapper from '@/hooks/useWrapper';
 
 import NavigationMenu from '../../navigationmenu';
 
+import { useDisclosure } from '@chakra-ui/react';
+import CheckInParticipantWithMultiScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/multi-in/index';
+import CheckInParticipant from '@/pages/[orgId]/events/[eventId]/participants/check-in/in/index';
+import CheckInParticipantWithScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/in/scanner/index';
+import CheckOutParticipant from '@/pages/[orgId]/events/[eventId]/participants/check-in/out/index';
+import CheckOutParticipantWithScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/out/scanner/index';
+
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
   { field: 'lastName', headerName: 'Last Name', width: 200 },
@@ -56,6 +63,32 @@ export default function ParticipantsCheckIn() {
     },
   );
 
+  const {
+    isOpen: isMultiScannerModalOpen,
+    onOpen: onMultiScannerModalOpen,
+    onClose: onMultiScannerModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCheckInModalOpen,
+    onOpen: onCheckInModalOpen,
+    onClose: onCheckInModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isScanner1ModalOpen,
+    onOpen: onScanner1ModalOpen,
+    onClose: onScanner1ModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isScanner2ModalOpen,
+    onOpen: onScanner2ModalOpen,
+    onClose: onScanner2ModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCheckOutModalOpen,
+    onOpen: onCheckOutModalOpen,
+    onClose: onCheckOutModalClose,
+  } = useDisclosure();
+
   return (
     <DashboardLayout
       pageTitle="Participants Check-In"
@@ -63,50 +96,23 @@ export default function ParticipantsCheckIn() {
       headerButton={
         <>
           <Flex h="100%" flexDirection="column">
-            <Button
-              mt="auto"
-              mb="0.5"
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`);
-              }}
-              isLoading={loading}
-            >
+            <Button mt="auto" mb="0.5" onClick={onMultiScannerModalOpen} isLoading={loading}>
               Multi-Stage Scanner
             </Button>
           </Flex>
           <Flex flexDirection="column" gap={4}>
-            <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`);
-              }}
-              isLoading={loading}
-            >
+            <Button onClick={onCheckInModalOpen} isLoading={loading}>
               Check-In Participant
             </Button>
-            <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`);
-              }}
-              isLoading={loading}
-            >
+            <Button onClick={onScanner1ModalOpen} isLoading={loading}>
               Open Scanner
             </Button>
           </Flex>
           <Flex flexDirection="column" gap={4}>
-            <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`);
-              }}
-              isLoading={loading}
-            >
+            <Button onClick={onCheckOutModalOpen} isLoading={loading}>
               Check-Out Participant
             </Button>
-            <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`);
-              }}
-              isLoading={loading}
-            >
+            <Button onClick={onScanner2ModalOpen} isLoading={loading}>
               Open Scanner
             </Button>
           </Flex>
@@ -137,6 +143,14 @@ export default function ParticipantsCheckIn() {
       ) : (
         <></>
       )}
+      <CheckInParticipantWithMultiScanner
+        isOpen={isMultiScannerModalOpen}
+        onClose={onMultiScannerModalClose}
+      />
+      <CheckInParticipant isOpen={isCheckInModalOpen} onClose={onCheckInModalClose} />
+      <CheckInParticipantWithScanner isOpen={isScanner1ModalOpen} onClose={onScanner1ModalClose} />
+      <CheckOutParticipant isOpen={isCheckOutModalOpen} onClose={onCheckOutModalClose} />
+      <CheckOutParticipantWithScanner isOpen={isScanner2ModalOpen} onClose={onScanner2ModalClose} />
     </DashboardLayout>
   );
 }
