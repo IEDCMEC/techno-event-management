@@ -1,17 +1,14 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
+import { ChevronLeftIcon, ChevronDownIcon,Menu, MenuButton, MenuList, MenuItem  } from '@chakra-ui/icons';
+import CustomStyledBox from '@/pages/CustomStyledBox'
 import { Button, Flex } from '@chakra-ui/react';
-import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
-
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';;
 import DashboardLayout from '@/layouts/DashboardLayout';
-
 import DataDisplay from '@/components/DataDisplay';
-
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
-
 import NavigationMenu from '../../navigationmenu';
 
 const columns = [
@@ -60,26 +57,71 @@ export default function ParticipantsCheckIn() {
     <DashboardLayout
       pageTitle="Participants Check-In"
       previousPage={`/${orgId}/events/${eventId}/participants`}
-      headerButton={
-        <>
-          <Flex h="100%" flexDirection="column">
+      debugInfo={participantsCheckIn}
+    >
+      <NavigationMenu orgId={orgId} eventId={eventId} 
+      navButton={
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', marginTop: '10px' }}>
+          {/* Left side content */}
+          <div style={{ display: 'flex', gap: '10px' }}>
             <Button
-              mt="auto"
-              mb="0.5"
+              leftIcon={<ChevronLeftIcon />}
+              colorScheme="gray"
+              variant="solid"
+              onClick={() => router.back()}
+            >
+              Back
+            </Button>
+            <Menu>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
+              Participants Check-in Details
+              </MenuButton>
+              <MenuList bg="gray.100" borderColor="gray.200">
+                <MenuItem
+                  color="gray.700"
+                  fontWeight="medium"
+                  _hover={{ bg: "gray.200" }}
+                  onClick={() => router.push(`/${orgId}/events/${eventId}/participants`)}
+                >
+                  Participants Details
+                </MenuItem>
+                <MenuItem
+                  color="gray.700"
+                  fontWeight="medium"
+                  _hover={{ bg: "gray.200" }}
+                  onClick={() => router.push(`/${orgId}/events/${eventId}/attributes`)}
+                >
+                  Attributes Details
+                </MenuItem>
+                <MenuItem
+                  color="gray.700"
+                  fontWeight="medium"
+                  _hover={{ bg: "gray.200" }}
+                  onClick={() => router.push(`/${orgId}/events/${eventId}/extras`)}
+                >
+                  Extras Details
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </div>
+      
+          {/* Right side content */}
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <Button
               onClick={() => {
                 router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`);
               }}
               isLoading={loading}
+              colorScheme="gray"
             >
               Multi-Stage Scanner
             </Button>
-          </Flex>
-          <Flex flexDirection="column" gap={4}>
             <Button
               onClick={() => {
                 router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`);
               }}
               isLoading={loading}
+              colorScheme="gray"
             >
               Check-In Participant
             </Button>
@@ -88,16 +130,16 @@ export default function ParticipantsCheckIn() {
                 router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`);
               }}
               isLoading={loading}
+              colorScheme="gray"
             >
               Open Scanner
             </Button>
-          </Flex>
-          <Flex flexDirection="column" gap={4}>
             <Button
               onClick={() => {
                 router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`);
               }}
               isLoading={loading}
+              colorScheme="gray"
             >
               Check-Out Participant
             </Button>
@@ -106,16 +148,16 @@ export default function ParticipantsCheckIn() {
                 router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`);
               }}
               isLoading={loading}
+              colorScheme="gray"
             >
               Open Scanner
             </Button>
-          </Flex>
-          {/* <NavigationMenu orgId={orgId} eventId={eventId} />*/}
-        </>
+          </div>
+        </div>
       }
-      debugInfo={participantsCheckIn}
-    >
-      <NavigationMenu orgId={orgId} eventId={eventId} />
+      />
+
+      <CustomStyledBox></CustomStyledBox>
 
       <DataDisplay
         loading={loading}

@@ -38,7 +38,8 @@ import { Box, VStack, Button, Flex } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
-const NavigationMenu = ({ orgId, eventId }) => {
+
+const NavigationMenu = ({ orgId, eventId, navButton }) => {
   const tabStyle = (isActive) => ({
     color: isActive ? '#369b97' : '#369b97',
     backgroundColor: isActive ? '#e6f7f5' : '#e6f7f5',
@@ -49,6 +50,7 @@ const NavigationMenu = ({ orgId, eventId }) => {
     fontWeight: '600',
     width: { base: '100%', md: 'auto' },
   });
+  
   const router = useRouter();
   const { activeTab, setActiveTab, eventDetails } = useContext(account);
   console.log('trial', eventDetails.isShortlisting);
@@ -70,32 +72,8 @@ const NavigationMenu = ({ orgId, eventId }) => {
     //console.log(activeTab);
   }, [activeTab]);
   return (
-    <Box
-      width="100%"
-      backgroundColor="#e6f7f5"
-      py={2}
-      px={2}
-      borderRadius="8px"
-      display={{ base: 'block', md: 'flex' }}
-    >
-      <VStack spacing={2} align="stretch" display={{ base: 'flex', md: 'none' }}>
-        {/* 'participants', 'check-in', 'attributes', 'extras' */}
-        {navItems.map((tab) => (
-          <Button
-            key={tab.link}
-            style={tabStyle(activeTab === tab.link)}
-            onClick={() => {
-              setActiveTab(tab.link);
-              const element = tab.link === 'check-in' ? 'participants/check-in' : tab;
-              router.push(`/${orgId}/events/${eventId}/${element}`);
-            }}
-          >
-            {tab === 'check-in'
-              ? 'Participant Check In'
-              : tab.name.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
-          </Button>
-        ))}
-      </VStack>
+    <VStack spacing={4} width="100%" align="stretch" p={4}>
+      {/* Navigation Menu Box */}
 
       <Flex
         justifyContent="space-evenly"
@@ -128,4 +106,5 @@ const NavigationMenu = ({ orgId, eventId }) => {
     </Box>
   );
 };
+
 export default NavigationMenu;
