@@ -50,7 +50,7 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
     fontWeight: '600',
     width: { base: '100%', md: 'auto' },
   });
-  
+
   const router = useRouter();
   const { activeTab, setActiveTab, eventDetails } = useContext(account);
   console.log('trial', eventDetails.isShortlisting);
@@ -77,7 +77,7 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
 
       {/* Nav Button Section */}
       {navButton && <Box width="100%">{navButton}</Box>}
-      <Flex
+      {/* <Flex
         justifyContent="space-evenly"
         alignItems="center"
         width="100%"
@@ -104,7 +104,7 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
             </Button>
           );
         })}
-      </Flex>
+      </Flex> */}
     </VStack>
   );
 };
