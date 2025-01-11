@@ -44,6 +44,7 @@ export const getOrganizationStats = async (req: Request, res: Response) => {
       },
       include: {
         Event: true,
+        Address: true,
         OrganizationUser: true,
       },
     });

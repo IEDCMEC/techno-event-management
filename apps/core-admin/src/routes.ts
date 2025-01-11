@@ -20,6 +20,7 @@ import {
   updateParticipantAttribute,
   getParticipantBycheckInKey,
 } from './controllers/participants';
+import { getAllRegistrations } from './controllers/registration';
 import {
   addNewAttribute,
   editAttribute,
@@ -79,6 +80,7 @@ router.get('/organizations/:orgId/events/:eventId', getEventStats); //midhun //m
 router.post('/organizations/:orgId/events', createNewEvent); //midhun
 
 router.get('/organizations/:orgId/events/:eventId/participants', getAllParticipants); //midhun //midhun - done
+router.get('/organizations/:orgId/events/:eventId/registrations', getAllRegistrations);
 router.post('/organizations/:orgId/events/:eventId/participants', addNewParticipant);
 router.put('/organizations/:orgId/events/:eventId/participants/:participantId', editParticipant);
 

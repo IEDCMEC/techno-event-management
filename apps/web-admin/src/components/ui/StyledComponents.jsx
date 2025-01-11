@@ -6,6 +6,7 @@ import { inter } from './fonts';
 import { useColorMode, Td } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useEffect } from 'react';
+
 const StyledBox = forwardRef(({ children, ...props }, ref) => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (

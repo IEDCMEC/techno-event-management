@@ -81,6 +81,7 @@ export default function EventById() {
       },
     },
   );
+
   // useEffect(() => {
   //   const fetchEventAttributes = async () => {
   //     const { data, status } = await get(

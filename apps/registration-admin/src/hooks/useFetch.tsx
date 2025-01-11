@@ -16,7 +16,13 @@ export const useFetch = () => {
     } catch (err) {
       console.error(err);
       setLoading(false);
-      return null;
+      if (axios.isAxiosError(err) && err.response) {
+        console.error(`Error: ${err.response.status} - ${err.response.statusText}`);
+        return { data: err.response.data, status: err.response.status };
+      } else {
+        console.error('Error: Unable to process the request.');
+        return null;
+      }
     }
   };
 
