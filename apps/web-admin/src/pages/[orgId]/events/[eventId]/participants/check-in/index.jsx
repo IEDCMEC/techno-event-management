@@ -159,7 +159,8 @@ export default function ParticipantsCheckIn() {
             <div style={{ display: 'flex', gap: '10px' }}>
               <Button
                 onClick={() => {
-                  router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`);
+                  // router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`);
+                  onMultiScannerModalOpen();
                 }}
                 isLoading={loading}
                 colorScheme="gray"
@@ -168,7 +169,8 @@ export default function ParticipantsCheckIn() {
               </Button>
               <Button
                 onClick={() => {
-                  router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`);
+                  // router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`);
+                  onCheckInModalOpen();
                 }}
                 isLoading={loading}
                 colorScheme="gray"
@@ -177,7 +179,8 @@ export default function ParticipantsCheckIn() {
               </Button>
               <Button
                 onClick={() => {
-                  router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`);
+                  // router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`);
+                  onScanner1ModalOpen();
                 }}
                 isLoading={loading}
                 colorScheme="gray"
@@ -186,7 +189,8 @@ export default function ParticipantsCheckIn() {
               </Button>
               <Button
                 onClick={() => {
-                  router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`);
+                  // router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`);
+                  onCheckOutModalOpen();
                 }}
                 isLoading={loading}
                 colorScheme="gray"
@@ -195,7 +199,8 @@ export default function ParticipantsCheckIn() {
               </Button>
               <Button
                 onClick={() => {
-                  router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`);
+                  // router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`);
+                  onScanner2ModalOpen();
                 }}
                 isLoading={loading}
                 colorScheme="gray"
