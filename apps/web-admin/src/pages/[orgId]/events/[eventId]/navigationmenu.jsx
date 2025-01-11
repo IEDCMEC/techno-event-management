@@ -30,44 +30,86 @@ const NavigationMenu = ({ orgId, eventId }) => {
     </>
   );
 };*/
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronLeftIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useTabsStyles } from '@chakra-ui/react';
-import { useState } from 'react';
-import { Box, VStack, Button, Flex } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { useContext } from 'react';
-import { account } from '@/contexts/MyContext';
+import { useEffect, useState } from 'react';
+import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
 
 const NavigationMenu = ({ orgId, eventId, navButton }) => {
-  const tabStyle = (isActive) => ({
-    color: isActive ? '#369b97' : '#369b97',
-    backgroundColor: isActive ? '#e6f7f5' : '#e6f7f5',
-    padding: '10px 20px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontSize: { base: '14px', md: '17px' },
-    fontWeight: '600',
-    width: { base: '100%', md: 'auto' },
-  });
-  
   const router = useRouter();
-  const navItems = [
-    { link: 'participants', name: 'Participants' },
-    { link: 'check-in', name: 'Participants Check In' },
-    { link: 'attributes', name: 'Attributes' },
-    { link: 'extras', name: 'Extras' },
-  ];
+  const [currentPage, setCurrentPage] = useState('');
   
-  const { activeTab, setActiveTab } = useContext(account);
+  const menuItems = [
+    { 
+      name: 'Participants Details',
+      path: `/${orgId}/events/${eventId}/participants`
+    },
+    { 
+      name: 'Participants Check-in Details',
+      path: `/${orgId}/events/${eventId}/participants/check-in`
+    },
+    { 
+      name: 'Attributes Details',
+      path: `/${orgId}/events/${eventId}/attributes`
+    },
+    { 
+      name: 'Extras Details',
+      path: `/${orgId}/events/${eventId}/extras`
+    }
+  ];
+
+  useEffect(() => {
+    const path = router.asPath;
+    const lastSegment = path.split('/').pop();
+    
+    const pageMap = {
+      'participants': 'Participants Details',
+      'check-in': 'Participants Check-in Details',
+      'attributes': 'Attributes Details',
+      'extras': 'Extras Details'
+    };
+
+    setCurrentPage(pageMap[lastSegment] || 'Details');
+  }, [router.asPath]);
+
+  const commonButtons = (
+    <div className="flex gap-4" style={{ paddingLeft: '20px', paddingRight: '20px' }}>
+      <Button
+        leftIcon={<ChevronLeftIcon />}
+        colorScheme="gray"
+        variant="solid"
+        onClick={() => router.back()}
+      >
+        Back
+      </Button>
+      <Menu>
+        <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
+          {currentPage}
+        </MenuButton>
+        <MenuList bg="gray.100" borderColor="gray.200">
+          {menuItems.map((item) => (
+            <MenuItem
+              key={item.name}
+              color="gray.700"
+              fontWeight="medium"
+              _hover={{ bg: "gray.200" }}
+              onClick={() => router.push(item.path)}
+            >
+              {item.name}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
+    </div>
+  );
 
   return (
-    <VStack spacing={4} width="100%" align="stretch" p={4}>
-      {/* Navigation Menu Box */}
-
-      {/* Nav Button Section */}
-      {navButton && <Box width="100%">{navButton}</Box>}
-    </VStack>
+    <div className="w-full space-y-4" style={{ marginTop: '20px' }}>
+      <div className="flex justify-between items-center mb-5 mt-2.5">
+        {commonButtons}
+        {navButton && <div className="flex gap-2.5" style={{ paddingRight: '20px' }}>{navButton}</div>}
+      </div>
+    </div>
   );
 };
 

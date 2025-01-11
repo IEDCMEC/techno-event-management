@@ -152,70 +152,28 @@ export default function Participants() {
       previousPage={`/organizations/${orgId}/events/${eventId}`}
       debugInfo={participants}
     >
-      <NavigationMenu orgId={orgId} eventId={eventId} 
-      navButton={
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px',marginTop: '10px' }}>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <Button
-            leftIcon={<ChevronLeftIcon />}
-            colorScheme="gray"
-            variant="solid"
-            onClick={() => router.back()}
-          >
-            Back
-          </Button>
-          <Menu>
-  <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
-    Participants Details
-  </MenuButton>
-  <MenuList bg="gray.100" borderColor="gray.200">
-    <MenuItem
-      color="gray.700"
-      fontWeight="medium"
-      _hover={{ bg: "gray.200" }}
-      onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in`)}
-    >
-      Participants Check-in Details
-    </MenuItem>
-    <MenuItem
-      color="gray.700"
-      fontWeight="medium"
-      _hover={{ bg: "gray.200" }}
-      onClick={() => router.push(`/${orgId}/events/${eventId}/attributes`)}
-    >
-      Attributes Details
-    </MenuItem>
-    <MenuItem
-      color="gray.700"
-      fontWeight="medium"
-      _hover={{ bg: "gray.200" }}
-      onClick={() => router.push(`/${orgId}/events/${eventId}/extras`)}
-    >
-      Extras Details
-    </MenuItem>
-  </MenuList>
-</Menu>
-        </div>
-        
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <Button onClick={onOpen} isLoading={loading} colorScheme="gray">
-            Add Participant
-          </Button>
-          <Button
-            onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
-            isLoading={loading}
-            colorScheme="gray"
-          >
-            Upload CSV
-          </Button>
-          {exportToCsv()}
-          <Button onClick={qROnOpen} colorScheme="gray">
-            Send Emails with QR
-          </Button>
-        </div>
-      </div>
-      }
-      />
+     <NavigationMenu 
+  orgId={orgId} 
+  eventId={eventId}
+  navButton={
+    <div className="flex gap-2.5">
+      <Button onClick={onOpen} isLoading={loading} colorScheme="gray">
+        Add Participant
+      </Button>
+      <Button
+        onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
+        isLoading={loading}
+        colorScheme="gray"
+      >
+        Upload CSV
+      </Button>
+      {exportToCsv()}
+      <Button onClick={qROnOpen} colorScheme="gray">
+        Send Emails with QR
+      </Button>
+    </div>
+  }
+/>
 
 
       <CustomStyledBox></CustomStyledBox>

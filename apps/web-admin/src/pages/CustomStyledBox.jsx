@@ -2,7 +2,7 @@ import { Box, Text, Image } from '@chakra-ui/react';
 
 const CustomStyledBox = () => {
   return (
-    <Box display="flex" gap="70px" marginTop="20px" paddingLeft="20px">
+    <Box display="flex" gap="70px" marginTop="40px" paddingLeft="20px">
       
       <Box
         display="flex"

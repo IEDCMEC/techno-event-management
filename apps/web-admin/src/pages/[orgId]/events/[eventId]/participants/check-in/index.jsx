@@ -1,15 +1,13 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { ChevronLeftIcon, ChevronDownIcon,Menu, MenuButton, MenuList, MenuItem  } from '@chakra-ui/icons';
-import CustomStyledBox from '@/pages/CustomStyledBox'
-import { Button, Flex } from '@chakra-ui/react';
-import { StyledBox, StyledText } from '@/components/ui/StyledComponents';;
+import { Button } from '@chakra-ui/react';
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
 import { useAlert } from '@/hooks/useAlert';
-import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../../navigationmenu';
+import CustomStyledBox from '@/pages/CustomStyledBox';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -23,7 +21,6 @@ const columns = [
     width: 200,
     valueGetter: (params) => params.row?.checkIn?.checkedInAt || 'Not Checked In',
   },
-
   {
     field: 'checkedInByEmail',
     headerName: 'Checked In By',
@@ -35,15 +32,11 @@ const columns = [
 export default function ParticipantsCheckIn() {
   const router = useRouter();
   const showAlert = useAlert();
-
   const { orgId, eventId } = router.query;
-  const { loading, get } = useFetch();
-
+  const [participantsCheckIn, setParticipantsCheckIn] = useState([]);
   const { useGetQuery } = useWrapper();
 
-  const [participantsCheckIn, setParticipantsCheckIn] = useState([]);
-
-  const { data, status, error } = useGetQuery(
+  const { data, status, error, isFetching: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
     `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
     {},
@@ -59,105 +52,51 @@ export default function ParticipantsCheckIn() {
       previousPage={`/${orgId}/events/${eventId}/participants`}
       debugInfo={participantsCheckIn}
     >
-      <NavigationMenu orgId={orgId} eventId={eventId} 
-      navButton={
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', marginTop: '10px' }}>
-          {/* Left side content */}
-          <div style={{ display: 'flex', gap: '10px' }}>
+      <NavigationMenu 
+        orgId={orgId} 
+        eventId={eventId}
+        navButton={
+          <div className="flex gap-2.5">
             <Button
-              leftIcon={<ChevronLeftIcon />}
-              colorScheme="gray"
-              variant="solid"
-              onClick={() => router.back()}
-            >
-              Back
-            </Button>
-            <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
-              Participants Check-in Details
-              </MenuButton>
-              <MenuList bg="gray.100" borderColor="gray.200">
-                <MenuItem
-                  color="gray.700"
-                  fontWeight="medium"
-                  _hover={{ bg: "gray.200" }}
-                  onClick={() => router.push(`/${orgId}/events/${eventId}/participants`)}
-                >
-                  Participants Details
-                </MenuItem>
-                <MenuItem
-                  color="gray.700"
-                  fontWeight="medium"
-                  _hover={{ bg: "gray.200" }}
-                  onClick={() => router.push(`/${orgId}/events/${eventId}/attributes`)}
-                >
-                  Attributes Details
-                </MenuItem>
-                <MenuItem
-                  color="gray.700"
-                  fontWeight="medium"
-                  _hover={{ bg: "gray.200" }}
-                  onClick={() => router.push(`/${orgId}/events/${eventId}/extras`)}
-                >
-                  Extras Details
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </div>
-      
-          {/* Right side content */}
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`);
-              }}
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`)}
               isLoading={loading}
               colorScheme="gray"
             >
               Multi-Stage Scanner
             </Button>
             <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`);
-              }}
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`)}
               isLoading={loading}
               colorScheme="gray"
             >
               Check-In Participant
             </Button>
             <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`);
-              }}
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`)}
               isLoading={loading}
               colorScheme="gray"
             >
               Open Scanner
             </Button>
             <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`);
-              }}
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`)}
               isLoading={loading}
               colorScheme="gray"
             >
               Check-Out Participant
             </Button>
             <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`);
-              }}
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`)}
               isLoading={loading}
               colorScheme="gray"
             >
               Open Scanner
             </Button>
           </div>
-        </div>
-      }
+        }
       />
 
-      <CustomStyledBox></CustomStyledBox>
+      <CustomStyledBox />
 
       <DataDisplay
         loading={loading}
@@ -167,6 +106,7 @@ export default function ParticipantsCheckIn() {
           router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
         }}
       />
+      
       {!loading && participantsCheckIn.length === 0 ? (
         <StyledBox style={{ textAlign: 'center', margin: '20px' }}>
           <StyledText fontSize="25px" color={'blackAlpha.800'} mb={3}>
@@ -176,9 +116,7 @@ export default function ParticipantsCheckIn() {
             Add details about the checked-in participants
           </StyledText>
         </StyledBox>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </DashboardLayout>
   );
 }
