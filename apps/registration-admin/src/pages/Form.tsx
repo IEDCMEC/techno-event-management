@@ -31,6 +31,8 @@ const Form = () => {
             status: 'error',
           });
         }
+      } else if (checkResponse?.status === 403) {
+        navigate('/registrationclosed');
       } else {
         navigate('/');
       }
@@ -58,7 +60,7 @@ const Form = () => {
         description: 'Form submitted successfully!',
         status: 'success',
       });
-      navigate('/');
+      navigate('/already-registered');
     } else {
       showAlert({
         title: 'Error',

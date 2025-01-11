@@ -11,6 +11,13 @@ import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../../navigationmenu';
 
+import { useDisclosure } from '@chakra-ui/react';
+import CheckInParticipantWithMultiScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/multi-in/index';
+import CheckInParticipant from '@/pages/[orgId]/events/[eventId]/participants/check-in/in/index';
+import CheckInParticipantWithScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/in/scanner/index';
+import CheckOutParticipant from '@/pages/[orgId]/events/[eventId]/participants/check-in/out/index';
+import CheckOutParticipantWithScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/out/scanner/index';
+
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
   { field: 'lastName', headerName: 'Last Name', width: 200 },
@@ -52,6 +59,32 @@ export default function ParticipantsCheckIn() {
       setParticipantsCheckIn(data.data.participantsCheckIn || []);
     },
   );
+
+  const {
+    isOpen: isMultiScannerModalOpen,
+    onOpen: onMultiScannerModalOpen,
+    onClose: onMultiScannerModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCheckInModalOpen,
+    onOpen: onCheckInModalOpen,
+    onClose: onCheckInModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isScanner1ModalOpen,
+    onOpen: onScanner1ModalOpen,
+    onClose: onScanner1ModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isScanner2ModalOpen,
+    onOpen: onScanner2ModalOpen,
+    onClose: onScanner2ModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCheckOutModalOpen,
+    onOpen: onCheckOutModalOpen,
+    onClose: onCheckOutModalClose,
+  } = useDisclosure();
 
   return (
     <DashboardLayout
@@ -155,6 +188,112 @@ export default function ParticipantsCheckIn() {
           </div>
         </div>
       }
+      <NavigationMenu
+        orgId={orgId}
+        eventId={eventId}
+        navButton={
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '20px',
+              marginTop: '10px',
+            }}
+          >
+            {/* Left side content */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <Button
+                leftIcon={<ChevronLeftIcon />}
+                colorScheme="gray"
+                variant="solid"
+                onClick={() => router.back()}
+              >
+                Back
+              </Button>
+              <Menu>
+                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
+                  Participants Check-in Details
+                </MenuButton>
+                <MenuList bg="gray.100" borderColor="gray.200">
+                  <MenuItem
+                    color="gray.700"
+                    fontWeight="medium"
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => router.push(`/${orgId}/events/${eventId}/participants`)}
+                  >
+                    Participants Details
+                  </MenuItem>
+                  <MenuItem
+                    color="gray.700"
+                    fontWeight="medium"
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => router.push(`/${orgId}/events/${eventId}/attributes`)}
+                  >
+                    Attributes Details
+                  </MenuItem>
+                  <MenuItem
+                    color="gray.700"
+                    fontWeight="medium"
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => router.push(`/${orgId}/events/${eventId}/extras`)}
+                  >
+                    Extras Details
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </div>
+
+            {/* Right side content */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <Button
+                onClick={() => {
+                  router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`);
+                }}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Multi-Stage Scanner
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`);
+                }}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Check-In Participant
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`);
+                }}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Open Scanner
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`);
+                }}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Check-Out Participant
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`);
+                }}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Open Scanner
+              </Button>
+            </div>
+          </div>
+        }
       />
 
       <CustomStyledBox></CustomStyledBox>
@@ -179,6 +318,14 @@ export default function ParticipantsCheckIn() {
       ) : (
         <></>
       )}
+      <CheckInParticipantWithMultiScanner
+        isOpen={isMultiScannerModalOpen}
+        onClose={onMultiScannerModalClose}
+      />
+      <CheckInParticipant isOpen={isCheckInModalOpen} onClose={onCheckInModalClose} />
+      <CheckInParticipantWithScanner isOpen={isScanner1ModalOpen} onClose={onScanner1ModalClose} />
+      <CheckOutParticipant isOpen={isCheckOutModalOpen} onClose={onCheckOutModalClose} />
+      <CheckOutParticipantWithScanner isOpen={isScanner2ModalOpen} onClose={onScanner2ModalClose} />
     </DashboardLayout>
   );
 }

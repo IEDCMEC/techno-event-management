@@ -300,7 +300,10 @@ export default function Events() {
         columns={columns}
         rows={mergedEvents}
         onRowClick={(row) => {
-          router.push(`/${orgId}/events/${row.id}/participants`);
+          setEventDetails(row);
+          row.isShortlisting
+            ? router.push(`/${orgId}/events/${row.id}/registrants`)
+            : router.push(`/${orgId}/events/${row.id}/participants`);
         }}
       />
       {!loading && events.length === 0 ? (
