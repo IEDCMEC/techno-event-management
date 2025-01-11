@@ -144,7 +144,6 @@ export default function ParticipantsCheckIn() {
         }
       />
 
-
       <DataDisplay
         loading={loading}
         rows={participantsCheckIn}

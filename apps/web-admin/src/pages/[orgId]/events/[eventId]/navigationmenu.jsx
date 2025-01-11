@@ -1,52 +1,28 @@
-/*
- // the idea with menu
-import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import { useRouter } from 'next/router';
-
-const NavigationMenu = ({ orgId, eventId }) => {
-  const router = useRouter();
-  const menuLabels = ['Participants', 'Participants Check In', 'Attributes', 'Extras'];
-  //console.log("navigation menu loaded")
-  return (
-    <>
-    <Menu>
-      <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-        Go to ...
-      </MenuButton>
-      <MenuList>
-        {menuLabels.map((label) => {
-            const path = `/${orgId}/events/${eventId}/${
-            label === 'Participants Check In' ? 'participants/check-in' : label.toLowerCase()
-            }`;
-            return (
-            <MenuItem key={label} onClick={() => router.push(path)}>
-                {label}
-            </MenuItem>
-            );
-        })}
-      </MenuList>
-    </Menu>
-    </>
-  );
-};*/
 import { inter } from '@/components/ui/fonts';
 import { ChevronDownIcon, ChevronLeftIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useColorMode } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { account } from '@/contexts/MyContext';
 import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
 import { StyledButton, StyledText } from '@/components/ui/StyledComponents';
 
 const NavigationMenu = ({ orgId, eventId, navButton }) => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState('');
-
+  const { eventDetails } = useContext(account);
   const menuItems = [
-    {
-      name: 'Participants Details',
-      path: `/${orgId}/events/${eventId}/participants`,
-    },
+    ...[
+      eventDetails.isShortlisting && router.asPath.endsWith('/participants')
+        ? {
+            name: 'Registrant Details',
+            path: `/${orgId}/events/${eventId}/registrants`,
+          }
+        : {
+            name: 'Participants Details',
+            path: `/${orgId}/events/${eventId}/participants`,
+          },
+    ],
     {
       name: 'Participants Check-in Details',
       path: `/${orgId}/events/${eventId}/participants/check-in`,
