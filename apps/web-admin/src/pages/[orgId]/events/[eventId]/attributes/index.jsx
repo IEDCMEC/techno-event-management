@@ -107,8 +107,15 @@ import NewAttributeForm from './new';
 import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
-import { ChevronLeftIcon, ChevronDownIcon,Menu, MenuButton, MenuList, MenuItem  } from '@chakra-ui/icons';
-import CustomStyledBox from '@/pages/CustomStyledBox'
+import {
+  ChevronLeftIcon,
+  ChevronDownIcon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/icons';
+import CustomStyledBox from '@/pages/CustomStyledBox';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },

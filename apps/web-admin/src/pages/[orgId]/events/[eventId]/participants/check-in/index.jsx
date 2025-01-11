@@ -1,6 +1,15 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Button } from '@chakra-ui/react';
+import {
+  ChevronLeftIcon,
+  ChevronDownIcon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/icons';
+import CustomStyledBox from '@/pages/CustomStyledBox';
+import { Button, Flex } from '@chakra-ui/react';
 import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
@@ -8,6 +17,13 @@ import { useAlert } from '@/hooks/useAlert';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../../navigationmenu';
 import CustomStyledBox from '@/pages/CustomStyledBox';
+
+import { useDisclosure } from '@chakra-ui/react';
+import CheckInParticipantWithMultiScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/multi-in/index';
+import CheckInParticipant from '@/pages/[orgId]/events/[eventId]/participants/check-in/in/index';
+import CheckInParticipantWithScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/in/scanner/index';
+import CheckOutParticipant from '@/pages/[orgId]/events/[eventId]/participants/check-in/out/index';
+import CheckOutParticipantWithScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/out/scanner/index';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -45,6 +61,32 @@ export default function ParticipantsCheckIn() {
       setParticipantsCheckIn(data.data.participantsCheckIn || []);
     },
   );
+
+  const {
+    isOpen: isMultiScannerModalOpen,
+    onOpen: onMultiScannerModalOpen,
+    onClose: onMultiScannerModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCheckInModalOpen,
+    onOpen: onCheckInModalOpen,
+    onClose: onCheckInModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isScanner1ModalOpen,
+    onOpen: onScanner1ModalOpen,
+    onClose: onScanner1ModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isScanner2ModalOpen,
+    onOpen: onScanner2ModalOpen,
+    onClose: onScanner2ModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCheckOutModalOpen,
+    onOpen: onCheckOutModalOpen,
+    onClose: onCheckOutModalClose,
+  } = useDisclosure();
 
   return (
     <DashboardLayout
@@ -172,7 +214,17 @@ export default function ParticipantsCheckIn() {
             Add details about the checked-in participants
           </StyledText>
         </StyledBox>
-      ) : null}
+      ) : (
+        <></>
+      )}
+      <CheckInParticipantWithMultiScanner
+        isOpen={isMultiScannerModalOpen}
+        onClose={onMultiScannerModalClose}
+      />
+      <CheckInParticipant isOpen={isCheckInModalOpen} onClose={onCheckInModalClose} />
+      <CheckInParticipantWithScanner isOpen={isScanner1ModalOpen} onClose={onScanner1ModalClose} />
+      <CheckOutParticipant isOpen={isCheckOutModalOpen} onClose={onCheckOutModalClose} />
+      <CheckOutParticipantWithScanner isOpen={isScanner2ModalOpen} onClose={onScanner2ModalClose} />
     </DashboardLayout>
   );
 }

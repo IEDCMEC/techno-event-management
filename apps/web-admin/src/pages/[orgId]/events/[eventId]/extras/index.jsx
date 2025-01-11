@@ -113,8 +113,15 @@ import DataDisplay from '@/components/DataDisplay';
 import NewExtraForm from './new'; // Import the form component
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
-import { ChevronLeftIcon, ChevronDownIcon,Menu, MenuButton, MenuList, MenuItem  } from '@chakra-ui/icons';
-import CustomStyledBox from '@/pages/CustomStyledBox'
+import {
+  ChevronLeftIcon,
+  ChevronDownIcon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/icons';
+import CustomStyledBox from '@/pages/CustomStyledBox';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },

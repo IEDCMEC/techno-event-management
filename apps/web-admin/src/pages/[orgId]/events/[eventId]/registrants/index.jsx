@@ -14,31 +14,19 @@ import { account } from '@/contexts/MyContext';
 import axios from 'axios';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
-import {
-  ChevronLeftIcon,
-  ChevronDownIcon,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-} from '@chakra-ui/icons';
-import CustomStyledBox from '@/pages/CustomStyledBox';
-// import AdduserIcon from '@/assets/events/Adduser.png';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
   { field: 'lastName', headerName: 'Last Name', width: 200 },
   { field: 'email', headerName: 'Email', width: 200 },
   { field: 'phone', headerName: 'Phone', width: 200 },
-  { field: 'checkInKey', headerName: 'Check In Key', width: 200 },
-  { field: 'checkedIn', headerName: 'CheckedIn', width: 200 },
   { field: 'numberOfAttributesAssigned', headerName: 'Attributes Assigned', width: 200 },
   { field: 'numnerOfExtrasAssigned', headerName: 'Extras Assigned', width: 200 },
   { field: 'addedAt', headerName: 'Added At', width: 200 },
 ];
 
-export default function Participants() {
-  const { participants, setParticipants } = useContext(account);
+export default function Registrants() {
+  const { participants, setParticipants, accountDetails } = useContext(account);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -47,11 +35,16 @@ export default function Participants() {
     checkInKey: '',
   });
 
+  //console.log("test",accountDetails);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const showAlert = useAlert();
   const { orgId, eventId } = router.query;
+  // const { loading, get, post } = useFetch();
   const { useGetQuery, usePostMutation } = useWrapper();
+
+  // const { accountDetails } = useContext(account);
 
   const {
     data,
@@ -59,12 +52,12 @@ export default function Participants() {
     error,
     isLoading: loading,
   } = useGetQuery(
-    `/core/organizations/${orgId}/events/${eventId}/participants`,
-    `/core/organizations/${orgId}/events/${eventId}/participants`,
+    `/core/organizations/${orgId}/events/${eventId}/registrations`,
+    `/core/organizations/${orgId}/events/${eventId}/registrations`,
     {},
     {},
     (data) => {
-      setParticipants(data.data.participants || []);
+      setParticipants(data.data.registrants || []);
     },
   );
 
@@ -96,7 +89,7 @@ export default function Participants() {
           status: 'success',
         });
       },
-      invalidatelKeys: [`/core/organizations/${orgId}/events/${eventId}/participants`],
+      invalidatelKeys: [`/core/organizations/${orgId}/events/${eventId}/registrations`],
     },
   );
 
@@ -140,7 +133,7 @@ export default function Participants() {
         filename={`participants-${eventId}.csv`}
         style={{ textDecoration: 'none' }}
       >
-        <Button colorScheme="gray" variant="solid">
+        <Button colorScheme="teal" variant="solid">
           Export to CSV
         </Button>
       </CSVLink>
@@ -151,76 +144,24 @@ export default function Participants() {
     <DashboardLayout
       pageTitle="Participants"
       previousPage={`/organizations/${orgId}/events/${eventId}`}
+      headerButton={
+        <>
+          <Button onClick={onOpen} isLoading={loading}>
+            Add Participant
+          </Button>
+          <Button
+            onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
+            isLoading={loading}
+          >
+            Upload CSV
+          </Button>
+          {exportToCsv()}
+          <Button onClick={qROnOpen}>Send Emails with QR</Button>
+        </>
+      }
       debugInfo={participants}
     >
-      <NavigationMenu
-        orgId={orgId}
-        eventId={eventId}
-        navButton={
-          <div className="flex gap-2.5">
-            <Button
-              onClick={onOpen}
-              isLoading={loading}
-              colorScheme="gray"
-              sx={{
-                display: 'flex',
-                padding: '8px 12px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignContent: 'center',
-                gap: '8px',
-                flexWrap: 'wrap',
-                borderRadius: 'var(--8, 8px)',
-                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-              }}
-            >
-              Add Participant
-            </Button>
-            <Button
-              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
-              isLoading={loading}
-              colorScheme="gray"
-              sx={{
-                display: 'flex',
-                padding: '8px 12px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignContent: 'center',
-                gap: '8px',
-                flexWrap: 'wrap',
-                borderRadius: 'var(--8, 8px)',
-                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-              }}
-            >
-              Upload CSV
-            </Button>
-            {exportToCsv()}
-            <Button
-              onClick={qROnOpen}
-              colorScheme="gray"
-              sx={{
-                display: 'flex',
-                padding: '8px 12px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignContent: 'center',
-                gap: '8px',
-                flexWrap: 'wrap',
-                borderRadius: 'var(--8, 8px)',
-                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-              }}
-            >
-              Send Emails with QR
-            </Button>
-          </div>
-        }
-      />
-
-      <CustomStyledBox></CustomStyledBox>
-
+      <NavigationMenu orgId={orgId} eventId={eventId} />
       <DataDisplay loading={loading} rows={participants} columns={columns} />
       {!loading && participants.length === 0 ? (
         <StyledBox style={{ textAlign: 'center', margin: '20px' }}>

@@ -156,7 +156,8 @@ export default function Events() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const { loading, get } = useFetch();
   const { useGetQuery } = useWrapper();
-  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
+  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts, setEventDetails } =
+    useContext(account);
   // console.log(accountDetails.Event);
 
   const links = [
@@ -300,7 +301,10 @@ export default function Events() {
         columns={columns}
         rows={mergedEvents}
         onRowClick={(row) => {
-          router.push(`/${orgId}/events/${row.id}/participants`);
+          setEventDetails(row);
+          row.isShortlisting
+            ? router.push(`/${orgId}/events/${row.id}/registrants`)
+            : router.push(`/${orgId}/events/${row.id}/participants`);
         }}
       />
       {!loading && events.length === 0 ? (
