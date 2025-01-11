@@ -104,7 +104,7 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import { useAlert } from '@/hooks/useAlert';
 import DataDisplay from '@/components/DataDisplay';
 import NewAttributeForm from './new';
-import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
+import { StyledBox, StyledButton, StyledText } from '@/components/ui/StyledComponents';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
 import {
@@ -159,35 +159,19 @@ export default function Attributes() {
       previousPage={`/organizations/${orgId}/events/${eventId}`}
       debugInfo={JSON.stringify(attributes)}
     >
-    <NavigationMenu 
-  orgId={orgId} 
-  eventId={eventId}
-  navButton={
-    <div className="flex gap-2.5">
-      <Button 
-        onClick={onOpen} 
-        isLoading={loading} 
-        colorScheme="gray"
-        sx={{
-          display: 'flex',
-          padding: '8px 12px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          alignContent: 'center',
-          gap: '8px',
-          flexWrap: 'wrap',
-          borderRadius: 'var(--8, 8px)',
-          border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-          background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-        }}
-      >
-        Add Attribute
-      </Button>
-    </div>
-  }
-/>
+      <NavigationMenu
+        orgId={orgId}
+        eventId={eventId}
+        navButton={
+          <div className="flex gap-2.5">
+            <StyledButton onClick={onOpen} isLoading={loading}>
+              <StyledText>Add Attribute</StyledText>
+            </StyledButton>
+          </div>
+        }
+      />
 
-      <CustomStyledBox></CustomStyledBox>
+      {/* <CustomStyledBox></CustomStyledBox> */}
 
       <DataDisplay
         loading={loading}

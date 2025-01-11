@@ -55,7 +55,7 @@ export default function Events() {
     fetchEvents();
   }, []);
 
-  const exportToCsv = () => {
+  const ExportToCsv = () => {
     const csvData = events.map((event) => ({
       Name: event.name,
       NumParticipants: event.numberOfParticipants,
@@ -81,7 +81,7 @@ export default function Events() {
           <Button onClick={onOpen} isLoading={loading}>
             New Event
           </Button>
-          {exportToCsv()}
+          <ExportToCsv/>
         </>
       }
       debugInfo={events}
@@ -192,7 +192,7 @@ export default function Events() {
 
   console.log(mergedEvents);
 
-  const exportToCsv = () => {
+  const ExportToCsv = () => {
     const csvData = events.map((event) => ({
       Name: event.name,
       NumParticipants: event.numberOfParticipants,
@@ -219,7 +219,7 @@ export default function Events() {
       //     <Button onClick={onOpen} isLoading={loading}>
       //       New Event
       //     </Button>
-      //     {exportToCsv()}
+      //     <ExportToCsv/>
       //   </>
       // }
 

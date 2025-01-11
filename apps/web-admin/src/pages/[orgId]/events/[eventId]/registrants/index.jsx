@@ -114,7 +114,7 @@ export default function Registrants() {
   };
   const { isOpen: qrIsOpen, onOpen: qROnOpen, onClose: qROnClose } = useDisclosure();
 
-  const exportToCsv = () => {
+  const ExportToCsv = () => {
     const csvData = participants.map((participant) => ({
       firstName: participant.firstName,
       lastName: participant.lastName,
@@ -155,7 +155,7 @@ export default function Registrants() {
           >
             Upload CSV
           </Button>
-          {exportToCsv()}
+          <ExportToCsv />
           <Button onClick={qROnOpen}>Send Emails with QR</Button>
         </>
       }

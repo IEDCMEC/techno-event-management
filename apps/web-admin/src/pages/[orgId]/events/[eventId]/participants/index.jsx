@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button, useDisclosure } from '@chakra-ui/react';
-import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
+import { StyledBox, StyledButton, StyledText } from '@/components/ui/StyledComponents';
 import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
@@ -121,7 +121,7 @@ export default function Participants() {
   };
   const { isOpen: qrIsOpen, onOpen: qROnOpen, onClose: qROnClose } = useDisclosure();
 
-  const exportToCsv = () => {
+  const ExportToCsv = () => {
     const csvData = participants.map((participant) => ({
       firstName: participant.firstName,
       lastName: participant.lastName,
@@ -140,9 +140,9 @@ export default function Participants() {
         filename={`participants-${eventId}.csv`}
         style={{ textDecoration: 'none' }}
       >
-        <Button colorScheme="gray" variant="solid">
+        <StyledButton colorScheme="gray" variant="solid">
           Export to CSV
-        </Button>
+        </StyledButton>
       </CSVLink>
     );
   };
@@ -158,68 +158,24 @@ export default function Participants() {
         eventId={eventId}
         navButton={
           <div className="flex gap-2.5">
-            <Button
-              onClick={onOpen}
-              isLoading={loading}
-              colorScheme="gray"
-              sx={{
-                display: 'flex',
-                padding: '8px 12px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignContent: 'center',
-                gap: '8px',
-                flexWrap: 'wrap',
-                borderRadius: 'var(--8, 8px)',
-                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-              }}
-            >
-              Add Participant
-            </Button>
-            <Button
+            <StyledButton onClick={onOpen} isLoading={loading}>
+              <StyledText>Add Participant</StyledText>
+            </StyledButton>
+            <StyledButton
               onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
               isLoading={loading}
-              colorScheme="gray"
-              sx={{
-                display: 'flex',
-                padding: '8px 12px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignContent: 'center',
-                gap: '8px',
-                flexWrap: 'wrap',
-                borderRadius: 'var(--8, 8px)',
-                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-              }}
             >
-              Upload CSV
-            </Button>
-            {exportToCsv()}
-            <Button
-              onClick={qROnOpen}
-              colorScheme="gray"
-              sx={{
-                display: 'flex',
-                padding: '8px 12px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignContent: 'center',
-                gap: '8px',
-                flexWrap: 'wrap',
-                borderRadius: 'var(--8, 8px)',
-                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-              }}
-            >
-              Send Emails with QR
-            </Button>
+              <StyledText>Upload CSV</StyledText>
+            </StyledButton>
+            <ExportToCsv />
+            <StyledButton onClick={qROnOpen} colorScheme="gray">
+              <StyledText>Send Emails with QR</StyledText>
+            </StyledButton>
           </div>
         }
       />
 
-      <CustomStyledBox></CustomStyledBox>
+      {/* <CustomStyledBox></CustomStyledBox> */}
 
       <DataDisplay loading={loading} rows={participants} columns={columns} />
       {!loading && participants.length === 0 ? (

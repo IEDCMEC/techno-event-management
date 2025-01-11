@@ -30,127 +30,90 @@ const NavigationMenu = ({ orgId, eventId }) => {
     </>
   );
 };*/
-//import { inter } from '../../../../../../components/ui/fonts';
+import { inter } from '@/components/ui/fonts';
 import { ChevronDownIcon, ChevronLeftIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useColorMode } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
+import { StyledButton, StyledText } from '@/components/ui/StyledComponents';
 
 const NavigationMenu = ({ orgId, eventId, navButton }) => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState('');
-  
+
   const menuItems = [
-    { 
+    {
       name: 'Participants Details',
-      path: `/${orgId}/events/${eventId}/participants`
+      path: `/${orgId}/events/${eventId}/participants`,
     },
-    { 
+    {
       name: 'Participants Check-in Details',
-      path: `/${orgId}/events/${eventId}/participants/check-in`
+      path: `/${orgId}/events/${eventId}/participants/check-in`,
     },
-    { 
+    {
       name: 'Attributes Details',
-      path: `/${orgId}/events/${eventId}/attributes`
+      path: `/${orgId}/events/${eventId}/attributes`,
     },
-    { 
+    {
       name: 'Extras Details',
-      path: `/${orgId}/events/${eventId}/extras`
-    }
+      path: `/${orgId}/events/${eventId}/extras`,
+    },
   ];
 
   useEffect(() => {
     const path = router.asPath;
     const lastSegment = path.split('/').pop();
-    
+
     const pageMap = {
-      'participants': 'Participants Details',
+      participants: 'Participants Details',
       'check-in': 'Participants Check-in Details',
-      'attributes': 'Attributes Details',
-      'extras': 'Extras Details'
+      attributes: 'Attributes Details',
+      extras: 'Extras Details',
     };
 
     setCurrentPage(pageMap[lastSegment] || 'Details');
   }, [router.asPath]);
-
+  const { colorMode } = useColorMode();
   const commonButtons = (
     <div className="flex gap-4" style={{ paddingLeft: '20px', paddingRight: '20px' }}>
-      <Button
+      <StyledButton
         leftIcon={<ChevronLeftIcon />}
         colorScheme="gray"
         variant="solid"
-        onClick={() => router.back()}
-        sx={{
-          display: 'flex',
-          height: '36px',
-          padding: '8px 10px 8px 12px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '3px',
-          borderRadius: 'var(--8, 8px)',
-          border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-          background: 'var(--black-5, rgba(4, 5, 11, 0.05))',
-          color: 'var(--black, #04050B)',
-          //fontFamily: inter.variable,
-          fontSize: '13px',
-          fontStyle: 'normal',
-          fontWeight: '500',
-          lineHeight: '20px',
-        }}
+        onClick={() => router.push(`/${orgId}/events/`)}
       >
-        Back
-      </Button>
+        <StyledText>Back</StyledText>
+      </StyledButton>
       <Menu>
-  <MenuButton
-    as={Button}
-    rightIcon={<ChevronDownIcon />}
-    colorScheme="gray"
-    sx={{
-      display: 'flex',
-      height: '36px',
-      padding: '8px 10px 8px 12px',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '3px',
-      borderRadius: 'var(--8, 8px)',
-      border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-      background: 'var(--black-5, rgba(4, 5, 11, 0.05))',
-      color: 'var(--black, #04050B)',
-      fontSize: '13px',
-      fontStyle: 'normal',
-      fontWeight: '500',
-      lineHeight: '20px',
-    }}
-  >
-    {currentPage}
-  </MenuButton>
-  <MenuList
-    sx={{
-      bg: 'var(--black-5, rgba(4, 5, 11, 0.05))',
-      borderColor: 'var(--black-10, rgba(4, 5, 11, 0.10))',
-      borderRadius: 'var(--8, 8px)',
-    }}
-  >
-    {menuItems.map((item) => (
-      <MenuItem
-        key={item.name}
-        sx={{
-          bg: 'var(--black-5, rgba(4, 5, 11, 0.05))',
-          color: 'var(--black, #04050B)',
-          fontSize: '13px',
-          fontWeight: '500',
-          _hover: {
-            bg: 'var(--black-10, rgba(4, 5, 11, 0.10))',
-          },
-        }}
-        onClick={() => router.push(item.path)}
-      >
-        {item.name}
-      </MenuItem>
-    ))}
-  </MenuList>
-</Menu>
-
+        <MenuButton as={StyledButton} rightIcon={<ChevronDownIcon />}>
+          <StyledText>{currentPage}</StyledText>
+        </MenuButton>
+        <MenuList
+          sx={{
+            bg: colorMode === 'light' ? '#F5F5F5' : '#1D1E23',
+            borderColor: colorMode === 'light' ? '#EEEFF2' : '#101117',
+            borderRadius: 'var(--8, 8px)',
+            opacity: '1',
+          }}
+        >
+          {menuItems.map((item) => (
+            <MenuItem
+              key={item.name}
+              sx={{
+                bg: colorMode === 'light' ? '#F5F5F5' : '#1D1E23',
+                _hover: {
+                  bg: colorMode === 'light' ? '#EEEFF2' : '#101117',
+                },
+                opacity: '1',
+              }}
+              onClick={() => router.push(item.path)}
+            >
+              <StyledText opacity="1">{item.name}</StyledText>
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
     </div>
   );
 
@@ -158,12 +121,14 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
     <div className="w-full space-y-4" style={{ marginTop: '20px' }}>
       <div className="flex justify-between items-center mb-5 mt-2.5">
         {commonButtons}
-        {navButton && <div className="flex gap-2.5" style={{ paddingRight: '20px' }}>{navButton}</div>}
+        {navButton && (
+          <div className="flex gap-2.5" style={{ paddingRight: '20px' }}>
+            {navButton}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default NavigationMenu;
-
-

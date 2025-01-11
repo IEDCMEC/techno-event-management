@@ -8,9 +8,9 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/icons';
-import CustomStyledBox from '@/pages/CustomStyledBox';
+// import CustomStyledBox from '@/pages/CustomStyledBox';
 import { Button, Flex } from '@chakra-ui/react';
-import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
+import { StyledBox, StyledButton, StyledText } from '@/components/ui/StyledComponents';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
 import { useAlert } from '@/hooks/useAlert';
@@ -52,7 +52,12 @@ export default function ParticipantsCheckIn() {
   const [participantsCheckIn, setParticipantsCheckIn] = useState([]);
   const { useGetQuery } = useWrapper();
 
-  const { data, status, error, isFetching: loading } = useGetQuery(
+  const {
+    data,
+    status,
+    error,
+    isFetching: loading,
+  } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
     `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
     {},
@@ -94,107 +99,52 @@ export default function ParticipantsCheckIn() {
       previousPage={`/${orgId}/events/${eventId}/participants`}
       debugInfo={participantsCheckIn}
     >
-   <NavigationMenu 
-  orgId={orgId} 
-  eventId={eventId}
-  navButton={
-    <div className="flex gap-2.5">
-      <Button
-        onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`)}
-        isLoading={loading}
-        sx={{
-          display: 'flex',
-          padding: '8px 12px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          alignContent: 'center',
-          gap: '8px',
-          flexWrap: 'wrap',
-          borderRadius: 'var(--8, 8px)',
-          border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-          background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-        }}
-      >
-        Multi-Stage Scanner
-      </Button>
-      <Button
-        onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`)}
-        isLoading={loading}
-        sx={{
-          display: 'flex',
-          padding: '8px 12px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          alignContent: 'center',
-          gap: '8px',
-          flexWrap: 'wrap',
-          borderRadius: 'var(--8, 8px)',
-          border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-          background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-        }}
-      >
-        Check-In Participant
-      </Button>
-      <Button
-        onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`)}
-        isLoading={loading}
-        sx={{
-          display: 'flex',
-          padding: '8px 12px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          alignContent: 'center',
-          gap: '8px',
-          flexWrap: 'wrap',
-          borderRadius: 'var(--8, 8px)',
-          border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-          background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-        }}
-      >
-        Open Scanner
-      </Button>
-      <Button
-        onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`)}
-        isLoading={loading}
-        sx={{
-          display: 'flex',
-          padding: '8px 12px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          alignContent: 'center',
-          gap: '8px',
-          flexWrap: 'wrap',
-          borderRadius: 'var(--8, 8px)',
-          border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-          background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-        }}
-      >
-        Check-Out Participant
-      </Button>
-      <Button
-        onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`)}
-        isLoading={loading}
-        sx={{
-          display: 'flex',
-          padding: '8px 12px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          alignContent: 'center',
-          gap: '8px',
-          flexWrap: 'wrap',
-          borderRadius: 'var(--8, 8px)',
-          border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
-          background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
-        }}
-      >
-        Open Scanner
-      </Button>
-    </div>
-  }
-/>
+      <NavigationMenu
+        orgId={orgId}
+        eventId={eventId}
+        navButton={
+          <div className="flex gap-2.5">
+            <StyledButton
+              onClick={() =>
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`)
+              }
+              isLoading={loading}
+            >
+              <StyledText>Multi-Stage Scanner</StyledText>
+            </StyledButton>
+            <StyledButton
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`)}
+              isLoading={loading}
+            >
+              <StyledText>Check-In Participant</StyledText>
+            </StyledButton>
+            <StyledButton
+              onClick={() =>
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`)
+              }
+              isLoading={loading}
+            >
+              <StyledText>Open Scanner</StyledText>
+            </StyledButton>
+            <StyledButton
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`)}
+              isLoading={loading}
+            >
+              <StyledText>Check-Out Participant</StyledText>
+            </StyledButton>
+            <StyledButton
+              onClick={() =>
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`)
+              }
+              isLoading={loading}
+            >
+              <StyledText>Open Scanner</StyledText>
+            </StyledButton>
+          </div>
+        }
+      />
 
-
-      <CustomStyledBox />
+      {/* <CustomStyledBox /> */}
 
       <DataDisplay
         loading={loading}
@@ -204,7 +154,7 @@ export default function ParticipantsCheckIn() {
           router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
         }}
       />
-      
+
       {!loading && participantsCheckIn.length === 0 ? (
         <StyledBox style={{ textAlign: 'center', margin: '20px' }}>
           <StyledText fontSize="25px" color={'blackAlpha.800'} mb={3}>
