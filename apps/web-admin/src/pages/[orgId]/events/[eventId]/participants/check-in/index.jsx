@@ -144,7 +144,6 @@ export default function ParticipantsCheckIn() {
         }
       />
 
-      {/* <CustomStyledBox /> */}
 
       <DataDisplay
         loading={loading}

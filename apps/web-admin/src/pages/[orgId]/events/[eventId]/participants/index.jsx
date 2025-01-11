@@ -176,7 +176,6 @@ export default function Participants() {
       />
 
       {/* <CustomStyledBox></CustomStyledBox> */}
-
       <DataDisplay loading={loading} rows={participants} columns={columns} />
       {!loading && participants.length === 0 ? (
         <StyledBox style={{ textAlign: 'center', margin: '20px' }}>

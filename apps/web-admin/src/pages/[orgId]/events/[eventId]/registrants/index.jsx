@@ -113,7 +113,6 @@ export default function Registrants() {
     onClose();
   };
   const { isOpen: qrIsOpen, onOpen: qROnOpen, onClose: qROnClose } = useDisclosure();
-
   const ExportToCsv = () => {
     const csvData = participants.map((participant) => ({
       firstName: participant.firstName,
