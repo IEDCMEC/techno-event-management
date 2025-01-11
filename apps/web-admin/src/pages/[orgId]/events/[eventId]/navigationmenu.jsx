@@ -75,6 +75,8 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
     <VStack spacing={4} width="100%" align="stretch" p={4}>
       {/* Navigation Menu Box */}
 
+      {/* Nav Button Section */}
+      {navButton && <Box width="100%">{navButton}</Box>}
       <Flex
         justifyContent="space-evenly"
         alignItems="center"
