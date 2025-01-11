@@ -30,83 +30,140 @@ const NavigationMenu = ({ orgId, eventId }) => {
     </>
   );
 };*/
-import { ChevronDownIcon } from '@chakra-ui/icons';
+//import { inter } from '../../../../../../components/ui/fonts';
+import { ChevronDownIcon, ChevronLeftIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useTabsStyles } from '@chakra-ui/react';
-import { useState } from 'react';
-import { Box, VStack, Button, Flex } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { useContext } from 'react';
-import { account } from '@/contexts/MyContext';
+import { useEffect, useState } from 'react';
+import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
 
 const NavigationMenu = ({ orgId, eventId, navButton }) => {
-  const tabStyle = (isActive) => ({
-    color: isActive ? '#369b97' : '#369b97',
-    backgroundColor: isActive ? '#e6f7f5' : '#e6f7f5',
-    padding: '10px 20px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontSize: { base: '14px', md: '17px' },
-    fontWeight: '600',
-    width: { base: '100%', md: 'auto' },
-  });
-
   const router = useRouter();
-  const { activeTab, setActiveTab, eventDetails } = useContext(account);
-  console.log('trial', eventDetails.isShortlisting);
-  const navItems =
-    eventDetails.isShortlisting && router.asPath.endsWith('/participants')
-      ? [
-          { link: 'registrants', name: 'Registrants' },
-          { link: 'check-in', name: 'Participants Check In' },
-          { link: 'attributes', name: 'Attributes' },
-          { link: 'extras', name: 'Extras' },
-        ]
-      : [
-          { link: 'participants', name: 'Participants' },
-          { link: 'check-in', name: 'Participants Check In' },
-          { link: 'attributes', name: 'Attributes' },
-          { link: 'extras', name: 'Extras' },
-        ];
-  useEffect(() => {
-    //console.log(activeTab);
-  }, [activeTab]);
-  return (
-    <VStack spacing={4} width="100%" align="stretch" p={4}>
-      {/* Navigation Menu Box */}
+  const [currentPage, setCurrentPage] = useState('');
+  
+  const menuItems = [
+    { 
+      name: 'Participants Details',
+      path: `/${orgId}/events/${eventId}/participants`
+    },
+    { 
+      name: 'Participants Check-in Details',
+      path: `/${orgId}/events/${eventId}/participants/check-in`
+    },
+    { 
+      name: 'Attributes Details',
+      path: `/${orgId}/events/${eventId}/attributes`
+    },
+    { 
+      name: 'Extras Details',
+      path: `/${orgId}/events/${eventId}/extras`
+    }
+  ];
 
-      {/* Nav Button Section */}
-      {navButton && <Box width="100%">{navButton}</Box>}
-      {/* <Flex
-        justifyContent="space-evenly"
-        alignItems="center"
-        width="100%"
-        display={{ base: 'none', md: 'flex' }} // Horizontal layout on desktop
+  useEffect(() => {
+    const path = router.asPath;
+    const lastSegment = path.split('/').pop();
+    
+    const pageMap = {
+      'participants': 'Participants Details',
+      'check-in': 'Participants Check-in Details',
+      'attributes': 'Attributes Details',
+      'extras': 'Extras Details'
+    };
+
+    setCurrentPage(pageMap[lastSegment] || 'Details');
+  }, [router.asPath]);
+
+  const commonButtons = (
+    <div className="flex gap-4" style={{ paddingLeft: '20px', paddingRight: '20px' }}>
+      <Button
+        leftIcon={<ChevronLeftIcon />}
+        colorScheme="gray"
+        variant="solid"
+        onClick={() => router.back()}
+        sx={{
+          display: 'flex',
+          height: '36px',
+          padding: '8px 10px 8px 12px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '3px',
+          borderRadius: 'var(--8, 8px)',
+          border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+          background: 'var(--black-5, rgba(4, 5, 11, 0.05))',
+          color: 'var(--black, #04050B)',
+          //fontFamily: inter.variable,
+          fontSize: '13px',
+          fontStyle: 'normal',
+          fontWeight: '500',
+          lineHeight: '20px',
+        }}
       >
-        {navItems.map((content) => {
-          const tab = content.link;
-          return (
-            <Button
-              key={tab}
-              style={tabStyle(activeTab === tab)}
-              onClick={() => {
-                setActiveTab(tab);
-                const element = tab === 'check-in' ? 'participants/check-in' : tab;
-                router.push(
-                  `/${orgId}/events/${eventId}/${element}
-                `,
-                );
-              }}
-            >
-              {tab === 'check-in'
-                ? 'Participant Check In'
-                : tab.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
-            </Button>
-          );
-        })}
-      </Flex> */}
-    </VStack>
+        Back
+      </Button>
+      <Menu>
+  <MenuButton
+    as={Button}
+    rightIcon={<ChevronDownIcon />}
+    colorScheme="gray"
+    sx={{
+      display: 'flex',
+      height: '36px',
+      padding: '8px 10px 8px 12px',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '3px',
+      borderRadius: 'var(--8, 8px)',
+      border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+      background: 'var(--black-5, rgba(4, 5, 11, 0.05))',
+      color: 'var(--black, #04050B)',
+      fontSize: '13px',
+      fontStyle: 'normal',
+      fontWeight: '500',
+      lineHeight: '20px',
+    }}
+  >
+    {currentPage}
+  </MenuButton>
+  <MenuList
+    sx={{
+      bg: 'var(--black-5, rgba(4, 5, 11, 0.05))',
+      borderColor: 'var(--black-10, rgba(4, 5, 11, 0.10))',
+      borderRadius: 'var(--8, 8px)',
+    }}
+  >
+    {menuItems.map((item) => (
+      <MenuItem
+        key={item.name}
+        sx={{
+          bg: 'var(--black-5, rgba(4, 5, 11, 0.05))',
+          color: 'var(--black, #04050B)',
+          fontSize: '13px',
+          fontWeight: '500',
+          _hover: {
+            bg: 'var(--black-10, rgba(4, 5, 11, 0.10))',
+          },
+        }}
+        onClick={() => router.push(item.path)}
+      >
+        {item.name}
+      </MenuItem>
+    ))}
+  </MenuList>
+</Menu>
+
+    </div>
+  );
+
+  return (
+    <div className="w-full space-y-4" style={{ marginTop: '20px' }}>
+      <div className="flex justify-between items-center mb-5 mt-2.5">
+        {commonButtons}
+        {navButton && <div className="flex gap-2.5" style={{ paddingRight: '20px' }}>{navButton}</div>}
+      </div>
+    </div>
   );
 };
 
 export default NavigationMenu;
+
+

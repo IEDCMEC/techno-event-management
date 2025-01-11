@@ -51,10 +51,7 @@ export default function Participants() {
   const router = useRouter();
   const showAlert = useAlert();
   const { orgId, eventId } = router.query;
-  // const { loading, get, post } = useFetch();
   const { useGetQuery, usePostMutation } = useWrapper();
-
-  // const { accountDetails } = useContext(account);
 
   const {
     data,
@@ -160,80 +157,70 @@ export default function Participants() {
         orgId={orgId}
         eventId={eventId}
         navButton={
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '20px',
-              marginTop: '10px',
-            }}
-          >
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <Button
-                leftIcon={<ChevronLeftIcon />}
-                colorScheme="gray"
-                variant="solid"
-                onClick={() => router.back()}
-              >
-                Back
-              </Button>
-              <Menu>
-                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
-                  Participants Details
-                </MenuButton>
-                <MenuList bg="gray.100" borderColor="gray.200">
-                  <MenuItem
-                    color="gray.700"
-                    fontWeight="medium"
-                    _hover={{ bg: 'gray.200' }}
-                    onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in`)}
-                  >
-                    Participants Check-in Details
-                  </MenuItem>
-                  <MenuItem
-                    color="gray.700"
-                    fontWeight="medium"
-                    _hover={{ bg: 'gray.200' }}
-                    onClick={() => router.push(`/${orgId}/events/${eventId}/attributes`)}
-                  >
-                    Attributes Details
-                  </MenuItem>
-                  <MenuItem
-                    color="gray.700"
-                    fontWeight="medium"
-                    _hover={{ bg: 'gray.200' }}
-                    onClick={() => router.push(`/${orgId}/events/${eventId}/extras`)}
-                  >
-                    Extras Details
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </div>
-
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <Button onClick={onOpen} isLoading={loading} colorScheme="gray">
-                Add Participant
-              </Button>
-              <Button
-                onClick={() =>
-                  router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)
-                }
-                isLoading={loading}
-                colorScheme="gray"
-              >
-                Upload CSV
-              </Button>
-              {exportToCsv()}
-              <Button onClick={qROnOpen} colorScheme="gray">
-                Send Emails with QR
-              </Button>
-            </div>
+          <div className="flex gap-2.5">
+            <Button
+              onClick={onOpen}
+              isLoading={loading}
+              colorScheme="gray"
+              sx={{
+                display: 'flex',
+                padding: '8px 12px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignContent: 'center',
+                gap: '8px',
+                flexWrap: 'wrap',
+                borderRadius: 'var(--8, 8px)',
+                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
+              }}
+            >
+              Add Participant
+            </Button>
+            <Button
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
+              isLoading={loading}
+              colorScheme="gray"
+              sx={{
+                display: 'flex',
+                padding: '8px 12px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignContent: 'center',
+                gap: '8px',
+                flexWrap: 'wrap',
+                borderRadius: 'var(--8, 8px)',
+                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
+              }}
+            >
+              Upload CSV
+            </Button>
+            {exportToCsv()}
+            <Button
+              onClick={qROnOpen}
+              colorScheme="gray"
+              sx={{
+                display: 'flex',
+                padding: '8px 12px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignContent: 'center',
+                gap: '8px',
+                flexWrap: 'wrap',
+                borderRadius: 'var(--8, 8px)',
+                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
+              }}
+            >
+              Send Emails with QR
+            </Button>
           </div>
         }
       />
 
-      {/* <CustomStyledBox></CustomStyledBox> */}
+      <CustomStyledBox></CustomStyledBox>
+
       <DataDisplay loading={loading} rows={participants} columns={columns} />
       {!loading && participants.length === 0 ? (
         <StyledBox style={{ textAlign: 'center', margin: '20px' }}>
