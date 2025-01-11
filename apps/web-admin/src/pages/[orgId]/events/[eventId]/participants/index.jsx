@@ -14,12 +14,8 @@ import { account } from '@/contexts/MyContext';
 import axios from 'axios';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
-import { ChevronLeftIcon, ChevronDownIcon,Menu, MenuButton, MenuList, MenuItem  } from '@chakra-ui/icons';
+import { ChevronLeftIcon, ChevronDownIcon, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/icons';
 import CustomStyledBox from '@/pages/CustomStyledBox';
-// import AdduserIcon from '@/assets/events/Adduser.png';
-
-
-
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -47,10 +43,7 @@ export default function Participants() {
   const router = useRouter();
   const showAlert = useAlert();
   const { orgId, eventId } = router.query;
-  // const { loading, get, post } = useFetch();
   const { useGetQuery, usePostMutation } = useWrapper();
-
-  // const { accountDetails } = useContext(account);
 
   const {
     data,
@@ -139,7 +132,22 @@ export default function Participants() {
         filename={`participants-${eventId}.csv`}
         style={{ textDecoration: 'none' }}
       >
-        <Button colorScheme="gray" variant="solid">
+        <Button
+          colorScheme="gray"
+          variant="solid"
+          sx={{
+            display: 'flex',
+            padding: '8px 12px',
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignContent: 'center',
+            gap: '8px',
+            flexWrap: 'wrap',
+            borderRadius: 'var(--8, 8px)',
+            border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+            background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
+          }}
+        >
           Export to CSV
         </Button>
       </CSVLink>
@@ -152,32 +160,73 @@ export default function Participants() {
       previousPage={`/organizations/${orgId}/events/${eventId}`}
       debugInfo={participants}
     >
-     <NavigationMenu 
-  orgId={orgId} 
-  eventId={eventId}
-  navButton={
-    <div className="flex gap-2.5">
-      <Button onClick={onOpen} isLoading={loading} colorScheme="gray">
-        Add Participant
-      </Button>
-      <Button
-        onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
-        isLoading={loading}
-        colorScheme="gray"
-      >
-        Upload CSV
-      </Button>
-      {exportToCsv()}
-      <Button onClick={qROnOpen} colorScheme="gray">
-        Send Emails with QR
-      </Button>
-    </div>
-  }
-/>
-
+      <NavigationMenu
+        orgId={orgId}
+        eventId={eventId}
+        navButton={
+          <div className="flex gap-2.5">
+            <Button
+              onClick={onOpen}
+              isLoading={loading}
+              colorScheme="gray"
+              sx={{
+                display: 'flex',
+                padding: '8px 12px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignContent: 'center',
+                gap: '8px',
+                flexWrap: 'wrap',
+                borderRadius: 'var(--8, 8px)',
+                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
+              }}
+            >
+              Add Participant
+            </Button>
+            <Button
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
+              isLoading={loading}
+              colorScheme="gray"
+              sx={{
+                display: 'flex',
+                padding: '8px 12px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignContent: 'center',
+                gap: '8px',
+                flexWrap: 'wrap',
+                borderRadius: 'var(--8, 8px)',
+                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
+              }}
+            >
+              Upload CSV
+            </Button>
+            {exportToCsv()}
+            <Button
+              onClick={qROnOpen}
+              colorScheme="gray"
+              sx={{
+                display: 'flex',
+                padding: '8px 12px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignContent: 'center',
+                gap: '8px',
+                flexWrap: 'wrap',
+                borderRadius: 'var(--8, 8px)',
+                border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+                background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
+              }}
+            >
+              Send Emails with QR
+            </Button>
+          </div>
+        }
+      />
 
       <CustomStyledBox></CustomStyledBox>
-
 
       <DataDisplay loading={loading} rows={participants} columns={columns} />
       {!loading && participants.length === 0 ? (

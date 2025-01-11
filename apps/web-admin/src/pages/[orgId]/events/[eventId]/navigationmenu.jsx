@@ -30,6 +30,7 @@ const NavigationMenu = ({ orgId, eventId }) => {
     </>
   );
 };*/
+//import { inter } from '../../../../../../components/ui/fonts';
 import { ChevronDownIcon, ChevronLeftIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -79,27 +80,77 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
         colorScheme="gray"
         variant="solid"
         onClick={() => router.back()}
+        sx={{
+          display: 'flex',
+          height: '36px',
+          padding: '8px 10px 8px 12px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '3px',
+          borderRadius: 'var(--8, 8px)',
+          border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+          background: 'var(--black-5, rgba(4, 5, 11, 0.05))',
+          color: 'var(--black, #04050B)',
+          //fontFamily: inter.variable,
+          fontSize: '13px',
+          fontStyle: 'normal',
+          fontWeight: '500',
+          lineHeight: '20px',
+        }}
       >
         Back
       </Button>
       <Menu>
-        <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
-          {currentPage}
-        </MenuButton>
-        <MenuList bg="gray.100" borderColor="gray.200">
-          {menuItems.map((item) => (
-            <MenuItem
-              key={item.name}
-              color="gray.700"
-              fontWeight="medium"
-              _hover={{ bg: "gray.200" }}
-              onClick={() => router.push(item.path)}
-            >
-              {item.name}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
+  <MenuButton
+    as={Button}
+    rightIcon={<ChevronDownIcon />}
+    colorScheme="gray"
+    sx={{
+      display: 'flex',
+      height: '36px',
+      padding: '8px 10px 8px 12px',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '3px',
+      borderRadius: 'var(--8, 8px)',
+      border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+      background: 'var(--black-5, rgba(4, 5, 11, 0.05))',
+      color: 'var(--black, #04050B)',
+      fontSize: '13px',
+      fontStyle: 'normal',
+      fontWeight: '500',
+      lineHeight: '20px',
+    }}
+  >
+    {currentPage}
+  </MenuButton>
+  <MenuList
+    sx={{
+      bg: 'var(--black-5, rgba(4, 5, 11, 0.05))',
+      borderColor: 'var(--black-10, rgba(4, 5, 11, 0.10))',
+      borderRadius: 'var(--8, 8px)',
+    }}
+  >
+    {menuItems.map((item) => (
+      <MenuItem
+        key={item.name}
+        sx={{
+          bg: 'var(--black-5, rgba(4, 5, 11, 0.05))',
+          color: 'var(--black, #04050B)',
+          fontSize: '13px',
+          fontWeight: '500',
+          _hover: {
+            bg: 'var(--black-10, rgba(4, 5, 11, 0.10))',
+          },
+        }}
+        onClick={() => router.push(item.path)}
+      >
+        {item.name}
+      </MenuItem>
+    ))}
+  </MenuList>
+</Menu>
+
     </div>
   );
 
@@ -114,3 +165,5 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
 };
 
 export default NavigationMenu;
+
+

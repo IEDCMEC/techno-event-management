@@ -157,12 +157,29 @@ export default function Attributes() {
   eventId={eventId}
   navButton={
     <div className="flex gap-2.5">
-      <Button onClick={onOpen} isLoading={loading} colorScheme="gray">
+      <Button 
+        onClick={onOpen} 
+        isLoading={loading} 
+        colorScheme="gray"
+        sx={{
+          display: 'flex',
+          padding: '8px 12px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignContent: 'center',
+          gap: '8px',
+          flexWrap: 'wrap',
+          borderRadius: 'var(--8, 8px)',
+          border: '1px solid var(--black-10, rgba(4, 5, 11, 0.10))',
+          background: 'var(--black-4, rgba(4, 5, 11, 0.04))',
+        }}
+      >
         Add Attribute
       </Button>
     </div>
   }
 />
+
       <CustomStyledBox></CustomStyledBox>
 
       <DataDisplay
