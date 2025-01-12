@@ -77,7 +77,7 @@ export const ProtectedRoute = ({ children }) => {
   async function checkOrg() {
     let myResponse = await get('/core/users/mycreds');
     // //console.log(myResponse.data.data);
-    if (myResponse && myResponse.status === 200 && myResponse.data.data.length !== 0) {
+    if (myResponse && myResponse.status === 200) {
       setAllAccounts(
         myResponse.data.data.map((value) => ({
           role: value.role,
