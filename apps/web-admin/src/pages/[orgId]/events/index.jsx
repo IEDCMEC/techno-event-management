@@ -156,7 +156,8 @@ export default function Events() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const { loading, get } = useFetch();
   const { useGetQuery } = useWrapper();
-  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts } = useContext(account);
+  const { accountDetails, setAccountDetails, allAccounts, setAllAccounts, setEventDetails } =
+    useContext(account);
   // console.log(accountDetails.Event);
 
   const links = [
@@ -179,6 +180,7 @@ export default function Events() {
     (data) => {
       console.log(data.data.events);
       setEvents(data.data.events || []);
+      setAccountDetails((preValue) => ({ ...preValue, Event: data.data.events }));
     },
   );
 
@@ -299,7 +301,10 @@ export default function Events() {
         columns={columns}
         rows={mergedEvents}
         onRowClick={(row) => {
-          router.push(`/${orgId}/events/${row.id}/participants`);
+          setEventDetails(row);
+          row.isShortlisting
+            ? router.push(`/${orgId}/events/${row.id}/registrants`)
+            : router.push(`/${orgId}/events/${row.id}/participants`);
         }}
       />
       {!loading && events.length === 0 ? (
@@ -317,7 +322,7 @@ export default function Events() {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent width={{ base: '95vw', md: '75vw' }} maxWidth={'95vw'}>
+        <ModalContent minWidth={'85vw'} minHeight={'85vh'}>
           <ModalHeader>Create New Event</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

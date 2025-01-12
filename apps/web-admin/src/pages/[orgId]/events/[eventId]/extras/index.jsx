@@ -104,6 +104,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  useColorMode,
 } from '@chakra-ui/react';
 import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import DashboardLayout from '@/layouts/DashboardLayout';
@@ -113,6 +114,15 @@ import DataDisplay from '@/components/DataDisplay';
 import NewExtraForm from './new'; // Import the form component
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
+import {
+  ChevronLeftIcon,
+  ChevronDownIcon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/icons';
+import CustomStyledBox from '@/pages/CustomStyledBox';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
@@ -129,6 +139,7 @@ const columns = [
 ];
 
 export default function Extras() {
+  const { colorMode } = useColorMode();
   const router = useRouter();
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
@@ -159,16 +170,76 @@ export default function Extras() {
     <DashboardLayout
       pageTitle="Extras"
       previousPage={`/organizations/${orgId}/events/${eventId}`}
-      headerButton={
-        <>
-          <Button onClick={onOpen} isLoading={loading}>
-            Add Extra
-          </Button>
-        </>
-      }
       debugInfo={extras}
     >
-      <NavigationMenu orgId={orgId} eventId={eventId} />
+      <NavigationMenu
+        orgId={orgId}
+        eventId={eventId}
+        navButton={
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '20px',
+              marginTop: '10px',
+            }}
+          >
+            {/* Left side content */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <Button
+                leftIcon={<ChevronLeftIcon />}
+                colorScheme="gray"
+                variant="solid"
+                onClick={() => router.back()}
+              >
+                Back
+              </Button>
+              <Menu>
+                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
+                  Extras Details
+                </MenuButton>
+                <MenuList bg="gray.100" borderColor="gray.200">
+                  <MenuItem
+                    color="gray.700"
+                    fontWeight="medium"
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => router.push(`/${orgId}/events/${eventId}/participants`)}
+                  >
+                    Participants Details
+                  </MenuItem>
+                  <MenuItem
+                    color="gray.700"
+                    fontWeight="medium"
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in`)}
+                  >
+                    Participants Check-in Details
+                  </MenuItem>
+                  <MenuItem
+                    color="gray.700"
+                    fontWeight="medium"
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => router.push(`/${orgId}/events/${eventId}/attributes`)}
+                  >
+                    Attributes Details
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </div>
+
+            {/* Right side content */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <Button onClick={onOpen} isLoading={loading} colorScheme="gray">
+                Add Extras
+              </Button>
+            </div>
+          </div>
+        }
+      />
+
+      {/* <CustomStyledBox></CustomStyledBox> */}
+
       <DataDisplay
         loading={loading}
         columns={columns}
@@ -191,12 +262,23 @@ export default function Extras() {
       )}
 
       {/* Modal for creating a new extra */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="outside" isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Extra</ModalHeader>
+        <ModalContent borderRadius="10px">
+          <ModalHeader
+            backgroundColor="#AFB4E9"
+            p={6}
+            borderTopLeftRadius="10px"
+            borderTopRightRadius="10px"
+            color="black"
+          >
+            <StyledText> Add Extra</StyledText>
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody
+            backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
+            borderRadius="10px"
+          >
             {/* Render the form from new/index.js */}
             <NewExtraForm onClose={onClose} />
           </ModalBody>

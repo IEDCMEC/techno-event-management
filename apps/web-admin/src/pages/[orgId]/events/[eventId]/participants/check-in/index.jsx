@@ -1,25 +1,29 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
+import {
+  ChevronLeftIcon,
+  ChevronDownIcon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/icons';
+import CustomStyledBox from '@/pages/CustomStyledBox';
 import { Button, Flex } from '@chakra-ui/react';
 import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
-
 import DashboardLayout from '@/layouts/DashboardLayout';
-
 import DataDisplay from '@/components/DataDisplay';
-
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
-
 import NavigationMenu from '../../navigationmenu';
 
 import { useDisclosure } from '@chakra-ui/react';
-import CheckInParticipantWithMultiScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/multi-in/index';
-import CheckInParticipant from '@/pages/[orgId]/events/[eventId]/participants/check-in/in/index';
-import CheckInParticipantWithScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/in/scanner/index';
-import CheckOutParticipant from '@/pages/[orgId]/events/[eventId]/participants/check-in/out/index';
-import CheckOutParticipantWithScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/out/scanner/index';
+import CheckInParticipantWithMultiScanner from '@/components/modals/MultiStageScanner/index';
+import CheckInParticipant from '@/components/modals/Check-inParticipant/index';
+import CheckInParticipantWithScanner from '@/components/modals/Check-in-Scanner/index';
+import CheckOutParticipant from '@/components/modals/Check-OutParticipant/index';
+import CheckOutParticipantWithScanner from '@/components/modals/Check-Out-Scanner/index';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -93,35 +97,122 @@ export default function ParticipantsCheckIn() {
     <DashboardLayout
       pageTitle="Participants Check-In"
       previousPage={`/${orgId}/events/${eventId}/participants`}
-      headerButton={
-        <>
-          <Flex h="100%" flexDirection="column">
-            <Button mt="auto" mb="0.5" onClick={onMultiScannerModalOpen} isLoading={loading}>
-              Multi-Stage Scanner
-            </Button>
-          </Flex>
-          <Flex flexDirection="column" gap={4}>
-            <Button onClick={onCheckInModalOpen} isLoading={loading}>
-              Check-In Participant
-            </Button>
-            <Button onClick={onScanner1ModalOpen} isLoading={loading}>
-              Open Scanner
-            </Button>
-          </Flex>
-          <Flex flexDirection="column" gap={4}>
-            <Button onClick={onCheckOutModalOpen} isLoading={loading}>
-              Check-Out Participant
-            </Button>
-            <Button onClick={onScanner2ModalOpen} isLoading={loading}>
-              Open Scanner
-            </Button>
-          </Flex>
-          {/* <NavigationMenu orgId={orgId} eventId={eventId} />*/}
-        </>
-      }
       debugInfo={participantsCheckIn}
     >
-      <NavigationMenu orgId={orgId} eventId={eventId} />
+      <NavigationMenu
+        orgId={orgId}
+        eventId={eventId}
+        navButton={
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '20px',
+              marginTop: '10px',
+            }}
+          >
+            {/* Left side content */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <Button
+                leftIcon={<ChevronLeftIcon />}
+                colorScheme="gray"
+                variant="solid"
+                onClick={() => router.back()}
+              >
+                Back
+              </Button>
+              <Menu>
+                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
+                  Participants Check-in Details
+                </MenuButton>
+                <MenuList bg="gray.100" borderColor="gray.200">
+                  <MenuItem
+                    color="gray.700"
+                    fontWeight="medium"
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => router.push(`/${orgId}/events/${eventId}/participants`)}
+                  >
+                    Participants Details
+                  </MenuItem>
+                  <MenuItem
+                    color="gray.700"
+                    fontWeight="medium"
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => router.push(`/${orgId}/events/${eventId}/attributes`)}
+                  >
+                    Attributes Details
+                  </MenuItem>
+                  <MenuItem
+                    color="gray.700"
+                    fontWeight="medium"
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => router.push(`/${orgId}/events/${eventId}/extras`)}
+                  >
+                    Extras Details
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </div>
+
+            {/* Right side content */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <Button
+                onClick={() => {
+                  // router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`);
+                  onMultiScannerModalOpen();
+                }}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Multi-Stage Scanner
+              </Button>
+              <Button
+                onClick={() => {
+                  // router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`);
+                  onCheckInModalOpen();
+                }}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Check-In Participant
+              </Button>
+              <Button
+                onClick={() => {
+                  // router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`);
+                  onScanner1ModalOpen();
+                }}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Open Scanner
+              </Button>
+              <Button
+                onClick={() => {
+                  // router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`);
+                  onCheckOutModalOpen();
+                }}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Check-Out Participant
+              </Button>
+              <Button
+                onClick={() => {
+                  // router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`);
+                  onScanner2ModalOpen();
+                }}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Open Scanner
+              </Button>
+            </div>
+          </div>
+        }
+      />
+
+      {/* <CustomStyledBox></CustomStyledBox> */}
 
       <DataDisplay
         loading={loading}

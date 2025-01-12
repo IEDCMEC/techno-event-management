@@ -13,9 +13,13 @@ const MyContext = ({ children }) => {
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const [participants, setParticipants] = useState([]);
   const [userDetails, setUserDetails] = useState([]);
+  const [eventDetails, setEventDetails] = useState({});
 
   const { loading, get, put } = useFetch();
   const showAlert = useAlert();
+  useEffect(() => {
+    console.log(accountDetails);
+  }, [accountDetails]);
   // useEffect(() => {
   //   const fetchAccountDetails = async () => {
   //     if (isAuthenticated) {
@@ -73,6 +77,8 @@ const MyContext = ({ children }) => {
           updateAccountDetails,
           participants,
           setParticipants,
+          eventDetails,
+          setEventDetails,
         }}
       >
         {children}

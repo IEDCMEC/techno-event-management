@@ -23,6 +23,7 @@ import {
   FormLabel,
   Select,
   Input,
+  useColorMode,
 } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import DOMPurify from 'dompurify';
@@ -33,13 +34,14 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor').then((mod) => mod.
 });
 // import { bold, italic } from '@uiw/react-md-editor/lib/commands';
 import { useContext } from 'react';
-import DataDisplayNew from './DataDisplayNew';
+import DataDisplayNew from '../../DataDisplayNew';
 import useWrapper from '@/hooks/useWrapper';
 // import { useEffect } from 'react';
 import { account } from '@/contexts/MyContext';
-import DataDisplay from './DataDisplay';
+import DataDisplay from '../../DataDisplay';
 import { useRouter } from 'next/router';
-
+import {inter} from '@/components/ui/fonts';
+import { StyledText } from '@/components/ui/StyledComponents';
 // const EditerMarkdown = dynamic(
 //   () =>
 //     import('@uiw/react-md-editor').then((mod) => {
@@ -52,6 +54,7 @@ import { useRouter } from 'next/router';
 // });
 
 const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
+  const { colorMode } = useColorMode();
   const router = useRouter();
   const { eventId } = router.query;
   // const queryClient = useQueryClient();
@@ -362,22 +365,33 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     <>
       {/* <Button onClick={onOpen}>Open Modal</Button> */}
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="outside" isCentered>
         <ModalOverlay />
         <ModalContent
           sx={{
             minWidth: { base: '95vw', md: '70vw' },
             height: { base: '600px', md: '750px' },
           }}
+          borderRadius="10px"
         >
-          <ModalHeader fontSize="28px">Send QR Tickets</ModalHeader>
+          <ModalHeader
+            fontSize="28px"
+            backgroundColor="#AFB4E9"
+            p={6}
+            borderTopLeftRadius="10px"
+            borderTopRightRadius="10px"
+            color="black"
+          >
+            Send QR Tickets
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}>
             {step === 1 && (
               <Box>
                 <FormControl id="name" mb={4}>
-                  <FormLabel>Select Email Project: </FormLabel>
+                  <FormLabel fontFamily={inter.style.fontFamily}>Select Email Project: </FormLabel>
                   <Select
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     placeholder="Select an Email recipient list"
                     // value={}
                     onChange={(e) => {
@@ -395,7 +409,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                       );
                     })}
                   </Select>
-                  {/* <Input type="text" placeholder="Enter your name" /> */}
+                  {/* <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                   type="text" placeholder="Enter your name" /> */}
                 </FormControl>
                 {selectedProject && (
                   <TableContainer
@@ -407,22 +423,28 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   >
                     <Table
                       variant="simple"
-                      borderRadius="20px"
                       size="lg"
                       borderWidth="2px"
                       borderCollapse="separate"
+                      backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     >
                       <Tbody>
                         <Tr borderWidth={'2px'}>
-                          <Th>ID: </Th>
+                          <Th>
+                            <StyledText> ID: </StyledText>
+                          </Th>
                           <Th>{selectedProject.id}</Th>
                         </Tr>
                         <Tr borderWidth={'2px'}>
-                          <Th>Description: </Th>
+                          <Th>
+                            <StyledText>Description: </StyledText>{' '}
+                          </Th>
                           <Th>{selectedProject.description}</Th>
                         </Tr>
                         <Tr borderWidth={'2px'}>
-                          <Th>name: </Th>
+                          <Th>
+                            <StyledText> name:</StyledText>{' '}
+                          </Th>
                           <Th>{selectedProject.name}</Th>
                         </Tr>
                       </Tbody>
@@ -441,8 +463,11 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   ------ OR ------
                 </Box>
                 <FormControl onSubmit={handleEmailProjectSubmit}>
-                  <FormLabel>Create a new Email Project:</FormLabel>
+                  <FormLabel fontFamily={inter.style.fontFamily}>
+                    Create a new Email Project:
+                  </FormLabel>
                   <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     onChange={(e) =>
                       setNewEmailProject((preValue) => ({
                         ...preValue,
@@ -451,8 +476,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                     }
                     value={newEmailProject.name}
                   />
-                  <FormLabel>Description:</FormLabel>
+                  <FormLabel fontFamily={inter.style.fontFamily}>Description:</FormLabel>
                   <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     onChange={(e) =>
                       setNewEmailProject((preValue) => ({
                         ...preValue,
@@ -469,7 +495,14 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                       flexDirection: 'column',
                     }}
                   >
-                    <Button type="submit" mt={'30px'} onClick={handleEmailProjectSubmit}>
+                    <Button
+                      backgroundColor="#AFB4E9"
+                      color="black"
+                      _hover={{ backgroundColor: '#D0D6F6 ' }}
+                      type="submit"
+                      mt={'30px'}
+                      onClick={handleEmailProjectSubmit}
+                    >
                       Create new project
                     </Button>
                   </Box>
@@ -489,18 +522,28 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 //   width: '100%',
                 // }}
               >
-                <FormLabel>Email Content: </FormLabel>
+                <FormLabel fontFamily={inter.style.fontFamily}>Email Content: </FormLabel>
                 {/* <div className="wmde-markdown-var"> </div> */}
                 <MDEditor value={emailContent} onChange={setEmailContent} height={450} />
-                <Button mt={'5'} onClick={updateEmailTemplate}>
+                <Button
+                  backgroundColor="#AFB4E9"
+                  color="black"
+                  _hover={{ backgroundColor: '#D0D6F6 ' }}
+                  mt={'5'}
+                  onClick={updateEmailTemplate}
+                >
                   Save Changes
                 </Button>
               </FormControl>
             )}
             {step === 3 && (
               <FormControl id="email" mb={4}>
-                <FormLabel>Add your recipients to email project</FormLabel>
-                {/* <Input type="email" placeholder="Enter your email" /> */}
+                <FormLabel fontFamily={inter.style.fontFamily}>
+                  Add your recipients to email project
+                </FormLabel>
+                {/* <Input
+                  backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                 type="email" placeholder="Enter your email" /> */}
                 <DataDisplay
                   columns={[
                     { field: 'checkInKey', headerName: 'QR Code' },
@@ -543,8 +586,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             {step === 4 && (
               <Box>
                 <FormControl id="email" mb={4}>
-                  <FormLabel>Enter email subject: </FormLabel>
+                  <FormLabel fontFamily={inter.style.fontFamily}>Enter email subject: </FormLabel>
                   <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     type="text"
                     placeholder="Enter the subject for your email: "
                     value={subject}
@@ -552,7 +596,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   />
                 </FormControl>
                 <Box>
-                  <Text textStyle={'lg'}>Preview your email: </Text>
+                  <StyledText textStyle={'lg'}>Preview your email: </StyledText>
                   <div
                     // mt={'10px'}
                     // p={'20px'}
@@ -580,9 +624,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 }}
               >
                 <Box width={'100%'}>
-                  <Text fontWeight="bold" mb={2}>
+                  <StyledText fontWeight="bold" mb={2}>
                     Emails sent:
-                  </Text>
+                  </StyledText>
                   <DataDisplayNew
                     columns={[
                       { field: 'checkInKey', headerName: 'QR Code' },
@@ -595,9 +639,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   ></DataDisplayNew>
                 </Box>
                 <Box width={'100%'}>
-                  <Text fontWeight="bold" mb={2}>
+                  <StyledText fontWeight="bold" mb={2}>
                     Email not sent:
-                  </Text>
+                  </StyledText>
                   <DataDisplayNew
                     columns={[
                       { field: 'checkInKey', headerName: 'QR Code' },
@@ -614,6 +658,8 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
           </ModalBody>
 
           <ModalFooter
+            backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
+            borderBottomRadius="10px"
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -622,7 +668,12 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             }}
           >
             {step > 1 && step !== 5 && (
-              <Button onClick={prevStep} mr={3}>
+              <Button
+                width={'20%'}
+                backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE1212'}
+                onClick={prevStep}
+                mr={3}
+              >
                 Previous
               </Button>
             )}
@@ -641,12 +692,21 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
 
                   //   ////console.log(step);
                 }}
+                width={'20%'}
+                backgroundColor="#AFB4E9"
+                color="black"
+                _hover={{ backgroundColor: '#D0D6F6 ' }}
               >
                 Next
               </Button>
             )}
             {step === 4 && (
-              <Button colorScheme="blue" onClick={sendEmails}>
+              <Button
+                backgroundColor="#AFB4E9"
+                color="black"
+                _hover={{ backgroundColor: '#D0D6F6 ' }}
+                onClick={sendEmails}
+              >
                 Send Emails
               </Button>
             )}
@@ -657,6 +717,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   setStep(1);
                   //   ////console.log(step);
                 }}
+                backgroundColor="#AFB4E9"
+                color="black"
+                _hover={{ backgroundColor: '#D0D6F6 ' }}
               >
                 Close
               </Button>

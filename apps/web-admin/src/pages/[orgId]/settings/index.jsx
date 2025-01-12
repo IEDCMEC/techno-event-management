@@ -28,7 +28,7 @@ import {
 
 import { inter } from '@/components/ui/fonts';
 import DashboardLayout from '@/layouts/DashboardLayout';
-import OrganizationSettingsModal from '@/layouts/OrganizationSettingsModal';
+import OrganizationSettingsModal from '@/components/modals/EditModal_of_Settings/OrganizationSettingsModal';
 
 export default function Settings() {
   //const { loading, get, put } = useFetch();

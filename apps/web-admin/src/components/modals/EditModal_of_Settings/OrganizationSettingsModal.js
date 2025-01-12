@@ -16,15 +16,18 @@ import {
   Heading,
   Box,
   Flex,
+  useColorMode,
 } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { account } from '@/contexts/MyContext';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 import { useAlert } from '@/hooks/useAlert';
-import { StyledBox } from '@/components/ui/StyledComponents';
+import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
+import { inter } from '@/components/ui/fonts';
 
 const OrganizationSettingsModal = ({ isOpen, onClose }) => {
+  const { colorMode } = useColorMode();
   const { accountDetails, setAccountDetails, setAllAccounts, allAccounts } = useContext(account);
   useEffect(() => {
     // //console.log(accountDetails);
@@ -194,69 +197,126 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
     console.log(allAccounts);
   }, [allAccounts]);
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="outside" isCentered>
       <ModalOverlay />
-      <ModalContent sx={{ minWidth: { base: '95vw', md: '75vw' } }}>
-        <ModalHeader>Organization Settings</ModalHeader>
+      <ModalContent sx={{ minWidth: { base: '95vw', md: '75vw' } }} borderRadius="10px">
+        <ModalHeader
+          backgroundColor="#AFB4E9"
+          p={6}
+          borderTopLeftRadius="10px"
+          borderTopRightRadius="10px"
+          color="black"
+        >
+          <StyledText>Organization Settings</StyledText>
+        </ModalHeader>
         <ModalCloseButton />
 
         <form onSubmit={handleSubmit}>
-          <ModalBody>
+          <ModalBody backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}>
             <StyledBox
               flexDirection={{ base: 'column', md: 'row' }}
               width="95%"
               justifyContent="space-between"
               alignItems="flex-start"
+              backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
             >
               <StyledBox
                 flexDirection="column"
                 justifyContent="space-between"
                 alignItems="flex-start"
                 width="49%"
+                backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
+                ml={[0, 3]}
               >
                 <FormControl id="orgName" isRequired>
-                  <FormLabel>Organization Name</FormLabel>
-                  <Input name="orgName" value={formData.orgName} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>Organization Name</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="orgName"
+                    value={formData.orgName}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="description" isRequired>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel fontFamily={inter.style.fontFamily}>Description</FormLabel>
                   <Textarea
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                   />
                 </FormControl>
                 <FormControl id="logo" isRequired>
-                  <FormLabel>Logo URL</FormLabel>
-                  <Input name="logo" value={formData.logo} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>Logo URL</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="logo"
+                    value={formData.logo}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="tagline" isRequired>
-                  <FormLabel>Tagline or Slogan</FormLabel>
-                  <Input name="tagline" value={formData.tagline} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>Tagline or Slogan</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="tagline"
+                    value={formData.tagline}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="email" isRequired>
-                  <FormLabel>Email Address</FormLabel>
-                  <Input name="email" value={formData.email} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>Email Address</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="phone" isRequired>
-                  <FormLabel>Phone Number</FormLabel>
-                  <Input name="phone" value={formData.phone} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>Phone Number</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="website" isRequired>
-                  <FormLabel>Website</FormLabel>
-                  <Input name="website" value={formData.website} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>Website</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="website"
+                    value={formData.website}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="LinkedIn" isRequired>
-                  <FormLabel>LinkedIn</FormLabel>
-                  <Input name="LinkedIn" value={formData.LinkedIn} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>LinkedIn</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="LinkedIn"
+                    value={formData.LinkedIn}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="Instagram" isRequired>
-                  <FormLabel>Instagram</FormLabel>
-                  <Input name="Instagram" value={formData.Instagram} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>Instagram</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="Instagram"
+                    value={formData.Instagram}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="Twitter" isRequired>
-                  <FormLabel>Twitter</FormLabel>
-                  <Input name="Twitter" value={formData.Twitter} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>Twitter</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="Twitter"
+                    value={formData.Twitter}
+                    onChange={handleChange}
+                  />
                 </FormControl>
               </StyledBox>
               <StyledBox
@@ -264,29 +324,51 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
                 justifyContent="space-between"
                 alignItems="flex-start"
                 width="49%"
+                backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
               >
                 <Heading size="md" mt={6}>
-                  Address
+                  <StyledText>Address</StyledText>
                 </Heading>
                 <FormControl id="City" isRequired>
-                  <FormLabel>City</FormLabel>
-                  <Input name="City" value={formData.City} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>City</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="City"
+                    value={formData.City}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="State" isRequired>
-                  <FormLabel>State</FormLabel>
-                  <Input name="State" value={formData.State} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>State</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="State"
+                    value={formData.State}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="Country" isRequired>
-                  <FormLabel>Country</FormLabel>
-                  <Input name="Country" value={formData.Country} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>Country</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="Country"
+                    value={formData.Country}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="Pincode" isRequired>
-                  <FormLabel>Pincode</FormLabel>
-                  <Input name="Pincode" value={formData.Pincode} onChange={handleChange} />
+                  <FormLabel fontFamily={inter.style.fontFamily}>Pincode</FormLabel>
+                  <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                    name="Pincode"
+                    value={formData.Pincode}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl id="Location" isRequired>
-                  <FormLabel>Location URL</FormLabel>
+                  <FormLabel fontFamily={inter.style.fontFamily}>Location URL</FormLabel>
                   <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     name="Location"
                     value={formData.Location}
                     onChange={handleChange}
@@ -296,11 +378,28 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
               </StyledBox>
             </StyledBox>
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} type="submit">
+          <ModalFooter
+            backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
+            borderBottomRadius="10px"
+            pt={0}
+          >
+            <Button
+              width="100%"
+              backgroundColor="#AFB4E9"
+              color="black"
+              _hover={{ backgroundColor: '#D0D6F6 ' }}
+              mr={3}
+              type="submit"
+            >
               Save
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button
+              backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE1212'}
+              mr={3}
+              width="100%"
+              variant="ghost"
+              onClick={onClose}
+            >
               Cancel
             </Button>
           </ModalFooter>
