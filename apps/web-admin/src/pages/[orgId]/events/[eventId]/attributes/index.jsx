@@ -114,6 +114,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  useColorMode,
 } from '@chakra-ui/icons';
 import CustomStyledBox from '@/pages/CustomStyledBox';
 
@@ -127,6 +128,7 @@ const columns = [
 ];
 
 export default function Attributes() {
+  const { colorMode } = useColorMode();
   const router = useRouter();
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
@@ -248,12 +250,23 @@ export default function Attributes() {
         <></>
       )}
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="outside" isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Attribute</ModalHeader>
+        <ModalContent borderRadius="10px">
+          <ModalHeader
+            backgroundColor="#AFB4E9"
+            p={6}
+            borderTopLeftRadius="10px"
+            borderTopRightRadius="10px"
+            color="black"
+          >
+            <StyledText>Add Attribute</StyledText>
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody
+            backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
+            borderRadius="10px"
+          >
             <NewAttributeForm onClose={onClose} />
           </ModalBody>
         </ModalContent>

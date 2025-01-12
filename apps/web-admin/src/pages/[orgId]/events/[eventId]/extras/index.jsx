@@ -104,6 +104,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  useColorMode,
 } from '@chakra-ui/react';
 import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import DashboardLayout from '@/layouts/DashboardLayout';
@@ -138,6 +139,7 @@ const columns = [
 ];
 
 export default function Extras() {
+  const { colorMode } = useColorMode();
   const router = useRouter();
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
@@ -260,12 +262,23 @@ export default function Extras() {
       )}
 
       {/* Modal for creating a new extra */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="outside" isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Extra</ModalHeader>
+        <ModalContent borderRadius="10px">
+          <ModalHeader
+            backgroundColor="#AFB4E9"
+            p={6}
+            borderTopLeftRadius="10px"
+            borderTopRightRadius="10px"
+            color="black"
+          >
+            <StyledText> Add Extra</StyledText>
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody
+            backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
+            borderRadius="10px"
+          >
             {/* Render the form from new/index.js */}
             <NewExtraForm onClose={onClose} />
           </ModalBody>

@@ -19,11 +19,11 @@ import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../../navigationmenu';
 
 import { useDisclosure } from '@chakra-ui/react';
-import CheckInParticipantWithMultiScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/multi-in/index';
-import CheckInParticipant from '@/pages/[orgId]/events/[eventId]/participants/check-in/in/index';
-import CheckInParticipantWithScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/in/scanner/index';
-import CheckOutParticipant from '@/pages/[orgId]/events/[eventId]/participants/check-in/out/index';
-import CheckOutParticipantWithScanner from '@/pages/[orgId]/events/[eventId]/participants/check-in/out/scanner/index';
+import CheckInParticipantWithMultiScanner from '@/components/modals/MultiStageScanner/index';
+import CheckInParticipant from '@/components/modals/Check-inParticipant/index';
+import CheckInParticipantWithScanner from '@/components/modals/Check-in-Scanner/index';
+import CheckOutParticipant from '@/components/modals/Check-OutParticipant/index';
+import CheckOutParticipantWithScanner from '@/components/modals/Check-Out-Scanner/index';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },

@@ -17,7 +17,6 @@ import Sidebar from '@/components/Sidebar';
 import { useAuth0 } from '@auth0/auth0-react';
 import Image from 'next/image';
 import { account } from '@/contexts/MyContext';
-import OrganizationSettingsModal from './OrganizationSettingsModal';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
 import { VscCalendar } from 'react-icons/vsc';
