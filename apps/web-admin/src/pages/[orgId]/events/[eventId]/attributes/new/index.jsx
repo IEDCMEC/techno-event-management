@@ -59,11 +59,7 @@ export default function NewAttributeForm({ onClose }) {
 */
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-<<<<<<< HEAD
-import { Button, FormControl, FormLabel, Input,useColorMode } from '@chakra-ui/react';
-=======
 import { Button, FormControl, FormLabel, Input, useColorMode } from '@chakra-ui/react';
->>>>>>> upstream/staging
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';

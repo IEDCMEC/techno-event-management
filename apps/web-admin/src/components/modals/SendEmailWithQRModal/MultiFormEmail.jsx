@@ -40,7 +40,7 @@ import useWrapper from '@/hooks/useWrapper';
 import { account } from '@/contexts/MyContext';
 import DataDisplay from '../../DataDisplay';
 import { useRouter } from 'next/router';
-import {inter} from '@/components/ui/fonts';
+import { inter } from '@/components/ui/fonts';
 import { StyledText } from '@/components/ui/StyledComponents';
 // const EditerMarkdown = dynamic(
 //   () =>
