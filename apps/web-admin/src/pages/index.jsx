@@ -14,11 +14,11 @@ function Dashboard() {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const { accountDetails } = useContext(account);
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push(`/${accountDetails.orgId}/events`);
-    }
-  }, [router.pathname]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     router.push(`/${accountDetails.orgId}/events`);
+  //   }
+  // }, [router.pathname]);
 
   return <DashboardLayout>{!isAuthenticated && <Landing />}</DashboardLayout>;
 }
