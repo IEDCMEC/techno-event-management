@@ -1,92 +1,3 @@
-/*import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-} from '@chakra-ui/react';
-import DashboardLayout from '@/layouts/DashboardLayout';
-import { useFetch } from '@/hooks/useFetch';
-import { useAlert } from '@/hooks/useAlert';
-import DataDisplay from '@/components/DataDisplay';
-import NewAttributeForm from './new';
-
-const columns = [
-  { field: 'name', headerName: 'Name', width: 200 },
-  {
-    field: 'numberOfParticipantsWithAttributeAssigned',
-    headerName: 'No of Participants Assigned',
-    width: 200,
-  },
-];
-
-export default function Attributes() {
-  const router = useRouter();
-  const { orgId, eventId } = router.query;
-  const showAlert = useAlert();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { loading, get } = useFetch();
-
-  const [attributes, setAttributes] = useState([]);
-
-  useEffect(() => {
-    const fetchAttributes = async () => {
-      const { data, status } = await get(
-        `/core/organizations/${orgId}/events/${eventId}/attributes`,
-      );
-      if (status === 200) {
-        setAttributes(data.attributes || []);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-    fetchAttributes();
-  }, []);
-
-  return (
-    <DashboardLayout
-      pageTitle="Attributes"
-      previousPage={`/organizations/${orgId}/events/${eventId}`}
-      headerButton={
-        <>
-          <Button onClick={onOpen} isLoading={loading}>
-            Add Attribute
-          </Button>
-        </>
-      }
-      debugInfo={JSON.stringify(attributes)}
-    >
-      <DataDisplay
-        loading={loading}
-        columns={columns}
-        rows={attributes}
-        onRowClick={(row) => {
-          router.push(`/${orgId}/events/${eventId}/attributes/${row.id}`);
-        }}
-      />
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Attribute</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <NewAttributeForm onClose={onClose} />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </DashboardLayout>
-  );
-}*/
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
@@ -104,7 +15,7 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import { useAlert } from '@/hooks/useAlert';
 import DataDisplay from '@/components/DataDisplay';
 import NewAttributeForm from './new';
-import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
+import { StyledBox, StyledButton, StyledText } from '@/components/ui/StyledComponents';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
 import {
@@ -165,64 +76,10 @@ export default function Attributes() {
         orgId={orgId}
         eventId={eventId}
         navButton={
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '20px',
-              marginTop: '10px',
-            }}
-          >
-            {/* Left side content */}
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <Button
-                leftIcon={<ChevronLeftIcon />}
-                colorScheme="gray"
-                variant="solid"
-                onClick={() => router.back()}
-              >
-                Back
-              </Button>
-              <Menu>
-                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
-                  Attributes Detail
-                </MenuButton>
-                <MenuList bg="gray.100" borderColor="gray.200">
-                  <MenuItem
-                    color="gray.700"
-                    fontWeight="medium"
-                    _hover={{ bg: 'gray.200' }}
-                    onClick={() => router.push(`/${orgId}/events/${eventId}/participants`)}
-                  >
-                    Participants Details
-                  </MenuItem>
-                  <MenuItem
-                    color="gray.700"
-                    fontWeight="medium"
-                    _hover={{ bg: 'gray.200' }}
-                    onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in`)}
-                  >
-                    Participants Check-in Details
-                  </MenuItem>
-                  <MenuItem
-                    color="gray.700"
-                    fontWeight="medium"
-                    _hover={{ bg: 'gray.200' }}
-                    onClick={() => router.push(`/${orgId}/events/${eventId}/extras`)}
-                  >
-                    Extras Details
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </div>
-
-            {/* Right side content */}
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <Button onClick={onOpen} isLoading={loading} colorScheme="gray">
-                Add Attribute
-              </Button>
-            </div>
+          <div className="flex gap-2.5">
+            <StyledButton onClick={onOpen} isLoading={loading}>
+              <StyledText>Add Attribute</StyledText>
+            </StyledButton>
           </div>
         }
       />
