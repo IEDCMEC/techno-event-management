@@ -382,7 +382,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             borderTopRightRadius="10px"
             color="black"
           >
-            Send QR Tickets
+            <Text fontFamily={inter.style.fontFamily} fontSize="25px">
+              Send QR Tickets
+            </Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}>
@@ -460,7 +462,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                     fontSize: '2rem',
                   }}
                 >
-                  ------ OR ------
+                  <Text fontFamily={inter.style.fontFamily}> ------ OR ------</Text>
                 </Box>
                 <FormControl onSubmit={handleEmailProjectSubmit}>
                   <FormLabel fontFamily={inter.style.fontFamily}>
@@ -503,7 +505,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                       mt={'30px'}
                       onClick={handleEmailProjectSubmit}
                     >
-                      Create new project
+                      <StyledText> Create new project</StyledText>
                     </Button>
                   </Box>
                 </FormControl>
@@ -532,7 +534,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   mt={'5'}
                   onClick={updateEmailTemplate}
                 >
-                  Save Changes
+                  <StyledText> Save Changes</StyledText>
                 </Button>
               </FormControl>
             )}
@@ -674,7 +676,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 onClick={prevStep}
                 mr={3}
               >
-                Previous
+                <StyledText> Previous</StyledText>
               </Button>
             )}
             {step < 4 && (
@@ -697,7 +699,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 color="black"
                 _hover={{ backgroundColor: '#D0D6F6 ' }}
               >
-                Next
+                <StyledText> Next</StyledText>
               </Button>
             )}
             {step === 4 && (
@@ -707,7 +709,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 _hover={{ backgroundColor: '#D0D6F6 ' }}
                 onClick={sendEmails}
               >
-                Send Emails
+                <StyledText>Send Emails</StyledText>
               </Button>
             )}
             {step === 5 && (
@@ -721,7 +723,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 color="black"
                 _hover={{ backgroundColor: '#D0D6F6 ' }}
               >
-                Close
+                <StyledText>Close</StyledText>
               </Button>
             )}
           </ModalFooter>

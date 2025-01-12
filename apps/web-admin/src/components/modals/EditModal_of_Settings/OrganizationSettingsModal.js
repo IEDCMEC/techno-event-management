@@ -391,7 +391,7 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
               mr={3}
               type="submit"
             >
-              Save
+              <StyledText>Save</StyledText>
             </Button>
             <Button
               backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE1212'}
@@ -400,7 +400,7 @@ const OrganizationSettingsModal = ({ isOpen, onClose }) => {
               variant="ghost"
               onClick={onClose}
             >
-              Cancel
+              <StyledText>Cancel</StyledText>
             </Button>
           </ModalFooter>
         </form>

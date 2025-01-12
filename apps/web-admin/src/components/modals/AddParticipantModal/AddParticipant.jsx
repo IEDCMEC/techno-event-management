@@ -97,7 +97,7 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
             color="black"
             _hover={{ backgroundColor: '#D0D6F6 ' }}
           >
-            Submit
+            <StyledText>Submit</StyledText>
           </Button>
           <Button
             backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE1212'}
@@ -105,7 +105,7 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
             onClick={onClose}
             ml={3}
           >
-            Cancel
+            <StyledText>Cancel</StyledText>
           </Button>
         </ModalFooter>
       </ModalContent>
