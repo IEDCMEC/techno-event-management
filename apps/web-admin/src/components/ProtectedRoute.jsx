@@ -37,17 +37,17 @@ export const ProtectedRoute = ({ children }) => {
   };
   const { get, post } = useFetch();
   // useEffect();
-  useEffect(() => {
-    //console.log(accountDetails);
-    if (
-      accountDetails &&
-      accountDetails.orgId &&
-      router.asPath !== `/${accountDetails.orgId}/events`
-    ) {
-      // // //console.log('route')
-      router.replace(`/${accountDetails.orgId}/events`);
-    }
-  }, [isAuthenticated, accountDetails]);
+  // useEffect(() => {
+  //   //console.log(accountDetails);
+  //   if (
+  //     accountDetails &&
+  //     accountDetails.orgId &&
+  //     router.asPath !== `/${accountDetails.orgId}/events`
+  //   ) {
+  //     // // //console.log('route')
+  //     router.replace(`/${accountDetails.orgId}/events`);
+  //   }
+  // }, [isAuthenticated, accountDetails]);
   useEffect(() => {
     // //console.log(accountDetails);
   }, [accountDetails]);
@@ -94,6 +94,7 @@ export const ProtectedRoute = ({ children }) => {
           });
           //console.log('final: ', data);
           setAccountDetails(data[0]);
+          router.replace(`/${data[0].orgId}/events`);
           return data;
         });
       }
