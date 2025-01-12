@@ -413,3 +413,127 @@
 .w-md-editor-fullscreen .w-md-editor-content {
   height: 100%;
 }
+
+/* New Calendar UI */
+.calendar-ui {
+  padding: 15px;
+}
+
+.calendar-ui .selected-date-text {
+  font-size: 20px;
+  padding-bottom: 8px;
+  font-weight: 700;
+}
+
+/* React day picker styles */
+.rdp-root {
+  --rdp-accent-color: #04050b;
+  --rdp-selected-border: none;
+  --rdp-nav_button-height: 22px;
+  --rdp-nav_button-width: 22px;
+  --rdp-day-height: 36px;
+  --rdp-day-width: 36px;
+  --rdp-day_button-height: 34px;
+  --rdp-day_button-width: 34px;
+}
+
+.chakra-ui-dark .rdp-root {
+  --rdp-accent-color: #fbfbfee0;
+}
+
+.rdp-weekday {
+  padding-left: 11px;
+}
+
+.rdp-root .rdp-button_next {
+  margin-left: 6px;
+}
+
+.rdp-root .rdp-button_previous,
+.rdp-root .rdp-button_next {
+  z-index: 11;
+}
+
+.rdp-selected {
+  font-weight: inherit;
+}
+
+.rdp-selected .rdp-day_button {
+  background-color: #11185a;
+  color: #fbfbfe;
+}
+
+.chakra-ui-dark .rdp-selected .rdp-day_button {
+  background-color: #afb4e9;
+  color: #11185a;
+}
+
+.rdp-today:not(.rdp-outside) .rdp-day_button {
+  border: 1.5px solid #11185a;
+  font-size: inherit;
+  border-radius: 50%;
+}
+
+.chakra-ui-dark .rdp-today:not(.rdp-outside) .rdp-day_button {
+  border-color: #afb4e9;
+}
+
+/* Year selection dropdown UI */
+.custom-year-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.year-grid {
+  min-height: 200px;
+  max-height: 350px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  position: absolute;
+  left: -85px;
+  background-color: rgb(255, 255, 255);
+  padding: 20px 10px;
+  z-index: 10;
+}
+
+.chakra-ui-dark .year-grid {
+  background-color: #04050b;
+}
+
+.year-grid button {
+  border-radius: 55px;
+  padding: 7px;
+  margin-right: 25px;
+}
+
+.year-grid button.selected {
+  background-color: #11185a;
+}
+
+.chakra-ui-dark .year-grid button.selected {
+  background-color: #afb4e9;
+}
+
+.year-grid button.selected .chakra-text {
+  color: white;
+}
+
+.chakra-ui-dark .year-grid button.selected .chakra-text {
+  color: #11185a;
+}
+
+/* Dropdown icon UI for calendar */
+.dropdown-icon {
+  margin-left: 8px;
+  color: #04050bc5;
+}
+
+.chakra-ui-dark .dropdown-icon {
+  color: #fbfbfee0;
+}
+
+.dropdown-icon.open {
+  transform: rotate(180deg);
+}

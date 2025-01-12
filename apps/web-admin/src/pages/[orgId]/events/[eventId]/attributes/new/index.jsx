@@ -59,12 +59,14 @@ export default function NewAttributeForm({ onClose }) {
 */
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, Input, useColorMode } from '@chakra-ui/react';
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
+import { StyledText } from '@/components/ui/StyledComponents';
 
 export default function NewAttributeForm({ onClose }) {
+  const { colorMode } = useColorMode();
   const { loading, post } = useFetch();
   const showAlert = useAlert();
   const router = useRouter();
@@ -114,8 +116,16 @@ export default function NewAttributeForm({ onClose }) {
   return (
     <form onSubmit={handleSubmit}>
       <FormControl isRequired my={4}>
-        <FormLabel>Name</FormLabel>
-        <Input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
+        <FormLabel>
+          <StyledText>Name</StyledText>{' '}
+        </FormLabel>
+        <Input
+          bg={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+          type="text"
+          name="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </FormControl>
 
       <Button
@@ -124,9 +134,11 @@ export default function NewAttributeForm({ onClose }) {
         my="4"
         isLoading={loading}
         loadingText="Please Wait"
-        colorScheme="teal"
+        backgroundColor="#AFB4E9"
+        color="black"
+        _hover={{ backgroundColor: '#D0D6F6 ' }}
       >
-        Add
+        <StyledText>Add</StyledText>
       </Button>
     </form>
   );

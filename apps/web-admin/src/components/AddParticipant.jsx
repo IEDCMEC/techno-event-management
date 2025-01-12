@@ -11,19 +11,32 @@ import {
   FormLabel,
   Input,
   useDisclosure,
+  useColorMode,
 } from '@chakra-ui/react';
+import { StyledText } from '@/components/ui/StyledComponents';
+import { inter } from '@/components/ui/fonts';
 
 const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSubmit }) => {
+  const { colorMode } = useColorMode();
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} size="lg" scrollBehavior="outside" isCentered>
       <ModalOverlay />
-      <ModalContent maxW="700px" h="585px">
-        <ModalHeader>Add Participant</ModalHeader>
+      <ModalContent maxW="700px" h="585px" borderRadius="10px">
+        <ModalHeader
+          backgroundColor="#AFB4E9"
+          p={6}
+          borderTopLeftRadius="10px"
+          borderTopRightRadius="10px"
+          color="black"
+        >
+          <StyledText color="black">Add Participant</StyledText>
+        </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}>
           <FormControl mb={4}>
-            <FormLabel>First Name</FormLabel>
+            <FormLabel fontFamily={inter.style.fontFamily}>First Name</FormLabel>
             <Input
+              backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
               name="firstName"
               value={formData.firstName}
               onChange={handleInputChange}
@@ -31,8 +44,9 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
             />
           </FormControl>
           <FormControl mb={4}>
-            <FormLabel>Last Name</FormLabel>
+            <FormLabel fontFamily={inter.style.fontFamily}>Last Name</FormLabel>
             <Input
+              backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
               name="lastName"
               value={formData.lastName}
               onChange={handleInputChange}
@@ -40,8 +54,9 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
             />
           </FormControl>
           <FormControl mb={4}>
-            <FormLabel>Email</FormLabel>
+            <FormLabel fontFamily={inter.style.fontFamily}>Email</FormLabel>
             <Input
+              backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
               name="email"
               value={formData.email}
               onChange={handleInputChange}
@@ -49,8 +64,9 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
             />
           </FormControl>
           <FormControl mb={4}>
-            <FormLabel>Phone</FormLabel>
+            <FormLabel fontFamily={inter.style.fontFamily}>Phone</FormLabel>
             <Input
+              backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
@@ -58,8 +74,9 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
             />
           </FormControl>
           <FormControl mb={4}>
-            <FormLabel>Check In Key</FormLabel>
+            <FormLabel fontFamily={inter.style.fontFamily}>Check In Key</FormLabel>
             <Input
+              backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
               name="checkInKey"
               value={formData.checkInKey}
               onChange={handleInputChange}
@@ -67,11 +84,27 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
             />
           </FormControl>
         </ModalBody>
-        <ModalFooter justifyContent="flex-end">
-          <Button colorScheme="blue" onClick={handleSubmit}>
+        <ModalFooter
+          backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
+          borderBottomRadius="10px"
+          pt={0}
+        >
+          <Button
+            width="100%"
+            colorScheme="blue"
+            onClick={handleSubmit}
+            backgroundColor="#AFB4E9"
+            color="black"
+            _hover={{ backgroundColor: '#D0D6F6 ' }}
+          >
             Submit
           </Button>
-          <Button onClick={onClose} ml={3}>
+          <Button
+            backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE1212'}
+            width="100%"
+            onClick={onClose}
+            ml={3}
+          >
             Cancel
           </Button>
         </ModalFooter>

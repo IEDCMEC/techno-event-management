@@ -1,98 +1,3 @@
-/*import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-} from '@chakra-ui/react';
-import DashboardLayout from '@/layouts/DashboardLayout';
-import { useFetch } from '@/hooks/useFetch';
-import { useAlert } from '@/hooks/useAlert';
-import DataDisplay from '@/components/DataDisplay';
-import NewExtraForm from './new'; // Import the form component
-
-const columns = [
-  { field: 'name', headerName: 'Name', width: 200 },
-  {
-    field: 'numberOfParticipantsWithExtrasAssigned',
-    headerName: 'No of Participants Assigned',
-    width: 200,
-  },
-  {
-    field: 'numberOfParticipantsWithExtrasCheckedIn',
-    headerName: 'No of Participants Checked In',
-    width: 200,
-  },
-];
-
-export default function Extras() {
-  const router = useRouter();
-  const { orgId, eventId } = router.query;
-  const showAlert = useAlert();
-  const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI hook for modal control
-  const { loading, get } = useFetch();
-
-  const [extras, setExtras] = useState([]);
-
-  useEffect(() => {
-    const fetchExtras = async () => {
-      const { data, status } = await get(`/core/organizations/${orgId}/events/${eventId}/extras`);
-      if (status === 200) {
-        setExtras(data.extras || []);
-      } else {
-        showAlert({
-          title: 'Error',
-          description: data.error,
-          status: 'error',
-        });
-      }
-    };
-    fetchExtras();
-  }, []);
-
-  return (
-    <DashboardLayout
-      pageTitle="Extras"
-      previousPage={`/organizations/${orgId}/events/${eventId}`}
-      headerButton={
-        <>
-          <Button onClick={onOpen} isLoading={loading}>
-            Add Extra
-          </Button>
-        </>
-      }
-      debugInfo={extras}
-    >
-      <DataDisplay
-        loading={loading}
-        columns={columns}
-        rows={extras}
-        onRowClick={(row) => {
-          router.push(`/${orgId}/events/${eventId}/extras/${row.id}`);
-        }}
-      />
-
-      
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Extra</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            
-            <NewExtraForm onClose={onClose} />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </DashboardLayout>
-  );
-}
-*/
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
@@ -103,9 +8,10 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  Text,
   useDisclosure,
+  useColorMode,
 } from '@chakra-ui/react';
+import { StyledBox, StyledButton, StyledText } from '@/components/ui/StyledComponents';
 import DashboardLayout from '@/layouts/DashboardLayout';
 // import { useFetch } from '@/hooks/useFetch';
 import { useAlert } from '@/hooks/useAlert';
@@ -113,6 +19,15 @@ import DataDisplay from '@/components/DataDisplay';
 import NewExtraForm from './new'; // Import the form component
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
+import {
+  ChevronLeftIcon,
+  ChevronDownIcon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/icons';
+import CustomStyledBox from '@/pages/CustomStyledBox';
 
 const columns = [
   { field: 'name', headerName: 'Name', width: 200 },
@@ -129,6 +44,7 @@ const columns = [
 ];
 
 export default function Extras() {
+  const { colorMode } = useColorMode();
   const router = useRouter();
   const { orgId, eventId } = router.query;
   const showAlert = useAlert();
@@ -137,7 +53,7 @@ export default function Extras() {
 
   const [extras, setExtras] = useState([]);
   const { useGetQuery } = useWrapper();
-  const { isLoading: loading } = useGetQuery(
+  const { isFetching: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/extras`,
     `/core/organizations/${orgId}/events/${eventId}/extras`,
     {},
@@ -159,16 +75,22 @@ export default function Extras() {
     <DashboardLayout
       pageTitle="Extras"
       previousPage={`/organizations/${orgId}/events/${eventId}`}
-      headerButton={
-        <>
-          <Button onClick={onOpen} isLoading={loading}>
-            Add Extra
-          </Button>
-        </>
-      }
       debugInfo={extras}
     >
-      <NavigationMenu orgId={orgId} eventId={eventId} />
+      <NavigationMenu
+        orgId={orgId}
+        eventId={eventId}
+        navButton={
+          <div className="flex gap-2.5">
+            <StyledButton onClick={onOpen} isLoading={loading}>
+              <StyledText>Add Extras</StyledText>
+            </StyledButton>
+          </div>
+        }
+      />
+
+      {/* <CustomStyledBox></CustomStyledBox> */}
+
       <DataDisplay
         loading={loading}
         columns={columns}
@@ -178,25 +100,36 @@ export default function Extras() {
         }}
       />
       {!loading && extras.length === 0 ? (
-        <div style={{ textAlign: 'center', margin: '20px' }}>
-          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+        <StyledBox style={{ textAlign: 'center', margin: '20px' }}>
+          <StyledText fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No extras created
-          </Text>
-          <Text color={'gray.500'} mb={3}>
+          </StyledText>
+          <StyledText color={'gray.500'} mb={3}>
             Add extras assigned and checked in to see details
-          </Text>
-        </div>
+          </StyledText>
+        </StyledBox>
       ) : (
         <></>
       )}
 
       {/* Modal for creating a new extra */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="outside" isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Extra</ModalHeader>
+        <ModalContent borderRadius="10px">
+          <ModalHeader
+            backgroundColor="#AFB4E9"
+            p={6}
+            borderTopLeftRadius="10px"
+            borderTopRightRadius="10px"
+            color="black"
+          >
+            <StyledText> Add Extra</StyledText>
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody
+            backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
+            borderRadius="10px"
+          >
             {/* Render the form from new/index.js */}
             <NewExtraForm onClose={onClose} />
           </ModalBody>

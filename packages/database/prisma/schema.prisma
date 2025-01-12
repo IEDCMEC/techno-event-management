@@ -66,6 +66,7 @@ model OrganizationUser {
 model Address {
   id           String         @id @default(uuid())
   name         String?
+  street       String?
   city         String?
   state        String?
   country      String?
@@ -76,23 +77,25 @@ model Address {
 }
 
 model Event {
-  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name               String
-  startTime          DateTime             @default(now())
-  endTime            DateTime             @default(now())
-  type               String?
-  description        String?
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
-  organizationId     String
-  venueId            String?
-  organization       Organization         @relation(fields: [organizationId], references: [id])
-  address            Address?             @relation(fields: [venueId], references: [id])
-  Participant        Participant[]
-  ParticipantCheckin ParticipantCheckIn[]
-  attributes         Attributes[]
-  extras             Extras[]
-  registrant         Registrant[]
+  id                             String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                           String
+  startTime                      DateTime             @default(now())
+  endTime                        DateTime             @default(now())
+  type                           String?
+  description                    String?
+  createdAt                      DateTime             @default(now())
+  updatedAt                      DateTime             @updatedAt
+  organizationId                 String
+  venueId                        String?
+  isShortlisting                 Boolean              @default(false)
+  isRegistrationClosed           Boolean              @default(false)
+  organization                   Organization         @relation(fields: [organizationId], references: [id])
+  address                        Address?             @relation(fields: [venueId], references: [id])
+  Participant                    Participant[]
+  ParticipantCheckin             ParticipantCheckIn[]
+  attributes                     Attributes[]
+  extras                         Extras[]
+  registrant                     Registrant[]
 }
 
 model Registrant {

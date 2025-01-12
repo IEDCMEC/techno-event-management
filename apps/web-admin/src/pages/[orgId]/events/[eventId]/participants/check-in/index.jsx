@@ -1,17 +1,29 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-import { Button, Flex, Text } from '@chakra-ui/react';
-
+import {
+  ChevronLeftIcon,
+  ChevronDownIcon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/icons';
+// import CustomStyledBox from '@/pages/CustomStyledBox';
+import { Button, Flex } from '@chakra-ui/react';
+import { StyledBox, StyledButton, StyledText } from '@/components/ui/StyledComponents';
 import DashboardLayout from '@/layouts/DashboardLayout';
-
 import DataDisplay from '@/components/DataDisplay';
-
 import { useAlert } from '@/hooks/useAlert';
-import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
-
 import NavigationMenu from '../../navigationmenu';
+import CustomStyledBox from '@/pages/CustomStyledBox';
+
+import { useDisclosure } from '@chakra-ui/react';
+import CheckInParticipantWithMultiScanner from '@/components/modals/MultiStageScanner/index';
+import CheckInParticipant from '@/components/modals/Check-inParticipant/index';
+import CheckInParticipantWithScanner from '@/components/modals/Check-in-Scanner/index';
+import CheckOutParticipant from '@/components/modals/Check-OutParticipant/index';
+import CheckOutParticipantWithScanner from '@/components/modals/Check-Out-Scanner/index';
 
 const columns = [
   { field: 'firstName', headerName: 'First Name', width: 200 },
@@ -25,7 +37,6 @@ const columns = [
     width: 200,
     valueGetter: (params) => params.row?.checkIn?.checkedInAt || 'Not Checked In',
   },
-
   {
     field: 'checkedInByEmail',
     headerName: 'Checked In By',
@@ -37,15 +48,16 @@ const columns = [
 export default function ParticipantsCheckIn() {
   const router = useRouter();
   const showAlert = useAlert();
-
   const { orgId, eventId } = router.query;
-  const { loading, get } = useFetch();
-
+  const [participantsCheckIn, setParticipantsCheckIn] = useState([]);
   const { useGetQuery } = useWrapper();
 
-  const [participantsCheckIn, setParticipantsCheckIn] = useState([]);
-
-  const { data, status, error } = useGetQuery(
+  const {
+    data,
+    status,
+    error,
+    isFetching: loading,
+  } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
     `/core/organizations/${orgId}/events/${eventId}/participants/check-in`,
     {},
@@ -55,66 +67,82 @@ export default function ParticipantsCheckIn() {
     },
   );
 
+  const {
+    isOpen: isMultiScannerModalOpen,
+    onOpen: onMultiScannerModalOpen,
+    onClose: onMultiScannerModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCheckInModalOpen,
+    onOpen: onCheckInModalOpen,
+    onClose: onCheckInModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isScanner1ModalOpen,
+    onOpen: onScanner1ModalOpen,
+    onClose: onScanner1ModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isScanner2ModalOpen,
+    onOpen: onScanner2ModalOpen,
+    onClose: onScanner2ModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCheckOutModalOpen,
+    onOpen: onCheckOutModalOpen,
+    onClose: onCheckOutModalClose,
+  } = useDisclosure();
+
   return (
     <DashboardLayout
       pageTitle="Participants Check-In"
       previousPage={`/${orgId}/events/${eventId}/participants`}
-      headerButton={
-        <>
-          <Flex h="100%" flexDirection="column">
-            <Button
-              mt="auto"
-              mb="0.5"
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in/scanner`);
-              }}
-              isLoading={loading}
-            >
-              Multi-Stage Scanner
-            </Button>
-          </Flex>
-          <Flex flexDirection="column" gap={4}>
-            <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`);
-              }}
-              isLoading={loading}
-            >
-              Check-In Participant
-            </Button>
-            <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`);
-              }}
-              isLoading={loading}
-            >
-              Open Scanner
-            </Button>
-          </Flex>
-          <Flex flexDirection="column" gap={4}>
-            <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`);
-              }}
-              isLoading={loading}
-            >
-              Check-Out Participant
-            </Button>
-            <Button
-              onClick={() => {
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`);
-              }}
-              isLoading={loading}
-            >
-              Open Scanner
-            </Button>
-          </Flex>
-          {/* <NavigationMenu orgId={orgId} eventId={eventId} />*/}
-        </>
-      }
       debugInfo={participantsCheckIn}
     >
-      <NavigationMenu orgId={orgId} eventId={eventId} />
+      <NavigationMenu
+        orgId={orgId}
+        eventId={eventId}
+        navButton={
+          <div className="flex gap-2.5">
+            <StyledButton
+              onClick={() =>
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`)
+              }
+              isLoading={loading}
+            >
+              <StyledText>Multi-Stage Scanner</StyledText>
+            </StyledButton>
+            <StyledButton
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`)}
+              isLoading={loading}
+            >
+              <StyledText>Check-In Participant</StyledText>
+            </StyledButton>
+            <StyledButton
+              onClick={() =>
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`)
+              }
+              isLoading={loading}
+            >
+              <StyledText>Open Scanner</StyledText>
+            </StyledButton>
+            <StyledButton
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`)}
+              isLoading={loading}
+            >
+              <StyledText>Check-Out Participant</StyledText>
+            </StyledButton>
+            <StyledButton
+              onClick={() =>
+                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`)
+              }
+              isLoading={loading}
+            >
+              <StyledText>Open Scanner</StyledText>
+            </StyledButton>
+          </div>
+        }
+      />
 
       <DataDisplay
         loading={loading}
@@ -124,18 +152,27 @@ export default function ParticipantsCheckIn() {
           router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
         }}
       />
+
       {!loading && participantsCheckIn.length === 0 ? (
-        <div style={{ textAlign: 'center', margin: '20px' }}>
-          <Text fontSize="25px" color={'blackAlpha.800'} mb={3}>
+        <StyledBox style={{ textAlign: 'center', margin: '20px' }}>
+          <StyledText fontSize="25px" color={'blackAlpha.800'} mb={3}>
             No participants checked-in
-          </Text>
-          <Text color={'gray.500'} mb={3}>
+          </StyledText>
+          <StyledText color={'gray.500'} mb={3}>
             Add details about the checked-in participants
-          </Text>
-        </div>
+          </StyledText>
+        </StyledBox>
       ) : (
         <></>
       )}
+      <CheckInParticipantWithMultiScanner
+        isOpen={isMultiScannerModalOpen}
+        onClose={onMultiScannerModalClose}
+      />
+      <CheckInParticipant isOpen={isCheckInModalOpen} onClose={onCheckInModalClose} />
+      <CheckInParticipantWithScanner isOpen={isScanner1ModalOpen} onClose={onScanner1ModalClose} />
+      <CheckOutParticipant isOpen={isCheckOutModalOpen} onClose={onCheckOutModalClose} />
+      <CheckOutParticipantWithScanner isOpen={isScanner2ModalOpen} onClose={onScanner2ModalClose} />
     </DashboardLayout>
   );
 }

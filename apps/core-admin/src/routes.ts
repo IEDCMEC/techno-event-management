@@ -20,6 +20,7 @@ import {
   updateParticipantAttribute,
   getParticipantBycheckInKey,
 } from './controllers/participants';
+import { getAllRegistrations } from './controllers/registration';
 import {
   addNewAttribute,
   editAttribute,
@@ -44,6 +45,7 @@ import {
   updateMailProject,
   verifyOTP,
 } from './controllers/mail';
+import { updateOrganizationDetails } from './controllers/organizations';
 
 const router: Router = express.Router();
 
@@ -78,6 +80,7 @@ router.get('/organizations/:orgId/events/:eventId', getEventStats); //midhun //m
 router.post('/organizations/:orgId/events', createNewEvent); //midhun
 
 router.get('/organizations/:orgId/events/:eventId/participants', getAllParticipants); //midhun //midhun - done
+router.get('/organizations/:orgId/events/:eventId/registrations', getAllRegistrations);
 router.post('/organizations/:orgId/events/:eventId/participants', addNewParticipant);
 router.put('/organizations/:orgId/events/:eventId/participants/:participantId', editParticipant);
 
@@ -108,8 +111,11 @@ router.put(
   updateParticipantAttribute,
 );
 
+router.post('/organizations/update', updateOrganizationDetails); //ajay
+
 router.get('/organizations/:orgId/events/:eventId/attributes', getAllAttributes); // done
 router.get('/organizations/:orgId/events/:eventId/attributes/:attributeId', getAttributeById); //done
+
 router.get(
   '/organizations/:orgId/events/:eventId/attributes/:attributeId/participants',
   getAttributeParticipants,
@@ -130,7 +136,7 @@ router.get('/organizations/:orgId/getMailStatus', getMailStatus);
 router.post('/organizations/:orgId/addNewRecipient', addNewRecipient);
 router.post('/organizations/:orgId/addNewRecipients', addNewRecipients);
 router.post('/organizations/:orgId/events/:eventId/mailQR', sendMailWithQR);
-
+router.post('/organizations/:orgId/getStatusOfEmails', getStatusOfEmails);
 // OTP routes
 router.post('/organizations/sendOTP', sendOTP);
 router.post('/organizations/verifyOTP', verifyOTP);

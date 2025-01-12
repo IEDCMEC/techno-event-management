@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Heading, Text, Center } from '@chakra-ui/react';
 
-const NotFound: React.FC = () => {
+const NotFound: React.FC<{ msg?: String }> = ({ msg }) => {
   return (
     <Center height="100vh" flexDirection="column" bg="gray.100">
       <Box textAlign="center" p={6} borderRadius="md" boxShadow="lg" bg="white">
@@ -9,7 +9,7 @@ const NotFound: React.FC = () => {
           404
         </Heading>
         <Text fontSize="lg" mb={4}>
-          Sorry, the page you are looking for does not exist.
+          {msg || 'Sorry, the page you are looking for does not exist.'}
         </Text>
       </Box>
     </Center>

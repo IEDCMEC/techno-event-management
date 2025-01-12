@@ -9,7 +9,7 @@ export const fetchAccountDetails = async (req: Request, res: Response) => {
     if (!userId) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
-    // console.log(prisma.)
+    // //console.log(prisma.)
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -29,26 +29,26 @@ export const fetchAccountDetails = async (req: Request, res: Response) => {
 export const myCredential = async (req: Request, res: Response) => {
   try {
     const userId = req?.auth?.payload?.sub;
-    // console.log(userId);
+    // //console.log(userId);
 
     if (!userId) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
-    // console.log(prisma.)
-    const userDetails = await prisma.organizationUser.findFirst({
+    // //console.log(prisma.)
+    const userDetails = await prisma.organizationUser.findMany({
       where: {
         userId: userId, // assuming userId is a unique identifier
       },
     });
-    // console.log(userDetails);
+    // //console.log(userDetails);
     if (userDetails) {
       return res.status(200).json({ data: userDetails }); // Return the details of the user
     } else {
-      console.log('User not found');
+      //console.log('User not found');
       return res.status(404).json({ error: 'User not found' });
     }
   } catch (err: any) {
-    console.log(err);
+    //console.log(err);
     return res.status(500).json({ error: 'Something went wrong' });
   }
 };

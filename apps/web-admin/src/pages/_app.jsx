@@ -3,16 +3,25 @@ import MyContext from '@/contexts/MyContext';
 import { extendTheme, ChakraProvider, withDefaultColorScheme } from '@chakra-ui/react';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { ColorModeScript } from '@chakra-ui/icons';
+import 'react-day-picker/dist/style.css';
 import '../styles/globals.css';
 // import '@uiw/react-md-editor/markdown-editor.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 const queryClient = new QueryClient();
 
-const theme = extendTheme(
-  withDefaultColorScheme({
+const theme = extendTheme({
+  ...withDefaultColorScheme({
     colorScheme: 'teal',
   }),
-);
+  components: {
+    Button: {
+      _hover: {
+        bg: 'auto',
+      },
+    },
+  },
+});
 
 export default function App({ Component, pageProps }) {
   return (
@@ -29,6 +38,7 @@ export default function App({ Component, pageProps }) {
       <QueryClientProvider client={queryClient}>
         <MyContext>
           <ProtectedRoute>
+            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
             <ChakraProvider theme={theme}>
               <Component {...pageProps} />
             </ChakraProvider>

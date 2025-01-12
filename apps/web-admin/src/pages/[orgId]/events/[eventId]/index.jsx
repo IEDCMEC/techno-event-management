@@ -62,7 +62,7 @@ export default function EventById() {
       setEvent(data.data.event || []);
     },
   );
-  const { isLoading: loading } = useGetQuery(
+  const { isFetching: loading } = useGetQuery(
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     `/core/organizations/${orgId}/events/${eventId}/attributes`,
     {},
@@ -81,25 +81,6 @@ export default function EventById() {
       },
     },
   );
-  // useEffect(() => {
-  //   const fetchEventAttributes = async () => {
-  //     const { data, status } = await get(
-  //       `/core/organizations/${orgId}/events/${eventId}/attributes`,
-  //     );
-  //     if (status === 200) {
-  //       setAttributes((preValue) => {
-  //         return [...preValue, ...(data.attributes || [])];
-  //       });
-  //     } else {
-  //       showAlert({
-  //         title: 'Error',
-  //         description: data.error,
-  //         status: 'error',
-  //       });
-  //     }
-  //   };
-  //   fetchEventAttributes();
-  // }, []);
 
   return (
     <DashboardLayout
@@ -124,59 +105,6 @@ export default function EventById() {
       }
     >
       <Flex flexDirection="column" height="100%" px={{ base: 4, md: 0 }}>
-        {/*<Box
-          width="100%"
-          backgroundColor="#e6f7f5"
-          py={2}
-          px={2}
-          borderRadius="8px"
-          display={{ base: 'block', md: 'flex' }}
-        >
-          <VStack spacing={2} align="stretch" display={{ base: 'flex', md: 'none' }}>
-            {['participants', 'check-in', 'attributes', 'extras'].map((tab) => (
-              <Button
-                key={tab}
-                style={tabStyle(activeTab === tab)}
-                onClick={() => {
-                  setActiveTab(tab);
-                  const element = tab === 'check-in' ? 'participants/check-in' : tab;
-                  router.push(`/${orgId}/events/${eventId}/${element}`);
-                }}
-              >
-                {tab === 'check-in'
-                  ? 'Participant Check In'
-                  : tab.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
-              </Button>
-            ))}
-          </VStack>
-
-          <Flex
-            justifyContent="space-evenly"
-            alignItems="center"
-            width="100%"
-            display={{ base: 'none', md: 'flex' }} // Horizontal layout on desktop
-          >
-            {['participants', 'check-in', 'attributes', 'extras'].map((tab) => (
-              <Button
-                key={tab}
-                style={tabStyle(activeTab === tab)}
-                onClick={() => {
-                  setActiveTab(tab);
-                  const element = tab === 'check-in' ? 'participants/check-in' : tab;
-                  router.push(
-                    `/${orgId}/events/${eventId}/${element}
-                `,
-                  );
-                }}
-              >
-                {tab === 'check-in'
-                  ? 'Participant Check In'
-                  : tab.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
-              </Button>
-            ))}
-          </Flex>
-        </Box> */}
-
         <NavigationMenu orgId={orgId} eventId={eventId} />
 
         <Flex

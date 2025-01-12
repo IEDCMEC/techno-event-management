@@ -1,119 +1,110 @@
-/*
- // the idea with menu
-import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { inter } from '@/components/ui/fonts';
+import { ChevronDownIcon, ChevronLeftIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
-
-const NavigationMenu = ({ orgId, eventId }) => {
-  const router = useRouter();
-  const menuLabels = ['Participants', 'Participants Check In', 'Attributes', 'Extras'];
-  console.log("navigation menu loaded")
-  return (
-    <>
-    <Menu>
-      <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-        Go to ...
-      </MenuButton>
-      <MenuList>
-        {menuLabels.map((label) => {
-            const path = `/${orgId}/events/${eventId}/${
-            label === 'Participants Check In' ? 'participants/check-in' : label.toLowerCase()
-            }`;
-            return (
-            <MenuItem key={label} onClick={() => router.push(path)}>
-                {label}
-            </MenuItem>
-            );
-        })}
-      </MenuList>
-    </Menu>
-    </>
-  );
-};*/
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import { useRouter } from 'next/router';
-import { useTabsStyles } from '@chakra-ui/react';
-import { useState } from 'react';
-import { Box, VStack, Button, Flex } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { useContext } from 'react';
+import { useColorMode } from '@chakra-ui/react';
+import { useEffect, useState, useContext } from 'react';
 import { account } from '@/contexts/MyContext';
-const NavigationMenu = ({ orgId, eventId }) => {
-  const tabStyle = (isActive) => ({
-    color: isActive ? '#369b97' : '#369b97',
-    backgroundColor: isActive ? '#e6f7f5' : '#e6f7f5',
-    padding: '10px 20px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontSize: { base: '14px', md: '17px' },
-    fontWeight: '600',
-    width: { base: '100%', md: 'auto' },
-  });
-  const router = useRouter();
-  const navItems = [
-    { link: 'participants', name: 'Participants' },
-    { link: 'check-in', name: 'Participants Check In' },
-    { link: 'attributes', name: 'Attributes' },
-    { link: 'extras', name: 'Extras' },
-  ];
-  const { activeTab, setActiveTab } = useContext(account);
-  useEffect(() => {
-    console.log(activeTab);
-  }, [activeTab]);
-  return (
-    <Box
-      width="100%"
-      backgroundColor="#e6f7f5"
-      py={2}
-      px={2}
-      borderRadius="8px"
-      display={{ base: 'block', md: 'flex' }}
-    >
-      <VStack spacing={2} align="stretch" display={{ base: 'flex', md: 'none' }}>
-        {/* 'participants', 'check-in', 'attributes', 'extras' */}
-        {navItems.map((tab) => (
-          <Button
-            key={tab.link}
-            style={tabStyle(activeTab === tab.link)}
-            onClick={() => {
-              setActiveTab(tab.link);
-              const element = tab.link === 'check-in' ? 'participants/check-in' : tab;
-              router.push(`/${orgId}/events/${eventId}/${element}`);
-            }}
-          >
-            {tab === 'check-in'
-              ? 'Participant Check In'
-              : tab.name.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
-          </Button>
-        ))}
-      </VStack>
+import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
+import { StyledButton, StyledText } from '@/components/ui/StyledComponents';
 
-      <Flex
-        justifyContent="space-evenly"
-        alignItems="center"
-        width="100%"
-        display={{ base: 'none', md: 'flex' }} // Horizontal layout on desktop
+const NavigationMenu = ({ orgId, eventId, navButton }) => {
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState('');
+  const { eventDetails } = useContext(account);
+  const menuItems = [
+    ...[
+      eventDetails.isShortlisting && router.asPath.endsWith('/participants')
+        ? {
+            name: 'Registrant Details',
+            path: `/${orgId}/events/${eventId}/registrants`,
+          }
+        : {
+            name: 'Participants Details',
+            path: `/${orgId}/events/${eventId}/participants`,
+          },
+    ],
+    {
+      name: 'Participants Check-in Details',
+      path: `/${orgId}/events/${eventId}/participants/check-in`,
+    },
+    {
+      name: 'Attributes Details',
+      path: `/${orgId}/events/${eventId}/attributes`,
+    },
+    {
+      name: 'Extras Details',
+      path: `/${orgId}/events/${eventId}/extras`,
+    },
+  ];
+
+  useEffect(() => {
+    const path = router.asPath;
+    const lastSegment = path.split('/').pop();
+
+    const pageMap = {
+      participants: 'Participants Details',
+      'check-in': 'Participants Check-in Details',
+      attributes: 'Attributes Details',
+      extras: 'Extras Details',
+    };
+
+    setCurrentPage(pageMap[lastSegment] || 'Details');
+  }, [router.asPath]);
+  const { colorMode } = useColorMode();
+  const commonButtons = (
+    <div className="flex gap-4" style={{ paddingLeft: '20px', paddingRight: '20px' }}>
+      <StyledButton
+        leftIcon={<ChevronLeftIcon />}
+        colorScheme="gray"
+        variant="solid"
+        onClick={() => router.push(`/${orgId}/events/`)}
       >
-        {['participants', 'check-in', 'attributes', 'extras'].map((tab) => (
-          <Button
-            key={tab}
-            style={tabStyle(activeTab === tab)}
-            onClick={() => {
-              setActiveTab(tab);
-              const element = tab === 'check-in' ? 'participants/check-in' : tab;
-              router.push(
-                `/${orgId}/events/${eventId}/${element}
-                `,
-              );
-            }}
-          >
-            {tab === 'check-in'
-              ? 'Participant Check In'
-              : tab.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
-          </Button>
-        ))}
-      </Flex>
-    </Box>
+        <StyledText>Back</StyledText>
+      </StyledButton>
+      <Menu>
+        <MenuButton as={StyledButton} rightIcon={<ChevronDownIcon />}>
+          <StyledText>{currentPage}</StyledText>
+        </MenuButton>
+        <MenuList
+          sx={{
+            bg: colorMode === 'light' ? '#F5F5F5' : '#1D1E23',
+            borderColor: colorMode === 'light' ? '#EEEFF2' : '#101117',
+            borderRadius: 'var(--8, 8px)',
+            opacity: '1',
+          }}
+        >
+          {menuItems.map((item) => (
+            <MenuItem
+              key={item.name}
+              sx={{
+                bg: colorMode === 'light' ? '#F5F5F5' : '#1D1E23',
+                _hover: {
+                  bg: colorMode === 'light' ? '#EEEFF2' : '#101117',
+                },
+                opacity: '1',
+              }}
+              onClick={() => router.push(item.path)}
+            >
+              <StyledText opacity="1">{item.name}</StyledText>
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
+    </div>
+  );
+
+  return (
+    <div className="w-full space-y-4" style={{ marginTop: '20px' }}>
+      <div className="flex justify-between items-center mb-5 mt-2.5">
+        {commonButtons}
+        {navButton && (
+          <div className="flex gap-2.5" style={{ paddingRight: '20px' }}>
+            {navButton}
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
+
 export default NavigationMenu;

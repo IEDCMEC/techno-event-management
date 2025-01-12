@@ -23,6 +23,7 @@ import {
   FormLabel,
   Select,
   Input,
+  useColorMode,
 } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import DOMPurify from 'dompurify';
@@ -33,13 +34,14 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor').then((mod) => mod.
 });
 // import { bold, italic } from '@uiw/react-md-editor/lib/commands';
 import { useContext } from 'react';
-import DataDisplayNew from './DataDisplayNew';
+import DataDisplayNew from '../../DataDisplayNew';
 import useWrapper from '@/hooks/useWrapper';
 // import { useEffect } from 'react';
 import { account } from '@/contexts/MyContext';
-import DataDisplay from './DataDisplay';
+import DataDisplay from '../../DataDisplay';
 import { useRouter } from 'next/router';
-
+import { inter } from '@/components/ui/fonts';
+import { StyledText } from '@/components/ui/StyledComponents';
 // const EditerMarkdown = dynamic(
 //   () =>
 //     import('@uiw/react-md-editor').then((mod) => {
@@ -52,6 +54,7 @@ import { useRouter } from 'next/router';
 // });
 
 const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
+  const { colorMode } = useColorMode();
   const router = useRouter();
   const { eventId } = router.query;
   // const queryClient = useQueryClient();
@@ -64,15 +67,16 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   const [selectedProject, setSelectedProject] = useState({});
   const [recipients, setRecipients] = useState([]);
   const [mailStatus, setMailStatus] = useState(null);
+  const [flag, setFlag] = useState(false);
   useEffect(() => {
     const fetchText = async () => {
       const response = await fetch('/QrTemplate.txt');
       const data = await response.text();
       setEmailContent(data);
-      // console.log(data);
+      // //console.log(data);
     };
     if (emailContent.length === 0) {
-      console.log('fetching text');
+      //console.log('fetching text');
       fetchText();
     }
   }, [selectedProject]);
@@ -80,7 +84,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     useContext(account);
 
   // useEffect(() => {
-  //   console.log(participants);
+  //   //console.log(participants);
   // }, [participants]);
   // useEffect(() => {
   //   async fetchEmailTemplate = ()=>
@@ -117,7 +121,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       ],
     },
   );
-  // const {data, isLoading: loading} = useGetQuery(`/core/organizations/${accountDetails.orgId}/`)
+  // const {data, isFetching: loading} = useGetQuery(`/core/organizations/${accountDetails.orgId}/`)
   const addNewRecipients = () => {
     if (accountDetails.orgId) {
       const myData = recipients.map((value) => ({
@@ -125,8 +129,8 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         email: value.email,
         payload: value.checkInKey,
       }));
-      //console.log('Request');
-      //console.log(myData, recipients);
+      ////console.log('Request');
+      ////console.log(myData, recipients);
       // Trigger the mutation
       addRecipientsMutation({
         projectId: selectedProject.id,
@@ -135,9 +139,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     }
   };
   useEffect(() => {
-    //console.log(recipients);
+    ////console.log(recipients);
   }, [recipients]);
-  // //console.log(`/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`);
+  // ////console.log(`/core/organizations/${accountDetails.orgId}/getRecipients/${selectedProject.id}`);
   useGetQuery(
     `/core/organizations/${accountDetails.orgId}/getRecipients/${
       selectedProject.id ? selectedProject.id : ''
@@ -148,11 +152,11 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     {},
     {
       onError: (error) => {
-        //console.log(error);
+        ////console.log(error);
       },
     },
     (response) => {
-      // //console.log(response.data.recipients);
+      // ////console.log(response.data.recipients);
       // setMailStatus(response.data.recipients);
       setRecipients(() => {
         const myParts = response.data.recipients.map((value) => value.email);
@@ -182,7 +186,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         });
       },
       onError: (error) => {
-        //console.log(error);
+        ////console.log(error);
         showAlert({
           title: 'Failure',
           description: 'Failed to update email template',
@@ -195,13 +199,24 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       ],
     },
     ({ data, variables, context }) => {
-      //console.log(data);
+      ////console.log(data);
     },
   );
   const updateEmailTemplate = async (e) => {
     e.preventDefault();
-    // //console.log(renderHtml(emailContent));
+    ////console.log(emailContent);
     if (accountDetails.orgId) {
+      let flag1 = false;
+      let flag2 = false;
+      if (/<\s+[^>]+\s+>/.test(emailContent)) {
+        flag1 = true;
+      }
+      if (!(/{{name}}/.test(emailContent) && /{{payload}}/.test(emailContent))) {
+        flag2 = true;
+      }
+      const flag3 = flag1 || flag2;
+      setFlag(flag3);
+      ////console.log(flag3);
       updateEmailMutation({
         projectId: selectedProject.id,
         html_template: emailContent,
@@ -214,7 +229,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     data: emailContentData,
     status: emailContentStatus,
     error: emailContentError,
-    isLoading: loading,
+    isFetching: loading,
   } = useGetQuery(
     `/core/organizations/${accountDetails.orgId}/getEmailProjects`,
     `/core/organizations/${accountDetails.orgId}/getEmailProjects`,
@@ -241,7 +256,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         // onClose();
       },
       onError: (error) => {
-        //console.log(error);
+        ////console.log(error);
       },
     },
   );
@@ -258,7 +273,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         },
         {
           onSuccess: (response) => {
-            //console.log(response.data);
+            ////console.log(response.data);
             // setMailStatus(response.data);
           },
         },
@@ -271,7 +286,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     {},
     {
       onSuccess: (response) => {
-        //console.log(response);
+        ////console.log(response);
         showAlert({
           title: 'Success',
           description: 'Email Project Added',
@@ -297,13 +312,13 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       ],
     },
     ({ data, variables, context }) => {
-      //console.log(data);
+      ////console.log(data);
     },
   );
   const handleEmailProjectSubmit = async (e) => {
     e.preventDefault();
-    // //console.log('Hekki')
-    //console.log(newEmailProject);
+    // ////console.log('Hekki')
+    ////console.log(newEmailProject);
     if (emailProjects.length > 9) {
       showAlert({
         title: 'Failure',
@@ -328,17 +343,17 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     {},
     {
       onSuccess: (response) => {
-        //console.log(response.data);
+        ////console.log(response.data);
         setMailStatus(response.data);
       },
     },
   );
   const nextStep = async () => {
     if (step == 3) {
-      //console.log('hi');
+      ////console.log('hi');
       addNewRecipients();
     }
-    //console.log(step);
+    ////console.log(step);
     setStep((prev) => Math.min(prev + 1, 5));
     // if(step == 4){
     //   checkMailStatusMutation({
@@ -350,32 +365,43 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     <>
       {/* <Button onClick={onOpen}>Open Modal</Button> */}
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="outside" isCentered>
         <ModalOverlay />
         <ModalContent
           sx={{
             minWidth: { base: '95vw', md: '70vw' },
             height: { base: '600px', md: '750px' },
           }}
+          borderRadius="10px"
         >
-          <ModalHeader fontSize="28px">Send QR Tickets</ModalHeader>
+          <ModalHeader
+            fontSize="28px"
+            backgroundColor="#AFB4E9"
+            p={6}
+            borderTopLeftRadius="10px"
+            borderTopRightRadius="10px"
+            color="black"
+          >
+            Send QR Tickets
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}>
             {step === 1 && (
               <Box>
                 <FormControl id="name" mb={4}>
-                  <FormLabel>Select Email Project: </FormLabel>
+                  <FormLabel fontFamily={inter.style.fontFamily}>Select Email Project: </FormLabel>
                   <Select
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     placeholder="Select an Email recipient list"
                     // value={}
                     onChange={(e) => {
-                      // //console.log(emailProjects[e.target.value]['html_template']);
+                      // ////console.log(emailProjects[e.target.value]['html_template']);
                       setSelectedProject(emailProjects[e.target.value]);
                       setEmailContent(emailProjects[e.target.value]['html_template']);
                     }}
                   >
                     {emailProjects.map((value, index) => {
-                      // //console.log(value);
+                      // ////console.log(value);
                       return (
                         <option key={index} value={index}>
                           {value.name}
@@ -383,7 +409,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                       );
                     })}
                   </Select>
-                  {/* <Input type="text" placeholder="Enter your name" /> */}
+                  {/* <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                   type="text" placeholder="Enter your name" /> */}
                 </FormControl>
                 {selectedProject && (
                   <TableContainer
@@ -395,22 +423,28 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   >
                     <Table
                       variant="simple"
-                      borderRadius="20px"
                       size="lg"
                       borderWidth="2px"
                       borderCollapse="separate"
+                      backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     >
                       <Tbody>
                         <Tr borderWidth={'2px'}>
-                          <Th>ID: </Th>
+                          <Th>
+                            <StyledText> ID: </StyledText>
+                          </Th>
                           <Th>{selectedProject.id}</Th>
                         </Tr>
                         <Tr borderWidth={'2px'}>
-                          <Th>Description: </Th>
+                          <Th>
+                            <StyledText>Description: </StyledText>{' '}
+                          </Th>
                           <Th>{selectedProject.description}</Th>
                         </Tr>
                         <Tr borderWidth={'2px'}>
-                          <Th>name: </Th>
+                          <Th>
+                            <StyledText> name:</StyledText>{' '}
+                          </Th>
                           <Th>{selectedProject.name}</Th>
                         </Tr>
                       </Tbody>
@@ -429,8 +463,11 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   ------ OR ------
                 </Box>
                 <FormControl onSubmit={handleEmailProjectSubmit}>
-                  <FormLabel>Create a new Email Project:</FormLabel>
+                  <FormLabel fontFamily={inter.style.fontFamily}>
+                    Create a new Email Project:
+                  </FormLabel>
                   <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     onChange={(e) =>
                       setNewEmailProject((preValue) => ({
                         ...preValue,
@@ -439,8 +476,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                     }
                     value={newEmailProject.name}
                   />
-                  <FormLabel>Description:</FormLabel>
+                  <FormLabel fontFamily={inter.style.fontFamily}>Description:</FormLabel>
                   <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     onChange={(e) =>
                       setNewEmailProject((preValue) => ({
                         ...preValue,
@@ -457,7 +495,14 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                       flexDirection: 'column',
                     }}
                   >
-                    <Button type="submit" mt={'30px'} onClick={handleEmailProjectSubmit}>
+                    <Button
+                      backgroundColor="#AFB4E9"
+                      color="black"
+                      _hover={{ backgroundColor: '#D0D6F6 ' }}
+                      type="submit"
+                      mt={'30px'}
+                      onClick={handleEmailProjectSubmit}
+                    >
                       Create new project
                     </Button>
                   </Box>
@@ -477,18 +522,28 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 //   width: '100%',
                 // }}
               >
-                <FormLabel>Email Content: </FormLabel>
+                <FormLabel fontFamily={inter.style.fontFamily}>Email Content: </FormLabel>
                 {/* <div className="wmde-markdown-var"> </div> */}
                 <MDEditor value={emailContent} onChange={setEmailContent} height={450} />
-                <Button mt={'5'} onClick={updateEmailTemplate}>
+                <Button
+                  backgroundColor="#AFB4E9"
+                  color="black"
+                  _hover={{ backgroundColor: '#D0D6F6 ' }}
+                  mt={'5'}
+                  onClick={updateEmailTemplate}
+                >
                   Save Changes
                 </Button>
               </FormControl>
             )}
             {step === 3 && (
               <FormControl id="email" mb={4}>
-                <FormLabel>Add your recipients to email project</FormLabel>
-                {/* <Input type="email" placeholder="Enter your email" /> */}
+                <FormLabel fontFamily={inter.style.fontFamily}>
+                  Add your recipients to email project
+                </FormLabel>
+                {/* <Input
+                  backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
+                 type="email" placeholder="Enter your email" /> */}
                 <DataDisplay
                   columns={[
                     { field: 'checkInKey', headerName: 'QR Code' },
@@ -499,24 +554,24 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   overflowY="visible"
                   height="500px"
                   onRowClick={(value) => {
-                    //console.log(value);
+                    ////console.log(value);
                   }}
                   state={recipients.map((value) => value.email)}
                   // state={recipients}
                   setState={(selectedValue) => {
-                    ////console.log(selectedValue);
+                    //////console.log(selectedValue);
                     if (Array.isArray(selectedValue)) {
-                      // //console.log(selectedValue);
-                      ////console.log('hello trigger')
+                      // ////console.log(selectedValue);
+                      //////console.log('hello trigger')
                       if (selectedValue.length > 0) {
                         setRecipients(participants);
                       } else {
                         setRecipients([]);
                       }
                     } else {
-                      ////console.log('trigger')
+                      //////console.log('trigger')
                       setRecipients((prevSelectedRows) => {
-                        //console.log(prevSelectedRows);
+                        ////console.log(prevSelectedRows);
                         const myIds = prevSelectedRows.map((value) => value.email);
                         return myIds.includes(selectedValue.email)
                           ? prevSelectedRows.filter((value) => value.email !== selectedValue.email)
@@ -531,8 +586,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             {step === 4 && (
               <Box>
                 <FormControl id="email" mb={4}>
-                  <FormLabel>Enter email subject: </FormLabel>
+                  <FormLabel fontFamily={inter.style.fontFamily}>Enter email subject: </FormLabel>
                   <Input
+                    backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
                     type="text"
                     placeholder="Enter the subject for your email: "
                     value={subject}
@@ -540,7 +596,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   />
                 </FormControl>
                 <Box>
-                  <Text textStyle={'lg'}>Preview your email: </Text>
+                  <StyledText textStyle={'lg'}>Preview your email: </StyledText>
                   <div
                     // mt={'10px'}
                     // p={'20px'}
@@ -568,9 +624,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 }}
               >
                 <Box width={'100%'}>
-                  <Text fontWeight="bold" mb={2}>
+                  <StyledText fontWeight="bold" mb={2}>
                     Emails sent:
-                  </Text>
+                  </StyledText>
                   <DataDisplayNew
                     columns={[
                       { field: 'checkInKey', headerName: 'QR Code' },
@@ -583,9 +639,9 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   ></DataDisplayNew>
                 </Box>
                 <Box width={'100%'}>
-                  <Text fontWeight="bold" mb={2}>
+                  <StyledText fontWeight="bold" mb={2}>
                     Email not sent:
-                  </Text>
+                  </StyledText>
                   <DataDisplayNew
                     columns={[
                       { field: 'checkInKey', headerName: 'QR Code' },
@@ -602,6 +658,8 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
           </ModalBody>
 
           <ModalFooter
+            backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
+            borderBottomRadius="10px"
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -610,22 +668,45 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             }}
           >
             {step > 1 && step !== 5 && (
-              <Button onClick={prevStep} mr={3}>
+              <Button
+                width={'20%'}
+                backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE1212'}
+                onClick={prevStep}
+                mr={3}
+              >
                 Previous
               </Button>
             )}
             {step < 4 && (
               <Button
                 onClick={() => {
-                  nextStep();
-                  //   //console.log(step);
+                  if (!flag) {
+                    nextStep();
+                  } else {
+                    showAlert({
+                      title: 'Failure...make sure',
+                      description: 'Check whether {{}} is present and < something > is not',
+                      status: 'success',
+                    });
+                  }
+
+                  //   ////console.log(step);
                 }}
+                width={'20%'}
+                backgroundColor="#AFB4E9"
+                color="black"
+                _hover={{ backgroundColor: '#D0D6F6 ' }}
               >
                 Next
               </Button>
             )}
             {step === 4 && (
-              <Button colorScheme="blue" onClick={sendEmails}>
+              <Button
+                backgroundColor="#AFB4E9"
+                color="black"
+                _hover={{ backgroundColor: '#D0D6F6 ' }}
+                onClick={sendEmails}
+              >
                 Send Emails
               </Button>
             )}
@@ -634,8 +715,11 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 onClick={() => {
                   onClose();
                   setStep(1);
-                  //   //console.log(step);
+                  //   ////console.log(step);
                 }}
+                backgroundColor="#AFB4E9"
+                color="black"
+                _hover={{ backgroundColor: '#D0D6F6 ' }}
               >
                 Close
               </Button>
