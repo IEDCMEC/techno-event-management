@@ -230,7 +230,7 @@ export default function CheckInParticipant({ isOpen, onClose }) {
               color="black"
               _hover={{ backgroundColor: '#D0D6F6 ' }}
             >
-              Check In
+              <StyledText>Check In</StyledText>
             </Button>
             <Button
               backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE1212'}
@@ -238,7 +238,7 @@ export default function CheckInParticipant({ isOpen, onClose }) {
               onClick={onClose}
               width={'100%'}
             >
-              Close
+              <StyledText>Close</StyledText>
             </Button>
           </Box>
         </ModalFooter>

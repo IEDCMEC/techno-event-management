@@ -223,7 +223,7 @@ export default function CheckInParticipantWithMultiScanner({ isOpen, onClose }) 
           <Box flex={1} display="flex" justifyContent="space-around" gap={3} p={3}>
             {scannedValue && (
               <Button backgroundColor="#04050B12" width={'100%'} onClick={confirmScannedValue}>
-                Confirm {stage === 1 ? 'Value' : ''}
+                <StyledText>Confirm</StyledText> {stage === 1 ? 'Value' : ''}
               </Button>
             )}
             <Button
@@ -236,7 +236,7 @@ export default function CheckInParticipantWithMultiScanner({ isOpen, onClose }) 
               mr={3}
               color="black"
             >
-              Clear
+              <StyledText>Clear</StyledText>
             </Button>
           </Box>
         </ModalFooter>
