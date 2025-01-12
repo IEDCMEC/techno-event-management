@@ -37,7 +37,7 @@ export const ProtectedRoute = ({ children }) => {
   };
   const { get, post } = useFetch();
   // useEffect();
-  useMemo(() => {
+  useEffect(() => {
     //console.log(accountDetails);
     if (
       accountDetails &&
