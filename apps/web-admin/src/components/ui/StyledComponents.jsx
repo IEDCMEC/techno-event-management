@@ -1,4 +1,4 @@
-import { forwardRef, Box, Text, IconButton, Tooltip } from '@chakra-ui/react';
+import { forwardRef, Box, Text, IconButton, Tooltip, Button } from '@chakra-ui/react';
 import { FaLinkedin, FaInstagramSquare } from 'react-icons/fa';
 import { HiGlobeAlt } from 'react-icons/hi2';
 import { FaXTwitter } from 'react-icons/fa6';
@@ -168,4 +168,42 @@ const StyledDisabledIconButton = forwardRef(({ children, iconD, ...props }, ref)
   );
 });
 
-export { StyledBox, StyledText, StyledTd, StyledIconButton, StyledDisabledIconButton };
+const StyledButton = forwardRef(({ children, ...props }, ref) => {
+  const { colorMode } = useColorMode();
+  return (
+    <Button
+      ref={ref}
+      display="flex"
+      padding="8px 12px"
+      justifyContent="center"
+      alignItems="center"
+      alignContent="center"
+      gap="8px"
+      fontWeight="400"
+      flexWrap="wrap"
+      borderRadius="var(--8, 8px)"
+      border={
+        colorMode === 'light'
+          ? '1px solid var(--black-10, rgba(4, 5, 11, 0.10))'
+          : '1px solid var(--white-10, rgba(251, 251, 254, 0.10))'
+      }
+      background={
+        colorMode === 'light'
+          ? 'var(--black-4, rgba(4, 5, 11, 0.04))'
+          : 'var(--white-5, rgba(251, 251, 254, 0.05))'
+      }
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+});
+
+export {
+  StyledBox,
+  StyledText,
+  StyledTd,
+  StyledIconButton,
+  StyledDisabledIconButton,
+  StyledButton,
+};

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button, useDisclosure } from '@chakra-ui/react';
-import { StyledBox, StyledText } from '@/components/ui/StyledComponents';
+import { StyledBox, StyledButton, StyledText } from '@/components/ui/StyledComponents';
 import { useRouter } from 'next/router';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
@@ -51,10 +51,7 @@ export default function Participants() {
   const router = useRouter();
   const showAlert = useAlert();
   const { orgId, eventId } = router.query;
-  // const { loading, get, post } = useFetch();
   const { useGetQuery, usePostMutation } = useWrapper();
-
-  // const { accountDetails } = useContext(account);
 
   const {
     data,
@@ -124,7 +121,7 @@ export default function Participants() {
   };
   const { isOpen: qrIsOpen, onOpen: qROnOpen, onClose: qROnClose } = useDisclosure();
 
-  const exportToCsv = () => {
+  const ExportToCsv = () => {
     const csvData = participants.map((participant) => ({
       firstName: participant.firstName,
       lastName: participant.lastName,
@@ -143,9 +140,9 @@ export default function Participants() {
         filename={`participants-${eventId}.csv`}
         style={{ textDecoration: 'none' }}
       >
-        <Button colorScheme="gray" variant="solid">
+        <StyledButton colorScheme="gray" variant="solid">
           Export to CSV
-        </Button>
+        </StyledButton>
       </CSVLink>
     );
   };
@@ -160,75 +157,20 @@ export default function Participants() {
         orgId={orgId}
         eventId={eventId}
         navButton={
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '20px',
-              marginTop: '10px',
-            }}
-          >
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <Button
-                leftIcon={<ChevronLeftIcon />}
-                colorScheme="gray"
-                variant="solid"
-                onClick={() => router.back()}
-              >
-                Back
-              </Button>
-              <Menu>
-                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="gray">
-                  Participants Details
-                </MenuButton>
-                <MenuList bg="gray.100" borderColor="gray.200">
-                  <MenuItem
-                    color="gray.700"
-                    fontWeight="medium"
-                    _hover={{ bg: 'gray.200' }}
-                    onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in`)}
-                  >
-                    Participants Check-in Details
-                  </MenuItem>
-                  <MenuItem
-                    color="gray.700"
-                    fontWeight="medium"
-                    _hover={{ bg: 'gray.200' }}
-                    onClick={() => router.push(`/${orgId}/events/${eventId}/attributes`)}
-                  >
-                    Attributes Details
-                  </MenuItem>
-                  <MenuItem
-                    color="gray.700"
-                    fontWeight="medium"
-                    _hover={{ bg: 'gray.200' }}
-                    onClick={() => router.push(`/${orgId}/events/${eventId}/extras`)}
-                  >
-                    Extras Details
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </div>
-
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <Button onClick={onOpen} isLoading={loading} colorScheme="gray">
-                Add Participant
-              </Button>
-              <Button
-                onClick={() =>
-                  router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)
-                }
-                isLoading={loading}
-                colorScheme="gray"
-              >
-                Upload CSV
-              </Button>
-              {exportToCsv()}
-              <Button onClick={qROnOpen} colorScheme="gray">
-                Send Emails with QR
-              </Button>
-            </div>
+          <div className="flex gap-2.5">
+            <StyledButton onClick={onOpen} isLoading={loading}>
+              <StyledText>Add Participant</StyledText>
+            </StyledButton>
+            <StyledButton
+              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/new/upload-csv`)}
+              isLoading={loading}
+            >
+              <StyledText>Upload CSV</StyledText>
+            </StyledButton>
+            <ExportToCsv />
+            <StyledButton onClick={qROnOpen} colorScheme="gray">
+              <StyledText>Send Emails with QR</StyledText>
+            </StyledButton>
           </div>
         }
       />
