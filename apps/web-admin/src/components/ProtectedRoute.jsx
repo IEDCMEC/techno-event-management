@@ -78,6 +78,7 @@ export const ProtectedRoute = ({ children }) => {
     let myResponse = await get('/core/users/mycreds');
     // //console.log(myResponse.data.data);
     if (myResponse && myResponse.status === 200) {
+      console.log('Hello world');
       setAllAccounts(
         myResponse.data.data.map((value) => ({
           role: value.role,
