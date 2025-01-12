@@ -60,14 +60,14 @@ export default function NewExtraForm({ onClose }) {
 */
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, FormControl, FormLabel, Input,useColorMode } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, Input, useColorMode } from '@chakra-ui/react';
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 import { StyledText } from '@/components/ui/StyledComponents';
 
 export default function NewExtraForm({ onClose }) {
-  const {colorMode} = useColorMode();
+  const { colorMode } = useColorMode();
   // Accept onClose to close the modal
   const { loading, post } = useFetch();
   const showAlert = useAlert();
