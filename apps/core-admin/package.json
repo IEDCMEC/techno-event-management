@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@supabase/supabase-js": "^2.46.1",
+    "@supabase/supabase-js": "^2.47.12",
     "@typescript-eslint/parser": "6.0.0",
     "axios": "^1.5.1",
     "bcryptjs": "^2.4.3",
