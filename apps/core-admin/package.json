@@ -43,7 +43,7 @@
     "@types/pg": "^8.10.1",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "chai": "^4.3.7",
-    "chai-http": "^4.3.0",
+    "chai-http": "^5.1.1",
     "concurrently": "^8.0.1",
     "eslint": "^8.56.0",
     "eslint-config-custom": "*",
