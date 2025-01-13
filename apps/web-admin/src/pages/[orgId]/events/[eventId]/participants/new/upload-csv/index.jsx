@@ -10,6 +10,8 @@ import DataDisplay from '@/components/DataDisplay';
 
 import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
+import { StyledText, StyledButton } from '@/components/ui/StyledComponents';
+import { inter } from '@/components/ui/fonts';
 
 export default function NewParticipantByCSVUpload() {
   const router = useRouter();
@@ -35,7 +37,9 @@ export default function NewParticipantByCSVUpload() {
 
       complete: (result) => {
         const filteredData = result.data.filter((row) => {
-          return Object.values(row).every((value) => value !== null && value !== undefined);
+          return Object.values(row).every(
+            (value) => value !== null && value !== undefined && value !== '',
+          );
         });
 
         if (filteredData[filteredData.length - 1].firstName === '') {
@@ -79,27 +83,54 @@ export default function NewParticipantByCSVUpload() {
           setCSVData(null);
           //e.target.value = '';
         }
+        const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'checkInKey'];
 
-        if (
-          columns.find(
-            (column) =>
-              column.field !== 'firstName' ||
-              column.field !== 'lastName' ||
-              column.field !== 'email' ||
-              column.field !== 'phone' ||
-              column.field !== 'checkInKey',
-          )
-        ) {
+        const missingColumns = requiredFields.some(
+          (field) => !columns.find((column) => column.field === field),
+        );
+        console.log({ missingColumns });
+        if (missingColumns) {
           showAlert({
-            title: 'Info',
+            title: 'Error',
             description:
-              'Extra columns marked with _ will be inserted as attributes and & will be inserted as extras to be checked-in.',
-            status: 'info',
+              'Your CSV file is missing one or more required columns: firstName, lastName, phone, checkInKey, email.Please ensure the columns are named exactly as listed, and try uploading the file again.',
+            status: 'error',
             duration: 10000,
           });
-        }
+          setCSVData(null);
+          e.target.value = '';
+        } else {
+          const extraColumn = columns.find(
+            (column) =>
+              column.field !== 'firstName' &&
+              column.field !== 'lastName' &&
+              column.field !== 'email' &&
+              column.field !== 'phone' &&
+              column.field !== 'checkInKey' &&
+              !(column.field.startsWith('_') || column.field.startsWith('&')),
+          );
 
-        setCSVData(dataWithId);
+          if (!extraColumn) {
+            setCSVData(dataWithId);
+          } else {
+            const extraColumnsWithPrefix = columns.find(
+              (column) => column.field.startsWith('_') || column.field.startsWith('&'),
+            );
+
+            if (extraColumnsWithPrefix) {
+              showAlert({
+                title: 'Info',
+                description:
+                  'Extra columns marked with _ will be inserted as attributes, and & will be inserted as extras to be checked-in.',
+                status: 'info',
+                duration: 10000,
+              });
+
+              // Proceed with the CSV data
+              setCSVData(dataWithId);
+            }
+          }
+        }
       },
       error: (error) => {
         console.error('Error parsing CSV:', error);
@@ -192,26 +223,35 @@ export default function NewParticipantByCSVUpload() {
       previousPage={`/organizations/${orgId}/events/${eventId}/participants`}
       debugInfo={csvData}
     >
-      <Box
-        height="100%"
-        width="100%"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Box height="100%" width="100%" display="flex" flexDirection="column" p={4}>
         {!csvData && (
-          <Text fontSize="xl">
-            Upload a CSV file of participants. The required columns are firstName, lastName, phone,
-            checkInKey, email. Extra attributes should be prefixed with an underscore (_) and extras
-            to be checked-in should be prefixed with and ampersand (&).
-          </Text>
+          <Box mb={6} textAlign="center">
+            <Text
+              fontFamily={inter.style.fontFamily}
+              fontSize="lg"
+              display="flex"
+              flexDirection="column"
+            >
+              Upload a CSV file of participants. The required columns are:
+              <Text fontFamily={inter.style.fontFamily} fontSize="lg" fontWeight={600}>
+                firstName, lastName, phone, checkInKey, email.
+              </Text>
+              Extra attributes should be prefixed with an underscore (_) and extras to be checked-in
+              should be prefixed with an ampersand (&).
+            </Text>
+          </Box>
         )}
-        <Flex justifyContent="space-between" alignItems="center">
-          <input type="file" accept=".csv" onChange={handleFileUpload} />
+
+        <StyledText mb="8px">Upload CSV File</StyledText>
+        <Flex justifyContent="space-between" alignItems="center" gap={4}>
+          <StyledButton>
+            <input type="file" accept=".csv" onChange={handleFileUpload} />
+          </StyledButton>
+
           {csvData && (
-            <Button onClick={handleSubmit} isLoading={loading}>
+            <StyledButton onClick={handleSubmit} isLoading={loading}>
               Confirm and Add
-            </Button>
+            </StyledButton>
           )}
         </Flex>
         {csvData && <DataDisplay loading={loading} rows={csvData} columns={columns} />}
