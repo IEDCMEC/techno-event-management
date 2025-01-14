@@ -13,9 +13,13 @@ const app: Express = express();
 
 const { auth } = require('express-oauth2-jwt-bearer');
 
+const allowedOrigins = ['https://techno-event-management.vercel.app', 'http://localhost:3000'];
+
 app.use(
   cors({
-    origin: '*',
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true, // Allow cookies or authorization headers
   }),
 );
 
