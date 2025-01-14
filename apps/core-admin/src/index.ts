@@ -18,7 +18,7 @@ const allowedOrigins = ['https://techno-event-management.vercel.app', 'http://lo
 app.use(
   cors({
     origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true, // Allow cookies or authorization headers
   }),
 );
