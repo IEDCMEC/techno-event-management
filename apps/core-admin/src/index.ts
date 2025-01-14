@@ -19,7 +19,14 @@ const allowedOrigins = [
   'https://admin.eventsync.iedcmec.in',
 ];
 
-app.use(cors());
+app.use(
+    cors({
+      origin: allowedOrigins,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      credentials: true, // Allow cookies or authorization headers
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    }),
+);
 
 app.use(
   bodyParser.json({
