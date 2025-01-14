@@ -13,7 +13,11 @@ const app: Express = express();
 
 const { auth } = require('express-oauth2-jwt-bearer');
 
-const allowedOrigins = ['https://techno-event-management.vercel.app', 'http://localhost:3000'];
+const allowedOrigins = [
+  'https://techno-event-management.vercel.app',
+  'http://localhost:3000',
+  'https://admin.eventsync.iedcmec.in',
+];
 
 app.use(
   cors({
