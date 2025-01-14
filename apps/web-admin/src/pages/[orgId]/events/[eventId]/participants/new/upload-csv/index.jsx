@@ -162,16 +162,7 @@ export default function NewParticipantByCSVUpload() {
         });
         if (data.success) {
           router.push(`/${orgId}/events/${eventId}/participants`);
-        } else {
-          console.error('Some participants not added:', data.participantsNotAdded);
-          showAlert({
-            title: 'Warning',
-            description: 'Some participants could not be added. Check console for details.',
-            status: 'warning',
-          });
         }
-      } else {
-        throw new Error(data.error || 'Failed to add participants');
       }
     } catch (error) {
       showAlert({
