@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 import { Text, Flex, Box, useColorMode } from '@chakra-ui/react';
 import Papa from 'papaparse';
 
@@ -135,7 +135,57 @@ export default function NewParticipantByCSVUpload() {
       },
     });
   };
+ //
+  // Checking for underscore prefixed fields
+  //
+  useEffect(() => {
+    if (columns.length <= 2) return;
+    if (columns.find((column) => column.field === '')) {
+      showAlert({
+        title: 'Error',
+        description: 'Please make sure that the CSV file is properly formatted.',
+        status: 'error',
+        duration: 10000,
+      });
+      setCSVData(null);
+      //e.target.value = '';
+      setColumns([
+        { field: 'firstName', headerName: 'First Name' },
+        { field: 'lastName', headerName: 'Last Name' },
+        { field: 'email', headerName: 'Email' },
+        { field: 'phone', headerName: 'Phone' },
+        { field: 'checkInKey', headerName: 'Check In Key' },
+      ]);
+    } else if (
+      columns.find(
+        (column) =>
+          column.field !== 'firstName' &&
+          column.field !== 'lastName' &&
+          column.field !== 'email' &&
+          column.field !== 'phone' &&
+          column.field !== 'checkInKey' &&
+          !(column.field.startsWith('_') || column.field.startsWith('&')),
+      )
+    ) {
+      //console.log({ columns });
 
+      showAlert({
+        title: 'Error',
+        description: 'Extra fields should be prefixed with an underscore (_)',
+        status: 'error',
+        duration: 10000,
+      });
+      setCSVData(null);
+      // e.target.value = '';
+      setColumns([
+        { field: 'firstName', headerName: 'First Name' },
+        { field: 'lastName', headerName: 'Last Name' },
+        { field: 'email', headerName: 'Email' },
+        { field: 'phone', headerName: 'Phone' },
+        { field: 'checkInKey', headerName: 'Check In Key' },
+      ]);
+    }
+  }, [columns]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!csvData || csvData.length === 0) {
@@ -151,7 +201,7 @@ export default function NewParticipantByCSVUpload() {
       const { data, status } = await post(
         `/core/organizations/${orgId}/events/${eventId}/participants?isBulk=true`,
         {},
-        { participants: csvData },
+        { participants: csvData }
       );
 
       if (status === 200) {
@@ -162,7 +212,16 @@ export default function NewParticipantByCSVUpload() {
         });
         if (data.success) {
           router.push(`/${orgId}/events/${eventId}/participants`);
+        } else {
+          console.error('Some participants not added:', data.participantsNotAdded);
+          showAlert({
+            title: 'Warning',
+            description: 'Some participants could not be added. Check console for details.',
+            status: 'warning',
+          });
         }
+      } else {
+        throw new Error(data.error || 'Failed to add participants');
       }
     } catch (error) {
       showAlert({
