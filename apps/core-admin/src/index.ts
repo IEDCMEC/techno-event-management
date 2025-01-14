@@ -24,6 +24,7 @@ app.use(
     origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true, // Allow cookies or authorization headers
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
 
