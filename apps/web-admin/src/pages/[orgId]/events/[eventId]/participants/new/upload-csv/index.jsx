@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, Flex, Box, useColorMode } from '@chakra-ui/react';
 import Papa from 'papaparse';
 
@@ -135,7 +135,7 @@ export default function NewParticipantByCSVUpload() {
       },
     });
   };
- //
+  //
   // Checking for underscore prefixed fields
   //
   useEffect(() => {
@@ -201,7 +201,7 @@ export default function NewParticipantByCSVUpload() {
       const { data, status } = await post(
         `/core/organizations/${orgId}/events/${eventId}/participants?isBulk=true`,
         {},
-        { participants: csvData }
+        { participants: csvData },
       );
 
       if (status === 200) {
@@ -216,7 +216,7 @@ export default function NewParticipantByCSVUpload() {
           console.error('Some participants not added:', data.participantsNotAdded);
           showAlert({
             title: 'Warning',
-            description: 'Some participants could not be added. Check console for details.',
+            description: 'Some participants could not be added',
             status: 'warning',
           });
         }
