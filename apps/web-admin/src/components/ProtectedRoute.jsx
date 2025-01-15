@@ -37,17 +37,17 @@ export const ProtectedRoute = ({ children }) => {
   };
   const { get, post } = useFetch();
   // useEffect();
-  useMemo(() => {
-    //console.log(accountDetails);
-    if (
-      accountDetails &&
-      accountDetails.orgId &&
-      router.asPath !== `/${accountDetails.orgId}/events`
-    ) {
-      // // //console.log('route')
-      router.replace(`/${accountDetails.orgId}/events`);
-    }
-  }, [isAuthenticated, accountDetails]);
+  // useEffect(() => {
+  //   //console.log(accountDetails);
+  //   if (
+  //     accountDetails &&
+  //     accountDetails.orgId &&
+  //     router.asPath !== `/${accountDetails.orgId}/events`
+  //   ) {
+  //     // // //console.log('route')
+  //     router.replace(`/${accountDetails.orgId}/events`);
+  //   }
+  // }, [isAuthenticated, accountDetails]);
   useEffect(() => {
     // //console.log(accountDetails);
   }, [accountDetails]);
@@ -77,7 +77,8 @@ export const ProtectedRoute = ({ children }) => {
   async function checkOrg() {
     let myResponse = await get('/core/users/mycreds');
     // //console.log(myResponse.data.data);
-    if (myResponse && myResponse.status === 200 && myResponse.data.data.length !== 0) {
+    if (myResponse && myResponse.status === 200) {
+      console.log('Hello world');
       setAllAccounts(
         myResponse.data.data.map((value) => ({
           role: value.role,
@@ -94,6 +95,7 @@ export const ProtectedRoute = ({ children }) => {
           });
           //console.log('final: ', data);
           setAccountDetails(data[0]);
+          router.replace(`/${data[0].orgId}/events`);
           return data;
         });
       }

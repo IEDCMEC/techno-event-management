@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:18-alpine3.16 AS builder
 RUN apk add --no-cache libc6-compat
 RUN apk update
 
@@ -23,7 +23,9 @@ RUN pnpm install
 
 RUN pnpm run build --filter=techno-event-core-admin... 
 
-FROM node:18-alpine
+FROM node:18-alpine3.16
+
+RUN apk --no-cache add openssl
 
 COPY --from=builder /app/apps/core-admin/dist .
 COPY --from=builder /app/node_modules/.pnpm/@prisma+client*/node_modules/.prisma/client/*.node .
