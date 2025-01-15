@@ -23,7 +23,9 @@ RUN pnpm install
 
 RUN pnpm run build --filter=core-mailer... 
 
-FROM node:18-alpine
+FROM node:18-alpine3.16
+
+RUN apk --no-cache add openssl
 
 COPY --from=builder /app/apps/core-mailer/dist .
 

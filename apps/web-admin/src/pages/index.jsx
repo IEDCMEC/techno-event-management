@@ -15,10 +15,16 @@ function Dashboard() {
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const { accountDetails } = useContext(account);
   useEffect(() => {
-    if (isAuthenticated) {
-      router.push(`/${accountDetails.orgId}/events`);
+    console.log(accountDetails);
+    if (
+      accountDetails &&
+      accountDetails.orgId &&
+      router.asPath !== `/${accountDetails.orgId}/events`
+    ) {
+      // // //console.log('route')
+      router.replace(`/${accountDetails.orgId}/events`);
     }
-  }, [router.pathname]);
+  }, [isAuthenticated, accountDetails]);
 
   return <DashboardLayout>{!isAuthenticated && <Landing />}</DashboardLayout>;
 }

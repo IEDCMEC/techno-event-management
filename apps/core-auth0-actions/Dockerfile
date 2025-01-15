@@ -1,10 +1,10 @@
-FROM node:16-alpine AS builder
-RUN apk update && apk add --no-cache libc6-compat
-RUN corepack enable && corepack prepare pnpm@8.15.1 --activate 
+FROM node:18-alpine AS builder
+RUN apk add --no-cache libc6-compat
+RUN apk update
 
 WORKDIR /app
 
-RUN npm install turbo
+RUN npm install -g pnpm turbo
 
 COPY ../../. .
 
@@ -23,7 +23,9 @@ RUN pnpm install
 
 RUN pnpm run build --filter=core-auth0-actions... 
 
-FROM node:18-alpine
+FROM node:18-alpine3.16
+
+RUN apk --no-cache add openssl
 
 COPY --from=builder /app/apps/core-auth0-actions/dist .
 COPY --from=builder /app/node_modules/.pnpm/@prisma+client*/node_modules/.prisma/client/*.node .
