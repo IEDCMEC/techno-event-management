@@ -15,7 +15,7 @@ export const useRequests = () => {
       const response = await axios.get(process.env.NEXT_PUBLIC_API_URL + endpoint, {
         headers: {
           ...headers,
-          contentType: 'application/json',
+          'Content-Type': 'application/json',
           Authorization:
             'Bearer ' +
             (await getAccessTokenSilently({
@@ -47,7 +47,7 @@ export const useRequests = () => {
       const { data, status } = await axios.post(process.env.NEXT_PUBLIC_API_URL + endpoint, body, {
         headers: {
           ...headers,
-          contentType: contentType,
+          'Content-Type': contentType,
           Authorization:
             'Bearer ' +
             (await getAccessTokenSilently({
@@ -79,7 +79,7 @@ export const useRequests = () => {
       const { data, status } = await axios.put(process.env.NEXT_PUBLIC_API_URL + endpoint, body, {
         headers: {
           ...headers,
-          contentType: 'application/json',
+          'Content-Type': 'application/json',
           Authorization:
             'Bearer ' +
             (await getAccessTokenSilently({
@@ -110,7 +110,7 @@ export const useRequests = () => {
       const { data, status } = await axios.delete(process.env.NEXT_PUBLIC_API_URL + endpoint, {
         headers: {
           ...headers,
-          contentType: 'application/json',
+          'Content-Type': 'application/json',
           Authorization:
             'Bearer ' +
             (await getAccessTokenSilently({
