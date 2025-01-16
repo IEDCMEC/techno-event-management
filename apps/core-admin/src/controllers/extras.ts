@@ -8,12 +8,11 @@ export const addNewExtra = async (req: Request, res: Response) => {
     const { assignToAllParticipants } = req?.query;
     const { name } = req?.body;
 
-    if(!name) {
+    if (!name) {
       return res.status(400).json({ error: 'Name is required' });
     }
 
     await prisma.$transaction(async (tx: typeof prisma) => {
-
       const newExtra = await tx.extras.create({
         data: {
           name,
@@ -23,7 +22,7 @@ export const addNewExtra = async (req: Request, res: Response) => {
       });
 
       if (!newExtra) {
-        return res.status(500).json({error: 'Something went wrong'});
+        return res.status(500).json({ error: 'Something went wrong' });
       }
 
       if (assignToAllParticipants === 'true') {
@@ -31,7 +30,7 @@ export const addNewExtra = async (req: Request, res: Response) => {
           where: {
             organizationId: orgId,
             eventId: eventId,
-          }
+          },
         });
 
         for (let participant of participants) {
@@ -43,7 +42,7 @@ export const addNewExtra = async (req: Request, res: Response) => {
           });
 
           if (!participantExtra) {
-            return res.status(500).json({error: 'Something went wrong'});
+            return res.status(500).json({ error: 'Something went wrong' });
           }
         }
       }
