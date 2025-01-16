@@ -104,40 +104,19 @@ export default function ParticipantsCheckIn() {
         eventId={eventId}
         navButton={
           <div className="flex gap-2.5">
-            <StyledButton
-              onClick={() =>
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/multi-in`)
-              }
-              isLoading={loading}
-            >
+            <StyledButton onClick={onMultiScannerModalOpen} isLoading={loading}>
               <StyledText>Multi-Stage Scanner</StyledText>
             </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/in/`)}
-              isLoading={loading}
-            >
+            <StyledButton onClick={onCheckInModalOpen} isLoading={loading}>
               <StyledText>Check-In Participant</StyledText>
             </StyledButton>
-            <StyledButton
-              onClick={() =>
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/in/scanner`)
-              }
-              isLoading={loading}
-            >
+            <StyledButton onClick={onScanner1ModalOpen} isLoading={loading}>
               <StyledText>Open Scanner</StyledText>
             </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${orgId}/events/${eventId}/participants/check-in/out/`)}
-              isLoading={loading}
-            >
+            <StyledButton onClick={onCheckOutModalOpen} isLoading={loading}>
               <StyledText>Check-Out Participant</StyledText>
             </StyledButton>
-            <StyledButton
-              onClick={() =>
-                router.push(`/${orgId}/events/${eventId}/participants/check-in/out/scanner`)
-              }
-              isLoading={loading}
-            >
+            <StyledButton onClick={onScanner2ModalOpen} isLoading={loading}>
               <StyledText>Open Scanner</StyledText>
             </StyledButton>
           </div>
