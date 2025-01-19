@@ -95,7 +95,7 @@ export const ProtectedRoute = ({ children }) => {
           });
           //console.log('final: ', data);
           setAccountDetails(data[0]);
-          router.replace(`/${data[0].orgId}/events`);
+          // router.replace(`/${data[0].orgId}/events`);
           return data;
         });
       }
