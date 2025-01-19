@@ -27,6 +27,7 @@ import {
   getAllAttributes,
   getAttributeById,
   getAttributeParticipants,
+  setPaymentStatus,
 } from './controllers/attributes';
 import { fetchAccountDetails, myCredential, updateAccountDetails } from './controllers/users';
 import { validateOrganizationUser, validateOrganizationAdmin } from './middlewares/authorization';
@@ -110,6 +111,9 @@ router.put(
   '/organizations/:orgId/events/:eventId/participants/:participantId/attributes/:attributeId',
   updateParticipantAttribute,
 );
+
+// Temp routes
+router.post('/organizations/:orgId/events/:eventId/participants/:participantId/payment-status', setPaymentStatus);
 
 router.post('/organizations/update', updateOrganizationDetails); //ajay
 
