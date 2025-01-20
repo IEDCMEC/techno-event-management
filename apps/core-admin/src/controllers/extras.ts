@@ -5,17 +5,50 @@ import prisma from '../utils/database';
 export const addNewExtra = async (req: Request, res: Response) => {
   try {
     const { orgId, eventId } = req?.params;
+    const { assignToAllParticipants } = req?.query;
     const { name } = req?.body;
 
-    const newExtra = await prisma.extras.create({
-      data: {
-        name,
-        organizationId: orgId,
-        eventId: eventId,
-      },
-    });
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
+    }
 
-    return res.status(200).json({ newExtra });
+    await prisma.$transaction(async (tx: typeof prisma) => {
+      const newExtra = await tx.extras.create({
+        data: {
+          name,
+          organizationId: orgId,
+          eventId: eventId,
+        },
+      });
+
+      if (!newExtra) {
+        return res.status(500).json({ error: 'Something went wrong' });
+      }
+
+      if (assignToAllParticipants === 'true') {
+        const participants = await prisma.participant.findMany({
+          where: {
+            organizationId: orgId,
+            eventId: eventId,
+          },
+        });
+
+        for (let participant of participants) {
+          const participantExtra = await tx.participantExtras.create({
+            data: {
+              participantId: participant.id,
+              extraId: newExtra.id,
+            },
+          });
+
+          if (!participantExtra) {
+            return res.status(500).json({ error: 'Something went wrong' });
+          }
+        }
+      }
+
+      return res.status(200).json({ newExtra });
+    });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: 'Something went wrong' });

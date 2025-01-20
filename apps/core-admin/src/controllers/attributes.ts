@@ -153,3 +153,75 @@ export const getAttributeParticipants = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Something went wrong' });
   }
 };
+
+
+// Temporary controllers
+
+export const setPaymentStatus = async (req: Request, res: Response) => {
+    try {
+        const {orgId, eventId, participantId} = req?.params;
+        const {paymentStatus} = req?.body;
+
+        if (paymentStatus !== 'yes' && paymentStatus !== 'no') {
+            return res.status(400).json({error: 'Invalid payment status'});
+        }
+
+        const attribute = await prisma.attributes.findFirst({
+            where: {
+                organizationId: orgId,
+                eventId: eventId,
+                name: 'Paid',
+            },
+        })
+
+        if (!attribute) {
+            return res.status(404).json({error: 'No attribute for payment status found'});
+        }
+
+        const participant = await prisma.participant.findFirst({
+            where: {
+                id: participantId,
+                eventId,
+                organizationId: orgId,
+            },
+        })
+
+        if (!participant) {
+            return res.status(404).json({error: 'Participant not found'});
+        }
+
+        const participantAttribute = await prisma.participantAttributes.findFirst({
+            where: {
+                participantId,
+                attributeId: attribute.id,
+            },
+        });
+
+        if (!participantAttribute) {
+            return res.status(400).json({error: 'Payment attribute not assigned to participant'});
+        }
+
+        if (participantAttribute.value === paymentStatus) {
+            return res.status(400).json({error: `Participant already payment status set as ${paymentStatus}`});
+        }
+
+        const updatedParticipantAttribute = await prisma.participantAttributes.update({
+            where: {
+                id: participantAttribute.id,
+            },
+            data: {
+                value: paymentStatus,
+            },
+        });
+
+        if (!updatedParticipantAttribute) {
+            return res.status(500).json({error: 'Failed to update payment status'});
+        }
+
+        return res.status(200).json({updatedParticipantAttribute});
+
+    } catch (err: any) {
+        console.error(err);
+        return res.status(500).json({error: 'Something went wrong'});
+    }
+}
