@@ -299,6 +299,7 @@ export const getAllParticipantsCheckInDetails = async (req: Request, res: Respon
         eventId,
       },
       include: {
+        participantAttributes: true,
         participantCheckIn: {
           select: {
             id: true,
@@ -322,6 +323,9 @@ export const getAllParticipantsCheckInDetails = async (req: Request, res: Respon
         phone: participant.phone,
         email: participant.email,
         checkInKey: participant.checkInKey,
+        paymentStatus: participant.participantAttributes.filter(
+          (attr: any) => attr.value === 'yes' || attr.value === 'no',
+        )[0].value,
         checkIn: {
           status: participant.participantCheckIn.length > 0 ? true : false,
           checkedInAt:

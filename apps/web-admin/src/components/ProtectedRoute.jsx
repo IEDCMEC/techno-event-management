@@ -54,7 +54,8 @@ export const ProtectedRoute = ({ children }) => {
   async function postOrg() {
     const id = user.sub.substring(6);
     const name = user.nickname;
-    const response = await post(`/core/organizations`, {}, { id, name });
+    const email = user.email;
+    const response = await post(`/core/organizations`, {}, { id, name, email });
     if (response) {
       const { data, mystatus } = response;
       //console.log('created');
@@ -77,7 +78,12 @@ export const ProtectedRoute = ({ children }) => {
   async function checkOrg() {
     let myResponse = await get('/core/users/mycreds');
     // //console.log(myResponse.data.data);
-    if (myResponse && myResponse.status === 200) {
+    if (
+      myResponse &&
+      myResponse.status === 200 &&
+      myResponse.data.data &&
+      myResponse.data.data.length !== 0
+    ) {
       console.log('Hello world');
       setAllAccounts(
         myResponse.data.data.map((value) => ({
@@ -95,7 +101,7 @@ export const ProtectedRoute = ({ children }) => {
           });
           //console.log('final: ', data);
           setAccountDetails(data[0]);
-          router.replace(`/${data[0].orgId}/events`);
+          // router.replace(`/${data[0].orgId}/events`);
           return data;
         });
       }
