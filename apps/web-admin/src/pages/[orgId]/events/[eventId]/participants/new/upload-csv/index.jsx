@@ -116,8 +116,7 @@ export default function NewParticipantByCSVUpload() {
         if (extraColumns.length > 0) {
           showAlert({
             title: 'Info',
-            description:
-              'Extra columns detected. Using _ for attributes and & for check-in extras.',
+            description: 'Extra columns detected. Using _ for attributes and & for extras.',
             status: 'info',
             duration: 5000,
           });
@@ -267,8 +266,7 @@ export default function NewParticipantByCSVUpload() {
                 fontSize="lg"
                 color={colorMode === 'light' ? 'gray.600' : 'gray.100'}
               >
-                Prefix extra attributes with underscore (_) and check-in attributes with ampersand
-                (&)
+                Prefix Attributes with underscore ( _ ) and Extra Details with ampersand ( & )
               </Text>
             </Box>
           </Box>
