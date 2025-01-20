@@ -157,9 +157,9 @@ export const getAttributeParticipants = async (req: Request, res: Response) => {
 // Temporary controllers
 
 export const setPaymentStatus = async (req: Request, res: Response) => {
-  try {
-    const { orgId, eventId, participantId } = req?.params;
-    const { paymentStatus } = req?.body;
+    try {
+        const {orgId, eventId} = req?.params;
+        const {participantId, paymentStatus} = req?.body;
 
     if (paymentStatus !== 'yes' && paymentStatus !== 'no') {
       return res.status(400).json({ error: 'Invalid payment status' });

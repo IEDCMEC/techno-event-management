@@ -189,6 +189,17 @@ export default function DataDisplay({
                         <StyledText>
                           <GoDotFill color="green" /> Open
                         </StyledText>
+                      ) : column.field == 'paymentStatus' ? (
+                        <HStack align="center" position="relative" zIndex={2}>
+                          <StyledText>{row[column.field]}</StyledText>
+                          <Checkbox
+                            isChecked={row[column.field] === 'yes'}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              column.togglePaymentStatus(row.id, e.target.checked ? 'yes' : 'no');
+                            }}
+                          />
+                        </HStack>
                       ) : (
                         // </StyledBox>
                         <StyledText>{row[column.field]}</StyledText>
