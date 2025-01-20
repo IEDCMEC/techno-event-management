@@ -94,7 +94,6 @@ export default function ParticipantsCheckIn() {
       headerName: 'Payment Status',
       width: 150,
       togglePaymentStatus: (id, status) => {
-
         handlePaymentStatusMutation({
           participantId: id,
           paymentStatus: status,
@@ -104,7 +103,6 @@ export default function ParticipantsCheckIn() {
             participant.id === id ? { ...participant, paymentStatus: status } : participant,
           ),
         );
-
       },
     },
     {
