@@ -113,7 +113,7 @@ router.put(
 );
 
 // Temp routes
-router.post('/organizations/:orgId/events/:eventId/participants/:participantId/payment-status', setPaymentStatus);
+router.post('/organizations/:orgId/events/:eventId/participants/payment-status', setPaymentStatus);
 
 router.post('/organizations/update', updateOrganizationDetails); //ajay
 
