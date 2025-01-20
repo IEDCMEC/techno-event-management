@@ -1,22 +1,11 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import {
-  ChevronLeftIcon,
-  ChevronDownIcon,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-} from '@chakra-ui/icons';
-// import CustomStyledBox from '@/pages/CustomStyledBox';
-import { Button, Flex } from '@chakra-ui/react';
+import { useState } from 'react';
 import { StyledBox, StyledButton, StyledText } from '@/components/ui/StyledComponents';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import DataDisplay from '@/components/DataDisplay';
 import { useAlert } from '@/hooks/useAlert';
 import useWrapper from '@/hooks/useWrapper';
 import NavigationMenu from '../navigationmenu';
-import CustomStyledBox from '@/pages/CustomStyledBox';
 
 import { useDisclosure } from '@chakra-ui/react';
 import CheckInParticipantWithMultiScanner from '@/components/modals/MultiStageScanner/index';

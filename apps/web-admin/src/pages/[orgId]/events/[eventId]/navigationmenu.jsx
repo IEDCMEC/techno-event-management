@@ -28,6 +28,10 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
       path: `/${orgId}/events/${eventId}/participants/check-in`,
     },
     {
+      name: 'Participants Payment Status',
+      path: `/${orgId}/events/${eventId}/paymentstatus`,
+    },
+    {
       name: 'Attributes Details',
       path: `/${orgId}/events/${eventId}/attributes`,
     },
