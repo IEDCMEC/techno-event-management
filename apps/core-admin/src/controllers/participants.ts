@@ -313,8 +313,18 @@ export const getAllParticipantsCheckInDetails = async (req: Request, res: Respon
     if (!participants) {
       return res.status(500).json({ error: 'Something went wrong' });
     }
-
     participants = participants.map((participant: any) => {
+      const myPaymentStatus =
+        participant.participantAttributes &&
+        participant.participantAttributes.filter(
+          (attr: any) => attr.value === 'yes' || attr.value === 'no',
+        )[0]
+          ? participant.participantAttributes &&
+            participant.participantAttributes.filter(
+              (attr: any) => attr.value === 'yes' || attr.value === 'no',
+            )[0].value
+          : undefined;
+
       return {
         id: participant.participantCheckIn.id ? participant.participantCheckIn.id : participant.id,
         participantId: participant.id,
@@ -323,9 +333,7 @@ export const getAllParticipantsCheckInDetails = async (req: Request, res: Respon
         phone: participant.phone,
         email: participant.email,
         checkInKey: participant.checkInKey,
-        paymentStatus: participant.participantAttributes.filter(
-          (attr: any) => attr.value === 'yes' || attr.value === 'no',
-        )[0].value,
+        paymentStatus: myPaymentStatus,
         checkIn: {
           status: participant.participantCheckIn.length > 0 ? true : false,
           checkedInAt:
