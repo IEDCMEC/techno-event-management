@@ -8,7 +8,15 @@ import 'react-day-picker/dist/style.css';
 import '../styles/globals.css';
 // import '@uiw/react-md-editor/markdown-editor.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // Disable refetch on window focus globally
+      refetchOnReconnect: false, // Prevent refetch on network reconnect
+      staleTime: 5 * 60 * 1000, // Set data as fresh for 5 minutes
+    },
+  },
+});
 
 const theme = extendTheme({
   ...withDefaultColorScheme({
