@@ -13,14 +13,47 @@ import CheckInParticipant from '@/components/modals/Check-inParticipant/index';
 import CheckInParticipantWithScanner from '@/components/modals/Check-in-Scanner/index';
 import CheckOutParticipant from '@/components/modals/Check-OutParticipant/index';
 import CheckOutParticipantWithScanner from '@/components/modals/Check-Out-Scanner/index';
+import { useEffect } from 'react';
+import useDebounce from '@/hooks/useDebounce';
 
 export default function ParticipantsCheckIn() {
   const router = useRouter();
   const showAlert = useAlert();
   const { orgId, eventId } = router.query;
   const [participantsCheckIn, setParticipantsCheckIn] = useState([]);
+  const [search, setSearch] = useState({
+    value: '',
+    result: participantsCheckIn,
+  });
   const { useGetQuery, usePostMutation } = useWrapper();
-
+  // useEffect(() => {
+  //   if (search.value.length !== 0) {
+  //     setSearch((preValue) => ({
+  //       ...preValue,
+  //       result: participantsCheckIn.filter((value) =>
+  //         value.firstName.toLowerCase().includes(search.value.toLowerCase()),
+  //       ),
+  //     }));
+  //   } else {
+  //     setSearch({ value: '', result: participantsCheckIn });
+  //   }
+  // }, [search.value]);
+  useDebounce(
+    () => {
+      if (search.value.length !== 0) {
+        setSearch((preValue) => ({
+          ...preValue,
+          result: participantsCheckIn.filter((value) =>
+            value.firstName.toLowerCase().includes(search.value.toLowerCase()),
+          ),
+        }));
+      } else {
+        setSearch({ value: '', result: participantsCheckIn });
+      }
+    },
+    500,
+    [search.value],
+  );
   const {
     data,
     status,
@@ -103,6 +136,14 @@ export default function ParticipantsCheckIn() {
             participant.id === id ? { ...participant, paymentStatus: status } : participant,
           ),
         );
+        if (search.result.length !== 0) {
+          setSearch((preValue) => ({
+            ...preValue,
+            result: preValue.result.map((participant) =>
+              participant.id === id ? { ...participant, paymentStatus: status } : participant,
+            ),
+          }));
+        }
       },
     },
     {
@@ -147,11 +188,18 @@ export default function ParticipantsCheckIn() {
             </StyledButton>
           </div>
         }
+        state={search.value}
+        setState={(currentValue) => {
+          setSearch((preValue) => ({
+            ...preValue,
+            value: currentValue,
+          }));
+        }}
       />
 
       <DataDisplay
         loading={loading}
-        rows={participantsCheckIn}
+        rows={search.value.length === 0 ? participantsCheckIn : search.result}
         columns={columns}
         // onRowClick={(row) => {
         //   router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
