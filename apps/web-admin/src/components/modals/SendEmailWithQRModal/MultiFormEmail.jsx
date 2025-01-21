@@ -67,7 +67,8 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   const [selectedProject, setSelectedProject] = useState({});
   const [recipients, setRecipients] = useState([]);
   const [mailStatus, setMailStatus] = useState(null);
-  const [flag, setFlag] = useState(false);
+  let flag1 = false;
+  let flag2 = false;
   useEffect(() => {
     const fetchText = async () => {
       const response = await fetch('/QrTemplate.txt');
@@ -203,19 +204,15 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     },
   );
   const updateEmailTemplate = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     ////console.log(emailContent);
     if (accountDetails.orgId) {
-      let flag1 = false;
-      let flag2 = false;
       if (/<\s+[^>]+\s+>/.test(emailContent)) {
-        flag1 = true;
+        flag1 = false; //make this true
       }
       if (!(/{{name}}/.test(emailContent) && /{{payload}}/.test(emailContent))) {
         flag2 = true;
       }
-      const flag3 = flag1 || flag2;
-      setFlag(flag3);
       ////console.log(flag3);
       updateEmailMutation({
         projectId: selectedProject.id,
@@ -558,6 +555,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                   onRowClick={(value) => {
                     ////console.log(value);
                   }}
+                  isCheckBox={true}
                   state={recipients.map((value) => value.email)}
                   // state={recipients}
                   setState={(selectedValue) => {
@@ -682,16 +680,20 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
             {step < 4 && (
               <Button
                 onClick={() => {
-                  if (!flag) {
-                    nextStep();
+                  if (step === 2) {
+                    updateEmailTemplate();
+                    if (!(flag1 || flag2)) {
+                      nextStep();
+                    } else {
+                      showAlert({
+                        title: 'Failure...make sure',
+                        description: 'Check whether {{}} is present and < something > is not',
+                        status: 'success',
+                      });
+                    }
                   } else {
-                    showAlert({
-                      title: 'Failure...make sure',
-                      description: 'Check whether {{}} is present and < something > is not',
-                      status: 'success',
-                    });
+                    nextStep();
                   }
-
                   //   ////console.log(step);
                 }}
                 width={'20%'}

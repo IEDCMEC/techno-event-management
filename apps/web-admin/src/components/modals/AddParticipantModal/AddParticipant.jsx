@@ -32,12 +32,7 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
           <StyledText color="black">Add Participant</StyledText>
         </ModalHeader>
         <ModalCloseButton />
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <ModalBody backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}>
             <FormControl mb={4} isRequired>
               <FormLabel fontFamily={inter.style.fontFamily}>First Name</FormLabel>

@@ -37,6 +37,7 @@ export default function DataDisplay({
   height = 'auto',
   state = null,
   setState = null,
+  isCheckBox = false,
 }) {
   const [selectedRows, setSelectedRows] = useState([]);
   // console.log(state);
@@ -103,10 +104,10 @@ export default function DataDisplay({
                     : '3px solid rgba(251, 251, 254, 0.20)'
                 }
               >
-                {/* <Th> */}
-                {/*
+                {isCheckBox && (
+                  <Th>
                     <Checkbox
-                      isChecked=
+                      isChecked={
                         state === null || setState === null
                           ? selectedRows.length === rows.length
                           : state.length === rows.length
@@ -126,8 +127,8 @@ export default function DataDisplay({
                         }
                       }}
                     />
-                    */}
-                {/* </Th> */}
+                  </Th>
+                )}
                 {columns.map((column) => (
                   <Th key={column.field} color={'rgba(4, 5, 11, 0.4)'}>
                     <StyledText variant="16Regular.black" textTransform="none">
@@ -155,9 +156,11 @@ export default function DataDisplay({
                     borderBottom: '1px solid #efeef3',
                   }}
                 >
-                  {/* <Td borderTopLeftRadius={'8px'} borderBottomLeftRadius={'8px'}> */}
-                  {/*
+                  {isCheckBox && (
+                    <Td borderTopLeftRadius={'8px'} borderBottomLeftRadius={'8px'}>
                       <Checkbox
+                        // colorPalette="blue"
+                        variant="solid"
                         isChecked={
                           state === null || setState === null
                             ? selectedRows.includes(row.id)
@@ -165,10 +168,11 @@ export default function DataDisplay({
                         }
                         onChange={() => {
                           handleCheckboxChange(row);
+                          console.log('checkbox change', state);
                         }}
                       />
-                        */}
-                  {/* </Td> */}
+                    </Td>
+                  )}
                   {columns.map((column) => (
                     <Td
                       key={column.field}
@@ -189,17 +193,6 @@ export default function DataDisplay({
                         <StyledText>
                           <GoDotFill color="green" /> Open
                         </StyledText>
-                      ) : column.field == 'paymentStatus' ? (
-                        <HStack align="center" position="relative" zIndex={2}>
-                          <StyledText>{row[column.field]}</StyledText>
-                          <Checkbox
-                            isChecked={row[column.field] === 'yes'}
-                            onChange={(e) => {
-                              e.stopPropagation();
-                              column.togglePaymentStatus(row.id, e.target.checked ? 'yes' : 'no');
-                            }}
-                          />
-                        </HStack>
                       ) : (
                         // </StyledBox>
                         <StyledText>{row[column.field]}</StyledText>
