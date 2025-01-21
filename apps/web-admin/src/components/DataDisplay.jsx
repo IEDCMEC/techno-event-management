@@ -189,6 +189,17 @@ export default function DataDisplay({
                         <StyledText>
                           <GoDotFill color="green" /> Open
                         </StyledText>
+                      ) : column.field == 'paymentStatus' ? (
+                        <HStack align="center" position="relative" zIndex={2}>
+                          <StyledText>{row[column.field]}</StyledText>
+                          <Checkbox
+                            isChecked={row[column.field] === 'yes'}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              column.togglePaymentStatus(row.id, e.target.checked ? 'yes' : 'no');
+                            }}
+                          />
+                        </HStack>
                       ) : (
                         // </StyledBox>
                         <StyledText>{row[column.field]}</StyledText>
@@ -199,73 +210,75 @@ export default function DataDisplay({
               ))}
             </Tbody>
           </Table>
-          <HStack spacing={2} justify="flex-end" mt={4}>
-            <IconButton
-              icon={<ChevronLeftIcon />}
-              isDisabled={currentPage === 1 || totalPages === 1}
-              onClick={handlePrevious}
-              aria-label="Previous Page"
-              variant={'ghost'}
-              sx={{
-                borderRadius: '8px',
-                gap: '8px',
-                width: '70px',
-                height: '28px',
-                color: colorMode === 'light' ? 'black' : 'white',
-                borderColor: 'rgba(4, 5, 11, 0.1)',
-              }}
-              _hover={{
-                backgroundColor: colorMode === 'light' ? 'white' : 'black',
-              }}
-            />
-            {Array.from({ length: totalPages }, (_, index) => (
-              <Button
-                key={index + 1}
-                onClick={() => handlePageClick(index + 1)}
-                bg={
-                  currentPage === index + 1
-                    ? colorMode === 'light'
-                      ? 'rgba(4, 5, 11, 0.1)'
-                      : 'rgba(251, 251, 254, 0.10)'
-                    : colorMode === 'light'
-                      ? 'white'
-                      : 'black'
-                }
-                color={colorMode === 'light' ? 'black' : 'white'}
-                borderRadius={'8px'}
+          <StyledBox width="100%" overflowY="scroll" alignItems="center" justifyContent="flex-end">
+            <HStack spacing={2} justify="flex-end" mt={4} minWidth={`${totalPages * 106}px`}>
+              <IconButton
+                icon={<ChevronLeftIcon />}
+                isDisabled={currentPage === 1 || totalPages === 1}
+                onClick={handlePrevious}
+                aria-label="Previous Page"
+                variant={'ghost'}
+                sx={{
+                  borderRadius: '8px',
+                  gap: '8px',
+                  width: '70px',
+                  height: '28px',
+                  color: colorMode === 'light' ? 'black' : 'white',
+                  borderColor: 'rgba(4, 5, 11, 0.1)',
+                }}
                 _hover={{
-                  backgroundColor:
+                  backgroundColor: colorMode === 'light' ? 'white' : 'black',
+                }}
+              />
+              {Array.from({ length: totalPages }, (_, index) => (
+                <Button
+                  key={index + 1}
+                  onClick={() => handlePageClick(index + 1)}
+                  bg={
                     currentPage === index + 1
                       ? colorMode === 'light'
                         ? 'rgba(4, 5, 11, 0.1)'
                         : 'rgba(251, 251, 254, 0.10)'
                       : colorMode === 'light'
                         ? 'white'
-                        : 'black',
+                        : 'black'
+                  }
+                  color={colorMode === 'light' ? 'black' : 'white'}
+                  borderRadius={'8px'}
+                  _hover={{
+                    backgroundColor:
+                      currentPage === index + 1
+                        ? colorMode === 'light'
+                          ? 'rgba(4, 5, 11, 0.1)'
+                          : 'rgba(251, 251, 254, 0.10)'
+                        : colorMode === 'light'
+                          ? 'white'
+                          : 'black',
+                  }}
+                >
+                  {index + 1}
+                </Button>
+              ))}
+              <IconButton
+                icon={<ChevronRightIcon />}
+                isDisabled={currentPage === totalPages || totalPages === 1}
+                onClick={handleNext}
+                aria-label="Next Page"
+                variant={'ghost'}
+                sx={{
+                  borderRadius: '8px',
+                  gap: '8px',
+                  width: '70px',
+                  height: '28px',
+                  color: colorMode === 'light' ? 'black' : 'white',
+                  borderColor: 'rgba(4, 5, 11, 0.1)',
                 }}
-              >
-                {index + 1}
-              </Button>
-            ))}
-            <IconButton
-              icon={<ChevronRightIcon />}
-              isDisabled={currentPage === totalPages || totalPages === 1}
-              onClick={handleNext}
-              aria-label="Next Page"
-              variant={'ghost'}
-              sx={{
-                borderRadius: '8px',
-                gap: '8px',
-                width: '70px',
-                height: '28px',
-                color: colorMode === 'light' ? 'black' : 'white',
-                borderColor: 'rgba(4, 5, 11, 0.1)',
-              }}
-              _hover={{
-                backgroundColor: colorMode === 'light' ? 'white' : 'black',
-              }}
-            />
-          </HStack>
+                _hover={{
+                  backgroundColor: colorMode === 'light' ? 'white' : 'black',
+                }}
+              />
+            </HStack>
+          </StyledBox>
         </TableContainer>
       )}
     </Box>

@@ -4,10 +4,11 @@ import { useRouter } from 'next/router';
 import { useColorMode } from '@chakra-ui/react';
 import { useEffect, useState, useContext } from 'react';
 import { account } from '@/contexts/MyContext';
+import { FormControl, Input } from '@chakra-ui/react';
 import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
-import { StyledButton, StyledText } from '@/components/ui/StyledComponents';
+import { StyledButton, StyledText, StyledBox } from '@/components/ui/StyledComponents';
 
-const NavigationMenu = ({ orgId, eventId, navButton }) => {
+const NavigationMenu = ({ orgId, eventId, navButton, state = null, setState = null }) => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState('');
   const { eventDetails } = useContext(account);
@@ -26,6 +27,10 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
     {
       name: 'Participants Check-in Details',
       path: `/${orgId}/events/${eventId}/participants/check-in`,
+    },
+    {
+      name: 'Participants Payment Status',
+      path: `/${orgId}/events/${eventId}/paymentstatus`,
     },
     {
       name: 'Attributes Details',
@@ -94,16 +99,28 @@ const NavigationMenu = ({ orgId, eventId, navButton }) => {
   );
 
   return (
-    <div className="w-full space-y-4" style={{ marginTop: '20px' }}>
-      <div className="flex justify-between items-center mb-5 mt-2.5">
+    <StyledBox className="w-full space-y-4" mt="20px" flexDirection="column" width="100%">
+      <StyledBox width="100%" flexDirection="row" justifyContent="space-between" mb="5" mt="2.5">
         {commonButtons}
         {navButton && (
-          <div className="flex gap-2.5" style={{ paddingRight: '20px' }}>
+          <StyledBox className="flex gap-2.5" pr="20px">
             {navButton}
-          </div>
+          </StyledBox>
         )}
-      </div>
-    </div>
+      </StyledBox>
+      <FormControl display={'flex'} justifyContent={'center'}>
+        {state !== null && setState !== null && (
+          <Input
+            width={{ base: '95vw', md: '50vw' }}
+            placeholder="Search for participants..."
+            value={state}
+            onChange={(e) => {
+              setState(e.target.value);
+            }}
+          />
+        )}
+      </FormControl>
+    </StyledBox>
   );
 };
 

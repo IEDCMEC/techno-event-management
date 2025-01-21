@@ -5,26 +5,64 @@ import prisma from '../utils/database';
 export const createNewOrganization = async (req: Request, res: Response) => {
   try {
     const userId = req?.auth?.payload?.sub;
-    const { id, name } = req.body;
-    //console.log(id, name);
-    const newOrganization = await prisma.organization.create({
-      data: {
-        id,
-        name,
-        OrganizationUser: {
-          create: {
-            userId,
-            role: 'ADMIN',
-          },
-        },
-      },
+    const { id, name, email } = req.body;
+    console.log(id, name);
+    console.log(userId);
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId },
     });
 
-    if (!newOrganization) {
-      return res.status(500).json({ error: 'Something went wrong' });
-    }
+    if (!existingUser) {
+      // throw new Error(`User with ID ${userId} not found`);
 
-    return res.status(200).json(newOrganization);
+      const newUser = await prisma.user.create({
+        data: {
+          email: email,
+          id: userId,
+        },
+      });
+      if (!newUser) {
+        return res.status(500).json({ error: 'Something went wrong' });
+      }
+      const newOrganization = await prisma.organization.create({
+        data: {
+          id,
+          name,
+          OrganizationUser: {
+            create: {
+              userId: userId,
+              role: 'ADMIN',
+            },
+          },
+        },
+      });
+
+      if (!newOrganization) {
+        return res.status(500).json({ error: 'Something went wrong' });
+      }
+
+      return res.status(200).json(newOrganization);
+    } else {
+      const newOrganization = await prisma.organization.create({
+        data: {
+          id,
+          name,
+          OrganizationUser: {
+            create: {
+              userId: userId,
+              role: 'ADMIN',
+            },
+          },
+        },
+      });
+
+      if (!newOrganization) {
+        return res.status(500).json({ error: 'Something went wrong' });
+      }
+
+      return res.status(200).json(newOrganization);
+    }
   } catch (err: any) {
     console.error(err);
     if (err.code === 'P2002') {
