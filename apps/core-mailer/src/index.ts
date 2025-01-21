@@ -48,13 +48,16 @@ app.post('/mail', authorize, async (req: Request, res: Response) => {
         return res.status(500).send({ message: 'Error parsing form data' });
       }
       // Process fields and files as needed
+      // Formidable returns the key value pairs as an array of strings. This will create issues further down the line
       const { name, to, subject, text, html } = fields;
       //console.log(name, to, subject, text, html);
       if (!name || !to || !subject || !text || !html) {
         return res.status(400).send({ message: 'Missing required fields' });
       }
 
-      const jobId: UUID = await sendEmailController(name, to, subject, text, html);
+      // Only sending the first element of the array as the form data is being sent as an array of strings.
+      // If this is not handled here, it will create further issues down the line.
+      const jobId: UUID = await sendEmailController(name[0], to[0], subject[0], text[0], html[0]);
 
       return res.status(200).send({
         jobId: jobId,
