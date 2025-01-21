@@ -201,6 +201,7 @@ export default function ParticipantsCheckIn() {
         loading={loading}
         rows={search.value.length === 0 ? participantsCheckIn : search.result}
         columns={columns}
+        // overflowY='scroll'
         // onRowClick={(row) => {
         //   router.push(`/${orgId}/events/${eventId}/participants/${row.id}`);
         // }}

@@ -35,7 +35,7 @@ export class Mail {
       to: this.to,
       subject: this.subject,
       text: this.text,
-      html: this.html
+      html: this.html,
     });
   }
 }
