@@ -33,7 +33,7 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}>
-          <FormControl mb={4}>
+          <FormControl mb={4} isRequired>
             <FormLabel fontFamily={inter.style.fontFamily}>First Name</FormLabel>
             <Input
               backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
@@ -43,7 +43,7 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
               placeholder="First Name"
             />
           </FormControl>
-          <FormControl mb={4}>
+          <FormControl mb={4} isRequired>
             <FormLabel fontFamily={inter.style.fontFamily}>Last Name</FormLabel>
             <Input
               backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
@@ -53,7 +53,7 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
               placeholder="Last Name"
             />
           </FormControl>
-          <FormControl mb={4}>
+          <FormControl mb={4} isRequired>
             <FormLabel fontFamily={inter.style.fontFamily}>Email</FormLabel>
             <Input
               backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
@@ -63,7 +63,7 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
               placeholder="Email"
             />
           </FormControl>
-          <FormControl mb={4}>
+          <FormControl mb={4} isRequired>
             <FormLabel fontFamily={inter.style.fontFamily}>Phone</FormLabel>
             <Input
               backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
@@ -73,7 +73,7 @@ const AddParticipant = ({ isOpen, onClose, formData, handleInputChange, handleSu
               placeholder="Phone"
             />
           </FormControl>
-          <FormControl mb={4}>
+          <FormControl mb={4} isRequired>
             <FormLabel fontFamily={inter.style.fontFamily}>Check In Key</FormLabel>
             <Input
               backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
