@@ -28,15 +28,15 @@ export class Mail {
   }
 
   toString(): string {
-    return `{
-            "jobId": "${this.jobId}",
-            "from": "${this.from}",
-            "name": "${this.name}",
-            "to": "${this.to}",
-            "subject": "${this.subject}",
-            "text": "${this.text}",
-            "html": "${this.html}"
-        }`;
+    return JSON.stringify({
+      jobId: this.jobId,
+      from: this.from,
+      name: this.name,
+      to: this.to,
+      subject: this.subject,
+      text: this.text,
+      html: this.html
+    });
   }
 }
 
