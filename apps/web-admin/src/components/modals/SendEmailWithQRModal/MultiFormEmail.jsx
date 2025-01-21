@@ -67,8 +67,8 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   const [selectedProject, setSelectedProject] = useState({});
   const [recipients, setRecipients] = useState([]);
   const [mailStatus, setMailStatus] = useState(null);
-  let flag1 = false
-  let flag2 = false
+  let flag1 = false;
+  let flag2 = false;
   useEffect(() => {
     const fetchText = async () => {
       const response = await fetch('/QrTemplate.txt');

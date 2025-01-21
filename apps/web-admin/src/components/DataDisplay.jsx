@@ -37,7 +37,7 @@ export default function DataDisplay({
   height = 'auto',
   state = null,
   setState = null,
-  isCheckBox = false
+  isCheckBox = false,
 }) {
   const [selectedRows, setSelectedRows] = useState([]);
   // console.log(state);
@@ -104,7 +104,8 @@ export default function DataDisplay({
                     : '3px solid rgba(251, 251, 254, 0.20)'
                 }
               >
-                {isCheckBox && (<Th>
+                {isCheckBox && (
+                  <Th>
                     <Checkbox
                       isChecked={
                         state === null || setState === null
@@ -126,7 +127,8 @@ export default function DataDisplay({
                         }
                       }}
                     />
-                </Th>)}
+                  </Th>
+                )}
                 {columns.map((column) => (
                   <Th key={column.field} color={'rgba(4, 5, 11, 0.4)'}>
                     <StyledText variant="16Regular.black" textTransform="none">
@@ -154,8 +156,8 @@ export default function DataDisplay({
                     borderBottom: '1px solid #efeef3',
                   }}
                 >
-                  {isCheckBox && (<Td borderTopLeftRadius={'8px'} borderBottomLeftRadius={'8px'}>
-                  
+                  {isCheckBox && (
+                    <Td borderTopLeftRadius={'8px'} borderBottomLeftRadius={'8px'}>
                       <Checkbox
                         // colorPalette="blue"
                         variant="solid"
@@ -166,11 +168,11 @@ export default function DataDisplay({
                         }
                         onChange={() => {
                           handleCheckboxChange(row);
-                          console.log("checkbox change", state)
+                          console.log('checkbox change', state);
                         }}
                       />
-                       
-                  </Td>)}
+                    </Td>
+                  )}
                   {columns.map((column) => (
                     <Td
                       key={column.field}
