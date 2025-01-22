@@ -9,6 +9,13 @@ import '../styles/globals.css';
 // import '@uiw/react-md-editor/markdown-editor.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 const queryClient = new QueryClient();
+// defaultOptions: {
+//   queries: {
+//     refetchOnWindowFocus: true, // Disable refetch on window focus globally
+//     refetchOnReconnect: true, // Prevent refetch on network reconnect
+//     staleTime: 60 * 1000, // Set data as fresh for 1 minute
+//   },
+// },
 
 const theme = extendTheme({
   ...withDefaultColorScheme({
