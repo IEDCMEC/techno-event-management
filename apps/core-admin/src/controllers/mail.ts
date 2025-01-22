@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
 
 import prisma from '../utils/database';
 import axios from 'axios';
@@ -15,30 +15,35 @@ const AUTHORIZATION_TOKEN = process.env.AUTHORIZATION_TOKEN;
 // //console.log(AUTHORIZATION_TOKEN);
 export const getStatusOfEmails = async (req: Request, res: Response) => {
   try {
-    const { emailArray } = req.body;
+    const { emailData } = req.body;
     const { orgId } = req?.params;
-    if (!emailArray || !orgId) {
+    if (!emailData || !orgId) {
       return res.status(400).send({ message: 'Missing required fields' });
     }
 
-    if (!Array.isArray(emailArray)) {
+    if (!Array.isArray(emailData)) {
       return res.status(400).send({ message: 'Element not a valid array' });
     }
-    const data: string[] = emailArray;
+    type emailDataType = {
+      email: string;
+      id: string;
+    };
+    const data = emailData as emailDataType[];
     // Fetch the jobId associated with the email from the Recipients table
     let invalidEmails = [];
     let successEmails = [];
-    for (const email of data) {
+    for (const element of data) {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (emailRegex.test(email)) {
+      if (element.email.length !== 0 && element.id.length !== 0) {
+        console.log(element);
         const recipient = await prisma.Recipients.findUnique({
-          where: { email: email },
+          where: { email: element.email, id: element.id },
           select: { jobId: true },
         });
-
+        // console.log('Recipient: ', recipient);
         if (recipient) {
           const jobId = recipient.jobId;
-
+          console.log('JobId: ', jobId);
           if (jobId) {
             // Call external mail service to get the status of the email job
             const emailStatus = await axios.get(`${MAILER_URL}/mail?jobId=${jobId}`, {
@@ -57,28 +62,38 @@ export const getStatusOfEmails = async (req: Request, res: Response) => {
               // return res.status(200).json({
               //   ...emailStatus.data.status,
               // });
-              successEmails.push(email);
+              successEmails.push(element);
             } else {
               // return res.status(400).send({ message: 'JobId not found', error: emailStatus.data });
-              invalidEmails.push(email);
+              invalidEmails.push(element);
             }
           } else {
             // return res.status(400).send({ message: 'Email Job ID not found, send email again' });
-            invalidEmails.push(email);
+            invalidEmails.push(element);
           }
         } else {
-          invalidEmails.push(email);
+          invalidEmails.push(element);
+          // console.log('hi');
         }
       } else {
-        invalidEmails.push(email);
+        invalidEmails.push(element);
+        // console.log('hi');
       }
     }
-    return res.status(200).json({
-      invalidEmails: invalidEmails,
-      successEmails: successEmails,
-    });
+    if (successEmails.length !== 0) {
+      return res.status(200).json({
+        invalidEmails: invalidEmails,
+        successEmails: successEmails,
+      });
+    } else {
+      return res.status(400).json({
+        invalidEmails: invalidEmails,
+        successEmails: successEmails,
+      });
+    }
   } catch (e: any) {
     console.error(e);
+    console.log('hi');
     return res.status(400).send({ message: e.message || 'Something went wrong' });
   }
 };

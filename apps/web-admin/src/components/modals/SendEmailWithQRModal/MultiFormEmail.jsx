@@ -41,7 +41,7 @@ import { account } from '@/contexts/MyContext';
 import DataDisplay from '../../DataDisplay';
 import { useRouter } from 'next/router';
 import { inter } from '@/components/ui/fonts';
-import { StyledText } from '@/components/ui/StyledComponents';
+import { StyledText, StyledBox, StyledButton } from '@/components/ui/StyledComponents';
 // const EditerMarkdown = dynamic(
 //   () =>
 //     import('@uiw/react-md-editor').then((mod) => {
@@ -66,6 +66,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
   const [step, setStep] = useState(1);
   const [selectedProject, setSelectedProject] = useState({});
   const [recipients, setRecipients] = useState([]);
+  const [recipientsData, setRecipientsData] = useState([]);
   const [mailStatus, setMailStatus] = useState(null);
   let flag1 = false;
   let flag2 = false;
@@ -163,6 +164,8 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
         const myParts = response.data.recipients.map((value) => value.email);
         return participants.filter((value) => myParts.includes(value.email));
       });
+      console.log('fuckk');
+      setRecipientsData(response.data.recipients);
     },
   );
   const { mutate: updateEmailMutation } = usePostMutation(
@@ -255,6 +258,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
       onError: (error) => {
         ////console.log(error);
       },
+      invalidateKeys: [`/core/organizations/${accountDetails.orgId}/getStatusOfEmails`],
     },
   );
   const sendEmails = async (e) => {
@@ -340,11 +344,21 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
     {},
     {
       onSuccess: (response) => {
-        ////console.log(response.data);
+        console.log(response.data);
         setMailStatus(response.data);
       },
     },
   );
+  const handleCheckStatus = () => {
+    checkMailStatusMutation({
+      emailData: recipientsData.map((value) => ({
+        email: value.email,
+        id: value.id,
+        // projectId: selectedProject.id,
+      })),
+    });
+    console.log('Checked Status');
+  };
   const nextStep = async () => {
     if (step == 3) {
       ////console.log('hi');
@@ -624,9 +638,12 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 }}
               >
                 <Box width={'100%'}>
-                  <StyledText fontWeight="bold" mb={2}>
-                    Emails sent:
-                  </StyledText>
+                  <StyledBox justifyContent="space-between" bg="transparent" flexDirection="row">
+                    <StyledText fontWeight="bold" mb={2}>
+                      Emails sent:
+                    </StyledText>
+                    <StyledButton onClick={handleCheckStatus}>Check Status</StyledButton>
+                  </StyledBox>
                   <DataDisplayNew
                     columns={[
                       { field: 'checkInKey', headerName: 'QR Code' },
@@ -640,7 +657,7 @@ const MultiStepModal = ({ isOpen, onClose, emailContent, setEmailContent }) => {
                 </Box>
                 <Box width={'100%'}>
                   <StyledText fontWeight="bold" mb={2}>
-                    Email not sent:
+                    Emails sent:
                   </StyledText>
                   <DataDisplayNew
                     columns={[

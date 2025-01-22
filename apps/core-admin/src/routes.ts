@@ -141,6 +141,7 @@ router.post('/organizations/:orgId/addNewRecipient', addNewRecipient);
 router.post('/organizations/:orgId/addNewRecipients', addNewRecipients);
 router.post('/organizations/:orgId/events/:eventId/mailQR', sendMailWithQR);
 router.post('/organizations/:orgId/getStatusOfEmails', getStatusOfEmails);
+router.get('/organizations/:orgId/getRecipients/:projectId', getRecipients);
 // OTP routes
 router.post('/organizations/sendOTP', sendOTP);
 router.post('/organizations/verifyOTP', verifyOTP);
