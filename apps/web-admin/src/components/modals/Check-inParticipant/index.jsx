@@ -15,6 +15,7 @@ import {
   ModalCloseButton,
   useColorMode,
   Box,
+  ChakraProvider,
 } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
@@ -23,6 +24,8 @@ import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 import { StyledText } from '@/components/ui/StyledComponents';
+import { CUIAutoComplete } from 'chakra-ui-autocomplete';
+import { inter } from '@/components/ui/fonts';
 
 export default function CheckInParticipant({ isOpen, onClose }) {
   const { loading, post, get } = useFetch();
@@ -35,6 +38,8 @@ export default function CheckInParticipant({ isOpen, onClose }) {
 
   const [checkInKey, setCheckInKey] = useState(null);
   const [participants, setParticipants] = useState([]);
+  const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const [firstNameInput, setFirstNameInput] = useState('');
 
   const { colorMode } = useColorMode();
 
@@ -79,6 +84,17 @@ export default function CheckInParticipant({ isOpen, onClose }) {
     //console.log('checkInKey', checkInKey);
   }, [checkInKey]);
 
+  const handleFirstNameSelect = (selectedItem) => {
+    if (selectedItem) {
+      const participant = participants.find((p) => p.firstName === selectedItem.value);
+      if (participant) {
+        setSelectedParticipant(participant);
+        setCheckInKey(participant.checkInKey);
+        setFirstNameInput(participant.firstName);
+      }
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" scrollBehavior="outside" isCentered>
       <ModalOverlay />
@@ -119,20 +135,39 @@ export default function CheckInParticipant({ isOpen, onClose }) {
                 <FormLabel>
                   <StyledText>First Name</StyledText>
                 </FormLabel>
-                <Select
-                  backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
-                  placeholder="Select First Name"
-                  value={checkInKey}
-                  onChange={(e) => {
-                    setCheckInKey(e.target.value);
-                  }}
-                >
-                  {participants.map((participant) => (
-                    <option key={participant.id} value={participant.checkInKey}>
-                      {participant.firstName}
-                    </option>
-                  ))}
-                </Select>
+                <ChakraProvider>
+                  <CUIAutoComplete
+                    bg={colorMode === 'light' ? '#04050B' : '#FBFBFE'}
+                    placeholder="Type or Select a First Name"
+                    items={participants.map((participant) => ({
+                      value: participant.firstName,
+                      label: participant.firstName,
+                    }))}
+                    selectedItem={
+                      selectedParticipant
+                        ? {
+                            value: selectedParticipant.firstName,
+                            label: selectedParticipant.firstName,
+                          }
+                        : null
+                    }
+                    inputValue={firstNameInput}
+                    onInputChange={(input) => setFirstNameInput(input)}
+                    onSelected={handleFirstNameSelect}
+                    value={checkInKey}
+                    tagStyleProps={{
+                      display: 'none',
+                    }}
+                    inputStyleProps={{
+                      fontFamily: inter,
+                      border: '1px solid gray',
+                      rounded: 'md',
+                      py: 2,
+                      px: 3,
+                    }}
+                    disableCreateItem
+                  />
+                </ChakraProvider>
               </FormControl>
               <FormControl my={4}>
                 <FormLabel>
