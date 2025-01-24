@@ -15,6 +15,7 @@ import {
   ModalCloseButton,
   useColorMode,
   Box,
+  ChakraProvider,
 } from '@chakra-ui/react';
 
 import DashboardLayout from '@/layouts/DashboardLayout';
@@ -23,6 +24,8 @@ import { useAlert } from '@/hooks/useAlert';
 import { useFetch } from '@/hooks/useFetch';
 import useWrapper from '@/hooks/useWrapper';
 import { StyledText } from '@/components/ui/StyledComponents';
+import { CUIAutoComplete } from 'chakra-ui-autocomplete';
+import { inter } from '@/components/ui/fonts';
 
 export default function CheckInParticipant({ isOpen, onClose }) {
   const { loading, post, get } = useFetch();
@@ -35,7 +38,11 @@ export default function CheckInParticipant({ isOpen, onClose }) {
 
   const [checkInKey, setCheckInKey] = useState(null);
   const [participants, setParticipants] = useState([]);
-
+  const [selectedParticipant, setSelectedParticipant] = useState([]);
+  const [firstNameInput, setFirstNameInput] = useState('');
+  useEffect(() => {
+    console.log(firstNameInput);
+  }, [firstNameInput]);
   const { colorMode } = useColorMode();
 
   const handleSubmit = async (e) => {
@@ -79,6 +86,23 @@ export default function CheckInParticipant({ isOpen, onClose }) {
     //console.log('checkInKey', checkInKey);
   }, [checkInKey]);
 
+  const handleFirstNameSelect = (selectedItems) => {
+    console.log(selectedItems.selectedItems);
+    if (selectedItems) {
+      const participant = selectedItems.selectedItems;
+      if (selectedItems) {
+        const latestValue = participant[participant.length - 1];
+        setSelectedParticipant([latestValue]);
+        setCheckInKey(latestValue ? latestValue.value : '');
+        setFirstNameInput(latestValue ? latestValue.label : '');
+        // console.log('Check In Key: ', latestValue.value, latestValue.label)
+      }
+      // setSelectedParticipant([...selectedItems.selectedItems])
+      // const myParticipant = participants.filter((value)=> value.firstName === selectedItems)
+      // setCheckInKey(myParticipant.length !== 0 ? myParticipant[0].checkInKey : '')
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" scrollBehavior="outside" isCentered>
       <ModalOverlay />
@@ -119,20 +143,33 @@ export default function CheckInParticipant({ isOpen, onClose }) {
                 <FormLabel>
                   <StyledText>First Name</StyledText>
                 </FormLabel>
-                <Select
-                  backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE12'}
-                  placeholder="Select First Name"
-                  value={checkInKey}
-                  onChange={(e) => {
-                    setCheckInKey(e.target.value);
-                  }}
-                >
-                  {participants.map((participant) => (
-                    <option key={participant.id} value={participant.checkInKey}>
-                      {participant.firstName}
-                    </option>
-                  ))}
-                </Select>
+                <ChakraProvider>
+                  <CUIAutoComplete
+                    bg={colorMode === 'light' ? '#04050B' : '#FBFBFE'}
+                    placeholder="Type or Select a First Name"
+                    items={participants.map((participant) => ({
+                      value: participant.checkInKey,
+                      label: participant.firstName,
+                    }))}
+                    selectedItems={selectedParticipant}
+                    inputValue={firstNameInput}
+                    onInputChange={(input) => setFirstNameInput(input)}
+                    onSelectedItemsChange={handleFirstNameSelect}
+                    value={selectedParticipant}
+                    tagStyleProps={{
+                      display: 'none',
+                    }}
+                    inputStyleProps={{
+                      fontFamily: inter,
+                      border: '1px solid gray',
+                      rounded: 'md',
+                      py: 2,
+                      px: 3,
+                    }}
+                    disableCreateItem
+                    hideToggleButton
+                  />
+                </ChakraProvider>
               </FormControl>
               <FormControl my={4}>
                 <FormLabel>
