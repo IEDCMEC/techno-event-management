@@ -117,9 +117,9 @@ export default function CheckInParticipant({ isOpen, onClose }) {
           <StyledText>Check In Participant</StyledText>
           <ModalCloseButton color="black" />
         </ModalHeader>
-        <ModalBody backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}>
-          <Box pl={4} pr={4} pb={0}>
-            <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
+          <ModalBody backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}>
+            <Box pl={4} pr={4} pb={0}>
               <FormControl my={4}>
                 <FormLabel>
                   <StyledText> Participant ID</StyledText>
@@ -248,37 +248,38 @@ export default function CheckInParticipant({ isOpen, onClose }) {
                   ))}
                 </Select>
               </FormControl>
-            </form>
-          </Box>
-        </ModalBody>
+            </Box>
+          </ModalBody>
 
-        <ModalFooter
-          backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
-          borderBottomRadius="10px"
-          pt={0}
-        >
-          <Box flex={1} display="flex" justifyContent="space-around" gap={3} p={3}>
-            <Button
-              width="100%"
-              isLoading={loading}
-              loadingText="Please Wait"
-              onClick={handleSubmit}
-              backgroundColor="#AFB4E9"
-              color="black"
-              _hover={{ backgroundColor: '#D0D6F6 ' }}
-            >
-              <StyledText>Check In</StyledText>
-            </Button>
-            <Button
-              backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE1212'}
-              mr={3}
-              onClick={onClose}
-              width={'100%'}
-            >
-              <StyledText>Close</StyledText>
-            </Button>
-          </Box>
-        </ModalFooter>
+          <ModalFooter
+            backgroundColor={colorMode === 'light' ? '#EEEFFF' : '#101116'}
+            borderBottomRadius="10px"
+            pt={0}
+          >
+            <Box flex={1} display="flex" justifyContent="space-around" gap={3} p={3}>
+              <Button
+                width="100%"
+                isLoading={loading}
+                loadingText="Please Wait"
+                // onClick={handleSubmit}
+                type="submit"
+                backgroundColor="#AFB4E9"
+                color="black"
+                _hover={{ backgroundColor: '#D0D6F6 ' }}
+              >
+                <StyledText>Check In</StyledText>
+              </Button>
+              <Button
+                backgroundColor={colorMode === 'light' ? '#04050B12' : '#FBFBFE1212'}
+                mr={3}
+                onClick={onClose}
+                width={'100%'}
+              >
+                <StyledText>Close</StyledText>
+              </Button>
+            </Box>
+          </ModalFooter>
+        </form>
       </ModalContent>
     </Modal>
   );
