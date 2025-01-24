@@ -49,7 +49,7 @@ export default function DataDisplay({
       // console.log(row);
     }
   };
-  console.log(rows);
+  // console.log(rows);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 

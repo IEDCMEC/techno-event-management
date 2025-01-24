@@ -38,9 +38,11 @@ export default function CheckInParticipant({ isOpen, onClose }) {
 
   const [checkInKey, setCheckInKey] = useState(null);
   const [participants, setParticipants] = useState([]);
-  const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const [selectedParticipant, setSelectedParticipant] = useState([]);
   const [firstNameInput, setFirstNameInput] = useState('');
-
+  useEffect(() => {
+    console.log(firstNameInput);
+  }, [firstNameInput]);
   const { colorMode } = useColorMode();
 
   const handleSubmit = async (e) => {
@@ -84,14 +86,20 @@ export default function CheckInParticipant({ isOpen, onClose }) {
     //console.log('checkInKey', checkInKey);
   }, [checkInKey]);
 
-  const handleFirstNameSelect = (selectedItem) => {
-    if (selectedItem) {
-      const participant = participants.find((p) => p.firstName === selectedItem.value);
-      if (participant) {
-        setSelectedParticipant(participant);
-        setCheckInKey(participant.checkInKey);
-        setFirstNameInput(participant.firstName);
+  const handleFirstNameSelect = (selectedItems) => {
+    console.log(selectedItems.selectedItems);
+    if (selectedItems) {
+      const participant = selectedItems.selectedItems;
+      if (selectedItems) {
+        const latestValue = participant[participant.length - 1];
+        setSelectedParticipant([latestValue]);
+        setCheckInKey(latestValue ? latestValue.value : '');
+        setFirstNameInput(latestValue ? latestValue.label : '');
+        // console.log('Check In Key: ', latestValue.value, latestValue.label)
       }
+      // setSelectedParticipant([...selectedItems.selectedItems])
+      // const myParticipant = participants.filter((value)=> value.firstName === selectedItems)
+      // setCheckInKey(myParticipant.length !== 0 ? myParticipant[0].checkInKey : '')
     }
   };
 
@@ -140,21 +148,14 @@ export default function CheckInParticipant({ isOpen, onClose }) {
                     bg={colorMode === 'light' ? '#04050B' : '#FBFBFE'}
                     placeholder="Type or Select a First Name"
                     items={participants.map((participant) => ({
-                      value: participant.firstName,
+                      value: participant.checkInKey,
                       label: participant.firstName,
                     }))}
-                    selectedItem={
-                      selectedParticipant
-                        ? {
-                            value: selectedParticipant.firstName,
-                            label: selectedParticipant.firstName,
-                          }
-                        : null
-                    }
+                    selectedItems={selectedParticipant}
                     inputValue={firstNameInput}
                     onInputChange={(input) => setFirstNameInput(input)}
-                    onSelected={handleFirstNameSelect}
-                    value={checkInKey}
+                    onSelectedItemsChange={handleFirstNameSelect}
+                    value={selectedParticipant}
                     tagStyleProps={{
                       display: 'none',
                     }}
@@ -166,6 +167,7 @@ export default function CheckInParticipant({ isOpen, onClose }) {
                       px: 3,
                     }}
                     disableCreateItem
+                    hideToggleButton
                   />
                 </ChakraProvider>
               </FormControl>
